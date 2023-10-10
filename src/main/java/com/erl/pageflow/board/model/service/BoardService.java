@@ -9,23 +9,23 @@ import com.erl.pageflow.common.Paging;
 
 public interface BoardService {
 	//업무게시판 게시글 리스트 갯수 조회
-	public int selectWorkListCount();
+	public int selectBoardListCount();
 	
 	//업무게시판 게시글 리스트 조회
-	public ArrayList<Board> selectWorkList(Paging paging);
+	public ArrayList<Board> selectBoardList(Paging paging);
 	
 	//업무게시판 게시글 필터링된 리스트 조회
-	public ArrayList<Board> selectFilterWorkList(Paging paging);
+	public ArrayList<Board> selectBoardSearch(Paging paging);
 	
 	//업무게시판 게시글 조회
-	public Board selectWork(BoardKeyword boardKeyword);
+	public Board selectBoard(BoardKeyword boardKeyword);
 	
 	//업무게시판 게시글 등록
-	public int insertWork(Board board);
+	public int insertBoard(Board board);
 	
 	//업무게시판 게시글 수정
-	public int updateWork(Board board);
+	public int updateBoard(Board board);
 	
 	//업무게시판 게시글 삭제
-	public int deletWork(Board board);
+	public int deletBoard(Board board);
 }

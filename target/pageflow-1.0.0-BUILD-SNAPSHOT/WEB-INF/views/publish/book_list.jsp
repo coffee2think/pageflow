@@ -7,8 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/main.css">
-<script type="text/javascript" src="/pageflow/resources/js/lib/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 3;
     const SUBPAGE = 2;
@@ -48,7 +48,7 @@
                 <!--main-header-bar-->
                 <div class="main-header-bar">
                     <div class="main-title-box">
-                        <img src="/pageflow/resources/images/header-icon.png">
+                        <img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
                         <span class="main-title"></span>
                     </div>
                     <button class="header-left-btn">
@@ -78,7 +78,7 @@
 
                                 <div class="search-box">
                                     <button class="search-btn">
-                                        <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
                                     <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                                 </div>
@@ -124,8 +124,8 @@
                         </div>
 
                         <button class="search-visible-btn" id="search_visible_btn">
-                            <img class="search-close" src="/pageflow/resources/images/cursor_1.png">
-                            <img class="search-open" src="/pageflow/resources/images/cursor_2.png">
+                            <img class="search-close" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
+                            <img class="search-open" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
                         </button>
 
                     </div>

@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/main.css">
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/notice.css">
-<script type="text/javascript" src="/pageflow/resources/js/lib/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title></title>
 <script>
     const NOWPAGE = 1;
@@ -38,7 +38,7 @@
                 <div class="side-container">
                     <div class="side-title"></div>
                     <div class="side-icon-box">
-                        <a href="/pageflow/views/work/notice_input.jsp" class="side-write-btn margin-bottom-0">글쓰기</a>
+                        <a href="${ pageContext.servletContext.contextPath }/views/work/notice_input.jsp" class="side-write-btn margin-bottom-0">글쓰기</a>
                     </div>
 
                     <!-- 리스트 들어감 -->
@@ -53,7 +53,7 @@
                 <!--main-header-bar-->
                 <div class="main-header-bar">
                     <div class="main-title-box">
-                        <img src="/pageflow/resources/images/header-icon.png">
+                        <img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
                         <span class="main-title"></span>
                     </div>
                     <button class="header-left-btn">
@@ -82,7 +82,7 @@
 
                                 <div class="search-box">
                                     <button class="search-btn">
-                                        <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
                                     <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                                 </div>
@@ -103,8 +103,8 @@
                         </form>
 
                         <button class="search-visible-btn" id="search_visible_btn">
-                            <img class="search-close" src="/pageflow/resources/images/cursor_1.png">
-                            <img class="search-open" src="/pageflow/resources/images/cursor_2.png">
+                            <img class="search-close" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
+                            <img class="search-open" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
                         </button>
 
                     </div>
@@ -127,7 +127,7 @@
                                     </div>
                                     <div class="contents-notice-line">
                                         <div class="notice-profile">
-                                            <img src="/pageflow/resources/images/profile.png">
+                                            <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
                                             <span>
                                                 <div>홍길동</div>
                                                 <div>
@@ -139,9 +139,9 @@
                                         </div>
                                     </div>
                                     <a class="contents-notice-down" href="#">
-                                        <img src="/pageflow/resources/images/side-icon-dep1-over.png">
+                                        <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
                                         <span>product_manage.zip</span>
-                                        <img class="down-img" src="/pageflow/resources/images/down.png">
+                                        <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
                                     </a>
                                 </div>
                                 

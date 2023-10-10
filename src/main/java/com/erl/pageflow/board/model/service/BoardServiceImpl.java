@@ -16,38 +16,38 @@ public class BoardServiceImpl implements BoardService{
 	private BoardDao boardDao;
 
 	@Override
-	public int selectWorkListCount() {
-		return boardDao.selectWorkListCount();
+	public int selectBoardListCount() {
+		return boardDao.selectBoardListCount();
 	}
 
 	@Override
-	public ArrayList<Board> selectWorkList(Paging paging) {
-		return boardDao.selectWorkList(paging);
+	public ArrayList<Board> selectBoardList(Paging paging) {
+		return boardDao.selectBoardList(paging);
 	}
 
 	@Override
-	public ArrayList<Board> selectFilterWorkList(Paging paging) {
-		return boardDao.selectFilterWorkList(paging);
+	public ArrayList<Board> selectBoardSearch(Paging paging) {
+		return boardDao.selectBoardSearch(paging);
 	}
 	
 	@Override
-	public Board selectWork(BoardKeyword boardKeyword) {
-		return boardDao.selectWork(boardKeyword);
+	public Board selectBoard(BoardKeyword boardKeyword) {
+		return boardDao.selectBoard(boardKeyword);
 	}
 
 	@Override
-	public int insertWork(Board board) {
-		return boardDao.insertWork(board);
+	public int insertBoard(Board board) {
+		return boardDao.insertBoard(board);
 	}
 
 	@Override
-	public int updateWork(Board board) {
-		return boardDao.updateWork(board);
+	public int updateBoard(Board board) {
+		return boardDao.updateBoard(board);
 	}
 
 	@Override
-	public int deletWork(Board board) {
-		return boardDao.deletWork(board);
+	public int deletBoard(Board board) {
+		return boardDao.deletBoard(board);
 	}
 	
 }

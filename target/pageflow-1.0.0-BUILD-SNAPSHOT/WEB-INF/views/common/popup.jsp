@@ -7,13 +7,13 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/jquery-ui.min.css" />
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/main.css">
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/popup.css">
-<script type="text/javascript" src="/pageflow/resources/js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="/pageflow/resources/js/lib/jquery-ui-zoom.js"></script>
-<script type="text/javascript" src="/pageflow/resources/js/lib/jquery.ui.touch-punch.min.js"></script>
-<script type="text/javascript" src="/pageflow/resources/js/popup.js"></script>
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/jquery-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/popup.css">
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery-ui-zoom.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/popup.js"></script>
 <title></title>
 </head>
 <body>
@@ -22,7 +22,7 @@
         <div class="modal-pop-title">
             도서검색
             <button class="modal-pop-close">
-                <img src="/pageflow/resources/images/close.png">
+                <img src="${ pageContext.servletContext.contextPath }/resources/images/close.png">
             </button>
         </div>
         
@@ -40,7 +40,7 @@
                 </div>
                 <div class="search-box">
                     <button class="search-btn">
-                        <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                     </button>
                     <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                 </div>
@@ -92,7 +92,7 @@
         <div class="modal-pop-title">
             인쇄소 검색
             <button class="modal-pop-close">
-                <img src="/pageflow/resources/images/close.png">
+                <img src="${ pageContext.servletContext.contextPath }/resources/images/close.png">
             </button>
         </div>
         
@@ -110,7 +110,7 @@
                 </div>
                 <div class="search-box">
                     <button class="search-btn">
-                        <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                     </button>
                     <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                 </div>

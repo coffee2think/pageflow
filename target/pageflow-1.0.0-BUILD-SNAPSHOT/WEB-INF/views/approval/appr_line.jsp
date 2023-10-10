@@ -7,8 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/main.css">
-<script type="text/javascript" src="/pageflow/resources/js/lib/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 6;
     const SUBPAGE = 4;
@@ -51,7 +51,7 @@
                     <!--main-header-bar-->
                     <div class="main-header-bar">
                         <div class="main-title-box">
-                            <img src="/pageflow/resources/images/header-icon.png">
+                            <img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
                             <span class="main-title"></span>
                         </div>
                         <button class="header-left-btn">
@@ -137,7 +137,7 @@
                                     <div class="search-box-all">
                                         <div class="search-box">
                                             <button class="search-btn">
-                                                <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                                                <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                             </button>
                                             <input type="text" placeholder="참조자" class="search-box-text" value="">
                                         </div>
@@ -180,7 +180,7 @@
                                             <td>
                                                 <div class="contents-check-div">
                                                     <button class="contents-input-plus">
-                                                        <img src="/pageflow/resources/images/plus.png">
+                                                        <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
                                                     </button>
                                                 </div>
                                             </td>
@@ -192,7 +192,7 @@
                                             <td>
                                                 <div class="contents-input-div input-search">
                                                     <button class="input-search-btn">
-                                                        <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                     </button>
                                                     <input type="input" name="approver" class="contents-input" value="">
                                                 </div>
@@ -200,7 +200,7 @@
                                             <td>
                                                 <div class="contents-input-div input-search">
                                                     <button class="input-search-btn">
-                                                        <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                     </button>
                                                     <input type="input" name="position" class="contents-input" value="">
                                                 </div>
@@ -208,7 +208,7 @@
                                             <td>
                                                 <div class="contents-input-div input-search">
                                                     <button class="input-search-btn">
-                                                        <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                     </button>
                                                     <input type="input" name="category" class="contents-input" value="">
                                                 </div>
@@ -224,10 +224,10 @@
                                             <td>
                                                 <div class="contents-check-div">
                                                     <button class="contents-input-plus">
-                                                        <img src="/pageflow/resources/images/plus.png">
+                                                        <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
                                                     </button>
                                                     <button class="contents-input-minus">
-                                                        <img src="/pageflow/resources/images/minus.png">
+                                                        <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
                                                     </button>
                                                 </div>
                                             </td>
@@ -239,7 +239,7 @@
                                             <td>
                                                 <div class="contents-input-div input-search">
                                                     <button class="input-search-btn">
-                                                        <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                     </button>
                                                     <input type="input" name="approver" class="contents-input" value="">
                                                 </div>
@@ -247,7 +247,7 @@
                                             <td>
                                                 <div class="contents-input-div input-search">
                                                     <button class="input-search-btn">
-                                                        <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                     </button>
                                                     <input type="input" name="position" class="contents-input" value="">
                                                 </div>
@@ -255,7 +255,7 @@
                                             <td>
                                                 <div class="contents-input-div input-search">
                                                     <button class="input-search-btn">
-                                                        <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                     </button>
                                                     <input type="input" name="category" class="contents-input" value="">
                                                 </div>
