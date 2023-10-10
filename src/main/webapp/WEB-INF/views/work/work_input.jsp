@@ -7,9 +7,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/main.css">
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/notice.css">
-<script type="text/javascript" src="/pageflow/resources/js/lib/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 1;
     const SUBPAGE = 2;
@@ -38,7 +38,7 @@
                 <div class="side-container">
                     <div class="side-title"></div>
                     <div class="side-icon-box">
-                        <a href="/pageflow/views/work/work_input.jsp" class="side-write-btn">글쓰기</a>
+                        <a href="${ pageContext.servletContext.contextPath }/views/work/work_input.jsp" class="side-write-btn">글쓰기</a>
                         <div class="side-icon-menu">
                             <button class="side-icon-btn" id="sideBtn_new">
                                 <span class="side-icon">3</span>
@@ -46,7 +46,7 @@
                             </button>
                             <button class="side-icon-btn" id="sideBtn_my">
                                 <span class="side-icon">
-                                    <img src="/pageflow/resources/images/my_1.png">
+                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/my_1.png">
                                 </span>
                                 <span>내 게시글</span>
                             </button>
@@ -65,7 +65,7 @@
                 <!--main-header-bar-->
                 <div class="main-header-bar">
                     <div class="main-title-box">
-                        <img src="/pageflow/resources/images/header-icon.png">
+                        <img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
                         <span class="main-title"></span>
                     </div>
                     <button class="header-left-btn">

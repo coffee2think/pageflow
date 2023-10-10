@@ -7,8 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/main.css">
-<script type="text/javascript" src="/pageflow/resources/js/lib/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 5;
     const SUBPAGE = 4;
@@ -48,7 +48,7 @@
                 <!--main-header-bar-->
                 <div class="main-header-bar">
                     <div class="main-title-box">
-                        <img src="/pageflow/resources/images/header-icon.png">
+                        <img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
                         <span class="main-title"></span>
                     </div>
                     <button class="header-left-btn">

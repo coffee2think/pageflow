@@ -1,17 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="board" value="${ requestScope.board }" />
+<c:set var="replyList" value="${ requestScope.replyList }" />
+
 <!DOCTYPE html>
 <html>
 <head>
-<c:set var="board" value="${ requestScope.board }" />
-<c:set var="replyList" value="${ requestScope.replyList }" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/main.css">
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/notice.css">
-<script type="text/javascript" src="/pageflow/resources/js/lib/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title></title>
 <script>
     const NOWPAGE = 1;
@@ -20,7 +21,7 @@
 </script>
 </head>
 <body>
-	git 처음!!!!!
+	
 	<div id="container">
         
         <!--헤더-->
@@ -41,7 +42,7 @@
                 <div class="side-container">
                     <div class="side-title"></div>
                     <div class="side-icon-box">
-                        <a href="/pageflow/views/work/work_input.jsp" class="side-write-btn">글쓰기</a>
+                        <a href="${ pageContext.servletContext.contextPath }/views/work/work_input.jsp" class="side-write-btn">글쓰기</a>
                         <div class="side-icon-menu">
                             <button class="side-icon-btn" id="sideBtn_new">
                                 <span class="side-icon">3</span>
@@ -49,7 +50,7 @@
                             </button>
                             <button class="side-icon-btn" id="sideBtn_my">
                                 <span class="side-icon">
-                                    <img src="/pageflow/resources/images/my_1.png">
+                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/my_1.png">
                                 </span>
                                 <span>내 게시글</span>
                             </button>
@@ -67,7 +68,7 @@
                 <!--main-header-bar-->
                 <div class="main-header-bar">
                     <div class="main-title-box">
-                        <img src="/pageflow/resources/images/header-icon.png">
+                        <img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
                         <span class="main-title"></span>
                     </div>
                     <button class="header-left-btn">
@@ -96,7 +97,7 @@
 
                                 <div class="search-box">
                                     <button class="search-btn">
-                                        <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
                                     <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                                 </div>
@@ -117,8 +118,8 @@
                         </form>
 
                         <button class="search-visible-btn" id="search_visible_btn">
-                            <img class="search-close" src="/pageflow/resources/images/cursor_1.png">
-                            <img class="search-open" src="/pageflow/resources/images/cursor_2.png">
+                            <img class="search-close" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
+                            <img class="search-open" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
                         </button>
 
                     </div>
@@ -141,7 +142,7 @@
                                     </div>
                                     <div class="contents-notice-line">
                                         <div class="notice-profile">
-                                            <img src="/pageflow/resources/images/profile.png">
+                                            <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
                                             <span>
                                                 <div>${ board.empName }</div>
                                                 <div>
@@ -153,9 +154,9 @@
                                         </div>
                                     </div>
                                     <a class="contents-notice-down" href="#">
-                                        <img src="/pageflow/resources/images/side-icon-dep1-over.png">
+                                        <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
                                         <span>product_manage.zip</span>
-                                        <img class="down-img" src="/pageflow/resources/images/down.png">
+                                        <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
                                     </a>
                                 </div>
                                 
@@ -171,11 +172,11 @@
                                         </div>
                                         <div class="reply-sort">
                                             <button class="reply-sort-btn">
-                                                <img src="/pageflow/resources/images/chk.png">
+                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/chk.png">
                                                 <span>등록순</span>
                                             </button>
                                             <button class="reply-sort-btn">
-                                                <img src="/pageflow/resources/images/chk.png">
+                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/chk.png">
                                                 <span>최신순</span>
                                             </button>
                                         </div>
@@ -185,7 +186,7 @@
                                     <div class="notice-reply-con depth1" data-parent="" data-num="">
                                         <div class="contents-notice-line">
                                             <div class="notice-profile">
-                                                <img src="/pageflow/resources/images/profile.png">
+                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
                                                 <span>
                                                     <div>홍길동</div>
                                                     <div>
@@ -213,9 +214,9 @@
                                         </div>
 
                                         <a class="contents-notice-down" href="#">
-                                            <img src="/pageflow/resources/images/side-icon-dep1-over.png">
+                                            <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
                                             <span>product_manage2.zip</span>
-                                            <img class="down-img" src="/pageflow/resources/images/down.png">
+                                            <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
                                         </a>
 
                                         <button class="reply-btn">
@@ -228,7 +229,7 @@
 												<button class="reply-report-btn">신고</button>
 											</div>
 					                        <button class="reply-right-btn">
-					                            <img class="reply-right-btn-img" src="/pageflow/resources/images/right.png">
+					                            <img class="reply-right-btn-img" src="${ pageContext.servletContext.contextPath }/resources/images/right.png">
 					                        </button>
 					                    </div>
                                     </div>
@@ -239,7 +240,7 @@
                                         <div class="depth2-icon">ㄴ</div>
                                         <div class="contents-notice-line">
                                             <div class="notice-profile">
-                                                <img src="/pageflow/resources/images/profile.png">
+                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
                                                 <span>
                                                     <div>홍길동</div>
                                                     <div>
@@ -256,9 +257,9 @@
                                         </div>
 
                                         <a class="contents-notice-down" href="#">
-                                            <img src="/pageflow/resources/images/side-icon-dep1-over.png">
+                                            <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
                                             <span>product_manage2.zip</span>
-                                            <img class="down-img" src="/pageflow/resources/images/down.png">
+                                            <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
                                         </a>
 
                                         <button class="reply-btn">
@@ -271,7 +272,7 @@
 												<button class="reply-report-btn">신고</button>
 											</div>
 					                        <button class="reply-right-btn">
-					                            <img class="reply-right-btn-img" src="/pageflow/resources/images/right.png">
+					                            <img class="reply-right-btn-img" src="${ pageContext.servletContext.contextPath }/resources/images/right.png">
 					                        </button>
 					                    </div>
 

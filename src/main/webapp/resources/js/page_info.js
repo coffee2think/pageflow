@@ -4,7 +4,7 @@
 var MENU_INFO = [
     {
         title : '업무관리'
-        ,link : 'selectWorkList.do'
+        ,link : 'bdlist.do'
         ,branch : [
             {
                 stitle : '공지사항'
@@ -14,9 +14,9 @@ var MENU_INFO = [
             },
             {
                 stitle : '업무게시판'
-                ,slink : 'work_list.do'
+                ,slink : 'bdlist.do'
                 ,sbranch : [
-                    {mtitle : '개발팀', mlink : 'work_list.do'}
+                    {mtitle : '개발팀', mlink : 'bdlist.do'}
                 ]
             },
             {

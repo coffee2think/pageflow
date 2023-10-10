@@ -26,47 +26,42 @@ public class BoardController {
 	@Autowired
 	private BoardServiceImpl boardService;
 	
-	private ReplyServiceImpl replyService = new ReplyServiceImpl();
+	@Autowired
+	private ReplyServiceImpl replyService;
 	
 	//**************뷰페이지 이동****************
 	//업무게시판 리스트 이동
 	@RequestMapping("work_list.do")
-	public String moveWorkList() {
+	public String moveBoardList() {
 		return "work/work_list";
 	}
 	
 	//업무게시판 글보기 이동
 	@RequestMapping("work_notice.do")
-	public String moveWorkNotice() {
+	public String moveBoardNotice() {
 		return "work/work_notice";
 	}
 	
 	//업무게시판 글작성 이동
 	@RequestMapping("work_input.do")
-	public String moveWorkInput() {
+	public String moveBoardInput() {
 		return "work/work_input";
 	}
 	
 	//**************요청 받아서 서비스로 넘기는 메소드****************
-	//업무게시판 게시글 리스트 갯수 조회
-	@RequestMapping("selectWorkListCount.do")
-	public String selectWorkListCount() {
-		
-		
-		return "";
-	}
 	
 	//업무게시판 게시글 리스트 조회
-	@RequestMapping("selectWorkList.do")
-	public String selectWorkList(Model model) {
-		int listCount = boardService.selectWorkListCount();
+	@RequestMapping("bdlist.do")
+	public String selectBoardList(Model model) {
+		int listCount = boardService.selectBoardListCount();
 		
-		Paging paging = new Paging(listCount, 1, 10, null);
+		Paging paging = new Paging(listCount, 1, 10, "selectBoardList.do");
 		paging.calculator();
-		ArrayList<Board> list = boardService.selectWorkList(paging);
-		
-		logger.info("=========list : " + list);
+		ArrayList<Board> list = boardService.selectBoardList(paging);
+		//logger.info("???");
+		//logger.info("=========list : " + list);
 		if(list != null && list.size() > 0) {
+			model.addAttribute("paging", paging);
 			model.addAttribute("boardList", list);
 			return "work/work_list";
 		}else {
@@ -75,19 +70,19 @@ public class BoardController {
 		}
 	}
 	
-	@RequestMapping("selectWork.do")
-	public String selectWork(@RequestParam("empId") int empId, 
+	@RequestMapping("bdselect.do")
+	public String selectBoard(@RequestParam("empId") int empId, 
 							 @RequestParam("depId") int depId,
 							 @RequestParam("boardId") int boardId, Model model) {
 		
-		Board board = boardService.selectWork(new BoardKeyword(empId, depId, boardId));
+		Board board = boardService.selectBoard(new BoardKeyword(empId, depId, boardId));
 		
-		System.out.println("board : " + board);
 		if(board != null) {
-			//ArrayList<Reply> replyList = replyService.selectReplyList(new ReplyKeyword(board.getDepId(), board.getBoardId()));
-			//System.out.println("replyList : " + replyList);
+			
+			ArrayList<Reply> replyList = replyService.selectReplyList(new ReplyKeyword(board.getDepId(), board.getBoardId()));
+			System.out.println("replyList : " + replyList);
 			model.addAttribute("board", board);
-			//model.addAttribute("replyList", replyList);
+			model.addAttribute("replyList", replyList);
 			return "work/work_notice";
 		}else {
 			model.addAttribute("message", "업무게시판 조회 실패!");
@@ -97,25 +92,25 @@ public class BoardController {
 	
 	//업무게시판 게시글 필터링된 리스트 조회
 	@RequestMapping("selectFilterWorkList.do")
-	public String selectFilterWorkList() {
+	public String selectBoardSearch() {
 		return "";
 	}
 	
 	//업무게시판 게시글 등록
 	@RequestMapping(value = "insertWork.do", method = RequestMethod.POST)
-	public String insertWork() {
+	public String insertBoard() {
 		return "";
 	}
 	
 	//업무게시판 게시글 수정
 	@RequestMapping(value = "updateWork.do", method = RequestMethod.POST)
-	public String updateWork() {
+	public String updateBoard() {
 		return "";
 	}
 	
 	//업무게시판 게시글 삭제
 	@RequestMapping(value = "work_list.do", method = RequestMethod.POST)
-	public String deleteWork() {
+	public String deleteBoard() {
 		return "";
 	}
 	

@@ -18,11 +18,11 @@
 		<result property="depName" column="DEP_NAME" />
 	</resultMap>
 	
-	<select id="selectWorkListCount" resultType="_int">
+	<select id="selectBoardListCount" resultType="_int">
 		select count(*) from board
 	</select>
 	
-	<select id="selectWorkList" parameterType="Paging" resultMap="resultBoard">
+	<select id="selectBoardList" parameterType="Paging" resultMap="resultBoard">
 		<![CDATA[
 		select * 
 		from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
@@ -37,7 +37,7 @@
 		]]>
 	</select>
 	
-	<select id="selectFilterWorkList" parameterType="Paging" resultMap="resultBoard">
+	<select id="selectBoardSearch" parameterType="Paging" resultMap="resultBoard">
 		<![CDATA[
 		select * 
 		from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
@@ -49,7 +49,7 @@
 		]]>
 	</select>
 	
-	<select id="selectWork" parameterType="BoardKeyword" resultMap="resultBoard">
+	<select id="selectBoard" parameterType="BoardKeyword" resultMap="resultBoard">
 		select *
 		from (select * 
 		      from board
@@ -58,15 +58,15 @@
 		left join employee using(EMP_ID)
 	</select>
 	
-	<insert id="insertWork" parameterType="Board">
+	<insert id="insertBoard" parameterType="Board">
 		
 	</insert>
 	
-	<update id="updateWork" parameterType="_int">
+	<update id="updateBoard" parameterType="_int">
 		
 	</update>
 	
-	<select id="deleteWork" parameterType="_int">
+	<select id="deleteBoard" parameterType="_int">
 	</select>	
 	
 

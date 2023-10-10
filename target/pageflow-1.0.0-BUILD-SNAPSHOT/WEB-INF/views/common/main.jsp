@@ -8,11 +8,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <title>pageFlow</title>
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/main.css">
-<script type="text/javascript" src="/pageflow/resources/js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="/pageflow/resources/js/lib/chart.min.js"></script>
-<script type="text/javascript" src="/pageflow/resources/js/page_info.js"></script>
-<script type="text/javascript" src="/pageflow/resources/js/make_graph.js"></script>
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/chart.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/page_info.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/make_graph.js"></script>
 <script>
     const NOWPAGE = 0;
     const SUBPAGE = 0;
@@ -32,7 +32,7 @@
         <header class="main-header">
             <!--header-container-->
             <div class="header-container">
-                <c:import url="./header.jsp" />
+                <c:import url="/WEB-INF/views/common/header.jsp" />
             </div>
             <!--header-container end-->
         </header>

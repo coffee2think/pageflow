@@ -737,3 +737,8 @@ body {
     font-size: 13px;
     color: #8f8f8f;
 }
+
+.greybtn {
+    opacity: .3;
+    cursor: default;
+}

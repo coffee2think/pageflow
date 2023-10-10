@@ -4,11 +4,9 @@ import java.io.Serializable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.erl.pageflow.board.controller.BoardController;
-
 public class Paging implements Serializable{
 	private static final long serialVersionUID = 5659582861753362036L;
-	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+	private static final Logger logger = LoggerFactory.getLogger(Paging.class);
 	
 	private int startRow;  //페이지에 출력할 시작행
 	private int endRow;   //페이지에 출력할 끝행

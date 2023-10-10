@@ -18,39 +18,39 @@ public class BoardDao {
 	private SqlSessionTemplate sqlSessionTemplate;
 	
 	//업무게시판 게시글 리스트 갯수 조회
-	public int selectWorkListCount() {
-		return sqlSessionTemplate.selectOne("boardMapper.selectWorkListCount");
+	public int selectBoardListCount() {
+		return sqlSessionTemplate.selectOne("boardMapper.selectBoardListCount");
 	}
 	
 	//업무게시판 게시글 리스트 조회
-	public ArrayList<Board> selectWorkList(Paging paging) {
-		List<Board> list = sqlSessionTemplate.selectList("boardMapper.selectWorkList", paging);
+	public ArrayList<Board> selectBoardList(Paging paging) {
+		List<Board> list = sqlSessionTemplate.selectList("boardMapper.selectBoardList", paging);
 		return (ArrayList<Board>) list;
 	}
 	
 	//업무게시판 게시글 필터링된 리스트 조회
-	public ArrayList<Board> selectFilterWorkList(Paging paging) {
-		List<Board> list = sqlSessionTemplate.selectList("boardMapper.selectFilterWorkList", paging);
+	public ArrayList<Board> selectBoardSearch(Paging paging) {
+		List<Board> list = sqlSessionTemplate.selectList("boardMapper.selectFilterBoardList", paging);
 		return (ArrayList<Board>)list;
 	}
 	
 	//업무게시판 게시글 조회
-	public Board selectWork(BoardKeyword boardKeyword) {
-		return sqlSessionTemplate.selectOne("boardMapper.selectWork", boardKeyword);
+	public Board selectBoard(BoardKeyword boardKeyword) {
+		return sqlSessionTemplate.selectOne("boardMapper.selectBoard", boardKeyword);
 	}
 	
 	//업무게시판 게시글 등록
-	public int insertWork(Board board) {
-		return sqlSessionTemplate.insert("boardMapper.insertWork", board);
+	public int insertBoard(Board board) {
+		return sqlSessionTemplate.insert("boardMapper.insertBoard", board);
 	}
 	
 	//업무게시판 게시글 수정
-	public int updateWork(Board board) {
-		return sqlSessionTemplate.insert("boardMapper.updateWork", board);
+	public int updateBoard(Board board) {
+		return sqlSessionTemplate.insert("boardMapper.updateBoard", board);
 	}
 	
 	//업무게시판 게시글 삭제
-	public int deletWork(Board board) {
-		return sqlSessionTemplate.insert("boardMapper.deletWork", board);
+	public int deletBoard(Board board) {
+		return sqlSessionTemplate.insert("boardMapper.deletBoard", board);
 	}
 }
