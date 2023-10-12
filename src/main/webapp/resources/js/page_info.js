@@ -132,30 +132,30 @@ var MENU_INFO = [
     ,
     {
         title : '영업관리'
-        ,link : 'border_list.do'
+        ,link : 'movebolist.do'
         ,branch : [
             {
                 stitle : '주문관리'
-                ,slink : 'border_list.do'
+                ,slink : 'movebolist.do'
                 ,sbranch : [
-                    {mtitle : '주문현황', mlink : 'border_list.do'},
-                    {mtitle : '주문입력', mlink : 'border_input.do'}
+                    {mtitle : '주문현황', mlink : 'movebolist.do'},
+                    {mtitle : '주문입력', mlink : 'boinsert.do'}
                 ]
             },
             {
                 stitle : '판매관리'
-                ,slink : '/page/views/sales/sales_list.jsp'
+                ,slink : 'salesList.do'
                 ,sbranch : [
-                    {mtitle : '판매현황', mlink : '/page/views/sales/sales_list.jsp'},
-                    {mtitle : '판매입력', mlink : '/page/views/sales/sales_input.jsp'}
+                    {mtitle : '판매현황', mlink : 'salesList.do'},
+                    {mtitle : '판매입력', mlink : 'salesInput.do'}
                 ]
             },
             {
                 stitle : '거래처'
-                ,slink : '/page/views/sales/account_list.jsp'
+                ,slink : 'clientList.do'
                 ,sbranch : [
-                    {mtitle : '거래처현황', mlink : '/page/views/sales/account_list.jsp'},
-                    {mtitle : '거래처등록', mlink : '/page/views/sales/account_input.jsp'}
+                    {mtitle : '거래처현황', mlink : 'clientList.do'},
+                    {mtitle : '거래처등록', mlink : 'clientInput.do'}
                 ]
             },
             {

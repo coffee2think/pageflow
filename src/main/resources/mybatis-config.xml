@@ -9,6 +9,9 @@
 	</settings>
 
 	<typeAliases>
+		<typeAlias type="com.erl.pageflow.common.Search" alias="Search" />
+		<typeAlias type="com.erl.pageflow.book.model.vo.Book" alias="Book" />
+		
 		<!-- 업무 게시판 게시글 -->
 		<typeAlias type="com.erl.pageflow.board.model.vo.Board" alias="Board" />
 		<typeAlias type="com.erl.pageflow.common.Paging" alias="Paging" />
@@ -17,12 +20,23 @@
 		<!-- 업무 게시판 댓글 -->
 		<typeAlias type="com.erl.pageflow.reply.model.vo.Reply" alias="Reply" />
 		<typeAlias type="com.erl.pageflow.common.ReplyKeyword" alias="ReplyKeyword" />
+		
+		<!-- 영업관리 -->
+		<typeAlias type="com.erl.pageflow.sales.model.vo.BookOrder" alias="BookOrder" />
+		<typeAlias type="com.erl.pageflow.sales.model.vo.Sales" alias="Sales" />
+		
+		<!-- 거래처 -->
+		<typeAlias type="com.erl.pageflow.sales.model.vo.BookStore" alias="BookStore" />
+		<typeAlias type="com.erl.pageflow.sales.model.vo.Storage" alias="Storage" />
+		<typeAlias type="com.erl.pageflow.sales.model.vo.PrintOffice" alias="PrintOffice" />
+		
 	</typeAliases>
 	
 	<mappers>
 		<!-- 존재하지 않는 파일을 등록하면, 톰켓 구동 안 됨 -->
 		<mapper resource="mappers/board-mapper.xml" />
 		<mapper resource="mappers/reply-mapper.xml" />
+		<mapper resource="mappers/sales-mapper.xml" />
 	</mappers>
 </configuration>
 
