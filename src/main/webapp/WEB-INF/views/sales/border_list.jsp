@@ -82,7 +82,7 @@
                                     <button class="search-btn">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
+                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="" name="keyword">
                                 </div>
                             </div>
 
@@ -114,8 +114,8 @@
                                     기간
                                 </div>
 
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
+                                <input type="date" class="select-date select-date-first" name="begin" value="${ LocalDate.now().plusDays(-7) }">
+                                <input type="date" class="select-date select-date-second" name="end" value="${ LocalDate.now() }">
 
                                 <input type="button" name="week" class="select-pan-btn" value="일주일">
                                 <input type="button" name="month" class="select-pan-btn" value="한달">

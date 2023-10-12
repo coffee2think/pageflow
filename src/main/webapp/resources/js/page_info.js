@@ -132,14 +132,14 @@ var MENU_INFO = [
     ,
     {
         title : '영업관리'
-        ,link : '/page/views/sales/sorder_list.jsp'
+        ,link : 'border_list.do'
         ,branch : [
             {
                 stitle : '주문관리'
-                ,slink : '/page/views/sales/sorder_list.jsp'
+                ,slink : 'border_list.do'
                 ,sbranch : [
-                    {mtitle : '주문현황', mlink : '/page/views/sales/sorder_list.jsp'},
-                    {mtitle : '주문입력', mlink : '/page/views/sales/sorder_input.jsp'}
+                    {mtitle : '주문현황', mlink : 'border_list.do'},
+                    {mtitle : '주문입력', mlink : 'border_input.do'}
                 ]
             },
             {
