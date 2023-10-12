@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="boardList" value="${ requestScope.boardList }"/>
-
+<c:set var="depId" value="${ boardList.get(0).depId }" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,7 +40,7 @@
                 <div class="side-container">
                     <div class="side-title"></div>
                     <div class="side-icon-box">
-                        <a href="${ pageContext.servletContext.contextPath }/views/work/work_input.jsp" class="side-write-btn">글쓰기</a>
+                        <a href="bdmoveinsert.do?depId=${ depId }" class="side-write-btn">글쓰기</a>
                         <div class="side-icon-menu">
                             <a class="side-icon-btn" id="sideBtn_new" href="#">
                                 <span class="side-icon">3</span>
@@ -157,7 +157,10 @@
 	                                    <span>|</span>
 	                                    <span>읽음 ${ b.viewsNum }</span>
 	                                    <span>|</span>
-	                                    <span><img src="${ pageContext.servletContext.contextPath }/resources/images/msg.png">0</span>
+	                                    <span>
+	                                    	<img src="${ pageContext.servletContext.contextPath }/resources/images/msg.png">
+	                                    	${ b.replyCount }
+	                                    </span>
 	                                    <span>|</span>
 	                                </div>
 	                            </a>

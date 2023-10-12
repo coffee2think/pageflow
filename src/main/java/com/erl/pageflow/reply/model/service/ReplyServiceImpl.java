@@ -19,4 +19,14 @@ public class ReplyServiceImpl implements ReplyService {
 		return replyDao.selectReplyList(replyKeyword);
 	}
 
+	@Override
+	public int selectReplyListCount(ReplyKeyword replyKeyword) {
+		return replyDao.selectReplyListCount(replyKeyword);
+	}
+
+	@Override
+	public String selectReplyEmpName(int replyId) {
+		return  replyDao.selectReplyEmpName(replyId);
+	}
+	
 }

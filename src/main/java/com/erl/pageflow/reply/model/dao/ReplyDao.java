@@ -21,4 +21,14 @@ public class ReplyDao {
 		return (ArrayList<Reply>)list;
 	}
 	
+	public int selectReplyListCount(ReplyKeyword replyKeyword) {
+		return sqlSessionTemplate.selectOne("replyMapper.selectReplyListCount", replyKeyword);
+	}
+
+	public String selectReplyEmpName(int replyId) {
+		return sqlSessionTemplate.selectOne("replyMapper.selectReplyEmpName", replyId);
+	}
+	
+	
+	
 }
