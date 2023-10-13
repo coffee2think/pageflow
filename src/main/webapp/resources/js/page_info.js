@@ -8,7 +8,7 @@ var MENU_INFO = [
         ,branch : [
             {
                 stitle : '공지사항'
-                ,slink : 'notice_list.do'
+                ,slink : 'list.do'
                 ,sbranch : [
                 ]
             },
@@ -21,11 +21,10 @@ var MENU_INFO = [
             },
             {
                 stitle : '관리자'
-                ,slink : ''
+                ,slink : 'mnlist.do'
                 ,sbranch : [
-                    {mtitle : '사원등록', mlink : ''},
-                    {mtitle : '사원정보수정', mlink : ''},
-                    {mtitle : '권한설정', mlink : ''}
+                    {mtitle : '사원등록', mlink : 'mnlist.do'},
+                    {mtitle : '권한설정', mlink : 'mnauthority.do'}
                 ]
             }
         ]
@@ -33,30 +32,21 @@ var MENU_INFO = [
     ,
     {
         title : '인쇄관리'
-        ,link : '/page/views/print/print_list.jsp'
+        ,link : 'polist.do'
         ,branch : [
             {
-                stitle : '인쇄의뢰'
-                ,slink : '/page/views/print/print_list.jsp'
-                ,sbranch : [
-                    {mtitle : '인쇄의뢰현황', mlink : '/page/views/print/print_list.jsp'},
-                    {mtitle : '인쇄의뢰등록', mlink : '/page/views/print/print_input.jsp'}
-                ]
-            },
-            {
                 stitle : '발주관리'
-                ,slink : '/page/views/print/porder_list.jsp'
+                ,slink : 'polist.do'
                 ,sbranch : [
-                    {mtitle : '발주현황', mlink : '/page/views/print/porder_list.jsp'},
-                    {mtitle : '발주등록', mlink : '/page/views/print/porder_input.jsp'}
+                    {mtitle : '발주현황', mlink : 'polist.do'},
+                    {mtitle : '발주등록', mlink : 'poinsert.do'}
                 ]
             },
             {
                 stitle : '정산관리'
-                ,slink : '/page/views/print/calc_list.jsp'
+                ,slink : 'pclist.do'
                 ,sbranch : [
-                    {mtitle : '정산현황', mlink : '/page/views/print/calc_list.jsp'},
-                    {mtitle : '정산등록', mlink : '/page/views/print/calc_input.jsp'}
+                    {mtitle : '정산현황', mlink : 'pclist.do'}
                 ]
             }
         ]
@@ -64,106 +54,116 @@ var MENU_INFO = [
     ,
     {
         title : '출판관리'
-        ,link : '/page/views/publish/contr_list.jsp'
+        ,link : 'ctrlist.do'
         ,branch : [
             {
                 stitle : '계약관리'
-                ,slink : '/page/views/publish/contr_list.jsp'
+                ,slink : 'ctrlist.do'
                 ,sbranch : [
-                    {mtitle : '계약현황', mlink : '/page/views/publish/contr_list.jsp'},
-                    {mtitle : '계약등록', mlink : '/page/views/publish/contr_input.jsp'}
-                ]
-            },
-            {
-                stitle : '도서관리'
-                ,slink : '/page/views/publish/book_list.jsp'
-                ,sbranch : [
-                    {mtitle : '도서현황', mlink : '/page/views/publish/book_list.jsp'},
-                    {mtitle : '도서등록', mlink : '/page/views/publish/book_input.jsp'}
+                    {mtitle : '계약현황', mlink : 'ctrlist.do'},
+                    {mtitle : '계약등록', mlink : 'ctrinsert.do'}
                 ]
             },
             {
                 stitle : '편집관리'
-                ,slink : '/page/views/publish/edit_list.jsp'
+                ,slink : 'edlist.do'
                 ,sbranch : [
-                    {mtitle : '편집현황', mlink : '/page/views/publish/edit_list.jsp'},
-                    {mtitle : '편집등록', mlink : '/page/views/publish/edit_input.jsp'}
+                    {mtitle : '편집현황', mlink : 'edlist.do'},
+                    {mtitle : '편집등록', mlink : 'edinsert.do'}
+                ]
+            },
+            {
+                stitle : '도서관리'
+                ,slink : 'bklist.do'
+                ,sbranch : [
+                    {mtitle : '도서현황', mlink : 'bklist.do'},
+                    {mtitle : '도서등록', mlink : 'bkinsert.do'}
+                ]
+            },
+            {
+                stitle : '작가관리'
+                ,slink : 'wtlist.do'
+                ,sbranch : [
+                    {mtitle : '작가현황', mlink : 'wtlist.do'},
+                    {mtitle : '작가등록', mlink : 'wtinsert.do'}
                 ]
             }
         ]
+
     },
     {
-        title : '재고관리'
-        ,link : '/page/views/inventory/store_list.jsp'
+         title : '재고관리'
+        ,link : 'inventorylist.do'
         ,branch : [
+         {
+                stitle : '재고관리'
+                ,slink : 'inventorylist.do'
+                ,sbranch : [
+                    {mtitle : '재고현황', mlink : 'inventorylist.do'}
+                ]
+            },
             {
                 stitle : '입고관리'
-                ,slink : '/page/views/inventory/store_list.jsp'
+                ,slink : 'storelist.do'
                 ,sbranch : [
-                    {mtitle : '입고현황', mlink : '/page/views/inventory/store_list.jsp'},
-                    {mtitle : '입고입력', mlink : '/page/views/inventory/store_input.jsp'}
+                    {mtitle : '입고현황', mlink : 'storelist.do'},
+                    {mtitle : '입고입력', mlink : 'storeinput.do'}
                 ]
             },
             {
                 stitle : '출고관리'
-                ,slink : '/page/views/inventory/release_list.jsp'
+                ,slink : 'releaselist.do'
                 ,sbranch : [
-                    {mtitle : '출고현황', mlink : '/page/views/inventory/release_list.jsp'},
-                    {mtitle : '출고등록', mlink : '/page/views/inventory/release_input.jsp'}
+                    {mtitle : '출고현황', mlink : 'releaselist.do'},
+                    {mtitle : '출고등록', mlink : 'releaseinput.do'}
                 ]
             },
             {
                 stitle : '반품관리'
-                ,slink : '/page/views/inventory/refund_list.jsp'
+                ,slink : 'refundlist.do'
                 ,sbranch : [
-                    {mtitle : '반품현황', mlink : '/page/views/inventory/refund_list.jsp'},
-                    {mtitle : '반품입력', mlink : '/page/views/inventory/refund_input.jsp'}
-                ]
-            },
-            {
-                stitle : '재고관리'
-                ,slink : '/page/views/inventory/inven_list.jsp'
-                ,sbranch : [
-                    {mtitle : '재고현황', mlink : '/page/views/inventory/inven_list.jsp'}
+                    {mtitle : '반품현황', mlink : 'refundlist.do'},
+                    {mtitle : '반품입력', mlink : 'refundinput.do'}
                 ]
             }
+            
         ]
     }
     ,
     {
         title : '영업관리'
-        ,link : '/page/views/sales/sorder_list.jsp'
+        ,link : 'movebolist.do'
         ,branch : [
             {
                 stitle : '주문관리'
-                ,slink : '/page/views/sales/sorder_list.jsp'
+                ,slink : 'movebolist.do'
                 ,sbranch : [
-                    {mtitle : '주문현황', mlink : '/page/views/sales/sorder_list.jsp'},
-                    {mtitle : '주문입력', mlink : '/page/views/sales/sorder_input.jsp'}
+                    {mtitle : '주문현황', mlink : 'movebolist.do'},
+                    {mtitle : '주문입력', mlink : 'moveboinput.do'}
                 ]
             },
             {
                 stitle : '판매관리'
-                ,slink : '/page/views/sales/sales_list.jsp'
+                ,slink : 'movesales.do'
                 ,sbranch : [
-                    {mtitle : '판매현황', mlink : '/page/views/sales/sales_list.jsp'},
-                    {mtitle : '판매입력', mlink : '/page/views/sales/sales_input.jsp'}
+                    {mtitle : '판매현황', mlink : 'movesales.do'},
+                    {mtitle : '판매입력', mlink : 'movessinput.do'}
                 ]
             },
             {
                 stitle : '거래처'
-                ,slink : '/page/views/sales/account_list.jsp'
+                ,slink : 'moveclient.do'
                 ,sbranch : [
-                    {mtitle : '거래처현황', mlink : '/page/views/sales/account_list.jsp'},
-                    {mtitle : '거래처등록', mlink : '/page/views/sales/account_input.jsp'}
+                    {mtitle : '거래처현황', mlink : 'moveclient.do'},
+                    {mtitle : '거래처등록', mlink : 'moveclinput.do'}
                 ]
             },
             {
                 stitle : '매출관리'
-                ,slink : '/page/views/sales/income_list.jsp'
+                ,slink : 'movestats.do'
                 ,sbranch : [
-                    {mtitle : '매출통계', mlink : '/page/views/sales/income_list.jsp'},
-                    {mtitle : '도서트렌드분석', mlink : '/page/views/sales/trend_list.jsp'}
+                    {mtitle : '매출통계', mlink : 'movestats.do'},
+                    {mtitle : '도서트렌드분석', mlink : 'moverank.do'}
                 ]
             }
         ]
@@ -171,29 +171,29 @@ var MENU_INFO = [
     ,
     {
         title : '전자결재'
-        ,link : '/page/views/approval/appr_list.jsp'
+        ,link : 'aplist.do'
         ,branch : [
             {
                 stitle : '내결재관리'
-                ,slink : '/page/views/approval/appr_list.jsp'
+                ,slink : 'aplist.do'
                 ,sbranch : [
                 ]
             },
             {
                 stitle : '기안서통합관리'
-                ,slink : '/page/views/approval/appr_listall.jsp'
+                ,slink : 'aplistall.do'
                 ,sbranch : [
                 ]
             },
             {
                 stitle : '기안서작성'
-                ,slink : '/page/views/approval/appr_input.jsp'
+                ,slink : 'apinsert.do'
                 ,sbranch : [
                 ]
             },
             {
                 stitle : '결재라인'
-                ,slink : '/page/views/approval/appr_line.jsp'
+                ,slink : 'allist.do'
                 ,sbranch : [
                 ]
             }

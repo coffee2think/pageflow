@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,6 +15,17 @@
     const NOWPAGE = 1;
     const SUBPAGE = 2;
     const LNKPAGE = 1;
+    
+    document.addEventListener('DOMContentLoaded', function(){
+        
+      
+    })
+    function inputSubmit(){
+    	$('#btn_insert').click(function() {
+            $('#appendTextArea').val($('.content-input').html());
+        });
+    }
+    
 </script>
 <title></title>
 </head>
@@ -38,7 +50,7 @@
                 <div class="side-container">
                     <div class="side-title"></div>
                     <div class="side-icon-box">
-                        <a href="${ pageContext.servletContext.contextPath }/views/work/work_input.jsp" class="side-write-btn">글쓰기</a>
+                        <a href="bdmoveinsert.do?depId=${ depId }" class="side-write-btn">글쓰기</a>
                         <div class="side-icon-menu">
                             <button class="side-icon-btn" id="sideBtn_new">
                                 <span class="side-icon">3</span>
@@ -98,14 +110,15 @@
                                 </div>
                             </div>
 
-                            <form>
+                            <form action="bdinsert.do" method="post" onsubmit="inputSubmit();">
+                            	<input type="hidden" name="depId" value="${ depId }">
                                 <div class="select-box">
                                     <div class="select-pan-nemo">
                                         제목
                                     </div>
 
                                     <div class="select-pan">
-                                        <input type="text" class="input-box-input noline" placeholder="제목을 입력하세요.">
+                                        <input type="text" name="boardTitle" class="input-box-input noline" placeholder="제목을 입력하세요.">
                                     </div>
                                 </div>
 
@@ -115,19 +128,21 @@
                                     </div>
 
                                     <div class="select-pan">
-                                        <input type="file" class="select-file">
+                                        <input type="file" name="upfile" class="select-file">
                                     </div>
                                 </div>
 
                                 <div class="content-input-area height-long">
                                     <div class="content-input" contenteditable="true">
-
+										
                                     </div>
                                 </div>
 
                                 <div class="content-input-btn-box">
-                                    <input type="button" class="contents-input-btn big noline" id="btn_insert" value="입력">
+                                    <input type="submit" class="contents-input-btn big noline" id="btn_insert" value="입력">
                                 </div>
+                                
+                                <textarea name="boardDetail" id="appendTextArea"></textarea> 
                             </form>
                         </div>
                     </div>

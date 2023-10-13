@@ -19,21 +19,9 @@ public class Board implements Serializable {
 	private String empName;
 	private String depName;
 	
-	public Board() {}
+	private int replyCount = 0;
 	
-//	public Board(int depId, int boardId, int empId, String boardTitle, String boardDetail, Date createDate,
-//			Date modifyDate, Date deleteDate, int viewsNum) {
-//		super();
-//		this.depId = depId;
-//		this.boardId = boardId;
-//		this.empId = empId;
-//		this.boardTitle = boardTitle;
-//		this.boardDetail = boardDetail;
-//		this.createDate = createDate;
-//		this.modifyDate = modifyDate;
-//		this.deleteDate = deleteDate;
-//		this.viewsNum = viewsNum;
-//	}
+	public Board() {}
 	
 	public Board(int depId, int boardId, int empId, String boardTitle, String boardDetail, Date createDate,
 			Date modifyDate, Date deleteDate, int viewsNum, String empName, String depName) {
@@ -138,12 +126,22 @@ public class Board implements Serializable {
 	public void setViewsNum(int viewsNum) {
 		this.viewsNum = viewsNum;
 	}
+	
+	public int getReplyCount() {
+		return replyCount;
+	}
 
+	public void setReplyCount(int replyCount) {
+		this.replyCount = replyCount;
+	}
+	
 	@Override
 	public String toString() {
 		return "Board [depId=" + depId + ", boardId=" + boardId + ", empId=" + empId + ", boardTitle=" + boardTitle
 				+ ", boardDetail=" + boardDetail + ", createDate=" + createDate + ", modifyDate=" + modifyDate
-				+ ", deleteDate=" + deleteDate + ", viewsNum=" + viewsNum + "]";
+				+ ", deleteDate=" + deleteDate + ", viewsNum=" + viewsNum + ", empName=" + empName + ", depName="
+				+ depName + ", replyCount=" + replyCount + "]";
 	}
+
 	
 }

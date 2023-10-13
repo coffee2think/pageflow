@@ -11,7 +11,7 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 4;
-    const SUBPAGE = 2;
+    const SUBPAGE = 3;
     const LNKPAGE = 2;
 </script>
 <title></title>
@@ -24,7 +24,7 @@
             <!--header-container-->
             <div class="header-container">
                 <!-- 헤더 들어감 -->
-                <c:import url="../common/header.jsp" />
+                <c:import url="/WEB-INF/views/common/header.jsp" />
             </div>
             <!--header-container end-->
         </header>
@@ -37,7 +37,7 @@
                 <div class="side-container">
                     <div class="side-title"></div>
                     <!-- 리스트 들어감 -->
-                    <c:import url="../common/side.jsp" />
+                    <c:import url="/WEB-INF/views/common/side.jsp" />
                 </div>
             </div>
             <!--main-side end-->
@@ -177,7 +177,7 @@
             <!--modal-pop-area-->
             <div class="modal-pop-area">
                 <!-- 팝업 들어감 -->
-                <c:import url="../common/popup.jsp" />
+                <c:import url="/WEB-INF/views/common/popup.jsp" />
             </div>
             <!--modal-pop-area end-->
 

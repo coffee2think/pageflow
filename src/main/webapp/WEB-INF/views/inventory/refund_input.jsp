@@ -11,7 +11,7 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 4;
-    const SUBPAGE = 3;
+    const SUBPAGE = 4;
     const LNKPAGE = 2;
 </script>
 <title></title>
@@ -24,7 +24,7 @@
             <!--header-container-->
             <div class="header-container">
                 <!-- 헤더 들어감 -->
-                <c:import url="../common/header.jsp" />
+                <c:import url="/WEB-INF/views/common/header.jsp" />
             </div>
             <!--header-container end-->
         </header>
@@ -37,7 +37,7 @@
                 <div class="side-container">
                     <div class="side-title"></div>
                     <!-- 리스트 들어감 -->
-                    <c:import url="../common/side.jsp" />
+                    <c:import url="/WEB-INF/views/common/side.jsp" />
                 </div>
             </div>
             <!--main-side end-->
@@ -47,7 +47,7 @@
 
                 <!--form-->
                 <!-- <form class="input-form" action="/comi/partyi" method="post" enctype="multipart/form-data">-->
-                <form class="input-form" action="" method="post">
+                <form class="input-form" action="refundinput.do">
                     <!--main-header-bar-->
                     <div class="main-header-bar">
                         <div class="main-title-box">
@@ -95,7 +95,7 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="code" class="contents-input" value="">
+                                                <input type="input" name="refundId" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-200">
@@ -103,7 +103,7 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="name" class="contents-input" value="">
+                                                <input type="input" name="bookId" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-100">
@@ -111,37 +111,42 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="store" class="contents-input" value="">
+                                                <input type="input" name="clientId" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="input" name="state" class="contents-input">
+                                                <input type="input" name="empId" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div">
-                                                <input type="date" name="date" class="select-date small">
+                                                <input type="date" name="empName" class="select-date small">
                                             </div>
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="number" name="count" class="contents-input">
+                                                <input type="number" name="refundName" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="number" name="price" class="contents-input">
+                                                <input type="number" name="refundDate" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div">
-                                                <input type="number" name="amount" class="contents-input">
+                                                <input type="number" name="refundAmount" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-120">
                                             <div class="contents-input-div">
-                                                <input type="number" name="bigo" class="contents-input">
+                                                <input type="number" name="refunfState" class="contents-input">
+                                            </div>
+                                        </td>
+                                        <td class="td-120">
+                                            <div class="contents-input-div">
+                                                <input type="number" name="remark" class="contents-input">
                                             </div>
                                         </td>
                                     </tr>
@@ -181,7 +186,7 @@
             <!--modal-pop-area-->
             <div class="modal-pop-area">
                 <!-- 팝업 들어감 -->
-                <c:import url="../common/popup.jsp" />
+                <c:import url="/WEB-INF/views/common/popup.jsp" />
             </div>
             <!--modal-pop-area end-->
 

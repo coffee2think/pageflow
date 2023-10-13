@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erl.pageflow.common.ReplyKeyword;
+import com.erl.pageflow.common.UploadKeyword;
 import com.erl.pageflow.reply.model.dao.ReplyDao;
 import com.erl.pageflow.reply.model.vo.Reply;
 
@@ -19,4 +20,26 @@ public class ReplyServiceImpl implements ReplyService {
 		return replyDao.selectReplyList(replyKeyword);
 	}
 
+	@Override
+	public int selectReplyListCount(ReplyKeyword replyKeyword) {
+		return replyDao.selectReplyListCount(replyKeyword);
+	}
+
+	@Override
+	public String selectReplyEmpName(int replyId) {
+		return replyDao.selectReplyEmpName(replyId);
+	}
+
+	@Override
+	public int insertReply(Reply reply) {
+		return replyDao.insertReply(reply);
+	}
+
+	@Override
+	public int insertUploadReply(UploadKeyword uploadKeyword) {
+		return replyDao.insertUploadReply(uploadKeyword);
+		
+	}
+	
+	
 }

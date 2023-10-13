@@ -14,10 +14,179 @@
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title></title>
-<script>
+
+<script type="text/javascript">
     const NOWPAGE = 1;
     const SUBPAGE = 2;
     const LNKPAGE = 1;
+    
+    document.addEventListener("DOMContentLoaded", function(){
+    	var workNotice = new Work_notice();
+    	workNotice.buttonEvent();
+    })
+	
+    function Work_notice() {
+    }
+    
+    Work_notice.prototype = {
+    	buttonEvent : function(){
+    		//등록순, 최신순 버튼
+    		$('.reply-sort-btn').each(function(){
+        		$(this).on('click', function(){
+        			
+        		})
+        	})
+        	
+        	//보드 수정
+        	$('.button-update').on('click', function(){
+        		
+        	})
+        	
+        	//보드 삭제
+        	$('.button-update').on('click', function(){
+        		
+        	})
+        	
+        	//게시판 댓글 뎁스0
+        	$('.reply-input-btn-depth0').on('click', function(){
+        		location.href = 'nlist.do';
+        	})
+        	
+        	
+    	}
+    }
+    
+    function setReplyBtn(){
+    	//댓글 입력 팝업 보이기 버튼
+        $('.reply-btn').each(function(){
+            $(this).on('click', function(){
+            	clickReplyBtn($(this));
+            })
+        })
+        
+        //댓글 입력버튼
+        $('.reply-input-btn').each(function(){
+        	$(this).on('click', function(){
+        		
+        		if($(this).parent().parent('.reply-input-box').hasClass('depth1')){
+        			
+        		}else{
+        			let parent = $(this).parent().parent().parent('.notice-reply-con');
+                	replyInsert(parent);
+        		}
+        		
+        	})
+        })
+    }
+    
+    function setId(parent){
+    	
+    	let data = {
+   			bundleId : parent.attr('data-bundleId')
+           	,bundleId2 : parent.attr('data-bundleId2')
+           	,parentId : parent.attr('data-parentId')
+           	,depth : parent.attr('data-depth')
+           	,depth2 : parent.attr('data-depth2')
+           	,replyId : parent.attr('data-replyId')
+    	}
+    	
+		return data;
+	}
+    
+  	//댓글 창 보이기
+	function clickReplyBtn(thisObj) {
+		let parent = thisObj.parent('.notice-reply-con');
+    	let data = setId(parent);
+    	console.log('data.replyId : ' + data.replyId);
+    	let reply = $('#reply_'+data.replyId);
+    	let inputBox = reply.find('.reply-input-box');
+    	let vis = inputBox.css('display');
+    	
+    	if(vis == 'none') inputBox.show();
+    	else inputBox.hide();
+    	
+    	inputBox.find('.reply-input').html('<em class="tag-text" contenteditable="false">@' + reply.find('.reply-ename').text() + '</em>&nbsp;');
+	}
+    
+  	//댓글 등록 버튼 클릭시
+	function replyInsert(parent){
+		
+		//댓글 ajax 
+		let obj = setId(parent);
+    	let replyId, bundleId, bundleId2, parentId, depth, depth2;
+    	let replyDetail = parent.find('.reply-input').text();
+		
+		if(obj.depth == -1){
+			//bundlId는 depth가 -1일때는 최상위
+			//번들아이디를 ajax로 받아와야 함
+			replyId = obj.replyId;
+			bundleId = replyId;
+			bundleId2 = bundleId;
+			parentId = bundleId;
+			depth = -1;
+			depth2 = -1;
+			
+			ajaxInsert2(bundleId, bundleId2, parentId, depth, 
+					depth2, replyId, replyDetail);
+			
+		}else{
+			//depth가 -1이 아닐때는 댓글의 댓글임
+			bundleId = obj.bundleId;
+			replyId = obj.replyId;
+			if(depth == 1) {
+				bundleId2 = replyId;
+			}else {
+				bundleId2 = obj.bundleId2;
+			}
+			
+			parentId = replyId;
+			depth = 1;
+			depth2 = (depth2 < 3) ? obj.depth2 + 1 : obj.depth2;
+			console.log('replyInsert - bundleId : ' + bundleId + ', bundleId2 : ' +
+					bundleId2 + ', parentId : ' + parentId + ', depth : ' + depth + 
+					', depth2 : ' + depth2 + ', replyId : ' + replyId + 
+					', replyDetail : ' + replyDetail);
+			ajaxInsert(bundleId, bundleId2, parentId, depth, 
+					depth2, replyId, replyDetail);
+			
+		}
+		
+	}
+    
+  	//댓글 인서트
+	function ajaxInsert(bundleId, bundleId2, parentId, depth, 
+			depth2, replyId, replyDetail){
+		
+		console.log('ajaxReplyInsert - bundleId : ' + bundleId + ', bundleId2 : ' +
+				bundleId2 + ', parentId : ' + parentId + ', depth : ' + depth + 
+				', depth2 : ' + depth2 + ', replyId : ' + replyId + 
+				', replyDetail : ' + replyDetail);
+		
+		$.ajax({
+    		url : 'ryinsert.do'
+    		,type : 'post'
+    		,data : {
+    			defId : ${ board.depId }
+    			,empId : 1
+    			,bundleId : bundleId
+    			,bundleId2 : bundleId2
+    			,parentId : parentId
+    			,depth : depth
+    			,depth2 : depth2
+    			,replyId : replyId
+    			,replyDetail : replyDetail
+    		},
+    		success : function(data) {
+    			console.log("success : " + data);
+    			//$('.reply-input-btn')
+    			
+    		},
+    		error: function(jqXHR, textStatus, errorThrown){
+    			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+    		}
+    	})
+	}
+    
 </script>
 </head>
 <body>
@@ -36,13 +205,12 @@
         <!--헤더 end-->
 
         <main class="main-wrapper">
-            
             <!--main-side-->
             <div class="main-side">
                 <div class="side-container">
                     <div class="side-title"></div>
                     <div class="side-icon-box">
-                        <a href="${ pageContext.servletContext.contextPath }/views/work/work_input.jsp" class="side-write-btn">글쓰기</a>
+                        <a href="bdmoveinsert.do?depId=${ board.depId }" class="side-write-btn">글쓰기</a>
                         <div class="side-icon-menu">
                             <button class="side-icon-btn" id="sideBtn_new">
                                 <span class="side-icon">3</span>
@@ -130,7 +298,7 @@
                         <div class="contents-box notice" data-num="">
 
                             <div class="contents-title notice-tit small">
-                                ${ board.depName }팀 게시판
+                                ${ board.depName } 게시판
                             </div>
 
                             <!--contents-notice-->
@@ -153,22 +321,27 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <a class="contents-notice-down" href="#">
-                                        <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
-                                        <span>product_manage.zip</span>
-                                        <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
-                                    </a>
+                                    
                                 </div>
                                 
                                 <div class="notice-contents-box">
                                     ${ board.boardDetail }
                                 </div>
-
+                                <div class="contents-notice-buttonbox">
+									<div class="button-box">
+		                                <a class="button-a button-update" href="#">
+		                                    수정
+		                                </a>
+		                                <a class="button-a button-delete" href="#">
+		                                    삭제
+		                                </a>
+		                            </div>
+		                        </div>
                                 <!--notice-reply-box-->
                                 <div class="notice-reply-box">
                                     <div class="notice-reply-title">
                                         <div class="reply-title">
-                                            댓글 <span>0</span>
+                                            댓글 <span>${ replyList.size() }</span>
                                         </div>
                                         <div class="reply-sort">
                                             <button class="reply-sort-btn">
@@ -176,134 +349,99 @@
                                                 <span>등록순</span>
                                             </button>
                                             <button class="reply-sort-btn">
-                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/chk.png">
+                                                <img class="display-none" src="${ pageContext.servletContext.contextPath }/resources/images/chk.png">
                                                 <span>최신순</span>
                                             </button>
                                         </div>
                                     </div>
-
-                                    <!--댓글 뎁스 1-->
-                                    <div class="notice-reply-con depth1" data-parent="" data-num="">
-                                        <div class="contents-notice-line">
-                                            <div class="notice-profile">
-                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
-                                                <span>
-                                                    <div>홍길동</div>
-                                                    <div>
-                                                        <span>2023.05.09</span>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="contents-notice-text">
-                                            <span class="contents-notice-text-parent">@전성훤</span>
-                                            댓글  댓글1댓글  댓글1
-                                            댓글  댓글1댓글  댓글1
-                                            댓글  댓글1댓글  댓글1
-                                            댓글  댓글1댓글  댓글1
-                                            댓글  댓글1댓글  댓글1
-                                            댓글  댓글1댓글  댓글1
-                                            댓글  댓글1댓글  댓글1
-                                            댓글  댓글1댓글  댓글1
-                                            댓글  댓글1댓글  댓글1
-                                            댓글  댓글1댓글  댓글1
-                                            댓글  댓글1댓글  댓글1
-                                            댓글  댓글1
-                                            댓글  댓글1
-                                        </div>
-
-                                        <a class="contents-notice-down" href="#">
-                                            <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
-                                            <span>product_manage2.zip</span>
-                                            <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
-                                        </a>
-
-                                        <button class="reply-btn">
-                                            답글
-                                        </button>
-
-                                        <div class="reply-right">
-											<div class="reply-dropdown">
-												<button class="reply-delete-btn">삭제</button>
-												<button class="reply-report-btn">신고</button>
-											</div>
-					                        <button class="reply-right-btn">
-					                            <img class="reply-right-btn-img" src="${ pageContext.servletContext.contextPath }/resources/images/right.png">
-					                        </button>
-					                    </div>
-                                    </div>
-                                    <!--댓글 뎁스 1 end-->
-
-                                    <!--댓글 뎁스 2-->
-                                    <div class="notice-reply-con depth2" data-parent="" data-num="">
-                                        <div class="depth2-icon">ㄴ</div>
-                                        <div class="contents-notice-line">
-                                            <div class="notice-profile">
-                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
-                                                <span>
-                                                    <div>홍길동</div>
-                                                    <div>
-                                                        <span>2023.05.09</span>
-                                                    </div>
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        <div class="contents-notice-text">
-                                            <span class="contents-notice-text-parent">@전성훤</span>
-                                            댓글  댓글1
-                                            댓글  댓글1
-                                        </div>
-
-                                        <a class="contents-notice-down" href="#">
-                                            <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
-                                            <span>product_manage2.zip</span>
-                                            <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
-                                        </a>
-
-                                        <button class="reply-btn">
-                                            답글
-                                        </button>
-
-                                        <div class="reply-right">
-											<div class="reply-dropdown">
-												<button class="reply-delete-btn">삭제</button>
-												<button class="reply-report-btn">신고</button>
-											</div>
-					                        <button class="reply-right-btn">
-					                            <img class="reply-right-btn-img" src="${ pageContext.servletContext.contextPath }/resources/images/right.png">
-					                        </button>
-					                    </div>
-
-                                        <div class="reply-input-box depth2">
-                                            <div class="depth2-icon-reply">ㄴ</div>
-                                            <div class="reply-input-area">
-                                                <div class="reply-input" contenteditable="true">
-                                                    
+                                    
+                                    <c:forEach var="r" items="${ replyList }">
+                                    	
+                                        <div class="notice-reply-con depth${ r.depth2 }" 
+                                        	data-empId="${ r.empId }"
+                                        	data-bundleId="${ r.bundleId }" 
+                                        	data-bundleId2="${ r.bundleId2 }" 
+                                        	data-parentId="${ r.parentId }" 
+                                        	data-depth="${ r.depth }" 
+                                        	data-depth2="${ r.depth2 }" 
+                                        	data-replyId="${ r.replyId }"
+                                        	id = "reply_${ r.replyId }"
+                                        >
+                                            
+                                            <c:if test="${ r.depth2 >= 1 }">
+                                            	<div class="depth2-icon">ㄴ</div>
+                                            </c:if>
+                                            
+                                            <div class="contents-notice-line">
+                                                <div class="notice-profile">
+                                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
+                                                    <span>
+                                                        <div class="reply-ename">${ r.empName }</div>
+                                                        <div class="reply-date">
+                                                            <span>${ r.createDate }</span>
+                                                        </div>
+                                                    </span>
                                                 </div>
                                             </div>
-                                            <div class="reply-input-btn-box">
-                                                <input type="file" class="file-btn" id="">
-                                                <input type="button" class="contents-input-btn big noline" id="btn_insert" value="입력">
+                                            
+                                            <div class="contents-notice-text">
+                                                <span class="contents-notice-text-parent">@${ r.parentEmpName }</span>
+                                                ${ r.replyDetail }
                                             </div>
+                                            
+    										
+		
+                                            <a class="contents-notice-down" href="#">
+                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
+                                                <span>product_manage2.zip</span>
+                                                <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
+                                            </a>
+                                            
+                                            <c:if test="${ r.depth2 != 3 }">
+	                                            <button class="reply-btn">
+	                                                답글
+	                                            </button>
+    										</c:if>
+    										
+    										<div class="reply-right">
+												<div class="reply-dropdown">
+													<button class="reply-delete-btn">삭제</button>
+													<button class="reply-report-btn">신고</button>
+												</div>
+						                        <button class="reply-right-btn">
+						                            <img class="reply-right-btn-img" src="/pageflow/resources/images/right.png">
+						                        </button>
+						                    </div>
+											
+	                                        <div class="reply-input-box depth2">
+	                                            <!-- <div class="depth2-icon-reply">ㄴ</div> -->
+	                                            <div class="reply-input-area">
+	                                                <div class="reply-input" contenteditable="true">
+	                                                    
+	                                                </div>
+	                                            </div>
+	                                            <div class="reply-input-btn-box">
+	                                                <input type="file" class="file-btn" name="upfile">
+	                                                <input type="button" class="contents-input-btn reply-input-btn big noline" value="입력">
+	                                            </div>
+	                                        </div>
                                         </div>
-
-                                    </div>
-                                    <!--댓글 뎁스 2 end-->
-
+                                    </c:forEach>
+									<script type="text/javascript">
+										setReplyBtn();
+									</script>
                                 </div>
                                 <!--notice-reply-box end-->
 
                                 <div class="reply-input-box depth1">
                                     <div class="reply-input-area">
                                         <div class="reply-input" contenteditable="true">
-
+											<em class="tag-text" contenteditable="false">@${ board.empName }</em>&nbsp;
                                         </div>
                                     </div>
                                     <div class="reply-input-btn-box">
-                                        <input type="file" class="file-btn" id="">
-                                        <input type="button" class="contents-input-btn big noline" id="btn_insert" value="입력">
+                                        <input type="file" class="file-btn" name="upfile">
+                                        <input type="button" class="contents-input-btn reply-input-btn-depth0 big noline" value="입력">
                                     </div>
                                 </div>
 
@@ -311,16 +449,16 @@
                             <!--contents-notice end-->
 
                             <div class="button-box">
-                                <a class="button-a button-list" href="#">
+                                <a class="button-a button-list">
                                     목록
                                 </a>
-                                <a class="button-a button-prev" href="#">
+                                <a class="button-a button-prev">
                                     ▲
                                 </a>
-                                <a class="button-a button-next" href="#">
+                                <a class="button-a button-next">
                                     ▼
                                 </a>
-                                <a class="button-a button-top" href="#">
+                                <a class="button-a button-top" href="#body-top">
                                     위로
                                 </a>
                             </div>

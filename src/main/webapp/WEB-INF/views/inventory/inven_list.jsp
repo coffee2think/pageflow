@@ -1,6 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<c:set var="currentLimit" value="${ requestScope.limit }" />
+<c:set var="nowpage" value="1" />
+<c:if test="${ !empty requestScope.currentPage }">
+	<c:set var="nowpage" value="${ requestScope.currentPage }" />
+</c:if>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,7 +18,7 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 4;
-    const SUBPAGE = 4;
+    const SUBPAGE = 1; 
     const LNKPAGE = 1;
 </script>
 <title></title>
@@ -24,7 +31,7 @@
             <!--header-container-->
             <div class="header-container">
                 <!-- 헤더 들어감 -->
-                <c:import url="../common/header.jsp" />
+                <c:import url="/WEB-INF/views/common/header.jsp" />
             </div>
             <!--header-container end-->
         </header>
@@ -37,7 +44,7 @@
                 <div class="side-container">
                     <div class="side-title"></div>
                     <!-- 리스트 들어감 -->
-                    <c:import url="../common/side.jsp" />
+                    <c:import url="/WEB-INF/views/common/side.jsp" />
                 </div>
             </div>
             <!--main-side end-->
@@ -61,19 +68,18 @@
 
                     <!--서치영역-->
                     <div class="search-container">
-                        <form class="search-form">
+                        <form class="search-form" action="invenfirstfilter.do" method="post">                         
                             <div class="select-search">
                                 <div class="select-box">
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">도서코드</option>
-                                            <option value="">도서명</option>
-                                            <option value="">정가</option>
-                                            <option value="">전일재고</option>
-                                            <option value="">당일재고</option>
-                                            <option value="">입고부수</option>
-                                            <option value="">출고부수</option>
+                                            <option value="bookId">도서코드</option>
+                                            <option value="bookName">도서명</option>
+                                            <option value="prevInbenId">전일재고</option>
+                                            <option value="currInven">당일재고</option>
+                                            <option value="storeNum">입고부수</option>
+                                            <option value="releaseNum">출고부수</option>
                                         </select>
                                     </div>
                                 </div>
@@ -82,7 +88,8 @@
                                     <button class="search-btn">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
+                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" name="keyword">
+                                    <input type="hidden" name="limit" value="${ currentLimit }">
                                 </div>
                             </div>
 
@@ -124,7 +131,7 @@
 
                         <div class="paging-box">
                             <!-- 페이징 -->
-                            <c:import url="../common/paging.jsp" />
+                            <c:import url="/WEB-INF/views/common/paging.jsp" />
                         </div>
 
                         <button class="search-visible-btn" id="search_visible_btn">
@@ -145,67 +152,62 @@
                                     <th>도서명</th>
                                     <th>창고</th>
                                     <th>구분</th>
-                                    <th>정가</th>
                                     <th>이전재고</th>
                                     <th>증감</th>
                                     <th>현재재고</th>
                                     <th>비고</th>
                                     <th>수정</th>
                                 </tr>
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                    <td class="td-50">
-                                        <input type="checkbox" name="check" value="" >
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="code" class="contents-input noline" value="10100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-250">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="name" class="contents-input noline" value="데이터베이스 개론과 실습" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date" class="contents-input noline" value="반품" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="state" class="contents-input noline" value="제1창고" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="price" class="contents-input noline" value="23000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="stor_prev" class="contents-input noline" value="1000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="store_in" class="contents-input noline" value="+300" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="store_current" class="contents-input noline" value="1300" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="bigo" class="contents-input noline" value="찢어짐" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-                                    </td>
-                                </tr>
-
+                                <c:forEach var = "inv" items="${ requestScope.list }">
+	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+	                                    <td class="td-50">
+	                                        <input type="checkbox" name="cheack">
+	                                    </td>
+	                                    <td class="td-155">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="bookId" class="contents-input noline" value="${ inv.bookId }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-250">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="bookName" class="contents-input noline" value="${ inv.bookName }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-70">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="classify" class="contents-input noline" value="${ inv.classify }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-105">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="clientName" class="contents-input noline" value="${ inv.storageName }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-110">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="currInven" class="contents-input noline" value="${ inv.currInven }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-100">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="increase" class="contents-input noline" value="${ inv.increase }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-100">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="plus" class="contents-input noline" value="${ inv.increase + inv.currInven }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-120">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="remark" class="contents-input noline" value="${ inv.remark }">
+	                                        </div>s
+	                                    </td>
+	                                    <td class="td-70">
+	                                        <input type="button" name="" class="contents-input-btn noline" value="수정">
+	                                    </td>
+	                                </tr>
+								</c:forEach>
                                 <!--합계-->
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
                                     <td></td>
@@ -229,12 +231,7 @@
 
                 </div>
                 <!--내용 end-->
-
-                
-                <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제">
-                </div>
-                
+             
             </div>
             <!--main-container end-->
 
@@ -242,7 +239,7 @@
             <!--modal-pop-area-->
             <div class="modal-pop-area">
                 <!-- 팝업 들어감 -->
-                <c:import url="../common/popup.jsp" />
+                <c:import url="/WEB-INF/views/common/popup.jsp" />
             </div>
             <!--modal-pop-area end-->
 
