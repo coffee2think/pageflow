@@ -8,27 +8,78 @@
 		<result property="replyId" column="REPLY_ID" />
 		<result property="depId" column="DEP_ID" />
 		<result property="boardId" column="BOARD_ID" />
-		<result property="writerId" column="WRITER_ID" />
-		<result property="parent" column="PARENT" />
+		<result property="empId" column="EMP_ID" />
+		<result property="bundleId" column="BUNDLE_ID" />
+		<result property="bundleId2" column="BUNDLE_ID2" />
+		<result property="parentId" column="PARENT_ID" />
 		<result property="depth" column="DEPTH" />
+		<result property="depth2" column="DEPTH2" />
 		<result property="replyDetail" column="REPLY_DETAIL" />
 		<result property="createDate" column="CREATE_DATE" />
 		<result property="modifyDate" column="MODIFY_DATE" />
 		<result property="deleteDate" column="DELETE_DATE" />
 	</resultMap>
 	
-	<select id="selectReplyListCount" resultType="_int">
-		select count(*) from reply
+	<resultMap type="Reply" id="resultReplyJoin">
+		<result property="replyId" column="REPLY_ID" />
+		<result property="depId" column="DEP_ID" />
+		<result property="boardId" column="BOARD_ID" />
+		<result property="empId" column="EMP_ID" />
+		<result property="bundleId" column="BUNDLE_ID" />
+		<result property="bundleId2" column="BUNDLE_ID2" />
+		<result property="parentId" column="PARENT_ID" />
+		<result property="depth" column="DEPTH" />
+		<result property="depth2" column="DEPTH2" />
+		<result property="replyDetail" column="REPLY_DETAIL" />
+		<result property="createDate" column="CREATE_DATE" />
+		<result property="modifyDate" column="MODIFY_DATE" />
+		<result property="deleteDate" column="DELETE_DATE" />
+		<result property="empName" column="EMP_NAME" />
+		<result property="profile" column="PROFILE" />
+	</resultMap>
+	
+	<resultMap type="Reply" id="resultReplyEmp">
+		<result property="empId" column="EMP_ID" />
+		<result property="empName" column="EMP_NAME" />
+	</resultMap>
+	
+	<select id="selectReplyListCount" parameterType="ReplyKeyword" resultType="_int">
+		select count(*) from reply 
+		where BOARD_ID = ${boardId} 
+		and DEP_ID = ${depId} 
 	</select>
 	
-	<select id="selectReplyList" parameterType="ReplyKeyword" resultMap="resultReply">
-		select *
-		from reply
-		where dep_id = ${depId} and board_id = ${boardId}
+	<select id="selectReplyList" parameterType="ReplyKeyword" resultMap="resultReplyJoin">
+	
+	select * 
+	from reply 
+	left join employee USING(EMP_ID) 
+	where BUNDLE_ID in    
+	     (select REPLY_ID 
+	      from (select rownum rnum, REPLY_ID, DEP_ID, BOARD_ID, EMP_ID, BUNDLE_ID, 
+	      		BUNDLE_ID2, PARENT_ID, DEPTH, DEPTH2, REPLY_DETAIL, CREATE_DATE, 
+	      		MODIFY_DATE, DELETE_DATE
+	            from (select * from reply where BOARD_ID = ${ boardId } and DEP_ID = ${ depId } ) 
+	            )
+	      ) 
+	order by BUNDLE_ID desc, DEPTH asc, BUNDLE_ID2 desc, DEPTH2 asc, REPLY_ID desc
+		
 	</select>
 	
+	<select id="selectReplyEmpName" parameterType="_int" resultType="string">
+		select EMP_NAME
+		from reply 
+		left join employee USING(EMP_ID)
+		where REPLY_ID = #{ replyId } 
+	</select>
 	
-
+	<insert id="insertReply" parameterType="Reply">
+	     insert into reply values
+	    ((select max(REPLY_ID) + 1 from reply), depId, boardId, empId,
+	     bundleId, bundleId2, parentId, depth, depth2,
+	     replyDetail, default, null, null)
+	</insert>
+	
 </mapper>
 
 

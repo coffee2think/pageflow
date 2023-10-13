@@ -102,7 +102,7 @@
 .depth2-icon{
     position: absolute;
     top: 10px;
-    left: 30px;
+    margin-left: -30px;
     font-size: 20px;
 }
 
@@ -138,9 +138,19 @@
     border-bottom: 1px solid #e2e2e2;
 }
 
-.notice-reply-con.depth2 {
+.notice-reply-con.depth1, .notice-reply-con.depth2 {
     background-color: #f7f6f6;
     padding-left: 60px;
+}
+
+.notice-reply-con.depth2 {
+    background-color: #f7f6f6;
+    padding-left: 120px;
+}
+
+.notice-reply-con.depth3 {
+    background-color: #f7f6f6;
+    padding-left: 180px;
 }
 
 .contents-notice-text {
@@ -160,7 +170,13 @@
     cursor: pointer;
     background-color: #fff;
 }
+.tag-text {
+    color: #1a70d3;
+}
 
+.display-none {
+    display: none;
+}
 
 /*오른쪽*/
 .reply-right {
@@ -187,7 +203,7 @@
 }
 
 .reply-input-box.depth2 {
-
+    display: none;
 }
 
 .depth2-icon-reply{
@@ -346,4 +362,18 @@
 
 .button-prev, .button-next {
 	font-size: 10px;
+}
+
+.contents-notice-buttonbox{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 0px;
+}
+
+#appendTextArea {
+    position: absolute;
+    top: 0;
+    right: 50000px;
+    z-index: -9999999999;
 }

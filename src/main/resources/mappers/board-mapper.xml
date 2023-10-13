@@ -4,7 +4,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="boardMapper">
 
-	<resultMap type="Board" id="resultBoard">
+	<resultMap type="Board" id="resultBoardJoin">
 		<result property="depId" column="DEP_ID" />
 		<result property="boardId" column="BOARD_ID" />
 		<result property="empId" column="EMP_ID" />
@@ -18,11 +18,25 @@
 		<result property="depName" column="DEP_NAME" />
 	</resultMap>
 	
+	<resultMap type="Board" id="resultBoard">
+		<result property="depId" column="DEP_ID" />
+		<result property="boardId" column="BOARD_ID" />
+		<result property="empId" column="EMP_ID" />
+		<result property="boardTitle" column="BOARD_TITLE" />
+		<result property="boardDetail" column="BOARD_DETAIL" />
+		<result property="createDate" column="CREATE_DATE" />
+		<result property="modifyDate" column="MODIFY_DATE" />
+		<result property="deleteDate" column="DELETE_DATE" />
+		<result property="viewsNum" column="VIEWS_NUM" />
+	</resultMap>
+	
 	<select id="selectBoardListCount" resultType="_int">
 		select count(*) from board
 	</select>
 	
-	<select id="selectBoardList" parameterType="Paging" resultMap="resultBoard">
+
+
+	<select id="selectBoardList" parameterType="Paging" resultMap="resultBoardJoin">
 		<![CDATA[
 		select * 
 		from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
@@ -37,7 +51,7 @@
 		]]>
 	</select>
 	
-	<select id="selectBoardSearch" parameterType="Paging" resultMap="resultBoard">
+	<select id="selectBoardSearch" parameterType="Paging" resultMap="resultBoardJoin">
 		<![CDATA[
 		select * 
 		from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
@@ -45,11 +59,12 @@
 		           MODIFY_DATE, DELETE_DATE, VIEWS_NUM 
 		      from (select * from board 
 		           order by BOARD_ID desc)) 
+		left join employee using(EMP_ID)
 		where rnum >= #{ startRow } and rnum <= #{ endRow }
 		]]>
 	</select>
 	
-	<select id="selectBoard" parameterType="BoardKeyword" resultMap="resultBoard">
+	<select id="selectBoard" parameterType="BoardKeyword" resultMap="resultBoardJoin">
 		select *
 		from (select * 
 		      from board
@@ -59,7 +74,11 @@
 	</select>
 	
 	<insert id="insertBoard" parameterType="Board">
-		
+		insert into board 
+		values (#{depId}, (select max(BOARD_ID) + 1 from board), 
+		        #{empId}, #{boardTitle}, #{boardDetail}, 
+		        #{createDate}, #{modifyDate},  
+		        #{deleteDate}, #{viewsNum})
 	</insert>
 	
 	<update id="updateBoard" parameterType="_int">
