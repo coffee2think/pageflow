@@ -311,9 +311,12 @@ CREATE TABLE reply (
 	reply_id NUMBER NOT NULL, /* 댓글 번호 */
 	dep_id NUMBER NOT NULL, /* 부서 번호 */
 	board_id NUMBER NOT NULL, /* 게시글 번호 */
-	writer_id NUMBER NOT NULL, /* 작성자 번호 */
-	parent NUMBER NOT NULL, /* 부모 댓글 번호 */
+	emp_id NUMBER NOT NULL, /* 작성자 번호 */
+	bundle_id NUMBER NOT NULL, /* 묶음 댓글 번호 */
+    bundle_id2 NUMBER NOT NULL, /* 묶음 댓글 번호2 */
+	parent_id NUMBER NOT NULL, /* 부모 댓글 번호 */
 	depth NUMBER NOT NULL, /* 깊이 */
+    depth2 NUMBER NOT NULL, /* 깊이2 */
 	reply_detail VARCHAR2(1000) NOT NULL, /* 댓글 내용 */
 	create_date DATE DEFAULT sysdate NOT NULL, /* 댓글 작성 일자 */
 	modify_date DATE, /* 댓글 수정 일자 */
@@ -328,11 +331,14 @@ COMMENT ON COLUMN reply.dep_id IS '부서 번호';
 
 COMMENT ON COLUMN reply.board_id IS '게시글 번호';
 
-COMMENT ON COLUMN reply.writer_id IS '작성자 번호';
+COMMENT ON COLUMN reply.emp_id IS '작성자 번호';
 
-COMMENT ON COLUMN reply.parent IS '부모 댓글 번호';
+COMMENT ON COLUMN reply.bundle_id IS '묶음 댓글 번호';
+COMMENT ON COLUMN reply.bundle_id2 IS '묶음 댓글 번호2';
 
+COMMENT ON COLUMN reply.parent_id IS '부모 댓글 번호';
 COMMENT ON COLUMN reply.depth IS '깊이';
+COMMENT ON COLUMN reply.depth2 IS '깊이2';
 
 COMMENT ON COLUMN reply.reply_detail IS '댓글 내용';
 
@@ -629,6 +635,7 @@ ALTER TABLE book
 /* 편집관리 */
 CREATE TABLE edit (
 	edit_id NUMBER NOT NULL, /* 편집 번호 */
+	dep_id NUMBER NOT NULL, /* 부서 번호 */
 	emp_id NUMBER, /* 직원 번호(담당자) */
 	emp_name VARCHAR2(30), /* 직원 이름(담당자) */
 	book_name VARCHAR2(300) NOT NULL, /* 도서명 */
@@ -640,6 +647,8 @@ CREATE TABLE edit (
 COMMENT ON TABLE edit IS '편집관리';
 
 COMMENT ON COLUMN edit.edit_id IS '편집 번호';
+
+COMMENT ON COLUMN edit.dep_id IS '부서 번호';
 
 COMMENT ON COLUMN edit.emp_id IS '직원 번호(담당자)';
 
@@ -657,7 +666,8 @@ ALTER TABLE edit
 	ADD
 		CONSTRAINT PK_edit
 		PRIMARY KEY (
-			edit_id
+			edit_id,
+            dep_id
 		)
 		NOT DEFERRABLE
 		INITIALLY IMMEDIATE
@@ -707,13 +717,14 @@ ALTER TABLE contract
 
 /* 작가 */
 CREATE TABLE writer (
-	writer_id NUMBER NOT NULL, /* 작가 번호 */
-	writer_name VARCHAR2(30) NOT NULL, /* 작가명 */
-	phone VARCHAR2(30) NOT NULL, /* 연락처 */
-	writer_birth VARCHAR2(13) NOT NULL, /* 생년월일 */
-	email VARCHAR2(40) NOT NULL, /* 이메일 */
-	address VARCHAR2(255), /* 주소 */
-	account NUMBER NOT NULL /* 계좌번호 */
+   writer_id NUMBER NOT NULL, /* 작가 번호 */
+   writer_name VARCHAR2(30) NOT NULL, /* 작가명 */
+   phone VARCHAR2(30) NOT NULL, /* 연락처 */
+   writer_birth VARCHAR2(13) NOT NULL, /* 생년월일 */
+   email VARCHAR2(40) NOT NULL, /* 이메일 */
+   address VARCHAR2(255), /* 주소 */
+   bank VARCHAR2(30) NOT NULL, /* 은행명 */
+   account VARCHAR2(20) NOT NULL /* 계좌번호 */
 );
 
 COMMENT ON TABLE writer IS '작가';
@@ -729,6 +740,8 @@ COMMENT ON COLUMN writer.writer_birth IS '생년월일';
 COMMENT ON COLUMN writer.email IS '이메일';
 
 COMMENT ON COLUMN writer.address IS '주소';
+
+COMMENT ON COLUMN writer.bank IS '은행명';
 
 COMMENT ON COLUMN writer.account IS '계좌번호';
 
@@ -987,7 +1000,7 @@ CREATE TABLE client (
 	category VARCHAR2(20) NOT NULL, /* 거래처구분 */
 	client_name VARCHAR2(100) NOT NULL, /* 거래처명 */
 	client_address VARCHAR2(255) NOT NULL, /* 거래처 주소 */
-	client_phone VARCHAR2(30) NOT NULL, /* 거래처 연락처 */
+	CLIENT_CONTACT VARCHAR2(30) NOT NULL, /* 거래처 연락처 */
 	eid VARCHAR2(12) NOT NULL, /* 사업자등록번호 */
 	client_url VARCHAR2(255), /* 거래처 홈페이지 */
 	manager VARCHAR2(30), /* 거래처 담당자 */
@@ -1007,7 +1020,7 @@ COMMENT ON COLUMN client.client_name IS '거래처명';
 
 COMMENT ON COLUMN client.client_address IS '거래처 주소';
 
-COMMENT ON COLUMN client.client_phone IS '거래처 연락처';
+COMMENT ON COLUMN client.CLIENT_CONTACT IS '거래처 연락처';
 
 COMMENT ON COLUMN client.eid IS '사업자등록번호';
 
@@ -1362,12 +1375,12 @@ ALTER TABLE reply
 		INITIALLY IMMEDIATE
 		ENABLE
 		VALIDATE;
-
+/*
 ALTER TABLE reply
 	ADD
 		CONSTRAINT FK_reply_TO_reply
 		FOREIGN KEY (
-			parent
+			parent_id
 		)
 		REFERENCES reply (
 			reply_id
@@ -1376,12 +1389,12 @@ ALTER TABLE reply
 		INITIALLY IMMEDIATE
 		ENABLE
 		VALIDATE;
-
+*/
 ALTER TABLE reply
 	ADD
 		CONSTRAINT FK_employee_TO_reply
 		FOREIGN KEY (
-			writer_id
+			emp_id
 		)
 		REFERENCES employee (
 			emp_id
@@ -1639,6 +1652,20 @@ ALTER TABLE edit
 		)
 		REFERENCES employee (
 			emp_id
+		)
+		NOT DEFERRABLE
+		INITIALLY IMMEDIATE
+		ENABLE
+		VALIDATE;
+
+ALTER TABLE edit
+	ADD
+		CONSTRAINT FK_department_TO_edit
+		FOREIGN KEY (
+			dep_id
+		)
+		REFERENCES department (
+			dep_id
 		)
 		NOT DEFERRABLE
 		INITIALLY IMMEDIATE
@@ -2024,3 +2051,25 @@ ALTER TABLE authority
 		INITIALLY IMMEDIATE
 		ENABLE
 		VALIDATE;
+
+
+ALTER TABLE notice
+	ADD (notice_readcount number);
+    
+ALTER TABLE notice
+	ADD (NOTICE_ORIGINAL_FILENAME VARCHAR2(255));
+
+ALTER TABLE notice
+	ADD (NOTICE_RENAME_FILENAME VARCHAR2(255));
+    
+ALTER TABLE print_order
+	modify (UNIT VARCHAR2(20));   
+
+alter table contract
+modify contr_state default '진행중';
+
+alter table edit
+modify start_date default null;
+
+alter table book
+modify book_state default '정상';

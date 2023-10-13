@@ -10,6 +10,7 @@ Make_graph.prototype = {
         if(type == 'graph') this.makeGraph(canvas, data);
         else this.makeChart(canvas, data);
         
+        
     }
     ,
     makeGraph : function(canvas, data){
