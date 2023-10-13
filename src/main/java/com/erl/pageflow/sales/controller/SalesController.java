@@ -28,8 +28,7 @@ public class SalesController {
 	//**************뷰페이지 이동****************
 	
 	// 주문현황 페이지 이동
-//	@RequestMapping("border_list.do")
-	@RequestMapping("moveboList.do")
+	@RequestMapping("movebolist.do")
 	public String moveBookOrderList(Model model) {
 		
 		// 첫 이동 시 해당 월의 데이터 조회
@@ -37,18 +36,18 @@ public class SalesController {
 		model.addAttribute("begin", today.minusDays(today.getDayOfMonth() - 1)); // 이번달 1일부터
 		model.addAttribute("end", today); // 오늘까지
 		
-		return "redirect:bolistDate.do";
+		return "redirect:bolistdate.do";
 	}
 	
 	// 주문등록 페이지 이동
-	@RequestMapping("moveboInput.do")
+	@RequestMapping("moveboinput.do")
 	public String moveBookOrderInputPage() {
 		return "sales/border_input";
 	}
 	
 	//**************요청 받아서 서비스로 넘기는 메소드****************
 	// 날짜로 주문현황 검색
-	@RequestMapping("bolistDate.do")
+	@RequestMapping("bolistdate.do")
 	public String bookOrderList(Search search, Model model) {
 		
 		ArrayList<BookOrder> list = salesService.selectBookOrderDate(search);
@@ -56,8 +55,8 @@ public class SalesController {
 			Book book = salesService.selectBook(bo.getBookId());
 			BookStore bookStore = salesService.selectBookStore(bo.getClientId());
 			
-			bo.setBookName(book.getBookName());
-			bo.setBookPrice(book.getBookPrice());
+//			bo.setBookName(book.getBookName());
+//			bo.setBookPrice(book.getBookPrice());
 			bo.calcTotalPrice();
 			bo.setBookStoreName(bookStore.getClientName());
 		}
