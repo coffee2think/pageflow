@@ -28,8 +28,8 @@ public class SalesController {
 	//**************뷰페이지 이동****************
 	
 	// 주문현황 페이지 이동
-	@RequestMapping("moveboList.do")
 //	@RequestMapping("border_list.do")
+	@RequestMapping("moveboList.do")
 	public String moveBookOrderList(Model model) {
 		
 		// 첫 이동 시 해당 월의 데이터 조회
