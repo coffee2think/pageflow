@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="employeeMapper">
+	<resultMap type="Employee" id="resultEmployee">
+		<result property="empId" column="EMP_ID" />
+		<result property="empPwd" column="EMP_PWD" />
+		<result property="empPwdUpdate" column="EMP_PWD_UPDATE" />
+		<result property="empName" column="EMP_NAME" />
+		<result property="phone" column="PHONE" />
+		<result property="empBirth" column="EMP_BIRTH" />
+		<result property="email" column="EMAIL" />
+		<result property="address" column="ADDRESS" />
+		<result property="salary" column="SALARY" />
+		<result property="profile" column="PROFILE" />
+		<result property="enrollDate" column="ENROLL_DATE" />
+		<result property="mdifyDate" column="MODIFY_DATE" />
+		<result property="leaveDate" column="LEAVE_DATE" />
+		<result property="lastDate" column="LAST_DATE" />
+		<result property="jobId" column="JOB_ID" />
+		<result property="posId" column="POS_ID" />
+		<result property="depId" column="DEP_ID" />
+		<result property="loginOk" column="LOGIN_OK" />
+		<result property="adminYN" column="ADMIN_YN" />
+	</resultMap>
+
+	<select id="selectEmployee" parameterType="_int" resultMap="resultEmployee">
+		select * from employee where emp_id = #{ eid } and login_ok = 'Y'
+	</select>
+
+</mapper>
