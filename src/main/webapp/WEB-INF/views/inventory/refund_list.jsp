@@ -11,7 +11,7 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 4;
-    const SUBPAGE = 3;
+    const SUBPAGE = 4;
     const LNKPAGE = 1;
 </script>
 <title></title>
@@ -24,7 +24,7 @@
             <!--header-container-->
             <div class="header-container">
                 <!-- 헤더 들어감 -->
-                <c:import url="../common/header.jsp" />
+                <c:import url="/WEB-INF/views/common/header.jsp" />
             </div>
             <!--header-container end-->
         </header>
@@ -37,7 +37,7 @@
                 <div class="side-container">
                     <div class="side-title"></div>
                     <!-- 리스트 들어감 -->
-                    <c:import url="../common/side.jsp" />
+                    <c:import url="/WEB-INF/views/common/side.jsp" />
                 </div>
             </div>
             <!--main-side end-->
@@ -113,7 +113,7 @@
 
                         <div class="paging-box">
                             <!-- 페이징 -->
-                            <c:import url="../common/paging.jsp" />
+                            <c:import url="/WEB-INF/views/common/paging.jsp" />
                         </div>
 
                         <button class="search-visible-btn" id="search_visible_btn">
@@ -147,47 +147,47 @@
                                     </td>
                                     <td class="td-100">
                                         <div class="contents-input-div">
-                                            <input type="input" name="code" class="contents-input noline" value="10100" readonly>
+                                            <input type="input" name="bookId" class="contents-input noline" value="">
                                         </div>
                                     </td>
                                     <td class="td-250">
                                         <div class="contents-input-div">
-                                            <input type="input" name="name" class="contents-input noline" value="데이터베이스 개론과 실습" readonly>
+                                            <input type="input" name="bookName" class="contents-input noline" value="">
                                         </div>
                                     </td>
                                     <td class="td-100">
                                         <div class="contents-input-div">
-                                            <input type="input" name="store" class="contents-input noline" value="교보문고" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="state" class="contents-input noline" value="삼전동" readonly>
+                                            <input type="input" name="clientName" class="contents-input noline" value="">
                                         </div>
                                     </td>
                                     <td class="td-120">
                                         <div class="contents-input-div">
-                                            <input type="input" name="date" class="contents-input noline" value="2023.05.09" readonly>
+                                            <input type="input" name="refunfState" class="contents-input noline" value="">
                                         </div>
                                     </td>
                                     <td class="td-70">
                                         <div class="contents-input-div">
-                                            <input type="input" name="count" class="contents-input noline" value="103" readonly>
+                                            <input type="input" name="refundDate" class="contents-input noline" value="">
                                         </div>
                                     </td>
                                     <td class="td-70">
                                         <div class="contents-input-div">
-                                            <input type="input" name="price" class="contents-input noline" value="20000" readonly>
+                                            <input type="input" name="refundNum" class="contents-input noline" value="">
                                         </div>
                                     </td>
                                     <td class="td-100">
                                         <div class="contents-input-div">
-                                            <input type="input" name="amount" class="contents-input noline" value="2060000" readonly>
+                                            <input type="input" name="bookPrice" class="contents-input noline" value="2060000">
                                         </div>
                                     </td>
                                     <td class="td-120">
                                         <div class="contents-input-div">
-                                            <input type="input" name="bigo" class="contents-input noline" value="비고" readonly>
+                                            <input type="input" name="refundAmount" class="contents-input noline" value="비고">
+                                        </div>
+                                    </td>
+                                       <td class="td-120">
+                                        <div class="contents-input-div">
+                                            <input type="input" name="remark" class="contents-input noline" value="비고">
                                         </div>
                                     </td>
                                     <td class="td-70">
@@ -231,7 +231,7 @@
             <!--modal-pop-area-->
             <div class="modal-pop-area">
                 <!-- 팝업 들어감 -->
-                <c:import url="../common/popup.jsp" />
+                <c:import url="/WEB-INF/views/common/popup.jsp" />
             </div>
             <!--modal-pop-area end-->
 

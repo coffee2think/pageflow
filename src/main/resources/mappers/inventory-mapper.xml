@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="inventoryMapper">
+<resultMap type="Inventory" id="resultInventory">
+		<result property="invenId" column="INVEN_ID" />
+		<result property="bookId" column="BOOK_ID" />
+		<result property="storageId" column="STORAGE_ID" />
+		<result property="storeId" column="STORE_ID" />
+		<result property="refundId" column="REFUND_ID" />
+		<result property="prevInbenId" column="PREV_INVEN_ID" />
+		<result property="increase" column="INCREASE" />
+		<result property="currInven" column="CURR_INVEN" />
+		<result property="invenDate" column="INVEN_DATE" />
+		<result property="classify" column="CLASSIFY" />
+		<result property="remark" column="REMARK" />
+	</resultMap>
+	
+	<select id="selectGetListCount" resultType="_int">
+		select count(*) from inventory
+	</select>
+	
+	<select id="selectInventoryList" parameterType="Paging" resultMap="resultInventory">
+		<![CDATA[
+			SELECT *
+			FROM INVENTORY
+			WHERE SYSDATE - INVEN_DATE <= 7
+		]]>
+	</select>
+	
+	<select id="selectInventoryBookName" parameterType="_int" resultType="string">
+		SELECT BOOK_NAME
+		FROM  BOOK
+		WHERE BOOK_ID= #{ bookId }
+	</select>
+	
+	<select id="selectInventoryClientName" parameterType="_int"  resultType="string">
+		SELECT CLIENT_NAME
+		FROM CLIENT
+		WHERE CLIENT_ID = #{ storageId }
+	</select>
+	
+</mapper>

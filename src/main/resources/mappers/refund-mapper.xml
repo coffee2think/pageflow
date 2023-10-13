@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="refundMapper">
+	<resultMap type="Refund" id="resultRefund">
+		<result property="refundId" column="REFUND_ID" />
+		<result property="bookId" column="BOOK_ID" />
+		<result property="clientId" column="CLIENT_ID" />
+		<result property="empId" column="EMP_ID" />
+		<result property="empName" column="EMP_NAME" />
+		<result property="refundName" column="REFUND_NUM" />
+		<result property="refundDate" column="REFUND_DATE" />
+		<result property="refundAmount" column="REFUND_AMOUNT" />
+		<result property="refunfState" column="REFUND_STATE" />
+		<result property="remark" column="REMARK" />
+	</resultMap>
+	
+	
+	<select id="selectGetListCount" resultType="_int">
+		select count(*) from refund
+	</select>
+	
+	<select id="selectRefundList" parameterType="Paging" resultMap="resultRefund">
+		<![CDATA[
+			SELECT *
+			FROM REFUND
+			WHERE SYSDATE - REFUND_DATE <= 7
+		]]>
+	</select>
+</mapper>
