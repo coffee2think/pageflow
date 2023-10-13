@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.common.ReplyKeyword;
+import com.erl.pageflow.common.UploadKeyword;
 import com.erl.pageflow.reply.model.vo.Reply;
 
 @Repository("replyDao")
@@ -27,6 +28,14 @@ public class ReplyDao {
 
 	public String selectReplyEmpName(int replyId) {
 		return sqlSessionTemplate.selectOne("replyMapper.selectReplyEmpName", replyId);
+	}
+
+	public int insertReply(Reply reply) {
+		return sqlSessionTemplate.insert("replyMapper.insertReply", reply);
+	}
+
+	public int insertUploadReply(UploadKeyword uploadKeyword) {
+		return sqlSessionTemplate.insert("replyMapper.insertUploadReply", uploadKeyword);
 	}
 	
 	

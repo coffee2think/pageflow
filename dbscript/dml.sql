@@ -57,3 +57,15 @@ from reply
 left join employee USING(EMP_ID)
 where REPLY_ID = 2;
 
+
+select * 
+		from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
+				   BOARD_TITLE, BOARD_DETAIL, CREATE_DATE, 
+		           MODIFY_DATE, DELETE_DATE, VIEWS_NUM 
+		      from (select * from board 
+		           order by BOARD_ID desc)) 
+		left join employee using(EMP_ID)
+		where rnum >= 1 and rnum <= 10;
+
+select max(BUNDLE_ID) from reply;
+

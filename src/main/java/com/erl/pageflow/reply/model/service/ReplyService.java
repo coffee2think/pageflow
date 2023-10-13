@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.erl.pageflow.common.ReplyKeyword;
+import com.erl.pageflow.common.UploadKeyword;
 import com.erl.pageflow.reply.model.vo.Reply;
 
 public interface ReplyService {
@@ -13,4 +14,8 @@ public interface ReplyService {
 	public int selectReplyListCount(ReplyKeyword replyKeyword);
 	
 	public String selectReplyEmpName(int replyId);
+	
+	public int insertReply(Reply reply);
+
+	public int insertUploadReply(UploadKeyword uploadKeyword);
 }

@@ -16,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.erl.pageflow.board.model.service.BoardServiceImpl;
+import com.erl.pageflow.board.model.service.BoardService;
 import com.erl.pageflow.board.model.vo.Board;
 import com.erl.pageflow.common.BoardKeyword;
 import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.ReplyKeyword;
-import com.erl.pageflow.reply.model.service.ReplyServiceImpl;
+import com.erl.pageflow.reply.model.service.ReplyService;
 import com.erl.pageflow.reply.model.vo.Reply;
 
 @Controller
@@ -30,10 +30,10 @@ public class BoardController {
 	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 
 	@Autowired
-	private BoardServiceImpl boardService;
+	private BoardService boardService;
 	
 	@Autowired
-	private ReplyServiceImpl replyService;
+	private ReplyService replyService;
 	
 	//**************뷰페이지 이동****************
 	//업무게시판 글작성 이동
@@ -47,7 +47,7 @@ public class BoardController {
 	
 	//업무게시판 게시글 리스트 조회
 	@RequestMapping("bdlist.do")
-	public String selectBoardList(Model model) {
+	public String selectBoardListMethod(Model model) {
 		int listCount = boardService.selectBoardListCount();
 		int limit = 10;
 		Paging paging = new Paging(listCount, 1, limit, "bdlist.do");
@@ -58,8 +58,6 @@ public class BoardController {
 			b.setReplyCount(replyCount);
 		}
 		
-		logger.info("???");
-		//logger.info("=========list : " + list);
 		if(list != null && list.size() > 0) {
 			model.addAttribute("paging", paging);
 			model.addAttribute("boardList", list);
@@ -71,7 +69,7 @@ public class BoardController {
 	}
 	
 	@RequestMapping("bdselect.do")
-	public String selectBoard(@RequestParam("empId") int empId, 
+	public String selectBoardMethod(@RequestParam("empId") int empId, 
 							 @RequestParam("depId") int depId,
 							 @RequestParam("boardId") int boardId, Model model) {
 		
@@ -85,6 +83,7 @@ public class BoardController {
 				String name = null;
 				if(r.getDepth() == -1) {
 					name = board.getEmpName();
+					
 				}else {
 					name = replyService.selectReplyEmpName(r.getParentId());
 				}
@@ -103,13 +102,13 @@ public class BoardController {
 	
 	//업무게시판 게시글 필터링된 리스트 조회
 	@RequestMapping("bdsearch.do")
-	public String selectBoardSearch() {
+	public String selectBoardSearchMethod() {
 		return "";
 	}
 	
 	//업무게시판 게시글 등록
 	@RequestMapping(value = "bdinsert.do", method = RequestMethod.POST)
-	public String insertBoard(Board board, Model model,
+	public String insertBoardMethod(Board board, Model model,
 			HttpServletRequest request, 
 			@RequestParam(name = "upfile", required = false) MultipartFile mfile) {
 		String savePath = request.getSession().getServletContext().getRealPath(
@@ -144,6 +143,7 @@ public class BoardController {
 		}
 		
 		if(boardService.insertBoard(board) > 0) {
+			model.addAttribute("depId", board.getDepId());
 			return "redirect:bdlist.do";
 		}else {
 			model.addAttribute("message", "새 게시글 등록 실패!");
@@ -180,13 +180,13 @@ public class BoardController {
 	
 	//업무게시판 게시글 수정
 	@RequestMapping(value = "bdupdate.do", method = RequestMethod.POST)
-	public String updateBoard() {
+	public String updateBoardMethod() {
 		return "";
 	}
 	
 	//업무게시판 게시글 삭제
 	@RequestMapping(value = "bddelete.do", method = RequestMethod.POST)
-	public String deleteBoard() {
+	public String deleteBoardMethod() {
 		return "";
 	}
 	

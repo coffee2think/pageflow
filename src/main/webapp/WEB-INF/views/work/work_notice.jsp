@@ -14,6 +14,7 @@
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title></title>
+
 <script type="text/javascript">
     const NOWPAGE = 1;
     const SUBPAGE = 2;
@@ -29,7 +30,6 @@
     
     Work_notice.prototype = {
     	buttonEvent : function(){
-    		
     		//등록순, 최신순 버튼
     		$('.reply-sort-btn').each(function(){
         		$(this).on('click', function(){
@@ -46,33 +46,146 @@
         	$('.button-update').on('click', function(){
         		
         	})
+        	
+        	//게시판 댓글 뎁스0
+        	$('.reply-input-btn-depth0').on('click', function(){
+        		location.href = 'nlist.do';
+        	})
+        	
+        	
     	}
     }
     
-    function replyBtnEvent(){
+    function setReplyBtn(){
+    	//댓글 입력 팝업 보이기 버튼
         $('.reply-btn').each(function(){
             $(this).on('click', function(){
-            	let parent = $(this).parent('.notice-reply-con');
-            	
-            	let bundlId = parent.attr('data-bundleId');
-            	let bundlId2 = parent.attr('data-bundleId2');
-            	let parentlId = parent.attr('data-parentId');
-            	let depth = parent.attr('data-depth');
-            	let depth2 = parent.attr('data-depth2');
-            	let replyId = parent.attr('data-replyId');
-            	
-            	let reply = $('#reply_'+bundlId+'_'+bundlId2+'_'+parentlId+'_'+depth+'_'+depth2+'_'+replyId);
-            	let inputBox = reply.find('.reply-input-box');
-            	let vis = inputBox.css('display');
-            	
-            	if(vis == 'none') inputBox.show();
-            	else inputBox.hide();
-            	
-            	inputBox.find('.reply-input').html('<em class="tag-text" contenteditable="false">@' + reply.find('.reply-ename').text() + '</em>&nbsp;');
+            	clickReplyBtn($(this));
             })
         })
+        
+        //댓글 입력버튼
+        $('.reply-input-btn').each(function(){
+        	$(this).on('click', function(){
+        		
+        		if($(this).parent().parent('.reply-input-box').hasClass('depth1')){
+        			
+        		}else{
+        			let parent = $(this).parent().parent().parent('.notice-reply-con');
+                	replyInsert(parent);
+        		}
+        		
+        	})
+        })
     }
-
+    
+    function setId(parent){
+    	
+    	let data = {
+   			bundleId : parent.attr('data-bundleId')
+           	,bundleId2 : parent.attr('data-bundleId2')
+           	,parentId : parent.attr('data-parentId')
+           	,depth : parent.attr('data-depth')
+           	,depth2 : parent.attr('data-depth2')
+           	,replyId : parent.attr('data-replyId')
+    	}
+    	
+		return data;
+	}
+    
+  	//댓글 창 보이기
+	function clickReplyBtn(thisObj) {
+		let parent = thisObj.parent('.notice-reply-con');
+    	let data = setId(parent);
+    	console.log('data.replyId : ' + data.replyId);
+    	let reply = $('#reply_'+data.replyId);
+    	let inputBox = reply.find('.reply-input-box');
+    	let vis = inputBox.css('display');
+    	
+    	if(vis == 'none') inputBox.show();
+    	else inputBox.hide();
+    	
+    	inputBox.find('.reply-input').html('<em class="tag-text" contenteditable="false">@' + reply.find('.reply-ename').text() + '</em>&nbsp;');
+	}
+    
+  	//댓글 등록 버튼 클릭시
+	function replyInsert(parent){
+		
+		//댓글 ajax 
+		let obj = setId(parent);
+    	let replyId, bundleId, bundleId2, parentId, depth, depth2;
+    	let replyDetail = parent.find('.reply-input').text();
+		
+		if(obj.depth == -1){
+			//bundlId는 depth가 -1일때는 최상위
+			//번들아이디를 ajax로 받아와야 함
+			replyId = obj.replyId;
+			bundleId = replyId;
+			bundleId2 = bundleId;
+			parentId = bundleId;
+			depth = -1;
+			depth2 = -1;
+			
+			ajaxInsert2(bundleId, bundleId2, parentId, depth, 
+					depth2, replyId, replyDetail);
+			
+		}else{
+			//depth가 -1이 아닐때는 댓글의 댓글임
+			bundleId = obj.bundleId;
+			replyId = obj.replyId;
+			if(depth == 1) {
+				bundleId2 = replyId;
+			}else {
+				bundleId2 = obj.bundleId2;
+			}
+			
+			parentId = replyId;
+			depth = 1;
+			depth2 = (depth2 < 3) ? obj.depth2 + 1 : obj.depth2;
+			console.log('replyInsert - bundleId : ' + bundleId + ', bundleId2 : ' +
+					bundleId2 + ', parentId : ' + parentId + ', depth : ' + depth + 
+					', depth2 : ' + depth2 + ', replyId : ' + replyId + 
+					', replyDetail : ' + replyDetail);
+			ajaxInsert(bundleId, bundleId2, parentId, depth, 
+					depth2, replyId, replyDetail);
+			
+		}
+		
+	}
+    
+  	//댓글 인서트
+	function ajaxInsert(bundleId, bundleId2, parentId, depth, 
+			depth2, replyId, replyDetail){
+		
+		console.log('ajaxReplyInsert - bundleId : ' + bundleId + ', bundleId2 : ' +
+				bundleId2 + ', parentId : ' + parentId + ', depth : ' + depth + 
+				', depth2 : ' + depth2 + ', replyId : ' + replyId + 
+				', replyDetail : ' + replyDetail);
+		
+		$.ajax({
+    		url : 'ryinsert.do'
+    		,type : 'post'
+    		,data : {
+    			defId : ${ board.depId }
+    			,empId : 1
+    			,bundleId : bundleId
+    			,bundleId2 : bundleId2
+    			,parentId : parentId
+    			,depth : depth
+    			,depth2 : depth2
+    			,replyId : replyId
+    			,replyDetail : replyDetail
+    		},
+    		success : function(data) {
+    			console.log("success : " + data);
+    			//$('.reply-input-btn')
+    			
+    		},
+    		error: function(jqXHR, textStatus, errorThrown){
+    			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+    		}
+    	})
+	}
     
 </script>
 </head>
@@ -97,7 +210,7 @@
                 <div class="side-container">
                     <div class="side-title"></div>
                     <div class="side-icon-box">
-                        <a href="bdmoveinsert.do?depId=${ depId }" class="side-write-btn">글쓰기</a>
+                        <a href="bdmoveinsert.do?depId=${ board.depId }" class="side-write-btn">글쓰기</a>
                         <div class="side-icon-menu">
                             <button class="side-icon-btn" id="sideBtn_new">
                                 <span class="side-icon">3</span>
@@ -245,13 +358,14 @@
                                     <c:forEach var="r" items="${ replyList }">
                                     	
                                         <div class="notice-reply-con depth${ r.depth2 }" 
+                                        	data-empId="${ r.empId }"
                                         	data-bundleId="${ r.bundleId }" 
                                         	data-bundleId2="${ r.bundleId2 }" 
                                         	data-parentId="${ r.parentId }" 
                                         	data-depth="${ r.depth }" 
                                         	data-depth2="${ r.depth2 }" 
                                         	data-replyId="${ r.replyId }"
-                                        	id = "reply_${ r.bundleId }_${ r.bundleId2 }_${ r.parentId }_${ r.depth }_${ r.depth2 }_${ r.replyId }"
+                                        	id = "reply_${ r.replyId }"
                                         >
                                             
                                             <c:if test="${ r.depth2 >= 1 }">
@@ -307,17 +421,15 @@
 	                                                </div>
 	                                            </div>
 	                                            <div class="reply-input-btn-box">
-	                                                <input type="file" class="file-btn" id="">
-	                                                <input type="button" class="contents-input-btn big noline" id="btn_insert" value="입력">
+	                                                <input type="file" class="file-btn" name="upfile">
+	                                                <input type="button" class="contents-input-btn reply-input-btn big noline" value="입력">
 	                                            </div>
 	                                        </div>
                                         </div>
                                     </c:forEach>
-
-                                    <script type="text/javascript">
-                                        replyBtnEvent();
-                                    </script>
-
+									<script type="text/javascript">
+										setReplyBtn();
+									</script>
                                 </div>
                                 <!--notice-reply-box end-->
 
@@ -328,8 +440,8 @@
                                         </div>
                                     </div>
                                     <div class="reply-input-btn-box">
-                                        <input type="file" class="file-btn" id="">
-                                        <input type="button" class="contents-input-btn big noline" id="btn_insert" value="입력">
+                                        <input type="file" class="file-btn" name="upfile">
+                                        <input type="button" class="contents-input-btn reply-input-btn-depth0 big noline" value="입력">
                                     </div>
                                 </div>
 

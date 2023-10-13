@@ -51,7 +51,7 @@
 		]]>
 	</select>
 	
-	<select id="selectBoardSearch" parameterType="Paging" resultMap="resultBoard">
+	<select id="selectBoardSearch" parameterType="Paging" resultMap="resultBoardJoin">
 		<![CDATA[
 		select * 
 		from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
@@ -59,11 +59,12 @@
 		           MODIFY_DATE, DELETE_DATE, VIEWS_NUM 
 		      from (select * from board 
 		           order by BOARD_ID desc)) 
+		left join employee using(EMP_ID)
 		where rnum >= #{ startRow } and rnum <= #{ endRow }
 		]]>
 	</select>
 	
-	<select id="selectBoard" parameterType="BoardKeyword" resultMap="resultBoard">
+	<select id="selectBoard" parameterType="BoardKeyword" resultMap="resultBoardJoin">
 		select *
 		from (select * 
 		      from board
@@ -73,7 +74,11 @@
 	</select>
 	
 	<insert id="insertBoard" parameterType="Board">
-		
+		insert into board 
+		values (#{depId}, (select max(BOARD_ID) + 1 from board), 
+		        #{empId}, #{boardTitle}, #{boardDetail}, 
+		        #{createDate}, #{modifyDate},  
+		        #{deleteDate}, #{viewsNum})
 	</insert>
 	
 	<update id="updateBoard" parameterType="_int">

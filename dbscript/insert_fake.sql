@@ -67,6 +67,27 @@ insert into reply values(
 insert into reply values(
 10,	1,	1,	5,	2,	10, 2,	1, 2,	'댓글댓글댓글2-2-2-10', sysdate, null, null);
 
+
+
+insert into board 
+values (DEP_ID, (select max(BOARD_ID) + 1 from board), 
+        EMP_ID, BOARD_TITLE, BOARD_DETAIL, 
+        CREATE_DATE, MODIFY_DATE,  
+        DELETE_DATE, VIEWS_NUM)
+        
+
+insert into reply values
+    (select max(REPLY_ID) + 1 from reply), DEP_ID, BOARD_ID, EMP_ID,
+     BUNDLE_ID, BUNDLE_ID2, PARENT_ID, DEPTH, DEPTH2,
+     REPLY_DETAIL, CREATE_DATE, MODIFY_DATE, DELETE_DATE);
+
 commit;
+
+insert into reply values
+	    ((select max(REPLY_ID) + 1 from reply), 1, 1, 1,
+	     6, 6, 6, 1, 2,
+	     'sadasdasdasd', default, null, null);
+rollback;
+
 
 
