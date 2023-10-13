@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -82,7 +83,7 @@
                                     <button class="search-btn">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
+                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="" name="keyword">
                                 </div>
                             </div>
 
@@ -114,11 +115,28 @@
                                     기간
                                 </div>
 
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
-
-                                <input type="button" name="week" class="select-pan-btn" value="일주일">
-                                <input type="button" name="month" class="select-pan-btn" value="한달">
+                                <input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
+                                <input type="date" class="select-date select-date-second" name="end" value=${ end }>
+								
+								<c:set var="today_" value="<%= new java.util.Date() %>" />
+								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*(new java.util.Date().getDate() - 1)) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+								
+								<c:url var="searchWeekUrl" value="bolistdate.do">
+									<c:param name="begin" value="${ weekago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+								
+								<c:url var="searchMonthUrl" value="bolistdate.do">
+									<c:param name="begin" value="${ monthago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+								
+                                <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
                             </div>
 
                         </form>
@@ -154,65 +172,68 @@
                                     <th>주문일시</th>
                                     <th>수정</th>
                                 </tr>
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                    <td class="td-50">
-                                        <input type="checkbox" name="check" value="" >
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="no" class="contents-input noline" value="2023-09-19-1" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="code" class="contents-input noline" value="10100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-200">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="name" class="contents-input noline" value="데이터베이스 개론과 실습" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="location" class="contents-input noline" value="강남" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="store" class="contents-input noline" value="교보문고" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="price" class="contents-input noline" value="25000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="quantity" class="contents-input noline" value="100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="amount" class="contents-input noline" value="2500000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="state" class="contents-input noline" value="주문접수" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date" class="contents-input noline" value="2015.03.05" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-                                    </td>
-                                </tr>
-                                
+                                <c:if test="${ !empty list }">
+	                                <c:forEach items="${ list }" var="bookOrder" >
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                    <td class="td-50">
+		                                        <input type="checkbox" name="check" value="" >
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="tradeId" class="contents-input noline" value="${ bookOrder.tradeId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookId" class="contents-input noline" value="${ bookOrder.bookId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-200">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookName" class="contents-input noline" value="${ bookOrder.bookName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="location" class="contents-input noline" value="강남" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookStoreName" class="contents-input noline" value="${ bookOrder.bookStoreName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ bookOrder.bookPrice }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="orderQuantity" class="contents-input noline" value="${ bookOrder.orderQuantity }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="totalPrice" class="contents-input noline" value="${ bookOrder.totalPrice }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="state" class="contents-input noline" value="${ bookOrder.state }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="orderDate" class="contents-input noline" value="${ bookOrder.orderDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+		                                    </td>
+		                                </tr>
+	                                </c:forEach>
+                                </c:if>
                             </table>
                         </div>
                     </div>
