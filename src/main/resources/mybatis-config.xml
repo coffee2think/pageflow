@@ -16,10 +16,12 @@
 		<typeAlias type="com.erl.pageflow.board.model.vo.Board" alias="Board" />
 		<typeAlias type="com.erl.pageflow.common.Paging" alias="Paging" />
 		<typeAlias type="com.erl.pageflow.common.BoardKeyword" alias="BoardKeyword" />
+		<typeAlias type="com.erl.pageflow.board.model.vo.BoardUpload" alias="BoardUpload" />
 		
 		<!-- 업무 게시판 댓글 -->
 		<typeAlias type="com.erl.pageflow.reply.model.vo.Reply" alias="Reply" />
 		<typeAlias type="com.erl.pageflow.common.ReplyKeyword" alias="ReplyKeyword" />
+		<typeAlias type="com.erl.pageflow.reply.model.vo.ReplyUpload" alias="ReplyUpload" />
 		
 		<!-- 영업관리 -->
 		<typeAlias type="com.erl.pageflow.sales.model.vo.BookOrder" alias="BookOrder" />
@@ -37,6 +39,9 @@
 		<typeAlias type="com.erl.pageflow.refund.model.vo.Refund" alias="Refund" />
 		<typeAlias type="com.erl.pageflow.store.model.vo.Store" alias="Store"/>
 		
+		<!-- 인쇄관리 -->
+		<typeAlias type="com.erl.pageflow.printOrder.model.vo.PrintOrder" alias="PrintOrder" />
+		
 	</typeAliases>
 	
 	<mappers>
@@ -47,6 +52,7 @@
 		<mapper resource="mappers/inventory-mapper.xml" />
 		<mapper resource="mappers/refund-mapper.xml" />
 		<mapper resource="mappers/store_mapper.xml" />
+		<mapper resource="mappers/print-mapper.xml" />
 	</mappers>
 </configuration>
 
