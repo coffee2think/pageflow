@@ -13,6 +13,70 @@
     const NOWPAGE = 5;
     const SUBPAGE = 1;
     const LNKPAGE = 2;
+    
+    function addRow(index) {
+		// table element 찾기
+		const table = document.getElementById('input_table');
+
+		// 새 행(Row) 추가 (테이블 중간에)
+		const newRow = table.insertRow();
+
+		// 새 행(Row)에 Cell 추가
+		const newCell1 = newRow.insertCell(0);
+		const newCell2 = newRow.insertCell(1);
+		const newCell3 = newRow.insertCell(2);
+		const newCell4 = newRow.insertCell(3);
+		const newCell5 = newRow.insertCell(4);
+		const newCell6 = newRow.insertCell(5);
+		const newCell7 = newRow.insertCell(6);
+		const newCell8 = newRow.insertCell(7);
+
+		// Cell에 텍스트 추가
+		newCell1.innerHTML = '<div class="contents-check-div">'
+						+ '<button class="contents-input-plus" onclick="addRow(); return false;">'
+						+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">'
+						+ '</button>'
+						+ '<button class="contents-input-minus" onclick="deleteRow(); return false;">'
+						+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">'
+						+ '</button>'
+						+ '</div>';
+		
+		newCell2.innerHTML = '<div class="contents-input-div input-search">'
+						+ '<button class="input-search-btn">'
+						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
+						+ '</button>'
+						+ '<input type="input" name="code" class="contents-input" value="">'
+						+ '</div>';
+		
+		newCell3.innerHTML = '<div class="contents-input-div input-search">'
+						+ '<button class="input-search-btn">'
+						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
+						+ '</button>'
+						+ '<input type="input" name="name" class="contents-input" value="">'
+						+ '</div>';
+		
+		newCell4.innerHTML = '<div class="contents-input-div input-search">'
+						+ '<button class="input-search-btn">'
+						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
+						+ '</button>'
+						+ '<input type="input" name="store" class="contents-input" value="">'
+						+ '</div>';
+		newCell5.innerHTML = '<div class="contents-input-div">'
+						+ '<input type="number" name="price" class="contents-input">'
+						+ '</div>';
+		
+		newCell6.innerHTML = '<div class="contents-input-div">'
+						+ '<input type="number" name="quantity" class="contents-input">'
+						+ '</div>';
+		
+		newCell7.innerHTML = '<div class="contents-input-div">'
+						+ '<input type="number" name="amount" class="contents-input" value="">'
+						+ '</div>';
+
+		newCell8.innerHTML = '<div class="contents-input-div">'
+						+ '<input type="input" name="state" class="contents-input" value="">'
+						+ '</div>';
+	}
 </script>
 <title></title>
 </head>
@@ -65,38 +129,27 @@
                         <!--컨텐츠영역-->
                         <div class="contents-container sort-row">
                             <div class="contents-box">
-                                <table class="contents-table">
+                                <table class="contents-table" id="input_table" border="1">
                                     <tr>
                                         <th></th>
-                                        <th>주문번호</th>
                                         <th>도서코드</th>
                                         <th>도서명</th>
-                                        <th>지역</th>
                                         <th>서점명</th>
                                         <th>정가</th>
                                         <th>주문수량</th>
                                         <th>금액</th>
                                         <th>상태</th>
-                                        <th>주문일시</th>
                                     </tr>
                                     <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
                                         
                                         <td class="td-50">
                                             <div class="contents-check-div">
-                                                <button class="contents-input-plus">
+                                                <button class="contents-input-plus" onclick="addRow(); return false;">
                                                     <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
                                                 </button>
-                                                <button class="contents-input-minus">
+                                                <button class="contents-input-minus" onclick="deleteRow(); return false;">
                                                     <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
                                                 </button>
-                                            </div>
-                                        </td>
-                                        <td class="td-120">
-                                            <div class="contents-input-div input-search">
-                                                <button class="input-search-btn">
-                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                                                </button>
-                                                <input type="input" name="no" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-120">
@@ -113,11 +166,6 @@
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
                                                 <input type="input" name="name" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                        <td class="td-70">
-                                            <div class="contents-input-div">
-                                                <input type="input" name="location" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-100">
@@ -146,11 +194,6 @@
                                         <td class="td-120">
                                             <div class="contents-input-div">
                                                 <input type="input" name="state" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                        <td class="td-120">
-                                            <div class="contents-input-div">
-                                                <input type="date" name="date" class="select-date">
                                             </div>
                                         </td>
                                     </tr>
