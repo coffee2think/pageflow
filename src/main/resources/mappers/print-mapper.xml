@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="printMapper">
+
+	<resultMap type="PrintOrder" id="resultPrintOrder">
+		<result property="orderId" column="ORDER_ID"/>
+		<result property="bookId" column="BOOK_ID"/>
+		<result property="printId" column="PRINT_ID"/>
+		<result property="empId" column="EMP_ID"/>
+		<result property="empName" column="EMP_NAME"/>
+		<result property="classify" column="CLASSIFY"/>
+		<result property="unit" column="UNIT"/>
+		<result property="quantity" column="QUANTITY"/>
+		<result property="price" column="PRICE"/>
+		<result property="amount" column="AMOUNT"/>
+		<result property="state" column="STATE"/>
+		<result property="orderDate" column="ORDER_DATE"/>
+		<result property="endDate" column="END_DATE"/>
+		<result property="pubDate" column="PUB_DATE"/>
+	</resultMap>
+
+	<resultMap type="Client" id="resultClient">
+		<result property="clientId" column="CLIENT_ID"/>
+		<result property="category" column="CATEGORY"/>
+		<result property="clientName" column="CLIENT_NAME"/>
+		<result property="clientAddress" column="CLIENT_ADDRESS"/>
+		<result property="clientContact" column="CLIENT_CONTACT"/>
+		<result property="eid" column="EID"/>
+		<result property="clientUrl" column="CLIENT_URL"/>
+		<result property="manager" column="MANAGER"/>
+		<result property="managerContact" column="MANAGER_CONTACT"/>
+		<result property="managerEmail" column="MANAGER_EMAIL"/>
+		<result property="startDate" column="START_DATE"/>
+		<result property="endDate" column="END_DATE"/>
+	</resultMap>
+	
+	<select id="select">
+	
+	</select>
+	
+	<select id="selectList" parameterType="Paging" resultMap="resultPrint">
+      <![CDATA[
+      select * 
+      from (select rownum rnum, sub.*
+            from (select * from print_order 
+                 ORDER_ID desc) sub) 
+      where rnum >= #{ startRow } and rnum <= #{ endRow }
+      ]]>
+   </select>
+	
+	<select id="selectList" parameterType="Paging" resultMap="resultClient">
+      <![CDATA[
+      select * 
+      from (select rownum rnum, sub.*
+            from (select * from print_order 
+                 CLIENT_ID desc) sub) 
+      where rnum >= #{ startRow } and rnum <= #{ endRow }
+      ]]>
+   </select>
+	
+	
+	
+	
+</mapper>
+

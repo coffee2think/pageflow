@@ -177,6 +177,7 @@
                                     <th>상태</th>
                                     <th>수정</th>
                                 </tr>
+                                
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
                                     <td class="td-50">
                                         <input type="checkbox" name="check" value="" >
