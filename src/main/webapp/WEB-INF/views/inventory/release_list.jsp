@@ -67,12 +67,12 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">도서코드</option>
-                                            <option value="">도서명</option>
-                                            <option value="">출고부수</option>
-                                            <option value="">정가</option>
-                                            <option value="">출고금액</option>
-                                            <option value="">인수자</option>
+                                            <option value="bookId">도서코드</option>
+                                            <option value="bookName">도서명</option>
+                                            <option value="storeNum">출고부수</option>
+                                            <option value="bookPrice">정가</option>
+                                            <option value="storePrice">출고금액</option>
+                                            <option value="empName">인수자</option>
                                         </select>
                                     </div>
                                 </div>
@@ -140,55 +140,56 @@
                                     <th>출고금액</th>
                                     <th>수정</th>
                                 </tr>
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                    <td class="td-50">
-                                        <input type="checkbox" name="check" value="" >
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="code" class="contents-input noline" value="10100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-250">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="name" class="contents-input noline" value="데이터베이스 개론과 실습" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="store" class="contents-input noline" value="제1창고" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="man" class="contents-input noline" value="홍길동" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date" class="contents-input noline" value="2023.05.09" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="count" class="contents-input noline" value="103" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="price" class="contents-input noline" value="20000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="amount" class="contents-input noline" value="2060000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-                                    </td>
-                                </tr>
-
+                                <c:forEach var="rel" items="${ requestScope.list }">
+	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+	                                    <td class="td-50">
+	                                        <input type="checkbox" name="check" value="" >
+	                                    </td>
+	                                    <td class="td-100">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="bookId" class="contents-input noline" value="${ rel.bookId }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-250">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="bookName" class="contents-input noline" value="${ rel.bookName }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-100">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="clientName" class="contents-input noline" value="${ rel.clientName }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-70">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="empName" class="contents-input noline" value="${ rel.empName }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-120">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="storeDate" class="contents-input noline" value="${ rel.storeDate }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-70">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="storeNum" class="contents-input noline" value="${ rel.storeNum }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-70">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="storePrice" class="contents-input noline" value="${ rel.bookPrice }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-100">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="amount" class="contents-input noline" value="${ rel.storePrice }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-70">
+	                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+	                                    </td>
+	                                </tr>
+								</c:forEach>
                                 <!--합계-->
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
                                     <td></td>

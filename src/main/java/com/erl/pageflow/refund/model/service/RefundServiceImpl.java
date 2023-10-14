@@ -24,4 +24,19 @@ public class RefundServiceImpl implements RefundService{
 	public ArrayList<Refund> selectRefundList(Paging paging){
 		return refundDao.selectRefundList(paging);
 	}
+	
+	@Override
+	public String selectRefundBookName(int bookId) {
+		return refundDao.selectRefundBookName(bookId);
+	}
+	
+	@Override
+	public String selectRefundClientName(int clientId) {
+		return refundDao.selectRefundClientName(clientId);
+	}
+	
+	@Override
+	public int selectRefundBookPrice(int bookId) {
+		return refundDao.selectRefundBookPrice(bookId);
+	}
 }

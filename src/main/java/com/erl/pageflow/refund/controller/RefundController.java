@@ -10,8 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.erl.pageflow.common.Paging;
-import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.refund.model.service.RefundService;
+import com.erl.pageflow.refund.model.vo.Refund;
 
 @Controller
 public class RefundController {
@@ -29,22 +29,43 @@ public class RefundController {
 	}
 
 	// 값------------------------------------------------------------------------------------------------------------------
-	// 반품현황
-//	@RequestMapping("refundlist.do")
-//	public String moveRefundList(Model model) {
-//		
-//		int currentPage = 1;
-//		int limit = 10;
-//
-//		// 총 페이지 수 계산을 위한 공지글 총갯수 조회
-//		int listCount = refundService.selectGetListCount();
-//		// 페이지 관련 항목 계산 처리
-//		Paging paging = new Paging(listCount, currentPage, limit, "inventorylist.do");
-//		paging.calculator();
-//
-//		ArrayList<Inventory> list = refundService.selectRefundList(paging); 
-//
-//		
-//	}
+	// 반품현황 뷰
+	@RequestMapping("refundlist.do")
+	public String moveRefundList(Model model) {
+
+		int currentPage = 1;
+		int limit = 10;
+
+		int listCount = refundService.selectGetListCount();
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "refundlist.do");
+		paging.calculator();
+
+		ArrayList<Refund> list = refundService.selectRefundList(paging);
+
+////		logger.info("list" + list);
+//		for (Refund ref : list) {
+////			logger.info("ref" + ref);
+//			String bname = refundService.selectRefundBookName(ref.getBookId());
+//			String cname = refundService.selectRefundClientName(ref.getClientId());
+//			int bprice = refundService.selectRefundBookPrice(ref.getBookId());
+//			ref.setBookName(bname);
+//			ref.setClientName(cname);
+//			ref.setBookPrice(bprice);
+//		}
+		
+
+		if (list != null && list.size() > 0) {
+			model.addAttribute("list", list);
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+
+			return "inventory/refund_list";
+		} else {
+			model.addAttribute("message", "반품조회 실패");
+			return "common/error";
+		}
+	}
 
 }
