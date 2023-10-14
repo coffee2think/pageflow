@@ -24,7 +24,7 @@ import com.erl.pageflow.sales.model.vo.Sales;
 @Controller
 public class SalesController {
 	
-	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+	private static final Logger logger = LoggerFactory.getLogger(SalesController.class);
 	
 	@Autowired
 	private SalesService salesService;
