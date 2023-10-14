@@ -177,76 +177,78 @@
                                     <th>상태</th>
                                     <th>수정</th>
                                 </tr>
-                                
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                    <td class="td-50">
-                                        <input type="checkbox" name="check" value="" >
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="code" class="contents-input noline" value="AK-1012" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="name" class="contents-input noline" value="거성인쇄" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_order" class="contents-input noline" value="2015.03.05" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_end" class="contents-input noline" value="2015.03.05" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_pub" class="contents-input noline" value="2015.03.05" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="book_code" class="contents-input noline" value="10100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-250">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="book_name" class="contents-input noline" value="혼자 공부하는 자바" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="phone" class="contents-input noline" value="EA" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_start" class="contents-input noline" value="100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_end" class="contents-input noline" value="18000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_end" class="contents-input noline" value="1800000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="state" class="contents-input noline" value="지급" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-                                    </td>
-                                </tr>
-
+                                <c:if test="${ !empty list }">
+	                                <c:forEach items="${ list }" var="printOrder" >
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                    <td class="td-50">
+		                                        <input type="checkbox" name="check" value="" >
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name=printId class="contents-input noline" value="${ printOrder.printId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="clientName" class="contents-input noline" value="${ printOrder.clientName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="orderDate" class="contents-input noline" value="${ printOrder.orderDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="endDate" class="contents-input noline" value="${ printOrder.endDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="pubDate" class="contents-input noline" value="${ printOrder.pubDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookId" class="contents-input noline" value="${ printOrder.bookId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-250">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookName" class="contents-input noline" value="${ printOrder.bookName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="unit" class="contents-input noline" value="${ printOrder.unit }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="quantity" class="contents-input noline" value="${ printOrder.quantity }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="price" class="contents-input noline" value="${ printOrder.price }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="amount" class="contents-input noline" value="${ printOrder.amount }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="state" class="contents-input noline" value="${ printOrder.state }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+		                                    </td>
+		                                </tr>
+									</c:forEach>
+                                </c:if>
                             </table>
                         </div>
                     </div>
