@@ -38,7 +38,7 @@ public class SalesController {
 		// 첫 이동 시 해당 월의 데이터 조회
 		LocalDate today = LocalDate.now();
 //		model.addAttribute("begin", today.minusDays(today.getDayOfMonth() - 1)); // 이번달 1일부터
-		model.addAttribute("begin", today.minusWeeks(1).plusWeeks(1)); // 일주일 전부터
+		model.addAttribute("begin", today.minusWeeks(1).plusDays(1)); // 일주일 전부터
 		model.addAttribute("end", today); // 오늘까지
 		
 		return "redirect:bolistdate.do";
@@ -66,6 +66,12 @@ public class SalesController {
 	@RequestMapping("moveclient.do")
 	public String moveClientPage(Model model) {
 		return "redirect:clientlist.do";
+	}
+	
+	// 거래처 등록 페이지 이동
+	@RequestMapping("moveclinput.do")
+	public String moveClientInputPage() {
+		return "sales/client_input";
 	}
 	
 	//**************요청 받아서 서비스로 넘기는 메소드****************

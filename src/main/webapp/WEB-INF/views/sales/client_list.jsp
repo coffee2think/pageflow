@@ -144,7 +144,6 @@
                                     <th>코드</th>
                                     <th>거래처명</th>
                                     <th>사업자등록번호</th>
-                                    <th>대표자</th>
                                     <th>분류</th>
                                     <th>사업장주소</th>
                                     <th>담당자</th>
@@ -153,64 +152,63 @@
                                     <th>거래종료일</th>
                                     <th>수정</th>
                                 </tr>
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                    <td class="td-50">
-                                        <input type="checkbox" name="check" value="" >
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="code" class="contents-input noline" value="1002" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="name" class="contents-input noline" value="교보문고" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-150">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="no" class="contents-input noline" value="534-00-444" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="ceo" class="contents-input noline" value="이승철" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="classify" class="contents-input noline" value="서점" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-300">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="address" class="contents-input noline" value="서울 서초구 강남대로 465 교보타워 지하 1층~지하 2층" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="manager" class="contents-input noline" value="신종식" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-150">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="phone" class="contents-input noline" value="010-0651-4374" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_start" class="contents-input noline" value="2015.03.05" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_end" class="contents-input noline" value="2015.03.05" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-                                    </td>
-                                </tr>
+                                <c:if test="${ !empty list }">
+	                                <c:forEach items="${ list }" var="client">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                    <td class="td-50">
+		                                        <input type="checkbox" name="check" value="" >
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="clientId" class="contents-input noline" value="${ client.clientId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="clientName" class="contents-input noline" value="${ client.clientName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-150">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="eid" class="contents-input noline" value="${ client.eid }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="category" class="contents-input noline" value="${ client.category }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-300">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="clientAddress" class="contents-input noline" value="${ client.clientAddress }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="manager" class="contents-input noline" value="${ client.manager }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-150">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="managerContact" class="contents-input noline" value="${ client.managerContact }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="startDate" class="contents-input noline" value="${ client.startDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="endDate" class="contents-input noline" value="${ client.endDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+		                                    </td>
+		                                </tr>
+	                                </c:forEach>
+                                </c:if>
 
                             </table>
                         </div>
