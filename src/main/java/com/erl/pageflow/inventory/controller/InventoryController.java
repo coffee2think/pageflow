@@ -31,14 +31,12 @@ public class InventoryController {
 
 	// 재고 현황 들어갔을 때 보여지는 뷰
 	@RequestMapping("inventorylist.do")
-	public String moveWritePage(Model model) {
+	public String moveInventoryList(Model model) {
 
 		int currentPage = 1;
 		int limit = 10;
 
-		// 총 페이지 수 계산을 위한 공지글 총갯수 조회
 		int listCount = inventoryService.selectGetListCount();
-		// 페이지 관련 항목 계산 처리
 		Paging paging = new Paging(listCount, currentPage, limit, "inventorylist.do");
 		paging.calculator();
 
@@ -57,64 +55,64 @@ public class InventoryController {
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
 
-			logger.info("list" + list);
+//			logger.info("list" + list);
 
 			return "inventory/inven_list";
 		} else {
 			model.addAttribute("message", "재고 조회 실패!!");
-			return "common/error.jsp";
+			return "common/error";
 		}
 
 	}
 
-	// 첫번째 필터 검색용 메소드
-	@RequestMapping(value = "invenfirstfilter.do", method = RequestMethod.POST)
-	public ModelAndView inventorfirstSearch(Inventory inventory,
-			@RequestParam(name = "storeNum", required = false) String storeNum,
-			@RequestParam(name = "releaseNum", required = false) String releaseNum,
-			@RequestParam("keyword") String keyword, @RequestParam(name = "limit", required = false) String slimit,
-			@RequestParam(name = "paging", required = false) String page, ModelAndView mv) {
-
-		int currentPage = 1;
-
-		if (page != null) {
-			currentPage = Integer.parseInt(page);
-		}
-
-		int limit = 10;
-
-		if (slimit != null) {
-			limit = Integer.parseInt(slimit);
-		}
-
-		int listCount = inventoryService.selectInventorfirstSearchCount(keyword);
-
-		Paging paging = new Paging(listCount, currentPage, limit, "invenfirstfilter.do");
-		paging.calculator();
-
-		Search search = new Search();
-		search.setStartRow(paging.getStartRow());
-		search.setEndRow(paging.getEndRow());
-		search.setKeyword(keyword);
-
-		ArrayList<Inventory> list = inventoryService.selectInventorfirst(search);
-
-		if (list != null && list.size() > 0) {
-			mv.addObject("list", list);
-			mv.addObject("paging", paging);
-			mv.addObject("currentPage", list);
-			mv.addObject("limit", list);
-			mv.addObject("action", list);
-			mv.addObject("keyword", list);
-			mv.addObject("storeNum", storeNum);
-			mv.addObject("releaseNum", releaseNum);
-
-			mv.setViewName("inventory/inven_list");
-		} else {
-			mv.addObject("message", keyword + " : 첫번쩨 검색 실패!");
-
-			mv.setViewName("common/error");
-		}
-		return mv;
-	}
+//	// 첫번째 필터 검색용 메소드
+//	@RequestMapping(value = "invenfirstfilter.do", method = RequestMethod.POST)
+//	public ModelAndView inventorfirstSearch(Inventory inventory,
+//			@RequestParam(name = "storeNum", required = false) String storeNum,
+//			@RequestParam(name = "releaseNum", required = false) String releaseNum,
+//			@RequestParam("keyword") String keyword, @RequestParam(name = "limit", required = false) String slimit,
+//			@RequestParam(name = "paging", required = false) String page, ModelAndView mv) {
+//
+//		int currentPage = 1;
+//
+//		if (page != null) {
+//			currentPage = Integer.parseInt(page);
+//		}
+//
+//		int limit = 10;
+//
+//		if (slimit != null) {
+//			limit = Integer.parseInt(slimit);
+//		}
+//
+//		int listCount = inventoryService.selectInventorfirstSearchCount(keyword);
+//
+//		Paging paging = new Paging(listCount, currentPage, limit, "invenfirstfilter.do");
+//		paging.calculator();
+//
+//		Search search = new Search();
+//		search.setStartRow(paging.getStartRow());
+//		search.setEndRow(paging.getEndRow());
+//		search.setKeyword(keyword);
+//
+//		ArrayList<Inventory> list = inventoryService.selectInventorfirst(search);
+//
+//		if (list != null && list.size() > 0) {
+//			mv.addObject("list", list);
+//			mv.addObject("paging", paging);
+//			mv.addObject("currentPage", list);
+//			mv.addObject("limit", list);
+//			mv.addObject("action", list);
+//			mv.addObject("keyword", list);
+//			mv.addObject("storeNum", storeNum);
+//			mv.addObject("releaseNum", releaseNum);
+//
+//			mv.setViewName("inventory/inven_list");
+//		} else {
+//			mv.addObject("message", keyword + " : 첫번쩨 검색 실패!");
+//
+//			mv.setViewName("common/error");
+//		}
+//		return mv;
+//	}
 }
