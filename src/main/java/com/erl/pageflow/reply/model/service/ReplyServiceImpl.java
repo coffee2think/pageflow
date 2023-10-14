@@ -9,6 +9,7 @@ import com.erl.pageflow.common.ReplyKeyword;
 import com.erl.pageflow.common.UploadKeyword;
 import com.erl.pageflow.reply.model.dao.ReplyDao;
 import com.erl.pageflow.reply.model.vo.Reply;
+import com.erl.pageflow.reply.model.vo.ReplyUpload;
 
 @Service("replyService")
 public class ReplyServiceImpl implements ReplyService {
@@ -38,7 +39,16 @@ public class ReplyServiceImpl implements ReplyService {
 	@Override
 	public int insertUploadReply(UploadKeyword uploadKeyword) {
 		return replyDao.insertUploadReply(uploadKeyword);
-		
+	}
+
+	@Override
+	public Reply selectReplyRecent() {
+		return replyDao.selectReplyRecent();
+	}
+
+	@Override
+	public ReplyUpload selectReplyListFile(int replyId) {
+		return replyDao.selectReplyListFile(replyId);
 	}
 	
 	

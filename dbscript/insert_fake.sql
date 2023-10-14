@@ -89,5 +89,9 @@ insert into reply values
 	     'sadasdasdasd', default, null, null);
 rollback;
 
+insert into upload_board 
+values (1, 1, 1, 'icon.png', '202310140305.png');
 
+insert into upload_reply 
+values (1, 1, 'mascot.png', '202310140306.png');
 

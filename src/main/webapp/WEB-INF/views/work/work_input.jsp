@@ -105,12 +105,11 @@
                                     <label for="sel_code"></label>
                                     <select name="code" id="sel_code">
                                         <option value="development">개발팀</option>
-                                        <option value="design">디자인팀</option>
                                     </select>
                                 </div>
                             </div>
 
-                            <form action="bdinsert.do" method="post" onsubmit="inputSubmit();">
+                            <form action="bdinsert.do" method="post" onsubmit="inputSubmit();" enctype="multipart/form-data">
                             	<input type="hidden" name="depId" value="${ depId }">
                                 <div class="select-box">
                                     <div class="select-pan-nemo">

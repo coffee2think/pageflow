@@ -56,38 +56,34 @@
     	}
     }
     
-    function setReplyBtn(){
+    function setReplyBtn(parent){
+    	
     	//댓글 입력 팝업 보이기 버튼
-        $('.reply-btn').each(function(){
-            $(this).on('click', function(){
-            	clickReplyBtn($(this));
-            })
+        parent.find('.reply-btn').on('click', function(){
+            clickReplyBtn($(this));
         })
         
         //댓글 입력버튼
-        $('.reply-input-btn').each(function(){
-        	$(this).on('click', function(){
-        		
-        		if($(this).parent().parent('.reply-input-box').hasClass('depth1')){
-        			
-        		}else{
-        			let parent = $(this).parent().parent().parent('.notice-reply-con');
-                	replyInsert(parent);
-        		}
-        		
-        	})
+        parent.find('.reply-input-btn').on('click', function(){
+        	if($(this).parent().parent('.reply-input-box').hasClass('depth1')){
+    			replyInsert(parent, 'first');
+    		}else{
+    			let parent = $(this).parent().parent().parent('.notice-reply-con');
+            	replyInsert(parent, 'second');
+    		}
         })
+        
     }
     
     function setId(parent){
     	
     	let data = {
-   			bundleId : parent.attr('data-bundleId')
-           	,bundleId2 : parent.attr('data-bundleId2')
-           	,parentId : parent.attr('data-parentId')
-           	,depth : parent.attr('data-depth')
-           	,depth2 : parent.attr('data-depth2')
-           	,replyId : parent.attr('data-replyId')
+   			bundleId : Number(parent.attr('data-bundleId'))
+           	,bundleId2 : Number(parent.attr('data-bundleId2'))
+           	,parentId : Number(parent.attr('data-parentId'))
+           	,depth : Number(parent.attr('data-depth'))
+           	,depth2 : Number(parent.attr('data-depth2'))
+           	,replyId : Number(parent.attr('data-replyId'))
     	}
     	
 		return data;
@@ -109,14 +105,14 @@
 	}
     
   	//댓글 등록 버튼 클릭시
-	function replyInsert(parent){
+	function replyInsert(parent, type){
 		
 		//댓글 ajax 
 		let obj = setId(parent);
     	let replyId, bundleId, bundleId2, parentId, depth, depth2;
     	let replyDetail = parent.find('.reply-input').text();
 		
-		if(obj.depth == -1){
+		if(type == 'first'){
 			//bundlId는 depth가 -1일때는 최상위
 			//번들아이디를 ajax로 받아와야 함
 			replyId = obj.replyId;
@@ -126,27 +122,37 @@
 			depth = -1;
 			depth2 = -1;
 			
-			ajaxInsert2(bundleId, bundleId2, parentId, depth, 
+			ajaxInsert($('.notice-reply-box'), 'first', bundleId, bundleId2, parentId, depth, 
 					depth2, replyId, replyDetail);
 			
 		}else{
 			//depth가 -1이 아닐때는 댓글의 댓글임
 			bundleId = obj.bundleId;
 			replyId = obj.replyId;
-			if(depth == 1) {
+			
+			if(obj.depth2 == 1) {
 				bundleId2 = replyId;
-			}else {
+				depth2 = obj.depth2 + 1;
+			}else if(obj.depth2 == 2){
 				bundleId2 = obj.bundleId2;
+				depth2 = obj.depth2 + 1;
+			}else if(obj.depth2 == 3){
+				bundleId2 = obj.bundleId2;
+				depth2 = obj.depth2;
+			}else{
+				//obj.depth2가 -1일때
+				bundleId2 = obj.bundleId2;
+				depth2 = 1;
 			}
 			
 			parentId = replyId;
 			depth = 1;
-			depth2 = (depth2 < 3) ? obj.depth2 + 1 : obj.depth2;
+			
 			console.log('replyInsert - bundleId : ' + bundleId + ', bundleId2 : ' +
 					bundleId2 + ', parentId : ' + parentId + ', depth : ' + depth + 
 					', depth2 : ' + depth2 + ', replyId : ' + replyId + 
 					', replyDetail : ' + replyDetail);
-			ajaxInsert(bundleId, bundleId2, parentId, depth, 
+			ajaxInsert(parent, 'second', bundleId, bundleId2, parentId, depth, 
 					depth2, replyId, replyDetail);
 			
 		}
@@ -154,7 +160,7 @@
 	}
     
   	//댓글 인서트
-	function ajaxInsert(bundleId, bundleId2, parentId, depth, 
+	function ajaxInsert(parent, type, bundleId, bundleId2, parentId, depth, 
 			depth2, replyId, replyDetail){
 		
 		console.log('ajaxReplyInsert - bundleId : ' + bundleId + ', bundleId2 : ' +
@@ -162,30 +168,154 @@
 				', depth2 : ' + depth2 + ', replyId : ' + replyId + 
 				', replyDetail : ' + replyDetail);
 		
+		let jsonData = {
+			depId : ${ board.depId }
+			,boardId : ${ board.boardId }
+			,empId : 1
+			,bundleId : bundleId
+			,bundleId2 : bundleId2
+			,parentId : parentId
+			,depth : depth
+			,depth2 : depth2
+			,replyId : replyId
+			,replyDetail : replyDetail	
+		}
+		
+        
 		$.ajax({
     		url : 'ryinsert.do'
     		,type : 'post'
-    		,data : {
-    			defId : ${ board.depId }
-    			,empId : 1
-    			,bundleId : bundleId
-    			,bundleId2 : bundleId2
-    			,parentId : parentId
-    			,depth : depth
-    			,depth2 : depth2
-    			,replyId : replyId
-    			,replyDetail : replyDetail
-    		},
-    		success : function(data) {
-    			console.log("success : " + data);
-    			//$('.reply-input-btn')
+    		,data : jsonData
+    		,success : function(data) {
     			
-    		},
-    		error: function(jqXHR, textStatus, errorThrown){
+    			let str = JSON.stringify(data);
+    			let ajaxData = JSON.parse(str);
+    	        console.log('ajaxData str : ' + str);
+    	        console.log('ajaxData : ' + ajaxData);
+    	        console.log('ajaxData.replyId : ' + ajaxData.replyId);
+    			parent.find('.reply-input-box').hide();
+    			parent.find('.reply-input').text('');
+    			parent.find('.file-btn').val('');
+    			
+    			let adata = {
+    				replyId : ajaxData.replyId
+    				,createDate : ajaxData.createDate
+    			}
+    			
+    			console.log('data.replyId : ' + data.replyId);
+    			if(type == 'first') parent.before(setTag(jsonData, adata));
+    			else parent.after(setTag(jsonData, adata));
+    			
+    			console.log('parent : ' + parent.attr('class'));
+    			setReplyBtn(parent);
+    		}
+    		,error: function(jqXHR, textStatus, errorThrown){
     			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
     		}
     	})
 	}
+  	
+  	function setTag(jsonData, ajaxData){
+        let empName = '호호홓';
+        let parentEmpName = '????';
+        let originFileName = '';
+        let renameFileName = '';
+
+        if(ajaxData.originFileName != undefined) {
+            originFileName = ajaxData.originFileName;
+            renameFileName = ajaxData.renameFileName;
+        }
+        console.log('ajaxData.replyId : ' + ajaxData.replyId);
+        console.log('ajaxData.createDate : ' + ajaxData.createDate);
+        let replyId = ajaxData.replyId;
+        let createDate = ajaxData.createDate;
+  		let el = `
+  		<div class="notice-reply-con depth`+jsonData.depth2+`" 
+        	data-empId="`+jsonData.empId+`"
+        	data-bundleId="`+jsonData.bundleId+`" 
+        	data-bundleId2="`+jsonData.bundleId2+`" 
+        	data-parentId="`+jsonData.parentId+`" 
+        	data-depth="`+jsonData.depth+`" 
+        	data-depth2="`+jsonData.depth2+`" 
+        	data-replyId="`+replyId+`"
+        	id = "reply_`+replyId+`"
+        >`
+        if(jsonData.depth2 >= 1) {
+            el += `<div class="depth2-icon">ㄴ</div>`;
+        }
+        
+        el += 
+            `
+            <div class="contents-notice-line">
+                <div class="notice-profile">
+                    <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
+                    <span>
+                        <div class="reply-ename">`+empName+`</div>
+                        <div class="reply-date">
+                            <span>`+createDate+`</span>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="contents-notice-text">
+                <span class="contents-notice-text-parent">@`+parentEmpName+`</span>
+                `+jsonData.replyDetail+`
+            </div>`
+        
+        if(originFileName == ''){
+
+            el += 
+            `
+            <a class="contents-notice-down" href="bddown.do?ofile=`+ originFileName +`&rfile=`+ renameFileName +`">
+                <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
+                <span>`+originFileName+`</span>
+                <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
+            </a>
+            `
+        }
+        
+        if(jsonData.depth2 != 3) {
+            el += `
+            <button class="reply-btn">
+                답글
+            </button>`;
+        }
+        
+        el +=
+            `	
+			<div class="reply-right">
+				<div class="reply-dropdown">
+					<button class="reply-delete-btn">삭제</button>
+					<button class="reply-report-btn">신고</button>
+				</div>
+                <button class="reply-right-btn">
+                    <img class="reply-right-btn-img" src="/pageflow/resources/images/right.png">
+                </button>
+            </div>`
+            
+        if(jsonData.depth2 != 3) {	
+            el +=
+            `
+            <div class="reply-input-box depth2">
+                <!-- <div class="depth2-icon-reply">ㄴ</div> -->
+                <div class="reply-input-area">
+                    <div class="reply-input" contenteditable="true">
+                        
+                    </div>
+                </div>
+                <div class="reply-input-btn-box">
+                    <input type="file" class="file-btn" name="upfile">
+                    <input type="button" class="contents-input-btn reply-input-btn big noline" value="입력">
+                </div>
+            </div>`
+        }
+        el +=
+        `
+        </div>`;
+        
+        return el;
+  	}
     
 </script>
 </head>
@@ -322,6 +452,19 @@
                                         </div>
                                     </div>
                                     
+                                    <c:if test="${ !empty board.originFile }">
+                                    	<c:url var="bdown" value="bddown.do">
+											<c:param name="ofile" value="${ board.originFile }" />
+	                                        <c:param name="rfile" value="${ board.renameFile }" />
+	                                    </c:url>
+	
+	                                    <a class="contents-notice-down" href="${ bdown }">
+	                                        <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
+	                                        <span>${ board.originFile }</span>
+	                                        <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
+	                                    </a>
+                                    </c:if>
+                                    
                                 </div>
                                 
                                 <div class="notice-contents-box">
@@ -388,15 +531,18 @@
                                                 <span class="contents-notice-text-parent">@${ r.parentEmpName }</span>
                                                 ${ r.replyDetail }
                                             </div>
-                                            
-    										
-		
-                                            <a class="contents-notice-down" href="#">
-                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
-                                                <span>product_manage2.zip</span>
-                                                <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
-                                            </a>
-                                            
+                                            <c:if test="${ !empty r.originFile }">
+	    										<c:url var="bdown" value="bddown.do">
+													<c:param name="ofile" value="${ r.originFile }" />
+	                                                <c:param name="rfile" value="${ r.renameFile }" />
+	                                            </c:url>
+			
+	                                            <a class="contents-notice-down" href="${ bdown }">
+	                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
+	                                                <span>${ r.originFile }</span>
+	                                                <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
+	                                            </a>
+                                            </c:if>
                                             <c:if test="${ r.depth2 != 3 }">
 	                                            <button class="reply-btn">
 	                                                답글
@@ -413,22 +559,27 @@
 						                        </button>
 						                    </div>
 											
-	                                        <div class="reply-input-box depth2">
-	                                            <!-- <div class="depth2-icon-reply">ㄴ</div> -->
-	                                            <div class="reply-input-area">
-	                                                <div class="reply-input" contenteditable="true">
-	                                                    
-	                                                </div>
-	                                            </div>
-	                                            <div class="reply-input-btn-box">
-	                                                <input type="file" class="file-btn" name="upfile">
-	                                                <input type="button" class="contents-input-btn reply-input-btn big noline" value="입력">
-	                                            </div>
-	                                        </div>
+											<c:if test="${ r.depth2 != 3 }">
+											
+		                                        <div class="reply-input-box depth2">
+		                                            <!-- <div class="depth2-icon-reply">ㄴ</div> -->
+		                                            <div class="reply-input-area">
+		                                                <div class="reply-input" contenteditable="true">
+		                                                    
+		                                                </div>
+		                                            </div>
+		                                            <div class="reply-input-btn-box">
+		                                                <input type="file" class="file-btn" name="upfile">
+		                                                <input type="button" class="contents-input-btn reply-input-btn big noline" value="입력">
+		                                            </div>
+		                                        </div>
+		                                    </c:if>
                                         </div>
                                     </c:forEach>
 									<script type="text/javascript">
-										setReplyBtn();
+                                        $('.notice-reply-con').each(function(){
+                                            setReplyBtn($(this));
+                                        })
 									</script>
                                 </div>
                                 <!--notice-reply-box end-->

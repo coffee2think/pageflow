@@ -1,6 +1,7 @@
 package com.erl.pageflow.reply.controller;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -34,17 +35,17 @@ public class ReplyController {
 	@ResponseBody
 	public String insertReplyMethod(Reply reply, Model model,
 			HttpServletRequest request, 
-			@RequestParam(name = "upfile", required = false) MultipartFile mfile) {
+			@RequestParam(name = "upfile", required = false) MultipartFile mfile) throws IOException{
 		
 		//ajax요청시 리턴방법은 여러가지가 있음
 		//response 객체 이용시에는 2가지 중 선택 가능
 		//1. 출력 스트림으로 응답하는 방법(아이디 중복체크 예)
 		//2. 뷰리졸버로 리턴하는 방법 : response body에 내보낼 값을 저장함
 		//   JSON View 등록처리 되어 있어야 함 : servlet-cntext.xml
-		logger.info("reply : " + reply);
+		logger.info("mfile : " + mfile);
 		String fileName = null;
 		String savePath = request.getSession().getServletContext().getRealPath(
-				"resources/reply_upfiles");
+				"resources/board_upfiles");
 		//첨부파일이 있을때 
 		if(mfile != null) {
 			if(!mfile.isEmpty()) {
@@ -76,14 +77,16 @@ public class ReplyController {
 			}
 		}
 		
+		JSONObject sendJson = new JSONObject();
+		
 		if(replyService.insertReply(reply) > 0) {
+			logger.info("??????????");
 			//전송용 json 객체 준비
-			JSONObject sendJson = new JSONObject();
-			sendJson.put("fileName", fileName);
-			return sendJson.toJSONString();//뷰리졸버로 리턴함
-		}else {
-			model.addAttribute("message", "새 게시글 등록 실패!");
-			return "common/error";
+			Reply selReply = replyService.selectReplyRecent();
+			sendJson.put("replyId", selReply.getReplyId());
+			sendJson.put("createDate", selReply.getCreateDate());
 		}
+
+		return sendJson.toJSONString();//뷰리졸버로 리턴함
 	}
 }

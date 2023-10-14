@@ -38,10 +38,18 @@
 		<result property="profile" column="PROFILE" />
 	</resultMap>
 	
+	<resultMap type="ReplyUpload" id="resultReplyUpload">
+		<result property="uploadId" column="UPLOAD_ID" />
+		<result property="replyId" column="REPLY_ID" />
+		<result property="uploadUrl" column="UPLOAD_URL" />
+		<result property="renameUrl" column="RENAME_URL" />
+	</resultMap>
+	
 	<resultMap type="Reply" id="resultReplyEmp">
 		<result property="empId" column="EMP_ID" />
 		<result property="empName" column="EMP_NAME" />
 	</resultMap>
+	
 	
 	<select id="selectReplyListCount" parameterType="ReplyKeyword" resultType="_int">
 		select count(*) from reply 
@@ -73,11 +81,21 @@
 		where REPLY_ID = #{ replyId } 
 	</select>
 	
+	<select id="selectReplyRecent" resultMap="resultReply">
+		select * from reply
+		where REPLY_ID = (select max(REPLY_ID) from reply)
+	</select>
+	
+	<select id="selectReplyListFile" parameterType="_int" resultMap="resultReplyUpload">
+		select * from UPLOAD_REPLY
+		where REPLY_ID = #{ replyId }
+	</select>
+	
 	<insert id="insertReply" parameterType="Reply">
 	     insert into reply values
-	    ((select max(REPLY_ID) + 1 from reply), depId, boardId, empId,
-	     bundleId, bundleId2, parentId, depth, depth2,
-	     replyDetail, default, null, null)
+	    ((select max(REPLY_ID) + 1 from reply), #{ depId }, #{ boardId }, #{ empId },
+	     #{ bundleId }, #{ bundleId2 }, #{ parentId }, #{ depth }, #{ depth2 },
+	     #{ replyDetail }, default, null, null)
 	</insert>
 	
 </mapper>
