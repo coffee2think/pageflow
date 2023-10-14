@@ -36,11 +36,27 @@
 		<result property="endDate" column="END_DATE"/>
 	</resultMap>
 	
+	<resultMap type="Book" id="resultBook">
+		<result property="bookId" column="BOOK_ID" />
+		<result property="writerId" column="WRITER_ID" />
+		<result property="bookName" column="BOOK_NAME" />
+		<result property="writerName" column="WRITER_NAME" />
+		<result property="bookPriceS" column="BOOK_PRICE_S" />
+		<result property="bookPriceR" column="BOOK_PRICE_R" />
+		<result property="bookPrice" column="BOOK_PRICE" />
+		<result property="category" column="CATEGORY" />
+		<result property="isbn" column="ISBN" />
+		<result property="bookState" column="BOOK_STATE" />
+		<result property="engraving" column="ENGRAVING" />
+		<result property="pubDate" column="PUB_DATE" />
+		<result property="regDate" column="REG_DATE" />
+	</resultMap>
+	
 	<select id="select">
 	
 	</select>
 	
-	<select id="selectList" parameterType="Paging" resultMap="resultPrint">
+	<select id="selectPrintOrderList" parameterType="Paging" resultMap="resultPrintOrder">
       <![CDATA[
       select * 
       from (select rownum rnum, sub.*
@@ -50,7 +66,7 @@
       ]]>
    </select>
 	
-	<select id="selectList" parameterType="Paging" resultMap="resultClient">
+	<select id="selectClientList" parameterType="Paging" resultMap="resultClient">
       <![CDATA[
       select * 
       from (select rownum rnum, sub.*
