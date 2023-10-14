@@ -30,12 +30,18 @@
 		<result property="viewsNum" column="VIEWS_NUM" />
 	</resultMap>
 	
+	<resultMap type="BoardUpload" id="resultBoardUpload">
+		<result property="uploadId" column="UPLOAD_ID" />
+		<result property="depId" column="DEP_ID" />
+		<result property="boardId" column="BOARD_ID" />
+		<result property="uploadUrl" column="UPLOAD_URL" />
+		<result property="renameUrl" column="RENAME_URL" />
+	</resultMap>
+	
 	<select id="selectBoardListCount" resultType="_int">
 		select count(*) from board
 	</select>
 	
-
-
 	<select id="selectBoardList" parameterType="Paging" resultMap="resultBoardJoin">
 		<![CDATA[
 		select * 
@@ -73,13 +79,24 @@
 		left join employee using(EMP_ID)
 	</select>
 	
+	<select id="selectBoardListFile" parameterType="BoardKeyword" resultMap="resultBoardUpload">
+		select * from UPLOAD_BOARD
+		where DEP_ID = #{ depId } and BOARD_ID = #{ boardId }
+	</select>
+	
 	<insert id="insertBoard" parameterType="Board">
 		insert into board 
 		values (#{depId}, (select max(BOARD_ID) + 1 from board), 
 		        #{empId}, #{boardTitle}, #{boardDetail}, 
-		        #{createDate}, #{modifyDate},  
-		        #{deleteDate}, #{viewsNum})
+		        default, null, null, 0)
 	</insert>
+	
+	<insert id="insertUploadBoard" parameterType="BoardUpload">
+		insert into upload_board 
+		values ((select max(UPLOAD_ID) + 1 from upload_board), 
+		        #{depId}, #{boardId}, #{uploadUrl}, #{renameUrl})
+	</insert>
+	
 	
 	<update id="updateBoard" parameterType="_int">
 		

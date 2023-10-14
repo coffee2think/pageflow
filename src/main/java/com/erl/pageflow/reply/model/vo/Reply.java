@@ -23,6 +23,9 @@ public class Reply implements Serializable {
 	private String profile;
 	private String parentEmpName;
 	
+	private String renameFile;
+	private String originFile;
+	
 	public Reply() {}
 	
 	public Reply(int replyId, int depId, int boardId, int empId, int bundleId, int bundleId2, int parentId, int depth,
@@ -172,14 +175,33 @@ public class Reply implements Serializable {
 	public void setProfile(String profile) {
 		this.profile = profile;
 	}
+	
+	
+
+	public String getRenameFile() {
+		return renameFile;
+	}
+
+	public void setRenameFile(String renameFile) {
+		this.renameFile = renameFile;
+	}
+
+	public String getOriginFile() {
+		return originFile;
+	}
+
+	public void setOriginFile(String originFile) {
+		this.originFile = originFile;
+	}
 
 	@Override
 	public String toString() {
 		return "Reply [replyId=" + replyId + ", depId=" + depId + ", boardId=" + boardId + ", empId=" + empId
 				+ ", bundleId=" + bundleId + ", bundleId2=" + bundleId2 + ", parentId=" + parentId + ", depth=" + depth
 				+ ", depth2=" + depth2 + ", replyDetail=" + replyDetail + ", createDate=" + createDate + ", modifyDate="
-				+ modifyDate + ", deleteDate=" + deleteDate + ", empName=" + empName + ", parentEmpName="
-				+ parentEmpName + "]";
+				+ modifyDate + ", deleteDate=" + deleteDate + ", empName=" + empName + ", profile=" + profile
+				+ ", parentEmpName=" + parentEmpName + ", renameFile=" + renameFile + ", originFile=" + originFile
+				+ "]";
 	}
 	
 }

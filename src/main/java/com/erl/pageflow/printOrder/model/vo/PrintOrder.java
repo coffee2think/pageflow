@@ -19,13 +19,16 @@ public class PrintOrder implements java.io.Serializable{
 	private Date orderDate;
 	private Date endDate;
 	private Date pubDate;
+	private String clientName;
+	private String bookName;
 	
 	public PrintOrder() {
 		super();
 	}
 
 	public PrintOrder(int orderId, int bookId, int printId, int empId, String empName, String classify, String unit,
-			int quantity, int price, int amount, String state, Date orderDate, Date endDate, Date pubDate) {
+			int quantity, int price, int amount, String state, Date orderDate, Date endDate, Date pubDate,
+			String clientName, String bookName) {
 		super();
 		this.orderId = orderId;
 		this.bookId = bookId;
@@ -41,6 +44,8 @@ public class PrintOrder implements java.io.Serializable{
 		this.orderDate = orderDate;
 		this.endDate = endDate;
 		this.pubDate = pubDate;
+		this.clientName = clientName;
+		this.bookName = bookName;
 	}
 
 	public int getOrderId() {
@@ -155,6 +160,22 @@ public class PrintOrder implements java.io.Serializable{
 		this.pubDate = pubDate;
 	}
 
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public String getBookName() {
+		return bookName;
+	}
+
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
@@ -164,8 +185,10 @@ public class PrintOrder implements java.io.Serializable{
 		return "PrintOrder [orderId=" + orderId + ", bookId=" + bookId + ", printId=" + printId + ", empId=" + empId
 				+ ", empName=" + empName + ", classify=" + classify + ", unit=" + unit + ", quantity=" + quantity
 				+ ", price=" + price + ", amount=" + amount + ", state=" + state + ", orderDate=" + orderDate
-				+ ", endDate=" + endDate + ", pubDate=" + pubDate + "]";
+				+ ", endDate=" + endDate + ", pubDate=" + pubDate + ", clientName=" + clientName + ", bookName="
+				+ bookName + "]";
 	}
+	
 	
 	
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.erl.pageflow.board.model.dao.BoardDao;
 import com.erl.pageflow.board.model.vo.Board;
+import com.erl.pageflow.board.model.vo.BoardUpload;
 import com.erl.pageflow.common.BoardKeyword;
 import com.erl.pageflow.common.Paging;
 
@@ -39,6 +40,11 @@ public class BoardServiceImpl implements BoardService{
 	public int insertBoard(Board board) {
 		return boardDao.insertBoard(board);
 	}
+	
+	@Override
+	public int insertUploadBoard(BoardUpload boardUpload) {
+		return boardDao.insertUploadBoard(boardUpload);
+	}
 
 	@Override
 	public int updateBoard(Board board) {
@@ -49,5 +55,12 @@ public class BoardServiceImpl implements BoardService{
 	public int deletBoard(Board board) {
 		return boardDao.deletBoard(board);
 	}
+
+	@Override
+	public BoardUpload selectBoardListFile(BoardKeyword boardKeyword) {
+		return boardDao.selectBoardListFile(boardKeyword);
+	}
+	
+	
 	
 }

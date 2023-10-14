@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -106,8 +107,8 @@
                                     기간
                                 </div>
 
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
+                                <input type="date" class="select-date select-date-first" value="${ begin }">
+                                <input type="date" class="select-date select-date-second" value="${ end }">
 
                                 <input type="button" name="week" class="select-pan-btn" value="일주일">
                                 <input type="button" name="month" class="select-pan-btn" value="한달">
@@ -147,71 +148,98 @@
                                     <th>잔액</th>
                                     <th>수정</th>
                                 </tr>
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                    <td class="td-50">
-                                        <input type="checkbox" name="check" value="" >
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="no" class="contents-input noline" value="2023-09-19-1" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="code" class="contents-input noline" value="10100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-200">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="name" class="contents-input noline" value="데이터베이스 개론과 실습" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="location" class="contents-input noline" value="강남" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="store" class="contents-input noline" value="교보문고" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date" class="contents-input noline" value="2015.03.05" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="price" class="contents-input noline" value="25000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="quantity" class="contents-input noline" value="100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="amount" class="contents-input noline" value="2500000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="collection" class="contents-input noline" value="0" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="balance" class="contents-input noline" value="0" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-                                    </td>
-                                </tr>
+                                <c:set var="sumQuantity" value="0" />
+                                <c:set var="sumTotalPrice" value="0" />
+                                <c:set var="sumCollectedAmount" value="0" />
+                                <c:set var="sumBalance" value="0" />
+                                
+                                
+                                
+                                <c:if test="${ !empty list }">
+									<c:forEach items="${ list }" var="sales">
+		                                <fmt:formatNumber var="bookPrice" value="${ sales.bookPrice }" type="number" />
+		                                <fmt:formatNumber var="orderQuantity" value="${ sales.orderQuantity }" type="number" />
+		                                <fmt:formatNumber var="totalPrice" value="${ sales.totalPrice }" type="number" />
+		                                <fmt:formatNumber var="collectedAmount" value="${ sales.collectedAmount }" type="number" />
+		                                <fmt:formatNumber var="balance" value="${ sales.totalPrice - sales.collectedAmount }" type="number" />
+		                                
+		                                <c:set var="sumQuantity" value="${ sumQuantity + sales.orderQuantity }" />
+		                                <c:set var="sumTotalPrice" value="${ sumTotalPrice + sales.totalPrice }" />
+		                                <c:set var="sumCollectedAmount" value="${ sumCollectedAmount + sales.collectedAmount }" />
+		                                <c:set var="sumBalance" value="${ sumBalance + (sales.totalPrice - sales.collectedAmount) }" />
+		                                
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                    <td class="td-50">
+		                                        <input type="checkbox" name="check" value="" >
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="tradeId" class="contents-input noline" value="${ sales.tradeId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookId" class="contents-input noline" value="${ sales.bookId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-200">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookName" class="contents-input noline" value="${ sales.bookName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="location" class="contents-input noline" value="강남" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookStoreName" class="contents-input noline" value="${ sales.bookStoreName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="orderDate" class="contents-input noline" value="${ sales.orderDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ bookPrice }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="orderQuantity" class="contents-input noline" value="${ orderQuantity }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="totalPrice" class="contents-input noline" value="${ totalPrice }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="collectedAmount" class="contents-input noline" value="${ collectedAmount }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="balance" class="contents-input noline" value="${ balance }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+		                                    </td>
+		                                </tr>
+									</c:forEach>
+                                </c:if>
 
                                 <!--합계-->
+                                <fmt:formatNumber var="sumQuantity" value="${ sumQuantity }" type="number" />
+                                <fmt:formatNumber var="sumTotalPrice" value="${ sumTotalPrice }" type="number" />
+                                <fmt:formatNumber var="sumCollectedAmount" value="${ sumCollectedAmount }" type="number" />
+                                <fmt:formatNumber var="sumBalance" value="${ sumBalance }" type="number" />
+                                
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
                                     <td></td>
                                     <td></td>
@@ -219,12 +247,12 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                     <td>합계</td>
-                                    <td>1200</td>
-                                    <td>100</td>
-                                    <td>150000</td>
-                                    <td>12000</td>
-                                    <td>12000</td>
+                                    <td>${ sumQuantity }</td>
+                                    <td>${ sumTotalPrice }</td>
+                                    <td>${ sumCollectedAmount }</td>
+                                    <td>${ sumBalance }</td>
                                     <td></td>
                                 </tr>
                                 <!--합계end-->

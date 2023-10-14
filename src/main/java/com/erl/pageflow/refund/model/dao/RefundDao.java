@@ -23,4 +23,16 @@ public class RefundDao {
 		List<Refund> list = sqlSessionTemplate.selectList("refundMapper.selectRefundList", paging);
 		return (ArrayList<Refund>) list;
 	}
+
+	public String selectRefundBookName(int bookId) {
+		return sqlSessionTemplate.selectOne("refundMapper/selectRefundBookName", bookId);
+	}
+
+	public String selectRefundClientName(int clientId) {
+		return sqlSessionTemplate.selectOne("refundMapper/selectRefundClientName", clientId);
+	}
+
+	public int selectRefundBookPrice(int bookId) {
+		return sqlSessionTemplate.selectOne("refundMapper/selectRefundBookPrice", bookId);
+	}
 }

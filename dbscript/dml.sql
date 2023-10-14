@@ -69,3 +69,5 @@ select *
 
 select max(BUNDLE_ID) from reply;
 
+select * from reply
+where REPLY_ID = (select max(REPLY_ID) from reply);
