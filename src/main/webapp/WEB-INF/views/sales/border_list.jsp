@@ -14,6 +14,64 @@
     const NOWPAGE = 5;
     const SUBPAGE = 1;
     const LNKPAGE = 1;
+    
+    // 수정 가능 상태로 변경
+    function onUpdate(clientId) {
+    	// 같은 주문번호의 행들을 모두 선택
+    	
+    	// 행 버튼 보이기/숨기기 상태 변경
+    	$('#completeBtn-' + clientId).show();
+    	$('#cancelBtn-' + clientId).show();
+    	$('#updateBtn-' + clientId).hide();
+    }
+    
+    function cancelUpdate(clientId) {
+    	// 같은 주문번호의 행들을 모두 선택
+    	
+    	// 정보를 수정했으면 원래 상태로 되돌리기(reset)
+    	
+    	// 행 버튼 보이기/숨기기 상태 변경
+    	$('#completeBtn-' + clientId).hide();
+    	$('#cancelBtn-' + clientId).hide();
+    	$('#updateBtn-' + clientId).show();
+    }
+    
+    function submitUpdate(tradeId) {
+    	// 유효성 검사
+    	
+    	// 정보 업데이트 post 방식으로 전송
+    	$.ajax({
+			url: "boupdate.do",
+			type: "post",
+			data: { tradeId: $('#tradeId-' + tradeId).val(),
+				bookId: $('#bookId-' + tradeId).val(),
+				bookName: $('#bookName-' + tradeId).val(),
+				bookStoreName: $('#bookStoreName-' + tradeId).val(),
+				bookPrice: $('#bookPrice-' + tradeId).val(),
+				orderQuantity: $('#orderQuantity-' + tradeId).val(),
+				totalPrice: $('#totalPrice-' + tradeId).val(),
+				state: $('#state-' + tradeId).val(),
+				orderDate: $('#orderDate-' + tradeId).val()
+			},
+			success: function(data){
+				console.log("success : " + data);
+				if(data == "ok") {
+					alert("사용 가능한 아이디입니다.");
+					$('#userpwd').focus();
+				} else {
+					alert("이미 사용중인 아이디입니다.");
+					$('#userid').select();
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown){
+				console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+			}
+		});
+	    	
+	    	return true;
+	    }
+    
+    
 </script>
 <title></title>
 </head>
@@ -157,7 +215,7 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <table class="contents-table">
+                            <table class="contents-table" id="list_table">
                                 <tr>
                                     <th>체크</th>
                                     <th>주문번호</th>
@@ -174,62 +232,64 @@
                                 </tr>
                                 <c:if test="${ !empty list }">
 	                                <c:forEach items="${ list }" var="bookOrder" >
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr-${ bookOrder.tradeId }">
 		                                    <td class="td-50">
 		                                        <input type="checkbox" name="check" value="" >
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="tradeId" class="contents-input noline" value="${ bookOrder.tradeId }" readonly>
+		                                            <input type="input" name="tradeId" id="tradeId-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.tradeId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookId" class="contents-input noline" value="${ bookOrder.bookId }" readonly>
+		                                            <input type="input" name="bookId" id="bookId-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.bookId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-200">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookName" class="contents-input noline" value="${ bookOrder.bookName }" readonly>
+		                                            <input type="input" name="bookName" id="bookName-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.bookName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="location" class="contents-input noline" value="강남" readonly>
+		                                            <input type="input" name="location" id="location-${ bookOrder.tradeId }" class="contents-input noline" value="강남" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookStoreName" class="contents-input noline" value="${ bookOrder.bookStoreName }" readonly>
+		                                            <input type="input" name="bookStoreName" id="bookStoreName-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.bookStoreName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ bookOrder.bookPrice }" readonly>
+		                                            <input type="input" name="bookPrice" id="bookPrice-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.bookPrice }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="orderQuantity" class="contents-input noline" value="${ bookOrder.orderQuantity }" readonly>
+		                                            <input type="input" name="orderQuantity" id="orderQuantity-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.orderQuantity }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="totalPrice" class="contents-input noline" value="${ bookOrder.totalPrice }" readonly>
+		                                            <input type="input" name="totalPrice" id="totalPrice-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.totalPrice }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="state" class="contents-input noline" value="${ bookOrder.state }" readonly>
+		                                            <input type="input" name="state" id="state-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.state }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="orderDate" class="contents-input noline" value="${ bookOrder.orderDate }" readonly>
+		                                            <input type="input" name="orderDate" id="orderDate-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.orderDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn-${ bookOrder.tradeId }" onclick="onUpdate(${ bookOrder.tradeId }); return false;">
+		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn-${ bookOrder.tradeId }"  onclick="submitUpdate(${ bookOrder.tradeId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn-${ bookOrder.tradeId }"  onclick="cancelUpdate(${ bookOrder.tradeId }); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
 	                                </c:forEach>

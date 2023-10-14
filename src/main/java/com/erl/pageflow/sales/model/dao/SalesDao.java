@@ -46,4 +46,12 @@ public class SalesDao {
 		List<Client> list = sqlSessionTemplate.selectList("salesMapper.selectClientList", paging);
 		return (ArrayList<Client>) list;
 	}
+
+	public int insertBookOrder(BookOrder bookOrder) {
+		return sqlSessionTemplate.insert("salesMapper.insertBookOrder", bookOrder);
+	}
+
+	public int updateBookOrder(BookOrder bookOrder) {
+		return sqlSessionTemplate.update("salesMapper.updateBookOrder", bookOrder);
+	}
 }

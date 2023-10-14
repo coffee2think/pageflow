@@ -49,6 +49,16 @@ public class SalesServiceImpl implements SalesService {
 	public ArrayList<Client> selectClientList(Paging paging) {
 		return salesDao.selectClientList(paging);
 	}
+
+	@Override
+	public int insertBookOrder(BookOrder bookOrder) {
+		return salesDao.insertBookOrder(bookOrder);
+	}
+
+	@Override
+	public int updateBookOrder(BookOrder bookOrder) {
+		return salesDao.updateBookOrder(bookOrder);
+	}
 	
 	
 }

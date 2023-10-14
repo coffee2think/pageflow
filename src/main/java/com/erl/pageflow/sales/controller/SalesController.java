@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.erl.pageflow.board.controller.BoardController;
@@ -147,6 +148,30 @@ public class SalesController {
 			return "sales/client_list";
 		} else {
 			model.addAttribute("message", "거래처 조회 실패 : 등록된 거래처가 없습니다");
+			return "common/error";
+		}
+	}
+	
+	@RequestMapping(value="boinsert.do", method=RequestMethod.POST)
+	public String bookOrderInsertMethod(BookOrder bookOrder, Model model) {
+		logger.info("boinsert.do" + bookOrder);
+		
+		if(salesService.insertBookOrder(bookOrder) > 0) {
+			return "redirect:movebolist.do";
+		} else {
+			model.addAttribute("message", "주문 등록 실패!");
+			return "common/error";
+		}
+	}
+	
+	@RequestMapping(value="boupdate.do", method=RequestMethod.POST)
+	public String bookOrderUpdateMethod(BookOrder bookOrder, Model model) {
+		logger.info("boupdate.do" + bookOrder);
+		
+		if(salesService.updateBookOrder(bookOrder) > 0) {
+			return "redirect:movebolist.do";
+		} else {
+			model.addAttribute("message", "주문 수정 실패!");
 			return "common/error";
 		}
 	}

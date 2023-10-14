@@ -110,6 +110,24 @@
 		where rnum between #{ startRow } and #{ endRow } 
 	</select>
 	
+	<insert id="insertBookOrder" parameterType="BookOrder">
+		insert into trade
+		values ((select max(trade_id) + 1 from trade), #{ bookId }, #{ clientId }, 
+				#{ empId }, #{ empName }, #{ orderQuantity }, sysdate, #{ state }, default, default, '주문')
+	</insert>
+	
+	<update id="updateBookOrder" parameterType="BookOrder">
+		update trade
+		set order_quantity = #{ orderQuantity },
+			state = #{ state }
+		where trade_id = #{ tradeId }
+	</update>
+	
+	<delete id="deleteBook" parameterType="_int">
+		delete from trade
+		where trade_id = #{ tradeId }
+	</delete>
+
 </mapper>
 
 
