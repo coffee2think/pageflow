@@ -54,4 +54,8 @@ public class SalesDao {
 	public int updateBookOrder(BookOrder bookOrder) {
 		return sqlSessionTemplate.update("salesMapper.updateBookOrder", bookOrder);
 	}
+
+	public int insertClient(Client client) {
+		return sqlSessionTemplate.insert("salesMapper.insertClient", client);
+	}
 }

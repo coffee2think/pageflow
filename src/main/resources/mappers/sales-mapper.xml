@@ -123,10 +123,33 @@
 		where trade_id = #{ tradeId }
 	</update>
 	
-	<delete id="deleteBook" parameterType="_int">
+	<delete id="deleteBookOrder" parameterType="_int">
 		delete from trade
 		where trade_id = #{ tradeId }
 	</delete>
+	
+	<insert id="insertClient" parameterType="Client">
+		insert into client
+		values (
+			<if test="category == '서점'">
+				decode((select count(client_id) from client where client_id like '1____'),
+				0, 10001,
+				(select max(client_id)+1 from client where client_id like '1____')),
+			</if>
+			<if test="category == '인쇄소'">
+				decode((select count(client_id) from client where client_id like '2____'),
+				0, 20001,
+				(select max(client_id)+1 from client where client_id like '2____')),
+			</if>
+			<if test="category == '창고'">
+				decode((select count(client_id) from client where client_id like '3____'),
+				0, 30001,
+				(select max(client_id)+1 from client where client_id like '3____')),
+			</if>
+			#{ category }, #{ clientName }, #{ clientAddress }, #{ clientContact }, #{ eid },
+			#{ clientUrl }, #{ manager }, #{ managerContact }, #{ managerEmail }, #{ startDate }, #{ endDate }
+		)
+	</insert>
 
 </mapper>
 

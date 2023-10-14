@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.erl.pageflow.board.controller.BoardController;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.sales.model.service.SalesService;
@@ -154,7 +153,7 @@ public class SalesController {
 	
 	@RequestMapping(value="boinsert.do", method=RequestMethod.POST)
 	public String bookOrderInsertMethod(BookOrder bookOrder, Model model) {
-		logger.info("boinsert.do" + bookOrder);
+		logger.info("boinsert.do : " + bookOrder);
 		
 		if(salesService.insertBookOrder(bookOrder) > 0) {
 			return "redirect:movebolist.do";
@@ -166,12 +165,24 @@ public class SalesController {
 	
 	@RequestMapping(value="boupdate.do", method=RequestMethod.POST)
 	public String bookOrderUpdateMethod(BookOrder bookOrder, Model model) {
-		logger.info("boupdate.do" + bookOrder);
+		logger.info("boupdate.do : " + bookOrder);
 		
 		if(salesService.updateBookOrder(bookOrder) > 0) {
 			return "redirect:movebolist.do";
 		} else {
 			model.addAttribute("message", "주문 수정 실패!");
+			return "common/error";
+		}
+	}
+	
+	@RequestMapping(value="clinsert.do", method=RequestMethod.POST)
+	public String clientInsertMethod(Client client, Model model) {
+		logger.info("clinsert.do : " + client);
+		
+		if(salesService.insertClient(client) > 0) {
+			return "redirect:moveclient.do";
+		} else {
+			model.addAttribute("message", "거래처 등록 실패!");
 			return "common/error";
 		}
 	}

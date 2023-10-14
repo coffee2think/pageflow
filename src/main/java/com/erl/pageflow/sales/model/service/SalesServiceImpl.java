@@ -59,6 +59,11 @@ public class SalesServiceImpl implements SalesService {
 	public int updateBookOrder(BookOrder bookOrder) {
 		return salesDao.updateBookOrder(bookOrder);
 	}
+
+	@Override
+	public int insertClient(Client client) {
+		return salesDao.insertClient(client);
+	}
 	
 	
 }

@@ -19,5 +19,6 @@ public interface SalesService {
 	public ArrayList<Client> selectClientList(Paging paging);
 	public int insertBookOrder(BookOrder bookOrder);
 	public int updateBookOrder(BookOrder bookOrder);
+	public int insertClient(Client client);
 
 }
