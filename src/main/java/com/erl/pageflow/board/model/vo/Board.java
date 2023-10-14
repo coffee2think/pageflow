@@ -21,6 +21,9 @@ public class Board implements Serializable {
 	
 	private int replyCount = 0;
 	
+	private String renameFile;
+	private String originFile;
+	
 	public Board() {}
 	
 	public Board(int depId, int boardId, int empId, String boardTitle, String boardDetail, Date createDate,
@@ -135,13 +138,31 @@ public class Board implements Serializable {
 		this.replyCount = replyCount;
 	}
 	
+	
+	
+	public String getRenameFile() {
+		return renameFile;
+	}
+
+	public void setRenameFile(String renameFile) {
+		this.renameFile = renameFile;
+	}
+
+	public String getOriginFile() {
+		return originFile;
+	}
+
+	public void setOriginFile(String originFile) {
+		this.originFile = originFile;
+	}
+
 	@Override
 	public String toString() {
 		return "Board [depId=" + depId + ", boardId=" + boardId + ", empId=" + empId + ", boardTitle=" + boardTitle
 				+ ", boardDetail=" + boardDetail + ", createDate=" + createDate + ", modifyDate=" + modifyDate
 				+ ", deleteDate=" + deleteDate + ", viewsNum=" + viewsNum + ", empName=" + empName + ", depName="
-				+ depName + ", replyCount=" + replyCount + "]";
+				+ depName + ", replyCount=" + replyCount + ", renameFile=" + renameFile + ", originFile=" + originFile
+				+ "]";
 	}
 
-	
 }

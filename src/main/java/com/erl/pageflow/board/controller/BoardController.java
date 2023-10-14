@@ -18,12 +18,14 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.erl.pageflow.board.model.service.BoardService;
 import com.erl.pageflow.board.model.vo.Board;
+import com.erl.pageflow.board.model.vo.BoardUpload;
 import com.erl.pageflow.common.BoardKeyword;
 import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.ReplyKeyword;
 import com.erl.pageflow.reply.model.service.ReplyService;
 import com.erl.pageflow.reply.model.vo.Reply;
+import com.erl.pageflow.reply.model.vo.ReplyUpload;
 
 @Controller
 public class BoardController {
@@ -72,23 +74,40 @@ public class BoardController {
 	public String selectBoardMethod(@RequestParam("empId") int empId, 
 							 @RequestParam("depId") int depId,
 							 @RequestParam("boardId") int boardId, Model model) {
-		
+		logger.info("empId : " + empId + " depId : " + depId + " boardId : " + boardId);
 		Board board = boardService.selectBoard(new BoardKeyword(empId, depId, boardId));
 		
 		if(board != null) {
 			ArrayList<Reply> replyList = replyService.selectReplyList(new ReplyKeyword(board.getDepId(), board.getBoardId()));
 			
 			for(int i=0; i<replyList.size(); i++) {
+				//부모 댓글 작성자 이름 호출
 				Reply r = replyList.get(i);
+				
+				//댓글의 첨부파일 찾기
+				ReplyUpload replyUpload = replyService.selectReplyListFile(r.getReplyId());
+				
+				if(replyUpload != null) {
+					r.setRenameFile(replyUpload.getRenameUrl());
+					r.setOriginFile(replyUpload.getUploadUrl());
+				}
+				
 				String name = null;
 				if(r.getDepth() == -1) {
 					name = board.getEmpName();
-					
 				}else {
 					name = replyService.selectReplyEmpName(r.getParentId());
 				}
 				
 				r.setParentEmpName(name);
+			}
+			
+			//보드 첨부파일 찾기
+			BoardUpload boardUpload = boardService.selectBoardListFile(new BoardKeyword(empId, depId, boardId));
+			
+			if(boardUpload != null) {
+				board.setRenameFile(boardUpload.getRenameUrl());
+				board.setOriginFile(boardUpload.getUploadUrl());
 			}
 			
 			model.addAttribute("board", board);
@@ -111,35 +130,40 @@ public class BoardController {
 	public String insertBoardMethod(Board board, Model model,
 			HttpServletRequest request, 
 			@RequestParam(name = "upfile", required = false) MultipartFile mfile) {
+		
 		String savePath = request.getSession().getServletContext().getRealPath(
 				"resources/board_upfiles");
+		logger.info("mfile : " + mfile);
 		//첨부파일이 있을때 
-		if(!mfile.isEmpty()) {
-			//전송온 파일이름 추출함
-			String fileName = mfile.getOriginalFilename();
-			String renameFileName = null;
-			
-			//저장폴더에는 변경된 이름을 저장 처리함
-			//파일 이름 바꾸기함 : 년월일시분초.확장자
-			if(fileName != null && fileName.length() > 0) {
-				//바꿀 파일명에 대한 문자열 만들기
-				renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmss");
-				logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
+		if(mfile != null) {
+			if(!mfile.isEmpty()) {
+				//전송온 파일이름 추출함
+				String fileName = mfile.getOriginalFilename();
+				String renameFileName = null;
 				
-				try {
-					//저장폴더에 파일명 바꾸기 처리
-					mfile.transferTo(new File(savePath + "\\" + renameFileName));
+				//저장폴더에는 변경된 이름을 저장 처리함
+				//파일 이름 바꾸기함 : 년월일시분초.확장자
+				if(fileName != null && fileName.length() > 0) {
+					//바꿀 파일명에 대한 문자열 만들기
+					renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmss");
+					logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
 					
-				} catch (Exception e) {
-					e.printStackTrace();
-					model.addAttribute("message", "파일명 바꾸기 또는 첨부파일 저장 실패");
-					return "common/error";
+					try {
+						//저장폴더에 파일명 바꾸기 처리
+						mfile.transferTo(new File(savePath + "\\" + renameFileName));
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+						model.addAttribute("message", "파일명 바꾸기 또는 첨부파일 저장 실패");
+						return "common/error";
+					}
 				}
+				//첨부파일 정보 저장 처리
+				BoardUpload boardUpload = new BoardUpload(
+						0, board.getDepId(), board.getBoardId(), fileName, renameFileName);
+						
+				boardService.insertUploadBoard(boardUpload);
 			}
-			
-			//notice객체에 첨부파일 정보 저장 처리
-			//board.setBoardOriginalFileName(fileName);
-			//board.setBoardRenameFileName(renameFileName);
 		}
 		
 		if(boardService.insertBoard(board) > 0) {

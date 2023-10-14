@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.erl.pageflow.common.ReplyKeyword;
 import com.erl.pageflow.common.UploadKeyword;
 import com.erl.pageflow.reply.model.vo.Reply;
+import com.erl.pageflow.reply.model.vo.ReplyUpload;
 
 @Repository("replyDao")
 public class ReplyDao {
@@ -36,6 +37,14 @@ public class ReplyDao {
 
 	public int insertUploadReply(UploadKeyword uploadKeyword) {
 		return sqlSessionTemplate.insert("replyMapper.insertUploadReply", uploadKeyword);
+	}
+
+	public Reply selectReplyRecent() {
+		return sqlSessionTemplate.selectOne("replyMapper.selectReplyRecent");
+	}
+
+	public ReplyUpload selectReplyListFile(int replyId) {
+		return sqlSessionTemplate.selectOne("replyMapper.selectReplyListFile", replyId);
 	}
 	
 	

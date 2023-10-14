@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.board.model.vo.Board;
+import com.erl.pageflow.board.model.vo.BoardUpload;
 import com.erl.pageflow.common.BoardKeyword;
 import com.erl.pageflow.common.Paging;
 
@@ -44,13 +45,22 @@ public class BoardDao {
 		return sqlSessionTemplate.insert("boardMapper.insertBoard", board);
 	}
 	
+	public BoardUpload selectBoardListFile(BoardKeyword boardKeyword) {
+		return sqlSessionTemplate.selectOne("boardMapper.selectBoardListFile", boardKeyword);
+	}
+	
 	//업무게시판 게시글 수정
 	public int updateBoard(Board board) {
-		return sqlSessionTemplate.insert("boardMapper.updateBoard", board);
+		return sqlSessionTemplate.update("boardMapper.updateBoard", board);
 	}
 	
 	//업무게시판 게시글 삭제
 	public int deletBoard(Board board) {
-		return sqlSessionTemplate.insert("boardMapper.deletBoard", board);
+		return sqlSessionTemplate.delete("boardMapper.deletBoard", board);
 	}
+
+	public int insertUploadBoard(BoardUpload boardUpload) {
+		return sqlSessionTemplate.insert("boardMapper.insertUploadBoard", boardUpload);
+	}
+
 }
