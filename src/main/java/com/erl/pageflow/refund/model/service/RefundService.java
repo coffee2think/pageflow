@@ -10,4 +10,10 @@ public interface RefundService {
 	public int selectGetListCount();
 	
 	public ArrayList<Refund> selectRefundList(Paging paging);
+	
+	public String selectRefundBookName(int bookId);
+	
+	public String selectRefundClientName(int clientId);
+	
+	public int selectRefundBookPrice(int bookId);
 }

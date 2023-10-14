@@ -14,18 +14,18 @@ public class Refund implements java.io.Serializable {
 	private int refundNum;
 	private Date refundDate;
 	private int refundAmount;
-	private String refunfState;
+	private String refundState;
 	private String remark;
 	private String bookName;
 	private String clientName;
-	private String bookPrice;
+	private int bookPrice;
 
 	public Refund() {
 		super();
 	}
 
 	public Refund(int refundId, int bookId, int clientId, int empId, String empName, int refundNum, Date refundDate,
-			int refundAmount, String refunfState, String remark, String bookName, String clientName, String bookPrice) {
+			int refundAmount, String refundState, String remark, String bookName, String clientName, int bookPrice) {
 		super();
 		this.refundId = refundId;
 		this.bookId = bookId;
@@ -35,10 +35,18 @@ public class Refund implements java.io.Serializable {
 		this.refundNum = refundNum;
 		this.refundDate = refundDate;
 		this.refundAmount = refundAmount;
-		this.refunfState = refunfState;
+		this.refundState = refundState;
 		this.remark = remark;
 		this.bookName = bookName;
 		this.clientName = clientName;
+		this.bookPrice = bookPrice;
+	}
+
+	public int getBookPrice() {
+		return bookPrice;
+	}
+
+	public void setBookPrice(int bookPrice) {
 		this.bookPrice = bookPrice;
 	}
 
@@ -106,12 +114,12 @@ public class Refund implements java.io.Serializable {
 		this.refundAmount = refundAmount;
 	}
 
-	public String getRefunfState() {
-		return refunfState;
+	public String getrefundState() {
+		return refundState;
 	}
 
-	public void setRefunfState(String refunfState) {
-		this.refunfState = refunfState;
+	public void setrefundState(String refundState) {
+		this.refundState = refundState;
 	}
 
 	public String getRemark() {
@@ -138,12 +146,12 @@ public class Refund implements java.io.Serializable {
 		this.clientName = clientName;
 	}
 
-	public String getBookPrice() {
-		return bookPrice;
+	public String getRefundState() {
+		return refundState;
 	}
 
-	public void setBookPrice(String bookPrice) {
-		this.bookPrice = bookPrice;
+	public void setRefundState(String refundState) {
+		this.refundState = refundState;
 	}
 
 	public static long getSerialversionuid() {
@@ -154,7 +162,7 @@ public class Refund implements java.io.Serializable {
 	public String toString() {
 		return "Refund [refundId=" + refundId + ", bookId=" + bookId + ", clientId=" + clientId + ", empId=" + empId
 				+ ", empName=" + empName + ", refundNum=" + refundNum + ", refundDate=" + refundDate + ", refundAmount="
-				+ refundAmount + ", refunfState=" + refunfState + ", remark=" + remark + ", bookName=" + bookName
+				+ refundAmount + ", refundState=" + refundState + ", remark=" + remark + ", bookName=" + bookName
 				+ ", clientName=" + clientName + ", bookPrice=" + bookPrice + "]";
 	}
 

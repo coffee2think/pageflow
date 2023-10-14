@@ -10,10 +10,10 @@
 		<result property="clientId" column="CLIENT_ID" />
 		<result property="empId" column="EMP_ID" />
 		<result property="empName" column="EMP_NAME" />
-		<result property="refundName" column="REFUND_NUM" />
+		<result property="refundNum" column="REFUND_NUM" />
 		<result property="refundDate" column="REFUND_DATE" />
 		<result property="refundAmount" column="REFUND_AMOUNT" />
-		<result property="refunfState" column="REFUND_STATE" />
+		<result property="refundState" column="REFUND_STATE" />
 		<result property="remark" column="REMARK" />
 	</resultMap>
 	
@@ -28,5 +28,23 @@
 			FROM REFUND
 			WHERE SYSDATE - REFUND_DATE <= 7
 		]]>
+	</select>
+	
+	<select id="selectRefundBookName" parameterType="_int" resultType="string">
+		SELECT BOOK_NAME
+		FROM  BOOK
+		WHERE BOOK_ID= #{ bookId }
+	</select>
+	
+	<select id="selectRefundClientName" parameterType="_int"  resultType="string">
+		SELECT CLIENT_NAME
+		FROM CLIENT
+		WHERE CLIENT_ID = #{ storageId }
+	</select>
+	
+	<select id="selectRefundBookPrice" parameterType="_int"  resultType="_int">
+		SELECT BOOK_PRICE
+		FROM BOOK
+		WHERE BOOK_ID = #{ bookId }
 	</select>
 </mapper>

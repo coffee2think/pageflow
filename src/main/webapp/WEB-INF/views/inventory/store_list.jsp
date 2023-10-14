@@ -140,55 +140,56 @@
                                     <th>입고금액</th>
                                     <th>수정</th>
                                 </tr>
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                    <td class="td-50">
-                                        <input type="checkbox" name="check" value="" >
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="code" class="contents-input noline" value="10100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-250">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="name" class="contents-input noline" value="데이터베이스 개론과 실습" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="store" class="contents-input noline" value="제1창고" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="man" class="contents-input noline" value="홍길동" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date" class="contents-input noline" value="2023.05.09" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="count" class="contents-input noline" value="103" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="price" class="contents-input noline" value="20000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="amount" class="contents-input noline" value="2060000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-                                    </td>
-                                </tr>
-
+                                <c:forEach var="sto" items="${ requestScope.list }">
+	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+	                                    <td class="td-50">
+	                                        <input type="checkbox" name="check" value="" >
+	                                    </td>
+	                                    <td class="td-100">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="bookId" class="contents-input noline" value="${ sto.bookId }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-250">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="bookName" class="contents-input noline" value="${ sto.bookName }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-100">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="clientName" class="contents-input noline" value="${ sto.clientName }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-70">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="empName" class="contents-input noline" value="${ sto.empName }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-120">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="storeDate" class="contents-input noline" value="${ sto.storeDate }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-70">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="storeNum" class="contents-input noline" value="${ sto.storeNum }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-70">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ sto.bookPrice }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-100">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="storeNum" class="contents-input noline" value="${ sto.storeNum }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-70">
+	                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+	                                    </td>
+	                                </tr>
+								</c:forEach>
                                 <!--합계-->
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
                                     <td></td>
