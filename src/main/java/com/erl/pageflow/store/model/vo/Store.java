@@ -15,13 +15,16 @@ public class Store implements java.io.Serializable {
 	private int storePrice;
 	private Date storeDate;
 	private String classify;
+	private String bookName;
+	private int bookPrice;
+	private String clientName;
 
 	public Store() {
 		super();
 	}
 
 	public Store(int storeId, int bookId, int storageId, int empId, String empName, int storeNum, int storePrice,
-			Date storeDate, String classify) {
+			Date storeDate, String classify, String bookName, int bookPrice, String clientName) {
 		super();
 		this.storeId = storeId;
 		this.bookId = bookId;
@@ -32,6 +35,37 @@ public class Store implements java.io.Serializable {
 		this.storePrice = storePrice;
 		this.storeDate = storeDate;
 		this.classify = classify;
+		this.bookName = bookName;
+		this.bookPrice = bookPrice;
+		this.clientName = clientName;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public String getBookName() {
+		return bookName;
+	}
+
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+
+	public int getBookPrice() {
+		return bookPrice;
+	}
+
+	public void setBookPrice(int bookPrice) {
+		this.bookPrice = bookPrice;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	public int getStoreId() {

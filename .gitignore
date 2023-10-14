@@ -1,6 +1,9 @@
+.git
 .git/
 target/
-.git
 logs/
 .classpath
+.classpath/
+.settings
 .settings/
+src/main/resources/logs/

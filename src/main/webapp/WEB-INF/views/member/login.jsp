@@ -23,18 +23,18 @@
         <main class="main-wrapper login">
             
             <div class="login-box">
-                <form action="" method="post">
-                    <a class="login-logo" href="./main.html">
+                <form action="login.do" method="post">
+                    <a class="login-logo" href="main.do">
                         <img src="${ pageContext.servletContext.contextPath }/resources/images/logo.png">
                     </a>
 
                     <div class="login-nemo login-name margin-top30px">
-                        <input type="text" id="empid" placeholder="사번을 입력하세요." name="empid" required>
+                        <input type="text" id="empid" placeholder="사번을 입력하세요." name="empId" required>
                         <i class='bx bxs-user' name='bx'></i>
                     </div>
 
                     <div class="login-nemo login-name">
-                        <input type="password" placeholder="비밀번호를 입력하세요." name="emppwd" required>
+                        <input type="password" id="emppwd" placeholder="비밀번호를 입력하세요." name="empPwd" required>
                         <i class='bx bxs-lock-alt' name="bx"></i>
                     </div>
 
