@@ -17,6 +17,11 @@ public class Trade implements Serializable {
 	private String state;
 	private String classify;
 	
+	private String bookName;
+	private int bookPrice;
+	private int totalPrice;
+	private String bookStoreName;
+	
 	public Trade() {}
 
 	public Trade(int tradeId, int bookId, int clientId, int empId, String empName, int orderQuantity, Date orderDate,
@@ -31,7 +36,60 @@ public class Trade implements Serializable {
 		this.state = state;
 		this.classify = classify;
 	}
+	
+	public Trade(int tradeId, int bookId, int clientId, int empId, String empName, int orderQuantity, Date orderDate,
+			String state, String classify, String bookName, int bookPrice, int totalPrice, String bookStoreName) {
+		this.tradeId = tradeId;
+		this.bookId = bookId;
+		this.clientId = clientId;
+		this.empId = empId;
+		this.empName = empName;
+		this.orderQuantity = orderQuantity;
+		this.orderDate = orderDate;
+		this.state = state;
+		this.classify = classify;
+		this.bookName = bookName;
+		this.bookPrice = bookPrice;
+		this.totalPrice = totalPrice;
+		this.bookStoreName = bookStoreName;
+	}
+	
+	public void calcTotalPrice() {
+		totalPrice = this.getBookPrice() * this.getOrderQuantity();
+	}
+	
+	public String getBookName() {
+		return bookName;
+	}
 
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+
+	public int getBookPrice() {
+		return bookPrice;
+	}
+
+	public void setBookPrice(int bookPrice) {
+		this.bookPrice = bookPrice;
+	}
+
+	public int getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(int totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public String getBookStoreName() {
+		return bookStoreName;
+	}
+
+	public void setBookStoreName(String bookStoreName) {
+		this.bookStoreName = bookStoreName;
+	}
+	
 	public int getTradeId() {
 		return tradeId;
 	}
@@ -108,7 +166,8 @@ public class Trade implements Serializable {
 	public String toString() {
 		return "Trade [tradeId=" + tradeId + ", bookId=" + bookId + ", clientId=" + clientId + ", empId=" + empId
 				+ ", empName=" + empName + ", orderQuantity=" + orderQuantity + ", orderDate=" + orderDate + ", state="
-				+ state + ", classify=" + classify + "]";
+				+ state + ", classify=" + classify + ", bookName=" + bookName + ", bookPrice=" + bookPrice
+				+ ", totalPrice=" + totalPrice + ", bookStoreName=" + bookStoreName + "]";
 	}
 
 }
