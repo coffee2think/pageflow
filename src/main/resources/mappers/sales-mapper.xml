@@ -76,16 +76,36 @@
 		<result property="endDate" column="END_DATE" />
 	</resultMap>
 	
-	<select id="selectBookOrderByDate" parameterType="Search" resultMap="resultBookOrder">
-		select * from trade
-		where order_date between #{ begin } and #{ end } + 1 - 1/86400
-		order by order_date desc
+	<select id="selectBookOrderCountByDate" parameterType="Search" resultType="_int">
+		select count(*) from trade
+		where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+			  and classify = '주문'
 	</select>
 	
-	<select id="selectSalesByDate" parameterType="Search" resultMap="resultSales">
-		select * from trade
-		where order_date between #{ begin } and #{ end } + 1 - 1/86400
-		order by order_date desc
+	<select id="selectBookOrderByDate" parameterType="Search" resultMap="resultBookOrder">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from trade
+					where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+						  and classify = '주문'
+					order by order_date desc, trade_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectSalesCountByDate" parameterType="Search" resultType="_int">
+		select count(*) from trade
+		where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+			  and classify = '판매'
+	</select>
+	
+	<select id="selectSalesListByDate" parameterType="Search" resultMap="resultSales">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from trade
+					where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+						  and classify = '판매'
+					order by order_date desc, trade_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
 	<select id="selectBook" parameterType="_int" resultMap="resultBook">
@@ -106,14 +126,16 @@
 		select *
 		from (select rownum rnum, sub.*
 			  from (select * from client
-					order by client_id desc) sub) 
+					order by start_date desc, client_id desc) sub) 
 		where rnum between #{ startRow } and #{ endRow } 
 	</select>
 	
 	<insert id="insertBookOrder" parameterType="BookOrder">
 		insert into trade
-		values ((select max(trade_id) + 1 from trade), #{ bookId }, #{ clientId }, 
-				#{ empId }, #{ empName }, #{ orderQuantity }, sysdate, #{ state }, default, default, '주문')
+		values (
+			decode((select count(trade_id) from trade), 0, 1, (select max(trade_id) + 1 from trade)),
+			#{ bookId }, #{ clientId }, #{ empId }, #{ empName }, #{ orderQuantity },
+			sysdate, #{ state }, default, default, '주문')
 	</insert>
 	
 	<update id="updateBookOrder" parameterType="BookOrder">
@@ -150,6 +172,21 @@
 			#{ clientUrl }, #{ manager }, #{ managerContact }, #{ managerEmail }, #{ startDate }, #{ endDate }
 		)
 	</insert>
+	
+	<update id="updateClient" parameterType="Client">
+		update client
+		set category = #{ category }, client_name = #{ clientName },
+			client_address = #{ clientAddress }, client_contact = #{ clientContact },
+			eid = #{ eid }, client_url = #{ clientUrl }, manager = #{ manager },
+			manager_contact = #{ managerContact }, manager_email = #{ managerEmail },
+			start_date = #{ startDate }, end_date = #{ endDate }
+		where client_id = #{ clientId }
+	</update>
+	
+	<delete id="deleteClient" parameterType="_int">
+		delete from client
+		where client_id = #{ clientId }
+	</delete>
 
 </mapper>
 

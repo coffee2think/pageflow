@@ -15,61 +15,130 @@
     const SUBPAGE = 1;
     const LNKPAGE = 1;
     
-    // 수정 가능 상태로 변경
-    function onUpdate(clientId) {
-    	// 같은 주문번호의 행들을 모두 선택
-    	
+ // 수정 버튼 클릭 시 수정 가능 상태로 변경
+    function onUpdate(tradeId) {
     	// 행 버튼 보이기/숨기기 상태 변경
-    	$('#completeBtn-' + clientId).show();
-    	$('#cancelBtn-' + clientId).show();
-    	$('#updateBtn-' + clientId).hide();
+    	$('#completeBtn_' + tradeId).show();
+    	$('#cancelBtn_' + tradeId).show();
+    	$('#updateBtn_' + tradeId).hide();
+    	
+    	// 정보 임시 보관
+    	var currentRow = $('#updateBtn_' + tradeId).parent().parent();
+    	
+    	currentRow.children('td').each(function(index) {
+    		if(index <= 1 || index >= 13) {
+    			return; // 체크박스와 수정버튼 열의 정보는 건너뜀
+    		}
+    		
+    		console.log(index);
+    		console.log($(this).find('input').val());
+    	});
+    	
+    	// 수정 중인 행의 스타일 변경
+    	$('#tr_' + tradeId).css('border', 'solid 3px #1a70d3');
+    	
+    	// class=changeable인 input 태그 값 변경 가능하도록 변경
+    	$('#tr_' + tradeId + ' .changeable').attr('readonly', false);
     }
     
-    function cancelUpdate(clientId) {
+    // 취소 버튼 클릭 시 수정 가능 상태로 변경
+    function cancelUpdate(tradeId) {
     	// 같은 주문번호의 행들을 모두 선택
     	
-    	// 정보를 수정했으면 원래 상태로 되돌리기(reset)
+    	// 원래 정보로 되돌리기(reset)
+    	
+    	
+    	// 수정 취소한 행의 스타일 원래대로 설정
+    	$('#tr_' + tradeId).css('border', 'none');
     	
     	// 행 버튼 보이기/숨기기 상태 변경
-    	$('#completeBtn-' + clientId).hide();
-    	$('#cancelBtn-' + clientId).hide();
-    	$('#updateBtn-' + clientId).show();
+    	$('#completeBtn_' + tradeId).hide();
+    	$('#cancelBtn_' + tradeId).hide();
+    	$('#updateBtn_' + tradeId).show();
+    	
+    	// 행의 모든 셀 readonly
+    	$('#tr_' + tradeId + ' .changeable').attr('readonly', true);
     }
     
     function submitUpdate(tradeId) {
-    	// 유효성 검사
+    	var currentRow = $('#updateBtn_' + tradeId).parent().parent();
+    	var json = {};
     	
-    	// 정보 업데이트 post 방식으로 전송
+    	currentRow.find('input').each(function(index) {
+    		if(index == 0 || index >= 13){
+    	        return;
+    	    }
+    		
+    		// 유효성 검사
+    		// endDate가 비었을 경우 json에 담지 않음
+    		if(index == 12 && $(this).val() == '') {
+    	        return;
+    	    }
+
+    		// input 태그을 이용하여 name:value로 json에 담기
+    	    json[$(this).attr('name')] = $(this).val();
+    	});
+    	
+    	// ajax로 update 요청 보내기
     	$.ajax({
-			url: "boupdate.do",
-			type: "post",
-			data: { tradeId: $('#tradeId-' + tradeId).val(),
-				bookId: $('#bookId-' + tradeId).val(),
-				bookName: $('#bookName-' + tradeId).val(),
-				bookStoreName: $('#bookStoreName-' + tradeId).val(),
-				bookPrice: $('#bookPrice-' + tradeId).val(),
-				orderQuantity: $('#orderQuantity-' + tradeId).val(),
-				totalPrice: $('#totalPrice-' + tradeId).val(),
-				state: $('#state-' + tradeId).val(),
-				orderDate: $('#orderDate-' + tradeId).val()
-			},
-			success: function(data){
-				console.log("success : " + data);
-				if(data == "ok") {
-					alert("사용 가능한 아이디입니다.");
-					$('#userpwd').focus();
-				} else {
-					alert("이미 사용중인 아이디입니다.");
-					$('#userid').select();
-				}
-			},
-			error: function(jqXHR, textStatus, errorThrown){
-				console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
-			}
-		});
-	    	
-	    	return true;
-	    }
+    		url: "boupdate.do",
+    		type: "post",
+    		data: json,
+    		success: function(data){
+    			console.log("success : " + data);
+    			if(data == "success") {
+    				alert(tradeId + " 주문 정보 수정 성공");
+    			} else {
+    				alert("주문 정보 수정 실패");
+    			}
+    			
+    			// 행 버튼 보이기/숨기기 상태 변경
+    	    	$('#completeBtn_' + tradeId).hide();
+    	    	$('#cancelBtn_' + tradeId).hide();
+    	    	$('#updateBtn_' + tradeId).show();
+    	    	
+    	    	// 수정 취소한 행의 스타일 원래대로 설정
+    	    	$('#tr_' + tradeId).css('border', 'none');
+    	    	
+    	    	// 행 버튼 보이기/숨기기 상태 변경
+    	    	$('#completeBtn_' + tradeId).hide();
+    	    	$('#cancelBtn_' + tradeId).hide();
+    	    	$('#updateBtn_' + tradeId).show();
+    	    	
+    	    	// 행의 모든 셀 readonly
+    	    	$('#tr_' + tradeId + ' .changeable').attr('readonly', true);
+    			
+    		},
+    		error: function(jqXHR, textStatus, errorThrown){
+    			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+    		}
+    	});
+    }
+    
+    function deleteCheckedRow() {
+    	// form 태그에 담아서 post 전송
+    	const form = document.createElement('form'); // form 태그 생성
+    	const url = 'bodelete.do';
+        form.setAttribute('method', 'post'); // 전송 방식 결정 (get or post)
+        form.setAttribute('action', url); // 전송할 url 지정
+    	
+    	$('#border_table').find('input[type="checkbox"]:checked').each(function() {
+    	    const tradeId = $(this).val();
+    		
+    	    // input 태그 생성하여 데이터 담기
+    	    const data = document.createElement('input');
+        	data.setAttribute('type', 'hidden');
+            data.setAttribute('name', 'tradeIDs'); // 데이터의 name
+            data.setAttribute('value', tradeId); // 데이터의 value
+            
+         	// form 태그에 input 태그 넣기 
+            form.appendChild(data);
+    	});
+    	
+        // body에 form 태그 추가하고 submit 전송
+        document.body.appendChild(form);
+        form.submit();
+    }
     
     
 </script>
@@ -149,23 +218,12 @@
                                 <div class="select-pan">
                                     <label for="sel_code"></label>
                                     <select name="code" id="sel_code">
-                                        <option value="all">지역</option>
-                                        <option value="">강남</option>
-                                        <option value="">서초</option>
-                                        <option value="">인천</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
                                         <option value="all">상태</option>
                                         <option value="">주문접수</option>
                                         <option value="">입고요청</option>
                                         <option value="">출고대기</option>
                                     </select>
                                 </div>
-                                
                             </div>
 
                             <div class="select-box">
@@ -180,7 +238,7 @@
 								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
 								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
 								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
-								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*(new java.util.Date().getDate() - 1)) %>" />
+								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
 								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
 								
 								<c:url var="searchWeekUrl" value="bolistdate.do">
@@ -215,7 +273,7 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <table class="contents-table" id="list_table">
+                            <table class="contents-table" id="border_table">
                                 <tr>
                                     <th>체크</th>
                                     <th>주문번호</th>

@@ -72,6 +72,7 @@
                                         <th>사업자등록번호</th>
                                         <th>사업장주소</th>
                                         <th>거래처연락처</th>
+                                        <th>거래처홈페이지</th>
                                         <th>담당자</th>
                                         <th>담당자연락처</th>
                                         <th>담당자이메일</th>
@@ -109,6 +110,11 @@
                                         <td class="td-200">
                                             <div class="contents-input-div">
                                                 <input type="input" name="clientContact" class="contents-input">
+                                            </div>
+                                        </td>
+                                        <td class="td-200">
+                                            <div class="contents-input-div">
+                                                <input type="input" name="clientUrl" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-100">
