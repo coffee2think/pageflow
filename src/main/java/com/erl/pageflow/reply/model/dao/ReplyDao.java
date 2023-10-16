@@ -35,8 +35,8 @@ public class ReplyDao {
 		return sqlSessionTemplate.insert("replyMapper.insertReply", reply);
 	}
 
-	public int insertUploadReply(UploadKeyword uploadKeyword) {
-		return sqlSessionTemplate.insert("replyMapper.insertUploadReply", uploadKeyword);
+	public int insertUploadReply(ReplyUpload replyUpload) {
+		return sqlSessionTemplate.insert("replyMapper.insertUploadReply", replyUpload);
 	}
 
 	public Reply selectReplyRecent() {

@@ -37,8 +37,8 @@ public class ReplyServiceImpl implements ReplyService {
 	}
 
 	@Override
-	public int insertUploadReply(UploadKeyword uploadKeyword) {
-		return replyDao.insertUploadReply(uploadKeyword);
+	public int insertUploadReply(ReplyUpload replyUpload) {
+		return replyDao.insertUploadReply(replyUpload);
 	}
 
 	@Override

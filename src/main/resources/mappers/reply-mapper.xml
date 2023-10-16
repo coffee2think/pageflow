@@ -81,8 +81,9 @@
 		where REPLY_ID = #{ replyId } 
 	</select>
 	
-	<select id="selectReplyRecent" resultMap="resultReply">
+	<select id="selectReplyRecent" resultMap="resultReplyJoin">
 		select * from reply
+		left join employee USING(EMP_ID)
 		where REPLY_ID = (select max(REPLY_ID) from reply)
 	</select>
 	
@@ -96,6 +97,11 @@
 	    ((select max(REPLY_ID) + 1 from reply), #{ depId }, #{ boardId }, #{ empId },
 	     #{ bundleId }, #{ bundleId2 }, #{ parentId }, #{ depth }, #{ depth2 },
 	     #{ replyDetail }, default, null, null)
+	</insert>
+	
+	<insert id="insertUploadReply" parameterType="ReplyUpload">
+		insert into upload_reply values 
+		((select max(UPLOAD_ID) + 1 from upload_reply), #{ replyId }, #{ uploadUrl }, #{ renameUrl } )
 	</insert>
 	
 </mapper>
