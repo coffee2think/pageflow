@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.erl.pageflow.board.model.vo.Board;
+import com.erl.pageflow.board.model.vo.BoardUpload;
 import com.erl.pageflow.common.BoardKeyword;
 import com.erl.pageflow.common.Paging;
 
@@ -28,4 +29,8 @@ public interface BoardService {
 	
 	//업무게시판 게시글 삭제
 	public int deletBoard(Board board);
+
+	public int insertUploadBoard(BoardUpload boardUpload);
+
+	public BoardUpload selectBoardListFile(BoardKeyword boardKeyword);
 }

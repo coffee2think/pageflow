@@ -43,17 +43,15 @@ public class RefundController {
 
 		ArrayList<Refund> list = refundService.selectRefundList(paging);
 
-////		logger.info("list" + list);
-//		for (Refund ref : list) {
-////			logger.info("ref" + ref);
-//			String bname = refundService.selectRefundBookName(ref.getBookId());
-//			String cname = refundService.selectRefundClientName(ref.getClientId());
-//			int bprice = refundService.selectRefundBookPrice(ref.getBookId());
-//			ref.setBookName(bname);
-//			ref.setClientName(cname);
-//			ref.setBookPrice(bprice);
-//		}
-		
+		for(Refund ref : list) {
+			String bname = refundService.selectRefundBookName(ref.getBookId());
+			String cname = refundService.selectRefundClientName(ref.getClientId());
+			int bprice = refundService.selectRefundBookPrice(ref.getBookId());
+			
+			ref.setBookName(bname);
+			ref.setClientName(cname);
+			ref.setBookPrice(bprice);
+		}
 
 		if (list != null && list.size() > 0) {
 			model.addAttribute("list", list);

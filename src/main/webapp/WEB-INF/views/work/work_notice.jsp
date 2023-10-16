@@ -31,69 +31,197 @@
     Work_notice.prototype = {
     	buttonEvent : function(){
     		//등록순, 최신순 버튼
-    		$('.reply-sort-btn').each(function(){
-        		$(this).on('click', function(){
-        			
-        		})
+    		$('.reply-sort-btn').on('click', function(){
+        		
         	})
         	
         	//보드 수정
         	$('.button-update').on('click', function(){
-        		
+                if(confirm('수정 화면으로 이동하시겠습니까?')) {
+                    location.href = 'bdupdate.do';
+                }
         	})
         	
         	//보드 삭제
-        	$('.button-update').on('click', function(){
-        		
+        	$('.button-delete').on('click', function(){
+        		if(confirm('정말 삭제하시겠습니까?')) {
+                    location.href = 'bddelete.do';
+                }
         	})
         	
         	//게시판 댓글 뎁스0
-        	$('.reply-input-btn-depth0').on('click', function(){
-        		location.href = 'nlist.do';
-        	})
-        	
+            $('.reply-input-btn-depth0').on('click', function(){
+                console.log('와 1번')
+                let parent = $('.notice-reply-box-con');
+                let box = $(this).parent().parent('.reply-input-box');
+                ajaxInsertFirst(parent, box);
+                
+            })
         	
     	}
     }
-    
-    function setReplyBtn(){
+
+    function ajaxInsertFirst(parent, box){
+        let replyDetail = changeDetail(box);
+        let formData = new FormData();
+        let empId = ${ board.empId };
+        formData.append('depId', ${ board.depId });
+        formData.append('boardId', ${ board.boardId });
+        formData.append('empId', empId);
+        formData.append('replyDetail', replyDetail);
+        formData.append('depth', -1);
+        formData.append('upfile', $('.reply-input-box.depth1').find('.file-btn')[0].files[0]);
+
+        $.ajax({
+            url : 'ryinsertfirst.do'
+            ,type : 'post'
+            ,processData : false
+            ,contentType : false
+    		,data : formData
+            ,success : function(data) {
+                
+                let arr = data.split('#%');
+                console.log("arr : " +arr);
+    			let ajaxData = {
+                    replyId : arr[0]
+                    ,empName : $('.notice-profile-one').text()
+                    ,profile : arr[2]
+                    ,createDate : arr[3]
+                    ,originFile : arr[4]
+                    ,renameFile : arr[5]
+                }
+
+                let jsonData = {
+                    empId : empId
+                    ,bundleId : ajaxData.replyId
+                    ,bundleId2 : ajaxData.replyId
+                    ,parentId : ajaxData.replyId
+                    ,replyDetail : replyDetail
+                    ,depth : -1
+                }
+
+                $('.reply-input-box.depth1').find('.reply-input').html('');
+                $('.reply-input-box.depth1').find('.reply-input').html('<em class="tag-text" contenteditable="false">@${ board.empName }</em>&nbsp;');
+                $('.reply-input-box.depth1').find('.file-btn').val('');
+                parent.prepend(setTag(jsonData, ajaxData));
+                //console.log('#reply_'+ ajaxData.replyId);
+                setReplyBtn($('#reply_' + ajaxData.replyId));
+            },error: function(request, status, errorData){
+                console.log("error : " + request + ", " + status + ", " + errorData);
+            }
+        })
+    }
+
+    function setReplyBtn(parent){
+    	
     	//댓글 입력 팝업 보이기 버튼
-        $('.reply-btn').each(function(){
-            $(this).on('click', function(){
-            	clickReplyBtn($(this));
-            })
+        parent.find('.reply-btn').on('click', function(){
+            clickReplyBtn($(this));
         })
         
         //댓글 입력버튼
-        $('.reply-input-btn').each(function(){
-        	$(this).on('click', function(){
-        		
-        		if($(this).parent().parent('.reply-input-box').hasClass('depth1')){
-        			
-        		}else{
-        			let parent = $(this).parent().parent().parent('.notice-reply-con');
-                	replyInsert(parent);
-        		}
-        		
-        	})
+        parent.find('.reply-input-btn').on('click', function(){
+            let parent = $(this).parent().parent().parent('.notice-reply-con');
+            replyInsert(parent);
+        })
+
+        //드롭다운 보이기 버튼
+        parent.find('.reply-right-btn').on('click', function(){
+            let dropdown = $(this).parent().parent('.notice-reply-con').find('.reply-dropdown');
+            let vis = dropdown.css('display');
+
+            if(vis == 'none') dropdown.show();
+    	    else dropdown.hide();
+        })
+
+        //댓글 수정버튼
+        parent.find('.reply-dropdown-btn').each(function(){
+
+            $(this).on('click', function(){
+                let parentBox = $(this).parent().parent().parent('.notice-reply-con');
+                let dropdown = parentBox.find('.reply-dropdown');
+                dropdown.hide();
+
+                if($(this).hasClass('deletew')){
+                    if(confirm('정말 삭제하시겠습니까?')) {
+                        location.href = 'rydelete.do';
+                    }
+                }else{
+                    if(confirm('수정하시겠습니까?')) {
+                        let textbox = parentBox.find('.contents-notice-text');
+                        textbox.attr('contenteditable', true);
+                        textbox.focus();
+                        let update_btn = parentBox.find('.reply-up-btn');
+                        update_btn.on('click', function(){
+                            $(this).hide();
+                            //ajax 사용
+                            ajaxUpdate(parentBox);
+                        })
+                    }
+                }
+
+            })
+        })
+
+        //댓글 삭제버튼
+        parent.find('.reply-report-btn').on('click', function(){
+            let parentBox = $(this).parent().parent().parent('.notice-reply-con');
+            let dropdown = $(this).parent().parent().parent('.notice-reply-con').find('.reply-dropdown');
+            dropdown.hide();
+
+            
         })
     }
-    
-    function setId(parent){
-    	
-    	let data = {
-   			bundleId : parent.attr('data-bundleId')
-           	,bundleId2 : parent.attr('data-bundleId2')
-           	,parentId : parent.attr('data-parentId')
-           	,depth : parent.attr('data-depth')
-           	,depth2 : parent.attr('data-depth2')
-           	,replyId : parent.attr('data-replyId')
-    	}
-    	
-		return data;
-	}
-    
-  	//댓글 창 보이기
+
+    //댓글 업데이트
+    function ajaxUpdate(parent){
+        
+        let obj = setId(parent);
+        let replyDetail = changeDetail(parent);
+        let formData = new FormData();
+        formData.append('depId', obj.depId);
+        formData.append('boardId', obj.boardId);
+        formData.append('empId', obj.empId);
+        formData.append('bundleId', obj.bundleId);
+        formData.append('bundleId2', obj.bundleId2);
+        formData.append('parentId', obj.parentId);
+        formData.append('depth', obj.depth);
+        formData.append('replyId', obj.replyId);
+        formData.append('replyDetail', replyDetail);
+        formData.append('upfile', $('#reply_' + obj.replyId + ' .file-btn')[0].files[0]);
+        
+		$.ajax({
+    		url : 'ryupdate.do'
+    		,type : 'post'
+            ,processData : false
+            ,contentType : false
+    		,data : formData
+    		,success : function(data) {
+    			
+                let arr = data.split('#%');
+                console.log("arr : " +arr);
+    			let ajaxData = {
+                    replyId : arr[0]
+                    ,empName : arr[1]
+                    ,profile : arr[2]
+                    ,createDate : arr[3]
+                    ,originFile : arr[4]
+                    ,renameFile : arr[5]
+                }
+                
+                parent.find('.reply-input').text('');
+                parent.find('.file-btn').val('');
+                parent.after(setTag(jsonData, ajaxData));
+    			console.log('parent : ' + parent.attr('class'));
+    			setReplyBtn($('#reply_' + ajaxData.replyId));
+    		}
+    		,error: function(request, status, errorData){
+    			console.log("error : " + request + ", " + status + ", " + errorData);
+    		}
+    	})
+    }
+
+    //댓글 창 보이기
 	function clickReplyBtn(thisObj) {
 		let parent = thisObj.parent('.notice-reply-con');
     	let data = setId(parent);
@@ -107,85 +235,232 @@
     	
     	inputBox.find('.reply-input').html('<em class="tag-text" contenteditable="false">@' + reply.find('.reply-ename').text() + '</em>&nbsp;');
 	}
+
+    function setId(parent){
+    	
+    	let data = {
+            empId : Number(parent.attr('data-empid'))
+   			,bundleId : Number(parent.attr('data-bundleid'))
+           	,bundleId2 : Number(parent.attr('data-bundleid2'))
+           	,parentId : Number(parent.attr('data-parentid'))
+           	,depth : Number(parent.attr('data-depth'))
+           	,replyId : Number(parent.attr('data-replyid'))
+    	}
+    	
+		return data;
+	}
     
+    function changeDetail(parent){
+        let replyDetail = parent.find('.reply-input').html();
+        let arr = replyDetail.split('</em>');
+        arr.shift();
+        return arr.join(' ');
+    }
+
   	//댓글 등록 버튼 클릭시
 	function replyInsert(parent){
 		
 		//댓글 ajax 
 		let obj = setId(parent);
-    	let replyId, bundleId, bundleId2, parentId, depth, depth2;
-    	let replyDetail = parent.find('.reply-input').text();
-		
-		if(obj.depth == -1){
-			//bundlId는 depth가 -1일때는 최상위
-			//번들아이디를 ajax로 받아와야 함
-			replyId = obj.replyId;
-			bundleId = replyId;
-			bundleId2 = bundleId;
-			parentId = bundleId;
-			depth = -1;
-			depth2 = -1;
-			
-			ajaxInsert2(bundleId, bundleId2, parentId, depth, 
-					depth2, replyId, replyDetail);
-			
-		}else{
-			//depth가 -1이 아닐때는 댓글의 댓글임
-			bundleId = obj.bundleId;
-			replyId = obj.replyId;
-			if(depth == 1) {
-				bundleId2 = replyId;
-			}else {
-				bundleId2 = obj.bundleId2;
-			}
-			
-			parentId = replyId;
-			depth = 1;
-			depth2 = (depth2 < 3) ? obj.depth2 + 1 : obj.depth2;
-			console.log('replyInsert - bundleId : ' + bundleId + ', bundleId2 : ' +
-					bundleId2 + ', parentId : ' + parentId + ', depth : ' + depth + 
-					', depth2 : ' + depth2 + ', replyId : ' + replyId + 
-					', replyDetail : ' + replyDetail);
-			ajaxInsert(bundleId, bundleId2, parentId, depth, 
-					depth2, replyId, replyDetail);
-			
-		}
+    	let replyId, bundleId, bundleId2, parentId, depth;
+        let empId = obj.empId;
+    	let replyDetail = changeDetail(parent);
+        console.log('replyDetail2 : ' + replyDetail);
+        
+		//depth가 -1이 아닐때는 댓글의 댓글임
+        bundleId = obj.bundleId;
+        replyId = obj.replyId;
+        
+        if(obj.depth == 1) {
+            bundleId2 = replyId;
+            depth = 2;
+        }else if(obj.depth == 2){
+            bundleId2 = obj.bundleId2;
+            depth = 3;
+        }else if(obj.depth == 3){
+            bundleId2 = obj.bundleId2;
+            depth = 3;
+        }else{
+            //obj.depth가 -1일때
+            bundleId2 = obj.bundleId2;
+            depth = 1;
+        }
+        
+        parentId = replyId;
+        
+        console.log('replyInsert - bundleId : ' + bundleId + ', bundleId2 : ' +
+                bundleId2 + ', parentId : ' + parentId + ', depth : ' + depth + 
+                    ', replyId : ' + replyId + ', replyDetail : ' + replyDetail);
+        ajaxInsert(parent, empId, bundleId, bundleId2, parentId, depth, replyId, replyDetail);
 		
 	}
     
   	//댓글 인서트
-	function ajaxInsert(bundleId, bundleId2, parentId, depth, 
-			depth2, replyId, replyDetail){
+	function ajaxInsert(parent, empId, bundleId, bundleId2, parentId, depth, replyId, replyDetail){
 		
 		console.log('ajaxReplyInsert - bundleId : ' + bundleId + ', bundleId2 : ' +
 				bundleId2 + ', parentId : ' + parentId + ', depth : ' + depth + 
-				', depth2 : ' + depth2 + ', replyId : ' + replyId + 
-				', replyDetail : ' + replyDetail);
+				', replyId : ' + replyId + ', replyDetail : ' + replyDetail);
 		
+		let jsonData = {
+			depId : ${ board.depId }
+			,boardId : ${ board.boardId }
+			,empId : empId
+            ,empName : parent.find('.reply-ename').text()
+			,bundleId : bundleId
+			,bundleId2 : bundleId2
+			,parentId : parentId
+			,depth : depth
+			,replyId : replyId
+			,replyDetail : replyDetail	
+		}
+
+        let formData = new FormData();
+        formData.append('depId', jsonData.depId);
+        formData.append('boardId', jsonData.boardId);
+        formData.append('empId', jsonData.empId);
+        formData.append('bundleId', jsonData.bundleId);
+        formData.append('bundleId2', jsonData.bundleId2);
+        formData.append('parentId', jsonData.parentId);
+        formData.append('depth', jsonData.depth);
+        formData.append('replyId', jsonData.replyId);
+        formData.append('replyDetail', jsonData.replyDetail);
+        formData.append('upfile', $('#reply_' + jsonData.replyId + ' .file-btn')[0].files[0]);
+        
+
 		$.ajax({
     		url : 'ryinsert.do'
     		,type : 'post'
-    		,data : {
-    			defId : ${ board.depId }
-    			,empId : 1
-    			,bundleId : bundleId
-    			,bundleId2 : bundleId2
-    			,parentId : parentId
-    			,depth : depth
-    			,depth2 : depth2
-    			,replyId : replyId
-    			,replyDetail : replyDetail
-    		},
-    		success : function(data) {
-    			console.log("success : " + data);
-    			//$('.reply-input-btn')
+            ,processData : false
+            ,contentType : false
+    		,data : formData
+    		,success : function(data) {
     			
-    		},
-    		error: function(jqXHR, textStatus, errorThrown){
-    			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+                let arr = data.split('#%');
+                console.log("arr : " +arr);
+    			let ajaxData = {
+                    replyId : arr[0]
+                    ,empName : arr[1]
+                    ,profile : arr[2]
+                    ,createDate : arr[3]
+                    ,originFile : arr[4]
+                    ,renameFile : arr[5]
+                }
+                parent.find('.reply-input-box').hide();
+                parent.find('.reply-input').text('');
+                parent.find('.file-btn').val('');
+                parent.after(setTag(jsonData, ajaxData));
+    			console.log('parent : ' + parent.attr('class'));
+    			setReplyBtn($('#reply_' + ajaxData.replyId));
+    		}
+    		,error: function(request, status, errorData){
+    			console.log("error : " + request + ", " + status + ", " + errorData);
     		}
     	})
 	}
+  	
+  	function setTag(jsonData, ajaxData){
+        let empName = '전성훤';
+        let parentEmpName = jsonData.empName;
+        let originFileName = '';
+        let renameFileName = '';
+        let profile = (ajaxData.profile == undefined || ajaxData.profile == '') ? '' : decodeURIComponent(ajaxData.profile);
+
+        if(ajaxData.originFile != undefined && ajaxData.originFile != '') {
+            originFileName = decodeURIComponent(ajaxData.originFile);
+            renameFileName = ajaxData.renameFile;
+        }
+        
+        let replyId = ajaxData.replyId;
+        let createDate = ajaxData.createDate;
+        
+  		let el = `
+  		<div class="notice-reply-con depth`+jsonData.depth+`" 
+        	data-empid="`+jsonData.empId+`"
+        	data-bundleid="`+jsonData.bundleId+`" 
+        	data-bundleid2="`+jsonData.bundleId2+`" 
+        	data-parentid="`+jsonData.parentId+`" 
+        	data-depth="`+jsonData.depth+`" 
+        	data-replyid="`+replyId+`"
+        	id = "reply_`+replyId+`"
+        >`
+        if(jsonData.depth >= 1) {
+            el += `<div class="depth2-icon">ㄴ</div>`;
+        }
+        
+        el += 
+            `
+            <div class="contents-notice-line">
+                <div class="notice-profile">
+                    <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
+                    <span>
+                        <div class="reply-ename">`+empName+`</div>
+                        <div class="reply-date">
+                            <span>`+createDate+`</span>
+                        </div>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="contents-notice-text">
+                <span class="contents-notice-text-parent">@`+parentEmpName+`</span>
+                `+jsonData.replyDetail+`
+            </div>`
+        
+        if(originFileName != ''){
+
+            el += 
+            `
+            <a class="contents-notice-down" href="bddown.do?ofile=`+ originFileName +`&rfile=`+ renameFileName +`">
+                <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
+                <span>`+originFileName+`</span>
+                <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
+            </a>
+            `
+        }
+        
+        if(jsonData.depth != 3) {
+            el += `
+            <button class="reply-btn">
+                답글
+            </button>`;
+        }
+        
+        el +=
+            `
+            <button class="reply-up-btn">수정</button>
+			<div class="reply-right">
+				<div class="reply-dropdown">
+					<button class="reply-dropdown-btn delete">삭제</button>
+					<button class="reply-dropdown-btn update">수정</button>
+				</div>
+                <button class="reply-right-btn">
+                    <img class="reply-right-btn-img" src="/pageflow/resources/images/right.png">
+                </button>
+            </div>`
+            
+        if(jsonData.depth != 3) {	
+            el +=
+            `
+            <div class="reply-input-box depth2">
+                <!-- <div class="depth2-icon-reply">ㄴ</div> -->
+                <div class="reply-input-area">
+                    <div class="reply-input" contenteditable="true">
+                        
+                    </div>
+                </div>
+                <div class="reply-input-btn-box">
+                    <input type="file" class="file-btn" name="upfile">
+                    <input type="button" class="contents-input-btn reply-input-btn big noline" value="입력">
+                </div>
+            </div>`
+        }
+        el +=
+        `
+        </div>`;
+        
+        return el;
+  	}
     
 </script>
 </head>
@@ -203,7 +478,7 @@
             <!--header-container end-->
         </header>
         <!--헤더 end-->
-
+        
         <main class="main-wrapper">
             <!--main-side-->
             <div class="main-side">
@@ -312,7 +587,7 @@
                                         <div class="notice-profile">
                                             <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
                                             <span>
-                                                <div>${ board.empName }</div>
+                                                <div class="notice-profile-one">${ board.empName }</div>
                                                 <div>
                                                     <span>${ board.createDate }</span>
                                                     <span>|</span>
@@ -321,6 +596,19 @@
                                             </span>
                                         </div>
                                     </div>
+                                    
+                                    <c:if test="${ !empty board.originFile }">
+                                    	<c:url var="bdown" value="bddown.do">
+											<c:param name="ofile" value="${ board.originFile }" />
+	                                        <c:param name="rfile" value="${ board.renameFile }" />
+	                                    </c:url>
+	
+	                                    <a class="contents-notice-down" href="${ bdown }">
+	                                        <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
+	                                        <span>${ board.originFile }</span>
+	                                        <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
+	                                    </a>
+                                    </c:if>
                                     
                                 </div>
                                 
@@ -343,93 +631,92 @@
                                         <div class="reply-title">
                                             댓글 <span>${ replyList.size() }</span>
                                         </div>
-                                        <div class="reply-sort">
-                                            <button class="reply-sort-btn">
-                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/chk.png">
-                                                <span>등록순</span>
-                                            </button>
-                                            <button class="reply-sort-btn">
-                                                <img class="display-none" src="${ pageContext.servletContext.contextPath }/resources/images/chk.png">
-                                                <span>최신순</span>
-                                            </button>
-                                        </div>
                                     </div>
-                                    
-                                    <c:forEach var="r" items="${ replyList }">
-                                    	
-                                        <div class="notice-reply-con depth${ r.depth2 }" 
-                                        	data-empId="${ r.empId }"
-                                        	data-bundleId="${ r.bundleId }" 
-                                        	data-bundleId2="${ r.bundleId2 }" 
-                                        	data-parentId="${ r.parentId }" 
-                                        	data-depth="${ r.depth }" 
-                                        	data-depth2="${ r.depth2 }" 
-                                        	data-replyId="${ r.replyId }"
-                                        	id = "reply_${ r.replyId }"
-                                        >
+                                    <div class="notice-reply-box-con">
+                                        <c:forEach var="r" items="${ replyList }">
                                             
-                                            <c:if test="${ r.depth2 >= 1 }">
-                                            	<div class="depth2-icon">ㄴ</div>
-                                            </c:if>
-                                            
-                                            <div class="contents-notice-line">
-                                                <div class="notice-profile">
-                                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
-                                                    <span>
-                                                        <div class="reply-ename">${ r.empName }</div>
-                                                        <div class="reply-date">
-                                                            <span>${ r.createDate }</span>
-                                                        </div>
-                                                    </span>
+                                            <div class="notice-reply-con depth${ r.depth }" 
+                                                data-empid="${ r.empId }"
+                                                data-bundleid="${ r.bundleId }" 
+                                                data-bundleid2="${ r.bundleId2 }" 
+                                                data-parentid="${ r.parentId }" 
+                                                data-depth="${ r.depth }"
+                                                data-replyid="${ r.replyId }"
+                                                id = "reply_${ r.replyId }"
+                                            >
+                                                
+                                                <c:if test="${ r.depth >= 1 }">
+                                                    <div class="depth2-icon">ㄴ</div>
+                                                </c:if>
+                                                
+                                                <div class="contents-notice-line">
+                                                    <div class="notice-profile">
+                                                        <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
+                                                        <span>
+                                                            <div class="reply-ename">${ r.empName }</div>
+                                                            <div class="reply-date">
+                                                                <span>${ r.createDate }</span>
+                                                            </div>
+                                                        </span>
+                                                    </div>
                                                 </div>
+                                                
+                                                <div class="contents-notice-text">
+                                                    <span class="contents-notice-text-parent">@${ r.parentEmpName }</span>
+                                                    ${ r.replyDetail }
+                                                </div>
+                                                <c:if test="${ !empty r.originFile }">
+                                                    <c:url var="bdown" value="bddown.do">
+                                                        <c:param name="ofile" value="${ r.originFile }" />
+                                                        <c:param name="rfile" value="${ r.renameFile }" />
+                                                    </c:url>
+                
+                                                    <a class="contents-notice-down" href="${ bdown }">
+                                                        <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
+                                                        <span>${ r.originFile }</span>
+                                                        <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${ r.depth != 3 }">
+                                                    <button class="reply-btn">
+                                                        답글
+                                                    </button>
+                                                </c:if>
+                                                <button class="reply-up-btn">수정</button>
+                                                
+                                                <div class="reply-right">
+                                                    <div class="reply-dropdown">
+                                                        <button class="reply-dropdown-btn delete">삭제</button>
+                                                        <button class="reply-dropdown-btn update">수정</button>
+                                                    </div>
+                                                    <button class="reply-right-btn">
+                                                        <img class="reply-right-btn-img" src="/pageflow/resources/images/right.png">
+                                                    </button>
+                                                </div>
+                                                
+                                                <c:if test="${ r.depth != 3 }">
+                                                
+                                                    <div class="reply-input-box depth2">
+                                                        <!-- <div class="depth2-icon-reply">ㄴ</div> -->
+                                                        <div class="reply-input-area">
+                                                            <div class="reply-input" contenteditable="true">
+                                                                
+                                                            </div>
+                                                        </div>
+                                                        <div class="reply-input-btn-box">
+                                                            <input type="file" class="file-btn" name="upfile">
+                                                            <input type="button" class="contents-input-btn reply-input-btn big noline" value="입력">
+                                                        </div>
+                                                    </div>
+                                                </c:if>
                                             </div>
-                                            
-                                            <div class="contents-notice-text">
-                                                <span class="contents-notice-text-parent">@${ r.parentEmpName }</span>
-                                                ${ r.replyDetail }
-                                            </div>
-                                            
-    										
-		
-                                            <a class="contents-notice-down" href="#">
-                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
-                                                <span>product_manage2.zip</span>
-                                                <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
-                                            </a>
-                                            
-                                            <c:if test="${ r.depth2 != 3 }">
-	                                            <button class="reply-btn">
-	                                                답글
-	                                            </button>
-    										</c:if>
-    										
-    										<div class="reply-right">
-												<div class="reply-dropdown">
-													<button class="reply-delete-btn">삭제</button>
-													<button class="reply-report-btn">신고</button>
-												</div>
-						                        <button class="reply-right-btn">
-						                            <img class="reply-right-btn-img" src="/pageflow/resources/images/right.png">
-						                        </button>
-						                    </div>
-											
-	                                        <div class="reply-input-box depth2">
-	                                            <!-- <div class="depth2-icon-reply">ㄴ</div> -->
-	                                            <div class="reply-input-area">
-	                                                <div class="reply-input" contenteditable="true">
-	                                                    
-	                                                </div>
-	                                            </div>
-	                                            <div class="reply-input-btn-box">
-	                                                <input type="file" class="file-btn" name="upfile">
-	                                                <input type="button" class="contents-input-btn reply-input-btn big noline" value="입력">
-	                                            </div>
-	                                        </div>
-                                        </div>
-                                    </c:forEach>
-									<script type="text/javascript">
-										setReplyBtn();
-									</script>
+                                        </c:forEach>
+                                        <script type="text/javascript">
+                                            $('.notice-reply-con').each(function(){
+                                                setReplyBtn($(this));
+                                            })
+                                        </script>
+                                    </div>
                                 </div>
                                 <!--notice-reply-box end-->
 

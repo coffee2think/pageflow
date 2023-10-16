@@ -10,16 +10,24 @@
 
 	<typeAliases>
 		<typeAlias type="com.erl.pageflow.common.Search" alias="Search" />
-		<typeAlias type="com.erl.pageflow.book.model.vo.Book" alias="Book" />
+		
+		
+		<!-- 직원 관리 -->
+		<typeAlias type="com.erl.pageflow.employee.model.vo.Employee" alias="Employee" />
+		
+		<!-- 공지사항 -->
+		<typeAlias type="com.erl.pageflow.notice.model.vo.Notice" alias="Notice" />
 		
 		<!-- 업무 게시판 게시글 -->
 		<typeAlias type="com.erl.pageflow.board.model.vo.Board" alias="Board" />
 		<typeAlias type="com.erl.pageflow.common.Paging" alias="Paging" />
 		<typeAlias type="com.erl.pageflow.common.BoardKeyword" alias="BoardKeyword" />
+		<typeAlias type="com.erl.pageflow.board.model.vo.BoardUpload" alias="BoardUpload" />
 		
 		<!-- 업무 게시판 댓글 -->
 		<typeAlias type="com.erl.pageflow.reply.model.vo.Reply" alias="Reply" />
 		<typeAlias type="com.erl.pageflow.common.ReplyKeyword" alias="ReplyKeyword" />
+		<typeAlias type="com.erl.pageflow.reply.model.vo.ReplyUpload" alias="ReplyUpload" />
 		
 		<!-- 영업관리 -->
 		<typeAlias type="com.erl.pageflow.sales.model.vo.BookOrder" alias="BookOrder" />
@@ -41,24 +49,25 @@
 		<typeAlias type="com.erl.pageflow.printOrder.model.vo.PrintOrder" alias="PrintOrder" />
 		<typeAlias type="com.erl.pageflow.printCalc.model.vo.PrintCalc" alias="PrintCalc" />
 		
+		<!-- 출판관리 -->
+		<typeAlias type="com.erl.pageflow.book.model.vo.Book" alias="Book" />
+		<typeAlias type="com.erl.pageflow.contract.model.vo.Contract" alias="Contract" />
+		<typeAlias type="com.erl.pageflow.edit.model.vo.Edit" alias="Edit" />
+		<typeAlias type="com.erl.pageflow.writer.model.vo.Writer" alias="Writer" />
+		
 	</typeAliases>
 	
 	<mappers>
 		<!-- 존재하지 않는 파일을 등록하면, 톰켓 구동 안 됨 -->
 		<mapper resource="mappers/board-mapper.xml" />
 		<mapper resource="mappers/reply-mapper.xml" />
+		<mapper resource="mappers/notice-mapper.xml" />
 		<mapper resource="mappers/sales-mapper.xml" />
 		<mapper resource="mappers/inventory-mapper.xml" />
 		<mapper resource="mappers/refund-mapper.xml" />
 		<mapper resource="mappers/store_mapper.xml" />
 		<mapper resource="mappers/print-mapper.xml" />
+		<mapper resource="mappers/employee-mapper.xml" />
+		<mapper resource="mappers/publish-mapper.xml" />
 	</mappers>
 </configuration>
-
-
-
-
-
-
-
-

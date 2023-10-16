@@ -26,7 +26,10 @@
 		<![CDATA[
 			SELECT *
 			FROM INVENTORY
-			WHERE SYSDATE - INVEN_DATE <= 7
+			WHERE PREV_INVEN_ID IN (
+		            SELECT PREV_INVEN_ID
+		            FROM INVENTORY
+		            WHERE SYSDATE - INVEN_DATE <= 7)
 		]]>
 	</select>
 	
@@ -40,6 +43,12 @@
 		SELECT CLIENT_NAME
 		FROM CLIENT
 		WHERE CLIENT_ID = #{ storageId }
+	</select>
+	
+	<select id="selectGetDateListCount" parameterType="Search" resultMap="resultInventory">
+		SELECT *
+		FROM INVENTORY
+		WHERE INVEN_DATE BETWEEN #{ startRow } AND #{ endRow }
 	</select>
 	
 </mapper>

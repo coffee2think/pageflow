@@ -15,8 +15,6 @@ public interface InventoryService {
 	public String selectInventoryBookName(int bookId);
 	
 	public String selectInventoryClientName(int storageId);
-	
-	public int selectInventorfirstSearchCount(String keyword);
-	
-	public ArrayList<Inventory> selectInventorfirst(Search search);
+		
+	public int selectGetDateListCount(Search search);
 }

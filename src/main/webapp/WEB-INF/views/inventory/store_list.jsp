@@ -15,6 +15,7 @@
     const LNKPAGE = 1;
 </script>
 <title></title>
+
 </head>
 <body>
 	<div id="container">
@@ -67,7 +68,7 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">도서코드</option>
+                                            <option value="bookId">도서코드</option>
                                             <option value="">도서명</option>
                                             <option value="">입고부수</option>
                                             <option value="">정가</option>
@@ -100,13 +101,31 @@
                             <div class="select-box">
                                 <div class="select-pan-nemo">
                                     입고일자
-                                </div>
-
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
-
-                                <input type="button" name="week" class="select-pan-btn" value="일주일">
-                                <input type="button" name="month" class="select-pan-btn" value="한달">
+                                </div>                       
+                                <input type="date" class="select-date select-date-first" name="begin" value="${ begin }">
+                                <input type="date" class="select-date select-date-second" name="end"  value="${ end }">
+                                
+                                <c:set var="today_" value="<%= new java.util.Date() %>" />
+                                <fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+     
+                                <input type="button" name="week" class="select-pan-btn" value="기간검색">
+                                
+                                <c:url var="searchWeekUrl" value="storedate.do">
+                                	<c:param name="begin" value="${ weekago }" />
+                                	<c:param name="end" value="${ today }" />
+                                </c:url>
+                                
+                                <c:url var="searchMonthUrl" value="storedate.do">
+                                	<c:param name="begin" value="${ monthago }" />
+                                	<c:param name="end" value="${ today }" />
+                                </c:url>
+                                
+                                <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
                             </div>
 
                         </form>
@@ -134,12 +153,14 @@
                                     <th>도서명</th>
                                     <th>입고창고</th>
                                     <th>인수자</th>
-                                    <th>입고일자</th>
-                                    <th>입고부수</th>
+                                    <th>입고일자</th>  
                                     <th>정가</th>
+                                    <th>입고부수</th>
                                     <th>입고금액</th>
                                     <th>수정</th>
                                 </tr>
+                                <c:set var="totalStoreNum" value="0" />
+                                <c:set var="totalStorePrice" value="0" />
                                 <c:forEach var="sto" items="${ requestScope.list }">
 	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
 	                                    <td class="td-50">
@@ -172,23 +193,25 @@
 	                                    </td>
 	                                    <td class="td-70">
 	                                        <div class="contents-input-div">
-	                                            <input type="input" name="storeNum" class="contents-input noline" value="${ sto.storeNum }">
+	                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ sto.bookPrice }">
 	                                        </div>
 	                                    </td>
 	                                    <td class="td-70">
 	                                        <div class="contents-input-div">
-	                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ sto.bookPrice }">
+	                                            <input type="input" name="storeNum" class="contents-input noline" value="${ sto.storeNum }">
 	                                        </div>
-	                                    </td>
+	                                    </td>         
 	                                    <td class="td-100">
 	                                        <div class="contents-input-div">
-	                                            <input type="input" name="storeNum" class="contents-input noline" value="${ sto.storeNum }">
+	                                            <input type="input" name="storeNum" class="contents-input noline" value="${ sto.storePrice }">
 	                                        </div>
 	                                    </td>
 	                                    <td class="td-70">
 	                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
 	                                    </td>
 	                                </tr>
+	                            <c:set var="totalStoreNum" value="${ totalStoreNum + sto.storeNum }"/>
+	                             <c:set var="totalStorePrice" value="${ totalStorePrice + sto.storePrice }"/>
 								</c:forEach>
                                 <!--합계-->
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
@@ -197,10 +220,10 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                     <td>합계</td>
-                                    <td>12123</td>
-                                    <td>100213</td>
-                                    <td>150000</td>
+                                    <td>${ totalStoreNum }</td>
+                                    <td>${ totalStorePrice }</td>
                                     <td></td>
                                 </tr>
                                 <!--합계end-->
@@ -215,7 +238,7 @@
 
                 
                 <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제">
+                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteStore(); return false;">
                 </div>
                 
             </div>

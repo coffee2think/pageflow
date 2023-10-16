@@ -38,35 +38,35 @@ insert into job values(1, '부장');
 insert into department values(1, '개발팀');
 
 insert into reply values(
-1,	1,	1,	1,	1,	1,	1,	-1, -1, '댓글댓글댓글1-1', sysdate, null, null);
+1,	1,	1,	1,	1,	1,	1,	-1, '댓글댓글댓글1-1', sysdate, null, null);
 
 insert into reply values(
-2,	1,	1,	2,	2,	2,	2,	-1, -1,	'댓글댓글댓글2-2', sysdate, null, null);
+2,	1,	1,	2,	2,	2,	2,	-1,	'댓글댓글댓글2-2', sysdate, null, null);
 
 insert into reply values(
-3,	1,	1,	3,	2,	3,	2,	1, 1,	'댓글댓글댓글2-2-1-3', sysdate, null, null);
+3,	1,	1,	3,	2,	3,	2,	1,	'댓글댓글댓글2-2-1-3', sysdate, null, null);
 
 insert into reply values(
-4,	1,	1,	4,	2,	3,	3,	1, 2,	'댓글댓글댓글2-3-2-4', sysdate, null, null);
+4,	1,	1,	4,	2,	3,	3,	2,	'댓글댓글댓글2-3-2-4', sysdate, null, null);
 
 insert into reply values(
-5,	1,	1,	5,	2,	5,	2,	1, 1,	'댓글댓글댓글2-2-1-5', sysdate, null, null);
+5,	1,	1,	5,	2,	5,	2,	1,	'댓글댓글댓글2-2-1-5', sysdate, null, null);
 
 insert into reply values(
-6,	1,	1,	1,	6,	1,	6,	-1, -1,	'댓글댓글댓글6-6', sysdate, null, null);
+6,	1,	1,	1,	6,	1,	6,	-1,	'댓글댓글댓글6-6', sysdate, null, null);
 
 insert into reply values(
-7,	1,	1,	1,	2,	3,	4,	1, 3,	'댓글댓글댓글2-4-3-7', sysdate, null, null);
+7,	1,	1,	1,	2,	3,	4,	3,	'댓글댓글댓글2-4-3-7', sysdate, null, null);
 
 insert into reply values(
-8,	1,	1,	2,	2,	5,	5,	1, 2,	'댓글댓글댓글2-5-2-8', sysdate, null, null);
+8,	1,	1,	2,	2,	5,	5,	2,	'댓글댓글댓글2-5-2-8', sysdate, null, null);
 
 insert into reply values(
-9,	1,	1,	4,	2,	9,	2,	1, 2,	'댓글댓글댓글2-2-2-9', sysdate, null, null);
+9,	1,	1,	4,	2,	9,	2,	2,	'댓글댓글댓글2-2-2-9', sysdate, null, null);
 
 insert into reply values(
-10,	1,	1,	5,	2,	10, 2,	1, 2,	'댓글댓글댓글2-2-2-10', sysdate, null, null);
-
+10,	1,	1,	5,	2,	10, 2,	2,	'댓글댓글댓글2-2-2-10', sysdate, null, null);
+commit;
 
 
 insert into board 
@@ -89,5 +89,9 @@ insert into reply values
 	     'sadasdasdasd', default, null, null);
 rollback;
 
+insert into upload_board 
+values (1, 1, 1, 'icon.png', '202310140305.png');
 
+insert into upload_reply 
+values (1, 1, 'mascot.png', '202310140306.png');
 

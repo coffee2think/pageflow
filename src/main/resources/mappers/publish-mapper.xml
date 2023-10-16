@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="publishMapper">
+	<!-- 계약 resultMap -->
+	<resultMap type="Contract" id="resultContract">
+		<result property="contrId" column="CONTR_ID" />
+		<result property="empId" column="EMP_ID" />
+		<result property="writerId" column="WRITER_ID" />
+		<result property="bookName" column="BOOK_NAME" />
+		<result property="empName" column="EMP_NAME" />
+		<result property="contrDate" column="CONTR_DATE" />
+		<result property="contrDoc" column="CONTR_DOC" />
+		<result property="contrState" column="CONTR_STATE" />
+		<result property="writerName" column="WRITER_NAME" />
+	</resultMap>
+	
+	<resultMap type="Writer" id="resultWriterJoin">
+		<result property="writerId" column="WRITER_ID" />
+		<result property="writerName" column="WRITER_NAME" />
+		<result property="phone" column="PHONE" />
+		<result property="writerBirth" column="WRITER_BIRTH" />
+		<result property="email" column="EMAIL" />
+		<result property="address" column="ADDRESS" />
+		<result property="bank" column="BANK" />
+		<result property="account" column="ACCOUNT" />
+	</resultMap>
+	
+	<!-- 편집 resultMap -->
+	
+	<!-- 도서 resultMap -->
+	
+	<!-- 작가 resultMap -->
+	
+	<!-- 계약 -->
+	<select id="selectContractListCount" resultType="_int">
+		select count(*) from contract
+	</select>
+	
+	<select id="selectContractList" parameterType="Paging" resultMap="resultContract">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from contract
+			  		left join writer using(WRITER_ID)
+					order by contr_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow } 
+	</select>
+	
+	<select id="selectContractSearch" parameterType="Paging" resultMap="resultWriterJoin">
+		<![CDATA[
+			select * 
+			from (select rownum rnum, CONTR_ID, EMP_ID, WRITER_ID, 
+					   BOOK_NAME, EMP_NAME, CONTR_DATE, 
+			           CONTR_DOC, CONTR_STATE 
+			      from (select * from contract 
+			           order by BOARD_ID desc)) 
+			left join writer using(WRITER_NAME)
+			where rnum >= #{ startRow } and rnum <= #{ endRow }
+		]]>
+	</select>
+	
+	<select id="selectContract" parameterType="_int" resultMap="resultContract">
+		select * 
+		from contract
+		left join book using(CETEGORY)
+		where contract_id = #{ contractId }
+	</select>
+	
+	<insert id="insertContract" parameterType="Contract">
+		insert into contract 
+		values ((select max(CONTR_ID) + 1 from contract), 
+		        #{ empId }, #{ writerId }, #{ bookName }, 
+		        #{ empName }, #{ contrDate }, null, default)
+	</insert>
+	
+	<update id="updateContract" parameterType="_int">
+		update contract
+		set contr_id = #{ contrId }, emp_id = #{ empId }, 
+			writer_id = #{ writerId }, book_name = #{ bookName },
+			emp_name = #{ empName }, contr_date = #{ contrDate },
+			contr_doc = #{ contrDoc }, contr_state = #{ contrState }
+		where contr_id = #{ contrId } 
+	</update>
+	
+	<select id="deleteContract" parameterType="_int">
+		delete from contract
+		where contr_id = #{ contrId }
+	</select>
+		
+	<!-- 편집 -->
+	
+	<!-- 도서 -->
+	
+	<!-- 작가 -->
+</mapper>

@@ -6,6 +6,7 @@ import java.util.List;
 import com.erl.pageflow.common.ReplyKeyword;
 import com.erl.pageflow.common.UploadKeyword;
 import com.erl.pageflow.reply.model.vo.Reply;
+import com.erl.pageflow.reply.model.vo.ReplyUpload;
 
 public interface ReplyService {
 	//업무게시판 게시글 리스트 조회
@@ -17,5 +18,13 @@ public interface ReplyService {
 	
 	public int insertReply(Reply reply);
 
-	public int insertUploadReply(UploadKeyword uploadKeyword);
+	public int insertUploadReply(ReplyUpload replyUpload);
+	
+	public Reply selectReplyRecent();
+
+	public ReplyUpload selectReplyListFile(int replyId);
+
+	public int selectReplyMaxCount();
+
+	public int insertReply2(Reply reply);
 }

@@ -8,6 +8,11 @@
 <c:set var="endPage" value="${ requestScope.paging.endPage }"/>
 <c:set var="maxPage" value="${ requestScope.paging.maxPage }"/>
 <c:set var="limit" value="${ requestScope.paging.limit }"/>
+<c:set var="urlMapping" value="${ requestScope.paging.urlMapping }"/>
+<c:set var="begin" value="${ requestScope.begin }" />
+<c:set var="end" value="${ requestScope.end }" />
+<c:set var="searchType" value="${ searchType }" />
+<c:set var="keyword" value="${ keyword }" />
 
 <!DOCTYPE html>
 <html>
@@ -45,11 +50,28 @@
 	</c:if>
 	
 	<c:forEach var="p" begin="${ startPage }" end="${ endPage }" step="1">
+		<!-- 키워드 검색시 페이징 처리 -->
 		<c:if test="${ p eq currentPage }">
 			<a href="" class="paging-list-btn active"><span>${ p }</span></a>
 		</c:if>
 		<c:if test="${ p ne currentPage }">
-			<a href="" class="paging-list-btn"><span>${ p }</span></a>
+			<c:url var="pUrl" value="${ urlMapping }">
+				<c:param name="page" value="${ p }" />
+				<c:param name="limit" value="${ limit }" />
+				
+				<!-- 키워드 검색 시 -->
+				<c:if test="${ !empty searchType and !empty keyword }">
+					<c:param name="searchType" value="${ searchType }" />
+					<c:param name="keyword" value="${ keyword }" />
+				</c:if>
+				
+				<!-- 날짜 검색 시 -->
+				<c:if test="${ !empty begin and !empty end }">
+					<c:param name="begin" value="${ begin }" />
+					<c:param name="end" value="${ end }" />
+				</c:if>
+			</c:url>
+			<a href="${ pUrl }" class="paging-list-btn"><span>${ p }</span></a>
 		</c:if>
 	</c:forEach>
     
