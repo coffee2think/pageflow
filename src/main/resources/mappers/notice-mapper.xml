@@ -3,7 +3,42 @@
 "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="noticeMapper">
+	
+	
+	
 
+	
+	<resultMap type="Notice" id="resultNotice">
+		<result column="NOTICE_ID" property="noticeId" />
+		<result column="EMP_ID" property="empid" />
+		<result column="EMP_Name" property="empName" />
+		<result column="NOTICE_TITLE" property="noticeTitle" />
+		<result column="NOTICE_DETAIL" property="noticeDetail" />
+		<result column="CREATE_DATE" property="noticeCreateDate" />
+		<result column="MODIFY_DATE" property="noticeModifyDate" />
+		<result column="DELETE_DATE" property="noticeDeleteDate" />
+		<result column="CLASSIFY" property="classify" />
+		<result column="IMPORTANCE" property="importance" />
+		<result column="NOTICE_READCOUNT" property="noticeReadCount" />
+		<result column="NOTICE_ORIGINAL_FILENAME" property="noticeOriginalFileName" />
+		<result column="NOTICE_RENAME_FILENAME" property="noticeRenameFileName" />
+	</resultMap>
+	
+	<select id="selectNoticeList" parameterType="Paging" resultMap="resultNotice">
+		
+			select * from (select rownum rnum, NOTICE_ID, EMP_ID, NOTICE_TITLE, 
+				            NOTICE_DETAIL, IMPORTANCE, NOTICE_READCOUNT , NOTICE_ORIGINAL_FILENAME, NOTICE_RENAME_FILENAME 
+				      		from (select * from notice 
+				            order by importance desc, CREATE_DATE desc, NOTICE_ID desc)
+				     	   ) 
+		where rnum between #{ startRow } and #{ endRow }
+		
+		
+	</select>
+	
+	<select id="getListCount" resultType="_int">
+		select count(*) from notice
+	</select>
 	
 </mapper>
 
