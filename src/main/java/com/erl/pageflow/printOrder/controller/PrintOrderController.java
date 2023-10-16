@@ -122,5 +122,13 @@ public class PrintOrderController {
 		}
 	}
 	
+	// 발주등록 페이지
+	@RequestMapping("poinsert.do")
+	public String PrintOrderInsert() {
+		return "print:porder_input";
+	}
+	
+	//발주 등록 요청 처리용
+	
 	
 }

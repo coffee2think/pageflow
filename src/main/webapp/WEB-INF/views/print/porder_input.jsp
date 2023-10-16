@@ -47,7 +47,7 @@
 
                 <!--form-->
                 <!-- <form class="input-form" action="/comi/partyi" method="post" enctype="multipart/form-data">-->
-                <form class="input-form" action="" method="post">
+                <form class="input-form" action="poinsert.do" method="post">
                     <!--main-header-bar-->
                     <div class="main-header-bar">
                         <div class="main-title-box">
@@ -81,91 +81,95 @@
                                         <th>합계</th>
                                         <th>상태</th>
                                     </tr>
-                                    <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                        
-                                        <td class="td-50">
-                                            <div class="contents-check-div">
-                                                <button class="contents-input-plus">
-                                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
-                                                </button>
-                                                <button class="contents-input-minus">
-                                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
-                                                </button>
-                                            </div>
-                                        </td>
-                                        <td class="td-120">
-                                            <div class="contents-input-div input-search">
-                                                <button class="input-search-btn">
-                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                                                </button>
-                                                <input type="input" name="code" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                        <td class="td-150">
-                                            <div class="contents-input-div input-search">
-                                                <button class="input-search-btn">
-                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                                                </button>
-                                                <input type="input" name="name" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                        <td class="td-120">
-                                            <div class="contents-input-div">
-                                                <input type="date" name="date_order" class="select-date small">
-                                            </div>
-                                        </td>
-                                        <td class="td-120">
-                                            <div class="contents-input-div">
-                                                <input type="date" name="date_end" class="select-date small">
-                                            </div>
-                                        </td>
-                                        <td class="td-120">
-                                            <div class="contents-input-div">
-                                                <input type="date" name="date_pub" class="select-date small">
-                                            </div>
-                                        </td>
-                                        <td class="td-100">
-                                            <div class="contents-input-div input-search">
-                                                <button class="input-search-btn">
-                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                                                </button>
-                                                <input type="input" name="book_code" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                        <td class="td-200">
-                                            <div class="contents-input-div input-search">
-                                                <button class="input-search-btn">
-                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                                                </button>
-                                                <input type="input" name="book_name" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                        <td class="td-70">
-                                            <div class="contents-input-div">
-                                                <input type="number" name="unit" class="contents-input">
-                                            </div>
-                                        </td>
-                                        <td class="td-70">
-                                            <div class="contents-input-div">
-                                                <input type="number" name="quantity" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                        <td class="td-100">
-                                            <div class="contents-input-div">
-                                                <input type="number" name="price" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                        <td class="td-100">
-                                            <div class="contents-input-div">
-                                                <input type="number" name="amount" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                        <td class="td-50">
-                                            <div class="contents-input-div">
-                                                <input type="input" name="state" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <c:if test="${ !empty list }">
+	                                    <c:forEach items="${ list }" var="printOrder" >
+		                                    <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                        
+		                                        <td class="td-50">
+		                                            <div class="contents-check-div">
+		                                                <button class="contents-input-plus">
+		                                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
+		                                                </button>
+		                                                <button class="contents-input-minus">
+		                                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
+		                                                </button>
+		                                            </div>
+		                                        </td>
+		                                        <td class="td-120">
+		                                            <div class="contents-input-div input-search">
+		                                                <button class="input-search-btn">
+		                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+		                                                </button>
+		                                                <input type="input" name="printId" class="contents-input" value="">
+		                                            </div>
+		                                        </td>
+		                                        <td class="td-150">
+		                                            <div class="contents-input-div input-search">
+		                                                <button class="input-search-btn">
+		                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+		                                                </button>
+		                                                <input type="input" name="clientName" class="contents-input" value="">
+		                                            </div>
+		                                        </td>
+		                                        <td class="td-120">
+		                                            <div class="contents-input-div">
+		                                                <input type="date" name="orderDate" class="select-date small">
+		                                            </div>
+		                                        </td>
+		                                        <td class="td-120">
+		                                            <div class="contents-input-div">
+		                                                <input type="date" name="endDate" class="select-date small">
+		                                            </div>
+		                                        </td>
+		                                        <td class="td-120">
+		                                            <div class="contents-input-div">
+		                                                <input type="date" name="pubDate" class="select-date small">
+		                                            </div>
+		                                        </td>
+		                                        <td class="td-100">
+		                                            <div class="contents-input-div input-search">
+		                                                <button class="input-search-btn">
+		                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+		                                                </button>
+		                                                <input type="input" name="bookId" class="contents-input" value="">
+		                                            </div>
+		                                        </td>
+		                                        <td class="td-200">
+		                                            <div class="contents-input-div input-search">
+		                                                <button class="input-search-btn">
+		                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+		                                                </button>
+		                                                <input type="input" name="bookName" class="contents-input" value="">
+		                                            </div>
+		                                        </td>
+		                                        <td class="td-70">
+		                                            <div class="contents-input-div">
+		                                                <input type="number" name="unit" class="contents-input">
+		                                            </div>
+		                                        </td>
+		                                        <td class="td-70">
+		                                            <div class="contents-input-div">
+		                                                <input type="number" name="quantity" class="contents-input" value="">
+		                                            </div>
+		                                        </td>
+		                                        <td class="td-100">
+		                                            <div class="contents-input-div">
+		                                                <input type="number" name="price" class="contents-input" value="">
+		                                            </div>
+		                                        </td>
+		                                        <td class="td-100">
+		                                            <div class="contents-input-div">
+		                                                <input type="number" name="amount" class="contents-input" value="">
+		                                            </div>
+		                                        </td>
+		                                        <td class="td-50">
+		                                            <div class="contents-input-div">
+		                                                <input type="input" name="state" class="contents-input" value="">
+		                                            </div>
+		                                        </td>
+		                                    </tr>
+		                                </c:forEach>
+	                                 </c:if>   
                                 </table>
                             </div>
                         </div>
