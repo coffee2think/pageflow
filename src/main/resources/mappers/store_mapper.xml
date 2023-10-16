@@ -53,4 +53,30 @@
 			WHERE SYSDATE - STORE_DATE <= 7 AND CLASSIFY = '입고'
 		]]>	
 	</select>
+	
+	<select id="selectStoreCountByDate" parameterType="Search" resultType="_int">
+		SELECT COUNT(*) FROM STORE
+		WHERE STORE_DATE #{ begin } and (to_date(#{ end }) + 1 - 1/86400) AND CLASSIFY = '입고'
+	</select>
+	
+	<select id="selectStoreByDate" parameterType="Search" resultMap="resultStore">
+		<![CDATA[
+			SELECT *
+			FROM (SELECT ROWNUM RNUM, STORE_ID, BOOK_ID, STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, STORE_PRICE, STORE_DATE, CLASSIFY)
+			            FROM (SELECT * FROM STORE
+			                        WHERE STORE_DATE between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+			                        AND CLASSIFY = '입고'
+			                        ORDER BY STORE_DATE DESC)
+			WHERE RNUM between #{ startRow } and #{ endRow }
+		]]>	
+	</select>
+	
+	
+	<delete id="deleteInventory" parameterType="Inventory">
+		DELETE FROM INVENTORY WHERE PREV_INVEN_ID = #{ prevInvenId } AND STORE_ID = #{ storeId }
+	</delete>
+	
+	<delete id="deleteStore" parameterType="Store">
+		DELETE FROM STORE WHERE STORE_ID = #{ storeId }
+	</delete>
 </mapper>
