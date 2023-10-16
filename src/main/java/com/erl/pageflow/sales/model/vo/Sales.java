@@ -1,32 +1,43 @@
 package com.erl.pageflow.sales.model.vo;
 
-import java.io.Serializable;
 import java.sql.Date;
 
-public class Sales extends Trade {
+public class Sales extends BookOrder {
 
-	private static final long serialVersionUID = -7081376351331977888L;
+	private static final long serialVersionUID = 6538424039103518592L;
 	
+	private int salesId;
 	private int collectedAmount;
 	private Date collectDate;
+	private Date createDate;
 	
 	public Sales() {}
 	
-	public Sales(int tradeId, int bookId, int clientId, int empId, String empName, int orderQuantity, Date orderDate,
-			String state, String classify) {
-		super(tradeId, bookId, clientId, empId, empName, orderQuantity, orderDate, state, classify);
-	}
-	
-	public Sales(int tradeId, int bookId, int clientId, int empId, String empName, int orderQuantity, Date orderDate,
-			String state, String classify, String bookName, int bookPrice, int totalPrice, String bookStoreName) {
-		super(tradeId, bookId, clientId, empId, empName, orderQuantity, orderDate, state, classify, bookName, bookPrice, totalPrice, bookStoreName);
-	}
-	
-	public Sales(int tradeId, int bookId, int clientId, int empId, String empName, int orderQuantity, Date orderDate,
-			String state, String classify, String bookName, int bookPrice, int totalPrice, String bookStoreName, int collectedAmount, Date collectDate) {
-		super(tradeId, bookId, clientId, empId, empName, orderQuantity, orderDate, state, classify, bookName, bookPrice, totalPrice, bookStoreName);
+	public Sales(int orderId, int bookId, int clientId, int empId, int orderQuantity, Date orderDate,
+			String state, int salesId, int collectedAmount, Date collectDate, Date createDate) {
+		super(orderId, bookId, clientId, empId, orderQuantity, orderDate, state);
+		this.salesId = salesId;
 		this.collectedAmount = collectedAmount;
 		this.collectDate = collectDate;
+		this.createDate = createDate;
+	}
+	
+	public Sales(int orderId, int bookId, int clientId, int empId, int orderQuantity, Date orderDate,
+			Date modifyDate, String state, String empName, String bookName, int bookPrice, int totalPrice,
+			String bookStoreName, int salesId, int collectedAmount, Date collectDate, Date createDate) {
+		super(orderId, bookId, clientId, empId, orderQuantity, orderDate, modifyDate, state, empName, bookName, bookPrice, totalPrice, bookStoreName);
+		this.salesId = salesId;
+		this.collectedAmount = collectedAmount;
+		this.collectDate = collectDate;
+		this.createDate = createDate;
+	}
+	
+	public int getSalesId() {
+		return salesId;
+	}
+
+	public void setSalesId(int salesId) {
+		this.salesId = salesId;
 	}
 
 	public int getCollectedAmount() {
@@ -45,13 +56,25 @@ public class Sales extends Trade {
 		this.collectDate = collectDate;
 	}
 
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	
+	public Date getCreateDate() {
+		return createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+
 	@Override
 	public String toString() {
-		return "Sales [tradeId=" + this.getTradeId() + ", bookId=" + this.getBookId() + ", clientId=" + this.getClientId()
-				+ ", empId=" + this.getEmpId() + ", empName=" + this.getEmpName() + ", orderQuantity=" + this.getOrderQuantity()
-				+ ", orderDate=" + this.getOrderDate() + ", state=" + this.getState() + ", classify=" + this.getClassify()
-				+ ", bookName=" + this.getBookName() + ", bookPrice=" + this.getBookPrice() + ", totalPrice=" + this.getTotalPrice()
-				+ ", bookStoreName=" + this.getBookStoreName() + ", collectedAmount=" + collectedAmount + ", collectDate=" + collectDate + "]";
+		return "Sales [orderId=" + getOrderId() + ", bookId=" + getBookId() + ", clientId=" + getClientId() + ", empId=" + getEmpId()
+				+ ", orderQuantity=" + getOrderQuantity() + ", orderDate=" + getOrderDate() + ", modifyDate=" + getModifyDate()
+				+ ", state=" + getState() + ", empName=" + getEmpName() + ", bookName=" + getBookName() + ", bookPrice=" + getBookPrice()
+				+ ", totalPrice=" + getTotalPrice() + ", bookStoreName=" + getBookStoreName() + ", salesId=" + salesId
+				+ ", collectedAmount=" + collectedAmount + ", collectDate=" + collectDate + ", createDate=" + createDate + "]";
 	}
 	
 }

@@ -5,13 +5,14 @@
 <mapper namespace="salesMapper">
 
 	<resultMap type="BookOrder" id="resultBookOrder">
-		<result property="tradeId" column="TRADE_ID" />
+		<result property="orderId" column="order_ID" />
 		<result property="bookId" column="BOOK_ID" />
 		<result property="clientId" column="CLIENT_ID" />
 		<result property="empId" column="EMP_ID" />
 		<result property="empName" column="EMP_NAME" />
 		<result property="orderQuantity" column="ORDER_QUANTITY" />
 		<result property="orderDate" column="ORDER_DATE" />
+		<result property="modifyDate" column="MODIFY_DATE" />
 		<result property="state" column="STATE" />
 		<result property="bookName" column="BOOK_NAME" />
 		<result property="bookPrice" column="BOOK_PRICE" />
@@ -19,17 +20,20 @@
 	</resultMap>
 	
 	<resultMap type="Sales" id="resultSales">
-		<result property="tradeId" column="TRADE_ID" />
+		<result property="salesId" column="SALES_ID" />
+		<result property="orderId" column="ORDER_ID" />
 		<result property="bookId" column="BOOK_ID" />
 		<result property="clientId" column="CLIENT_ID" />
 		<result property="empId" column="EMP_ID" />
 		<result property="empName" column="EMP_NAME" />
 		<result property="orderQuantity" column="ORDER_QUANTITY" />
 		<result property="orderDate" column="ORDER_DATE" />
-		<result property="state" column="STATE" />
-		<result property="classify" column="CLASSIFY" />
 		<result property="collectedAmount" column="COLLECTED_AMOUNT" />
 		<result property="collectDate" column="COLLECT_DATE" />
+		<result property="createDate" column="CREATE_DATE" />
+		<result property="bookName" column="BOOK_NAME" />
+		<result property="bookPrice" column="BOOK_PRICE" />
+		<result property="bookStoreName" column="CLIENT_NAME" />
 	</resultMap>
 	
 	<resultMap type="BookForSales" id="resultBook">
@@ -79,36 +83,35 @@
 	</resultMap>
 	
 	<select id="selectBookOrderCountByDate" parameterType="Search" resultType="_int">
-		select count(*) from trade
+		select count(*) from book_order
 		where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
-			  and classify = '주문'
 	</select>
 	
 	<select id="selectBookOrderByDate" parameterType="Search" resultMap="resultBookOrder">
 		select *
 		from (select rownum rnum, sub.*
-			  from (select * from trade
+			  from (select * from book_order
 			  		join book using (book_id)
 			  		join client using (client_id)
 					where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
-						  and classify = '주문'
-					order by order_date desc, trade_id desc) sub)
+					order by order_date desc, order_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
 	<select id="selectSalesCountByDate" parameterType="Search" resultType="_int">
-		select count(*) from trade
-		where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
-			  and classify = '판매'
+		select count(*) from sales
+		where create_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
 	</select>
 	
 	<select id="selectSalesListByDate" parameterType="Search" resultMap="resultSales">
 		select *
 		from (select rownum rnum, sub.*
-			  from (select * from trade
-					where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
-						  and classify = '판매'
-					order by order_date desc, trade_id desc) sub)
+			  from (select * from sales
+					join book using (book_id)
+					join book_order using (order_id, book_id)
+					join client using (client_id)
+					where create_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+					order by create_date desc, sales_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
@@ -135,23 +138,23 @@
 	</select>
 	
 	<insert id="insertBookOrder" parameterType="BookOrder">
-		insert into trade
+		insert into book_order
 		values (
-			decode((select count(trade_id) from trade), 0, 1, (select max(trade_id) + 1 from trade)),
-			#{ bookId }, #{ clientId }, #{ empId }, #{ empName }, #{ orderQuantity },
-			sysdate, #{ state }, default, default, '주문')
+			decode((select count(order_id) from book_order), 0, 1, (select max(order_id) + 1 from book_order)),
+			#{ bookId }, #{ clientId }, #{ empId }, #{ orderQuantity }, sysdate, default, #{ state })
 	</insert>
 	
 	<update id="updateBookOrder" parameterType="BookOrder">
-		update trade
+		update book_order
 		set order_quantity = #{ orderQuantity },
-			state = #{ state }
-		where trade_id = #{ tradeId }
+			state = #{ state },
+			modify_date = sysdate
+		where order_id = #{ orderId }
 	</update>
 	
 	<delete id="deleteBookOrder" parameterType="_int">
-		delete from trade
-		where trade_id = #{ tradeId }
+		delete from book_order
+		where order_id = #{ orderId }
 	</delete>
 	
 	<insert id="insertClient" parameterType="Client">
@@ -193,56 +196,50 @@
 	</delete>
 	
 	<select id="selectBookOrderCountByBook" parameterType="Search" resultType="_int">
-		select count(*) from trade
+		select count(*) from book_order
 		join book using (book_id)
 		where book_name like '%' || #{ keyword } || '%'
-			  and classify = '주문'
 	</select>
 	
 	<select id="selectBookOrderCountByBookStore" parameterType="Search" resultType="_int">
-		select count(*) from trade
+		select count(*) from book_order
 		join client using (client_id)
 		where client_name like '%' || #{ keyword } || '%'
-			  and classify = '주문'
 	</select>
 	
 	<select id="selectBookOrderCountByLocation" parameterType="Search" resultType="_int">
-		select count(*) from trade
+		select count(*) from book_order
 		join client using (client_id)
 		where client_address like '%' || #{ keyword } || '%'
-			  and classify = '주문'
 	</select>
 	
 	<select id="selectBookOrderByBook" parameterType="Search" resultMap="resultBookOrder">
 		select *
 		from (select rownum rnum, sub.*
-			  from (select * from trade
+			  from (select * from book_order
 			  		join book using (book_id)
 					where book_name like '%' || #{ keyword } || '%'
-						  and classify = '주문'
-					order by order_date desc, trade_id desc) sub)
+					order by order_date desc, order_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
 	<select id="selectBookOrderByBookStore" parameterType="Search" resultMap="resultBookOrder">
 		select *
 		from (select rownum rnum, sub.*
-			  from (select * from trade
+			  from (select * from book_order
 			  		join client using (client_id)
 					where client_name like '%' || #{ keyword } || '%'
-						  and classify = '주문'
-					order by order_date desc, trade_id desc) sub)
+					order by order_date desc, order_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
 	<select id="selectBookOrderByLocation" parameterType="Search" resultMap="resultBookOrder">
 		select *
 		from (select rownum rnum, sub.*
-			  from (select * from trade
+			  from (select * from book_order
 			  		join client using (client_id)
 					where client_address like '%' || #{ keyword } || '%'
-						  and classify = '주문'
-					order by order_date desc, trade_id desc) sub)
+					order by order_date desc, order_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 

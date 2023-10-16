@@ -63,8 +63,8 @@ public class SalesDao {
 		return sqlSessionTemplate.update("salesMapper.updateBookOrder", bookOrder);
 	}
 	
-	public int deleteBookOrder(int tradeId) {
-		return sqlSessionTemplate.delete("salesMapper.deleteBookOrder", tradeId);
+	public int deleteBookOrder(int orderId) {
+		return sqlSessionTemplate.delete("salesMapper.deleteBookOrder", orderId);
 	}
 
 	public int insertClient(Client client) {

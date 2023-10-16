@@ -71,8 +71,8 @@ public class SalesServiceImpl implements SalesService {
 	}
 	
 	@Override
-	public int deleteBookOrder(int tradeId) {
-		return salesDao.deleteBookOrder(tradeId);
+	public int deleteBookOrder(int orderId) {
+		return salesDao.deleteBookOrder(orderId);
 	}
 
 	@Override

@@ -248,17 +248,21 @@
 
                                 <c:set var="today_" value="<%= new java.util.Date() %>" />
 								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
-								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
+								
+								<!-- LocalDate 객체를 통해 일주일 전 날짜를 구한 후 Date 객체로 변환 -->
+								<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
 								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
-								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
+								
+								<!-- LocalDate 객체를 통해 한달 전 날짜를 구한 후 Date 객체로 변환 -->
+								<c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
 								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
 								
-								<c:url var="searchWeekUrl" value="bolistdate.do">
+								<c:url var="searchWeekUrl" value="cllistdate.do">
 									<c:param name="begin" value="${ weekago }" />
 									<c:param name="end" value="${ today }" />
 								</c:url>
 								
-								<c:url var="searchMonthUrl" value="bolistdate.do">
+								<c:url var="searchMonthUrl" value="cllistdate.do">
 									<c:param name="begin" value="${ monthago }" />
 									<c:param name="end" value="${ today }" />
 								</c:url>

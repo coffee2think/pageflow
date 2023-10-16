@@ -237,13 +237,7 @@ public class SalesController {
 		
 		if(list != null && list.size() > 0) {
 			for(Sales ss : list) {
-				BookForSales book = salesService.selectBook(ss.getBookId());
-				BookStore bookStore = salesService.selectBookStore(ss.getClientId());
-				
-				ss.setBookName(book.getBookName());
-				ss.setBookPrice(book.getBookPrice());
 				ss.calcTotalPrice();
-				ss.setBookStoreName(bookStore.getClientName());
 			}
 	
 			model.addAttribute("list", list);
@@ -295,15 +289,13 @@ public class SalesController {
 	
 	// 거래처 정보 삭제 요청 처리
 	@RequestMapping(value="bodelete.do", method=RequestMethod.POST)
-	public String bookOrderDeleteMethod(@RequestParam("tradeIDs") String[] tradeIDs, Model model) {
-		logger.info("bodelete.do : " + tradeIDs);
+	public String bookOrderDeleteMethod(@RequestParam("IDs") int[] orderIDs, Model model) {
+		logger.info("bodelete.do : " + orderIDs);
 		
-		if(tradeIDs != null) {
-			for(String tradeId : tradeIDs) {
-				if(salesService.deleteBookOrder(Integer.parseInt(tradeId)) == 0) {
-					model.addAttribute("message", tradeId + "번 주문 정보 삭제 실패!");
-					return "common/error";
-				}
+		for(int orderId : orderIDs) {
+			if(salesService.deleteBookOrder(orderId) == 0) {
+				model.addAttribute("message", orderId + "번 주문 정보 삭제 실패!");
+				return "common/error";
 			}
 		}
 		

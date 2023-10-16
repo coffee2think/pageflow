@@ -10,180 +10,24 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
 <script>
     const NOWPAGE = 5;
     const SUBPAGE = 1;
     const LNKPAGE = 1;
     
+    // 수량 변경 시 총액 계산
     $(function() {
-    	const searchType = '${ searchType }';
-    	const selectBox = $('#search_type');
-    	const len = selectBox.options.length;
-    	
-    	for(i = 0; i < len; i++) {
-    		if(selectBox.options[i].value == searchType){
-    			selectBox.options[i].selected = true;
-    	    }
-    	}
-    }); // document ready
-    
- 	// 수정 버튼 클릭 시 수정 가능 상태로 변경
-    function onUpdate(tradeId) {
-    	// 행 버튼 보이기/숨기기 상태 변경
-    	$('#completeBtn_' + tradeId).show();
-    	$('#cancelBtn_' + tradeId).show();
-    	$('#updateBtn_' + tradeId).hide();
-    	
-    	// 정보 임시 보관
-    	var currentRow = $('#updateBtn_' + tradeId).parent().parent();
-    	
-    	currentRow.children('td').each(function(index) {
-    		if(index <= 1 || index >= 13) {
-    			return; // 체크박스와 수정버튼 열의 정보는 건너뜀
-    		}
-    		
-    		console.log(index);
-    		console.log($(this).find('input').val());
+    	$('#table_list').find('input[name=orderQuantity]').each(function() {
+    		$(this).change(function() {
+    			var tr = $(this).parent().parent().parent();
+    			var bookPrice = tr.find('input[name=bookPrice]').val();
+    			var quantity = $(this).val();
+    			var totalPrice = tr.find('input[name=totalPrice]');
+    			totalPrice.val(bookPrice * quantity);
+    		});
     	});
-    	
-    	// 수정 중인 행의 스타일 변경
-    	$('#tr_' + tradeId).css('border', 'solid 3px #1a70d3');
-    	
-    	// class=changeable인 input 태그 값 변경 가능하도록 변경
-    	$('#tr_' + tradeId + ' .changeable').attr('readonly', false);
-    }
-    
-    // 취소 버튼 클릭 시 수정 가능 상태로 변경
-    function cancelUpdate(tradeId) {
-    	// 같은 주문번호의 행들을 모두 선택
-    	
-    	// 원래 정보로 되돌리기(reset)
-    	
-    	
-    	// 수정 취소한 행의 스타일 원래대로 설정
-    	$('#tr_' + tradeId).css('border', 'none');
-    	
-    	// 행 버튼 보이기/숨기기 상태 변경
-    	$('#completeBtn_' + tradeId).hide();
-    	$('#cancelBtn_' + tradeId).hide();
-    	$('#updateBtn_' + tradeId).show();
-    	
-    	// 행의 모든 셀 readonly
-    	$('#tr_' + tradeId + ' .changeable').attr('readonly', true);
-    }
-    
-    function submitUpdate(tradeId) {
-    	var currentRow = $('#updateBtn_' + tradeId).parent().parent();
-    	var json = {};
-    	
-    	currentRow.find('input').each(function(index) {
-    		if(index == 0 || index >= 13){
-    	        return;
-    	    }
-    		
-    		// 유효성 검사
-    		// endDate가 비었을 경우 json에 담지 않음
-    		if(index == 12 && $(this).val() == '') {
-    	        return;
-    	    }
-
-    		// input 태그을 이용하여 name:value로 json에 담기
-    	    json[$(this).attr('name')] = $(this).val();
-    	});
-    	
-    	// ajax로 update 요청 보내기
-    	$.ajax({
-    		url: "boupdate.do",
-    		type: "post",
-    		data: json,
-    		success: function(data){
-    			console.log("success : " + data);
-    			if(data == "success") {
-    				alert(tradeId + " 주문 정보 수정 성공");
-    			} else {
-    				alert("주문 정보 수정 실패");
-    			}
-    			
-    			// 행 버튼 보이기/숨기기 상태 변경
-    	    	$('#completeBtn_' + tradeId).hide();
-    	    	$('#cancelBtn_' + tradeId).hide();
-    	    	$('#updateBtn_' + tradeId).show();
-    	    	
-    	    	// 수정 취소한 행의 스타일 원래대로 설정
-    	    	$('#tr_' + tradeId).css('border', 'none');
-    	    	
-    	    	// 행 버튼 보이기/숨기기 상태 변경
-    	    	$('#completeBtn_' + tradeId).hide();
-    	    	$('#cancelBtn_' + tradeId).hide();
-    	    	$('#updateBtn_' + tradeId).show();
-    	    	
-    	    	// 행의 모든 셀 readonly
-    	    	$('#tr_' + tradeId + ' .changeable').attr('readonly', true);
-    			
-    		},
-    		error: function(jqXHR, textStatus, errorThrown){
-    			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
-    		}
-    	});
-    }
-    
-    function deleteCheckedRow() {
-    	// form 태그에 담아서 post 전송
-    	const form = document.createElement('form'); // form 태그 생성
-    	const url = 'bodelete.do';
-        form.setAttribute('method', 'post'); // 전송 방식 결정 (get or post)
-        form.setAttribute('action', url); // 전송할 url 지정
-    	
-    	$('#table_list').find('input[type="checkbox"]:checked').each(function() {
-    	    const tradeId = $(this).val();
-    		
-    	    // input 태그 생성하여 데이터 담기
-    	    const data = document.createElement('input');
-        	data.setAttribute('type', 'hidden');
-            data.setAttribute('name', 'tradeIDs'); // 데이터의 name
-            data.setAttribute('value', tradeId); // 데이터의 value
-            
-         	// form 태그에 input 태그 넣기 
-            form.appendChild(data);
-    	});
-    	
-        // body에 form 태그 추가하고 submit 전송
-        document.body.appendChild(form);
-        form.submit();
-    }
-    
-    function search() {
-    	var search_type = $('#search_type').val();
-    	var keyword = $('input[type=search]').val();
-    	
-    	if(keyword == '') {
-    		alert('키워드를 입력해주세요.');
-    		return false;
-    	}
-    	
-    	// form 태그에 담아서 post 전송
-    	const form = document.createElement('form'); // form 태그 생성
-    	const url = 'bolistkw.do';
-        form.setAttribute('method', 'post'); // 전송 방식 결정 (get or post)
-        form.setAttribute('action', url); // 전송할 url 지정
-    	
-        const data1 = document.createElement('input');
-        data1.setAttribute('type', 'hidden');
-        data1.setAttribute('name', 'searchType'); // 데이터의 name
-        data1.setAttribute('value', search_type); // 데이터의 value
-        form.appendChild(data1);
-        
-        const data2 = document.createElement('input');
-        data2.setAttribute('type', 'hidden');
-        data2.setAttribute('name', 'keyword'); // 데이터의 name
-        data2.setAttribute('value', keyword); // 데이터의 value
-        form.appendChild(data2);
-        
-        // body에 form 태그 추가하고 submit 전송
-        document.body.appendChild(form);
-        form.submit();
-    } 
-    
+    }); 
 </script>
 <title></title>
 </head>
@@ -247,7 +91,7 @@
 
                                 <div class="search-box">
                                     <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
-                                    <button class="search-btn" onclick="search(); return false;">
+                                    <button class="search-btn" onclick="search('bolistkw.do'); return false;">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
                                 </div>
@@ -275,9 +119,13 @@
 								
 								<c:set var="today_" value="<%= new java.util.Date() %>" />
 								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
-								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
+								
+								<!-- LocalDate 객체를 통해 일주일 전 날짜를 구한 후 Date 객체로 변환 -->
+								<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
 								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
-								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
+								
+								<!-- LocalDate 객체를 통해 한달 전 날짜를 구한 후 Date 객체로 변환 -->
+								<c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
 								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
 								
 								<c:url var="searchWeekUrl" value="bolistdate.do">
@@ -329,64 +177,64 @@
                                 </tr>
                                 <c:if test="${ !empty list }">
 	                                <c:forEach items="${ list }" var="bookOrder" >
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ bookOrder.tradeId }">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ bookOrder.orderId }">
 		                                    <td class="td-50">
-		                                        <input type="checkbox" name="check" value="" >
+		                                        <input type="checkbox" name="check" value="${ bookOrder.orderId }">
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="tradeId" id="tradeId-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.tradeId }" readonly>
+		                                            <input type="input" name="orderId" class="contents-input noline" value="${ bookOrder.orderId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookId" id="bookId-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.bookId }" readonly>
+		                                            <input type="input" name="bookId" class="contents-input noline" value="${ bookOrder.bookId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-200">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookName" id="bookName-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.bookName }" readonly>
+		                                            <input type="input" name="bookName" class="contents-input noline" value="${ bookOrder.bookName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="location" id="location-${ bookOrder.tradeId }" class="contents-input noline" value="강남" readonly>
+		                                            <input type="input" name="location" class="contents-input noline" value="강남" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookStoreName" id="bookStoreName-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.bookStoreName }" readonly>
+		                                            <input type="input" name="bookStoreName" class="contents-input noline" value="${ bookOrder.bookStoreName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookPrice" id="bookPrice-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.bookPrice }" readonly>
+		                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ bookOrder.bookPrice }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="orderQuantity" id="orderQuantity-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.orderQuantity }" readonly>
+		                                            <input type="input" name="orderQuantity" class="contents-input noline changeable" value="${ bookOrder.orderQuantity }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="totalPrice" id="totalPrice-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.totalPrice }" readonly>
+		                                            <input type="input" name="totalPrice" class="contents-input noline" value="${ bookOrder.totalPrice }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="state" id="state-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.state }" readonly>
+		                                            <input type="input" name="state" class="contents-input noline changeable" value="${ bookOrder.state }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="orderDate" id="orderDate-${ bookOrder.tradeId }" class="contents-input noline" value="${ bookOrder.orderDate }" readonly>
+		                                            <input type="input" name="orderDate" class="contents-input noline" value="${ bookOrder.orderDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ bookOrder.tradeId }" onclick="onUpdate(${ bookOrder.tradeId }); return false;">
-		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ bookOrder.tradeId }"  onclick="submitUpdate(${ bookOrder.tradeId }); return false;" style="display: none;">
-		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ bookOrder.tradeId }"  onclick="cancelUpdate(${ bookOrder.tradeId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ bookOrder.orderId }" onclick="onUpdate(${ bookOrder.orderId }); return false;">
+		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ bookOrder.orderId }"  onclick="submitUpdate(${ bookOrder.orderId }, 'boupdate.do'); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ bookOrder.orderId }"  onclick="cancelUpdate(${ bookOrder.orderId }); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
 	                                </c:forEach>
@@ -401,7 +249,7 @@
 
                 
                 <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제">
+                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('bodelete.do'); return false;">
                 </div>
                 
             </div>

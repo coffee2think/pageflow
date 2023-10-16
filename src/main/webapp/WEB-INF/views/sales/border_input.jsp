@@ -230,7 +230,7 @@
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
                                                 <!-- <input type="hidden" name="clientId" value=""> -->
-                                                <input type="hidden" name="clientId" value="1"> <!-- 하드코딩(팝업창에서 정보를 가져와야함) -->
+                                                <input type="hidden" name="clientId" value="10001"> <!-- 하드코딩(팝업창에서 정보를 가져와야함) -->
                                                 <input type="input" name="clientName" class="contents-input" value="">
                                             </div>
                                         </td>
