@@ -2,6 +2,8 @@ package com.erl.pageflow.contract.model.vo;
 
 import java.sql.Date;
 
+import com.erl.pageflow.writer.model.vo.Writer;
+
 public class Contract implements java.io.Serializable {
 	private static final long serialVersionUID = 3730106916488432512L;
 	
@@ -13,12 +15,14 @@ public class Contract implements java.io.Serializable {
 	private java.sql.Date contrDate;
 	private String contrDoc;
 	private String contrState;
+	private String writerName;
+	private String category;
 	
 	public Contract() {
 		super();
 	}
-
-	public Contract(int contrId, int empId, int writerId, String bookName, String empName, String contrState) {
+	
+	public Contract(int contrId, int empId, int writerId, String bookName, String empName, String contrState, String writerName, String category) {
 		super();
 		this.contrId = contrId;
 		this.empId = empId;
@@ -26,10 +30,12 @@ public class Contract implements java.io.Serializable {
 		this.bookName = bookName;
 		this.empName = empName;
 		this.contrState = contrState;
+		this.writerName = writerName;
+		this.category = category;
 	}
 
 	public Contract(int contrId, int empId, int writerId, String bookName, String empName, Date contrDate,
-			String contrDoc, String contrState) {
+			String contrDoc, String contrState, String writerName, String category) {
 		super();
 		this.contrId = contrId;
 		this.empId = empId;
@@ -39,6 +45,8 @@ public class Contract implements java.io.Serializable {
 		this.contrDate = contrDate;
 		this.contrDoc = contrDoc;
 		this.contrState = contrState;
+		this.writerName = writerName;
+		this.category = category;
 	}
 
 	public int getContrId() {
@@ -108,12 +116,28 @@ public class Contract implements java.io.Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-
+	
+	public String getCategory() {
+		return category;
+	}
+	
+	public void setCategory(String category) {
+		this.category = category;
+	}
+	
+	public String getWriterName() {
+		return writerName;
+	}
+	
+	public void setWriterName(String writerName) {
+		this.writerName = writerName;
+	}
+	
 	@Override
 	public String toString() {
 		return "Contract [contrId=" + contrId + ", empId=" + empId + ", writerId=" + writerId + ", bookName=" + bookName
 				+ ", empName=" + empName + ", contrDate=" + contrDate + ", contrDoc=" + contrDoc + ", contrState="
-				+ contrState + "]";
+				+ contrState + ", category=" + category + ", writerName=" + writerName + "]";
 	}
 	
 }

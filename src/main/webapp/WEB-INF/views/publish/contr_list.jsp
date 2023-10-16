@@ -89,9 +89,8 @@
                                     <label for="sel_code"></label>
                                     <select name="code" id="sel_code">
                                         <option value="all">진행상태</option>
-                                        <option value="">주문</option>
                                         <option value="">진행중</option>
-                                        <option value="">완료</option>
+                                        <option value="">계약완료</option>
                                     </select>
                                 </div>
                                 
@@ -130,59 +129,74 @@
                             <table class="contents-table">
                                 <tr>
                                     <th>체크</th>
-                                    <th>도서코드</th>
+                                    <th>계약번호</th>
                                     <th>도서명</th>
                                     <th>카테고리</th>
-                                    <th>저/역자</th>
-                                    <th>담당자</th>
+                                    <th>작가명</th>
+                                    <th>담당직원번호</th>
+                                    <th>담당직원</th>
                                     <th>진행상태</th>
-                                    <th>주문일시</th>
+                                    <th>계약일자</th>
+                                    <th>계약서url</th>
                                     <th>수정</th>
                                 </tr>
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                    <td class="td-50">
-                                        <input type="checkbox" name="check" value="" >
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="code" class="contents-input noline" value="10100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-250">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="no" class="contents-input noline" value="데이터베이스 개론과 실습" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="category" class="contents-input noline" value="IT" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="author" class="contents-input noline" value="전성훤" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="manager" class="contents-input noline" value="나정운" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="state" class="contents-input noline" value="진행중" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date" class="contents-input noline" value="2015.03.05" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-                                    </td>
-                                </tr>
-
+                                <c:if test="${ !empty contractList }">
+	                                <c:forEach items="${ contractList }" var="contract">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                    <td class="td-50">
+		                                        <input type="checkbox" name="check" value="" >
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="code" class="contents-input noline" value="${ contract.contrId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-250">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="name" class="contents-input noline" value="${ contract.bookName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="category" class="contents-input noline" value="${ contract.category }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="author" class="contents-input noline" value="${ contract.writerName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="manager" class="contents-input noline" value="${ contract.empId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name=manager class="contents-input noline" value="${ contract.empName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="state" class="contents-input noline" value="${ contract.contrState }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="date" class="contents-input noline" value="${ contract.contrDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="doc" class="contents-input noline" value="${ contract.contrDoc }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+		                                    </td>
+		                                </tr>
+    								</c:forEach>
+                                </c:if>
                             </table>
                         </div>
                     </div>
