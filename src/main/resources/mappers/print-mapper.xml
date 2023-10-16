@@ -20,6 +20,23 @@
 		<result property="endDate" column="END_DATE"/>
 		<result property="pubDate" column="PUB_DATE"/>
 	</resultMap>
+	
+	<resultMap type="PrintCalc" id="resultPrintCalc">
+		<result property="orderId" column="ORDER_ID"/>
+		<result property="bookId" column="BOOK_ID"/>
+		<result property="printId" column="PRINT_ID"/>
+		<result property="empId" column="EMP_ID"/>
+		<result property="empName" column="EMP_NAME"/>
+		<result property="classify" column="CLASSIFY"/>
+		<result property="unit" column="UNIT"/>
+		<result property="quantity" column="QUANTITY"/>
+		<result property="price" column="PRICE"/>
+		<result property="amount" column="AMOUNT"/>
+		<result property="state" column="STATE"/>
+		<result property="orderDate" column="ORDER_DATE"/>
+		<result property="endDate" column="END_DATE"/>
+		<result property="pubDate" column="PUB_DATE"/>
+	</resultMap>
 
 	<resultMap type="PrintOffice" id="resultPrintOffice">
 		<result property="clientId" column="CLIENT_ID"/>
@@ -63,6 +80,16 @@
       ]]>
    </select>
    
+   <select id="selectPrintCalcList" parameterType="Paging" resultMap="resultPrintCalc">
+      <![CDATA[
+      select * 
+      from (select rownum rnum, sub.*
+            from (select * from print_order 
+                order by ORDER_DATE desc) sub) 
+      where rnum >= #{ startRow } and rnum <= #{ endRow }
+      ]]>
+   </select>
+   
    <select id="selectPrintOrderByDate" parameterType="Search" resultMap="resultPrintOrder">
       <![CDATA[
       select * 
@@ -74,6 +101,16 @@
       ]]>
    </select>
 	
+	<select id="selectPrintCalcByDate" parameterType="Search" resultMap="resultPrintCalc">
+      <![CDATA[
+      select * 
+      from (select rownum rnum, sub.*
+            from (select * from print_order
+		where order_date between #{ begin } and #{ end } + 1 - 1/86400
+		order by order_date desc) sub) 
+      where rnum >= #{ startRow } and rnum <= #{ endRow }
+      ]]>
+   </select>
 	<!-- <select id="selectClientList" parameterType="Paging" resultMap="resultPrintOffice">
       <![CDATA[
       select * 
@@ -85,6 +122,10 @@
    </select> -->
 	
 	<select id="selectPrintOrderListCount" resultType="_int" >
+		select count(*) from print_order
+	</select>
+	
+	<select id="selectPrintCalcListCount" resultType="_int" >
 		select count(*) from print_order
 	</select>
 	

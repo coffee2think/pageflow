@@ -7,11 +7,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
-<link rel="stylesheet" type="text/css" href="/pageflow/resources/css/main.css">
-<script type="text/javascript" src="/pageflow/resources/js/lib/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 2;
-    const SUBPAGE = 3;
+    const SUBPAGE = 2;
     const LNKPAGE = 1;
 </script>
 <title></title>
@@ -48,7 +48,7 @@
                 <!--main-header-bar-->
                 <div class="main-header-bar">
                     <div class="main-title-box">
-                        <img src="/pageflow/resources/images/header-icon.png">
+                        <img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
                         <span class="main-title"></span>
                     </div>
                     <button class="header-left-btn">
@@ -80,7 +80,7 @@
 
                                 <div class="search-box">
                                     <button class="search-btn">
-                                        <img class="search-image" src="/pageflow/resources/images/search_btn.png">
+                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
                                     <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                                 </div>
@@ -111,11 +111,28 @@
                                     마감일
                                 </div>
 
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
+                                <input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
+                                <input type="date" class="select-date select-date-second" name="end" value=${ end }>
 
-                                <input type="button" name="week" class="select-pan-btn" value="일주일">
-                                <input type="button" name="month" class="select-pan-btn" value="한달">
+								<c:set var="today_" value="<%= new java.util.Date() %>" />
+								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+								
+								<c:url var="searchWeekUrl" value="polistdate.do">
+									<c:param name="begin" value="${ weekago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+								
+								<c:url var="searchMonthUrl" value="polistdate.do">
+									<c:param name="begin" value="${ monthago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+
+                                <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
                             </div>
                             
                         </form>
@@ -126,8 +143,8 @@
                         </div>
 
                         <button class="search-visible-btn" id="search_visible_btn">
-                            <img class="search-close" src="/pageflow/resources/images/cursor_1.png">
-                            <img class="search-open" src="/pageflow/resources/images/cursor_2.png">
+                            <img class="search-close" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
+                            <img class="search-open" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
                         </button>
 
                     </div>
@@ -151,65 +168,68 @@
                                     <th>상태</th>
                                     <th>수정</th>
                                 </tr>
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                    <td class="td-50">
-                                        <input type="checkbox" name="check" value="" >
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="code" class="contents-input noline" value="AK-1012" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="name" class="contents-input noline" value="거성인쇄" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_end" class="contents-input noline" value="2015.03.05" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="book_code" class="contents-input noline" value="10100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-250">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="book_name" class="contents-input noline" value="혼자 공부하는 자바" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="phone" class="contents-input noline" value="EA" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_start" class="contents-input noline" value="100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_end" class="contents-input noline" value="18000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-120">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_end" class="contents-input noline" value="1800000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="state" class="contents-input noline" value="지급" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-                                    </td>
-                                </tr>
-
+                                <c:if test="${ !empty list }">
+	                                <c:forEach items="${ list }" var="printCalc" >
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                    <td class="td-50">
+		                                        <input type="checkbox" name="check" value="" >
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="printId" class="contents-input noline" value="${ printCalc.printId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="clientName" class="contents-input noline" value="${ printCalc.clientName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="endDate" class="contents-input noline" value="${ printCalc.endDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookId" class="contents-input noline" value="${ printCalc.bookId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-250">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookName" class="contents-input noline" value="${ printCalc.bookName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="unit" class="contents-input noline" value="${ printCalc.unit }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="quantity" class="contents-input noline" value="${ printCalc.quantity }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="price" class="contents-input noline" value="${ printCalc.price }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="amount" class="contents-input noline" value="${ printCalc.amount }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="state" class="contents-input noline" value="${ printCalc.state }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+		                                    </td>
+		                                </tr>
+	                                </c:forEach>
+                                </c:if>
                             </table>
                         </div>
                     </div>

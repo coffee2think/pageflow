@@ -37,6 +37,10 @@
 		<typeAlias type="com.erl.pageflow.refund.model.vo.Refund" alias="Refund" />
 		<typeAlias type="com.erl.pageflow.store.model.vo.Store" alias="Store"/>
 		
+		<!-- 인쇄관리 -->
+		<typeAlias type="com.erl.pageflow.printOrder.model.vo.PrintOrder" alias="PrintOrder" />
+		<typeAlias type="com.erl.pageflow.printCalc.model.vo.PrintCalc" alias="PrintCalc" />
+		
 	</typeAliases>
 	
 	<mappers>
@@ -47,6 +51,7 @@
 		<mapper resource="mappers/inventory-mapper.xml" />
 		<mapper resource="mappers/refund-mapper.xml" />
 		<mapper resource="mappers/store_mapper.xml" />
+		<mapper resource="mappers/print-mapper.xml" />
 	</mappers>
 </configuration>
 
