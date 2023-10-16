@@ -15,6 +15,7 @@
     const LNKPAGE = 1;
 </script>
 <title></title>
+
 </head>
 <body>
 	<div id="container">
@@ -67,7 +68,7 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">도서코드</option>
+                                            <option value="bookId">도서코드</option>
                                             <option value="">도서명</option>
                                             <option value="">입고부수</option>
                                             <option value="">정가</option>
@@ -100,13 +101,31 @@
                             <div class="select-box">
                                 <div class="select-pan-nemo">
                                     입고일자
-                                </div>
-
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
-
-                                <input type="button" name="week" class="select-pan-btn" value="일주일">
-                                <input type="button" name="month" class="select-pan-btn" value="한달">
+                                </div>                       
+                                <input type="date" class="select-date select-date-first" name="begin" value="${ begin }">
+                                <input type="date" class="select-date select-date-second" name="end"  value="${ end }">
+                                
+                                <c:set var="today_" value="<%= new java.util.Date() %>" />
+                                <fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+     
+                                <input type="button" name="week" class="select-pan-btn" value="기간검색">
+                                
+                                <c:url var="searchWeekUrl" value="storedate.do">
+                                	<c:param name="begin" value="${ weekago }" />
+                                	<c:param name="end" value="${ today }" />
+                                </c:url>
+                                
+                                <c:url var="searchMonthUrl" value="storedate.do">
+                                	<c:param name="begin" value="${ monthago }" />
+                                	<c:param name="end" value="${ today }" />
+                                </c:url>
+                                
+                                <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
                             </div>
 
                         </form>
@@ -219,7 +238,7 @@
 
                 
                 <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제">
+                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteStore(); return false;">
                 </div>
                 
             </div>
