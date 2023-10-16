@@ -12,6 +12,9 @@
 		<typeAlias type="com.erl.pageflow.common.Search" alias="Search" />
 		<typeAlias type="com.erl.pageflow.book.model.vo.Book" alias="Book" />
 		
+		<!-- 공지사항 -->
+		<typeAlias type="com.erl.pageflow.notice.model.vo.Notice" alias="Notice" />
+		
 		<!-- 업무 게시판 게시글 -->
 		<typeAlias type="com.erl.pageflow.board.model.vo.Board" alias="Board" />
 		<typeAlias type="com.erl.pageflow.common.Paging" alias="Paging" />
@@ -48,6 +51,7 @@
 		<!-- 존재하지 않는 파일을 등록하면, 톰켓 구동 안 됨 -->
 		<mapper resource="mappers/board-mapper.xml" />
 		<mapper resource="mappers/reply-mapper.xml" />
+		<mapper resource="mappers/notice-mapper.xml" />
 		<mapper resource="mappers/sales-mapper.xml" />
 		<mapper resource="mappers/inventory-mapper.xml" />
 		<mapper resource="mappers/refund-mapper.xml" />
