@@ -11,7 +11,7 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 2;
-    const SUBPAGE = 2;
+    const SUBPAGE = 1;
     const LNKPAGE = 1;
 </script>
 <title></title>
@@ -110,12 +110,29 @@
                                 <div class="select-pan-nemo">
                                     발주일
                                 </div>
+                                
+                                <input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
+                                <input type="date" class="select-date select-date-second" name="end" value=${ end }>
+                                
+                                <c:set var="today_" value="<%= new java.util.Date() %>" />
+								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+								
+								<c:url var="searchWeekUrl" value="polistdate.do">
+									<c:param name="begin" value="${ weekago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+								
+								<c:url var="searchMonthUrl" value="polistdate.do">
+									<c:param name="begin" value="${ monthago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
 
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
-
-                                <input type="button" name="week" class="select-pan-btn" value="일주일">
-                                <input type="button" name="month" class="select-pan-btn" value="한달">
+                                <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
                             </div>
 
                             <div class="select-box">
@@ -123,8 +140,25 @@
                                     마감일
                                 </div>
 
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
+                                <input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
+                                <input type="date" class="select-date select-date-second" name="end" value=${ end }>
+                                
+                                <c:set var="today_" value="<%= new java.util.Date() %>" />
+								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+								
+								<c:url var="searchWeekUrl" value="polistdate.do">
+									<c:param name="begin" value="${ weekago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+								
+								<c:url var="searchMonthUrl" value="polistdate.do">
+									<c:param name="begin" value="${ monthago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
 
                                 <input type="button" name="week" class="select-pan-btn" value="일주일">
                                 <input type="button" name="month" class="select-pan-btn" value="한달">
@@ -135,8 +169,25 @@
                                     출간일
                                 </div>
 
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
+                                <input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
+                                <input type="date" class="select-date select-date-second" name="end" value=${ end }>
+                                
+                                <c:set var="today_" value="<%= new java.util.Date() %>" />
+								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+								
+								<c:url var="searchWeekUrl" value="polistdate.do">
+									<c:param name="begin" value="${ weekago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+								
+								<c:url var="searchMonthUrl" value="polistdate.do">
+									<c:param name="begin" value="${ monthago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
 
                                 <input type="button" name="week" class="select-pan-btn" value="일주일">
                                 <input type="button" name="month" class="select-pan-btn" value="한달">
