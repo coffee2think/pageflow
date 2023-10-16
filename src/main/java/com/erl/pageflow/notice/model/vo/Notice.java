@@ -5,21 +5,58 @@ import java.util.Date;
 public class Notice {
 	
 	private int noticeId;
-	private int empid;
-	private String noticeContent;
+	private int empId;
+	private String empName;
+	private String noticeTitle;
+	private String noticeDetail;
 	private Date noticeCreateDate;
 	private Date noticeModifyDate;
 	private Date noticeDeleteDate;
 	private String classify;
 	private String importance;
+	private int noticeReadCount;
 	private String noticeOriginalFileName;
 	private String noticeRenameFileName;
-	private int noticeReadCount;
 	
 	public Notice() {
-		
+		super();
 	}
 
+	public Notice(int noticeId, int empId, String empName, String noticeTitle, String noticeDetail,
+			Date noticeCreateDate, Date noticeModifyDate, Date noticeDeleteDate, String classify, String importance,
+			int noticeReadCount, String noticeOriginalFileName, String noticeRenameFileName) {
+		super();
+		this.noticeId = noticeId;
+		this.empId = empId;
+		this.empName = empName;
+		this.noticeTitle = noticeTitle;
+		this.noticeDetail = noticeDetail;
+		this.noticeCreateDate = noticeCreateDate;
+		this.noticeModifyDate = noticeModifyDate;
+		this.noticeDeleteDate = noticeDeleteDate;
+		this.classify = classify;
+		this.importance = importance;
+		this.noticeReadCount = noticeReadCount;
+		this.noticeOriginalFileName = noticeOriginalFileName;
+		this.noticeRenameFileName = noticeRenameFileName;
+	}
+	
+	public int getEmpId() {
+		return empId;
+	}
+
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}
+	
+	public String getEmpName() {
+		return empName;
+	}
+
+	public void setEmpName(String empName) {
+		this.empName = empName;
+	}
+	
 	public int getNoticeId() {
 		return noticeId;
 	}
@@ -29,19 +66,19 @@ public class Notice {
 	}
 
 	public int getEmpid() {
-		return empid;
+		return empId;
 	}
 
 	public void setEmpid(int empid) {
-		this.empid = empid;
+		this.empId = empid;
 	}
 
-	public String getNoticeContent() {
-		return noticeContent;
+	public String getNoticeDetail() {
+		return noticeDetail;
 	}
 
-	public void setNoticeContent(String noticeContent) {
-		this.noticeContent = noticeContent;
+	public void setNoticeDetail(String noticeDetail) {
+		this.noticeDetail = noticeDetail;
 	}
 
 	public Date getNoticeCreateDate() {
@@ -108,17 +145,22 @@ public class Notice {
 		this.noticeReadCount = noticeReadCount;
 	}
 
+	public String getNoticeTitle() {
+		return noticeTitle;
+	}
+
+	public void setNoticeTitle(String noticeTitle) {
+		this.noticeTitle = noticeTitle;
+	}
+
 	@Override
 	public String toString() {
-		return "Notice [noticeId=" + noticeId + ", empid=" + empid + ", noticeContent=" + noticeContent
-				+ ", noticeCreateDate=" + noticeCreateDate + ", noticeModifyDate=" + noticeModifyDate
-				+ ", noticeDeleteDate=" + noticeDeleteDate + ", classify=" + classify + ", importance=" + importance
+		return "Notice [noticeId=" + noticeId + ", empId=" + empId + ", empName=" + empName + ", noticeTitle="
+				+ noticeTitle + ", noticeDetail=" + noticeDetail + ", noticeCreateDate=" + noticeCreateDate
+				+ ", noticeModifyDate=" + noticeModifyDate + ", noticeDeleteDate=" + noticeDeleteDate + ", classify="
+				+ classify + ", importance=" + importance + ", noticeReadCount=" + noticeReadCount
 				+ ", noticeOriginalFileName=" + noticeOriginalFileName + ", noticeRenameFileName="
-				+ noticeRenameFileName + ", noticeReadCount=" + noticeReadCount + "]";
+				+ noticeRenameFileName + "]";
 	}
-	
-	
-	
-	
 	
 }

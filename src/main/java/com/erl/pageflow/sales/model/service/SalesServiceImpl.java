@@ -90,6 +90,34 @@ public class SalesServiceImpl implements SalesService {
 		return salesDao.deleteClient(clientId);
 	}
 
-	
+	@Override
+	public int selectBookOrderCountByBook(Search search) {
+		return salesDao.selectBookOrderCountByBook(search);
+	}
+
+	@Override
+	public int selectBookOrderCountByBookStore(Search search) {
+		return salesDao.selectBookOrderCountByBookStore(search);
+	}
+
+	@Override
+	public int selectBookOrderCountByLocation(Search search) {
+		return salesDao.selectBookOrderCountByLocation(search);
+	}
+
+	@Override
+	public ArrayList<BookOrder> selectBookOrderByBook(Search search) {
+		return salesDao.selectBookOrderByBook(search);
+	}
+
+	@Override
+	public ArrayList<BookOrder> selectBookOrderByBookStore(Search search) {
+		return salesDao.selectBookOrderByBookStore(search);
+	}
+
+	@Override
+	public ArrayList<BookOrder> selectBookOrderByLocation(Search search) {
+		return salesDao.selectBookOrderByLocation(search);
+	}
 
 }

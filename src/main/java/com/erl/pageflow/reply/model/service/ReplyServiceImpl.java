@@ -50,6 +50,17 @@ public class ReplyServiceImpl implements ReplyService {
 	public ReplyUpload selectReplyListFile(int replyId) {
 		return replyDao.selectReplyListFile(replyId);
 	}
+
+	@Override
+	public int selectReplyMaxCount() {
+		return replyDao.selectReplyMaxCount();
+	}
+
+	@Override
+	public int insertReply2(Reply reply) {
+		return replyDao.insertReply2(reply);
+	}
+	
 	
 	
 }

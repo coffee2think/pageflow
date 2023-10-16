@@ -23,6 +23,23 @@ public class Book implements Serializable {
 	public Book() {
 		super();
 	}
+	
+	public Book(int bookId, int writerId, String bookName, String writerName, int bookPriceS, int bookPrice,
+			String category, String isbn, String bookState, String engraving, Date pubDate, Date regDate) {
+		super();
+		this.bookId = bookId;
+		this.writerId = writerId;
+		this.bookName = bookName;
+		this.writerName = writerName;
+		this.bookPriceS = bookPriceS;
+		this.bookPrice = bookPrice;
+		this.category = category;
+		this.isbn = isbn;
+		this.bookState = bookState;
+		this.engraving = engraving;
+		this.pubDate = pubDate;
+		this.regDate = regDate;
+	}
 
 	public Book(int bookId, int writerId, String bookName, String writerName, int bookPriceS, int bookPriceR,
 			int bookPrice, String category, String isbn, String bookState, String engraving, Date pubDate,

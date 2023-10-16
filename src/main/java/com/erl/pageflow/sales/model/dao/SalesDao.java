@@ -79,9 +79,31 @@ public class SalesDao {
 		return sqlSessionTemplate.delete("salesMapper.deleteClient", clientId);
 	}
 
-	
+	public int selectBookOrderCountByBook(Search search) {
+		return sqlSessionTemplate.selectOne("salesMapper.selectBookOrderCountByBook", search);
+	}
 
-	
+	public int selectBookOrderCountByBookStore(Search search) {
+		return sqlSessionTemplate.selectOne("salesMapper.selectBookOrderCountByBookStore", search);
+	}
 
+	public int selectBookOrderCountByLocation(Search search) {
+		return sqlSessionTemplate.selectOne("salesMapper.selectBookOrderCountByLocation", search);
+	}
+
+	public ArrayList<BookOrder> selectBookOrderByBook(Search search) {
+		List<BookOrder> list = sqlSessionTemplate.selectList("salesMapper.selectBookOrderByBook", search);
+		return (ArrayList<BookOrder>) list;
+	}
+
+	public ArrayList<BookOrder> selectBookOrderByBookStore(Search search) {
+		List<BookOrder> list = sqlSessionTemplate.selectList("salesMapper.selectBookOrderByBookStore", search);
+		return (ArrayList<BookOrder>) list;
+	}
+
+	public ArrayList<BookOrder> selectBookOrderByLocation(Search search) {
+		List<BookOrder> list = sqlSessionTemplate.selectList("salesMapper.selectBookOrderByLocation", search);
+		return (ArrayList<BookOrder>) list;
+	}
 	
 }

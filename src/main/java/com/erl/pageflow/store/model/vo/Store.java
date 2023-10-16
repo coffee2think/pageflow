@@ -18,13 +18,14 @@ public class Store implements java.io.Serializable {
 	private String bookName;
 	private int bookPrice;
 	private String clientName;
+	private int prevInvenId;
 
 	public Store() {
 		super();
 	}
 
 	public Store(int storeId, int bookId, int storageId, int empId, String empName, int storeNum, int storePrice,
-			Date storeDate, String classify, String bookName, int bookPrice, String clientName) {
+			Date storeDate, String classify, String bookName, int bookPrice, String clientName, int prevInvenId) {
 		super();
 		this.storeId = storeId;
 		this.bookId = bookId;
@@ -38,6 +39,15 @@ public class Store implements java.io.Serializable {
 		this.bookName = bookName;
 		this.bookPrice = bookPrice;
 		this.clientName = clientName;
+		this.prevInvenId = prevInvenId;
+	}
+
+	public int getPrevInvenId() {
+		return prevInvenId;
+	}
+
+	public void setPrevInvenId(int prevInvenId) {
+		this.prevInvenId = prevInvenId;
 	}
 
 	public String getClientName() {
@@ -144,7 +154,8 @@ public class Store implements java.io.Serializable {
 	public String toString() {
 		return "Store [storeId=" + storeId + ", bookId=" + bookId + ", storageId=" + storageId + ", empId=" + empId
 				+ ", empName=" + empName + ", storeNum=" + storeNum + ", storePrice=" + storePrice + ", storeDate="
-				+ storeDate + ", classify=" + classify + "]";
+				+ storeDate + ", classify=" + classify + ", bookName=" + bookName + ", bookPrice=" + bookPrice
+				+ ", clientName=" + clientName + ", prevInvenId=" + prevInvenId + "]";
 	}
 
 }
