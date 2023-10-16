@@ -13,7 +13,7 @@
 		<result property="contrDate" column="CONTR_DATE" />
 		<result property="contrDoc" column="CONTR_DOC" />
 		<result property="contrState" column="CONTR_STATE" />
-		<result property="category" column="CATEGORY" />
+		<result property="writerName" column="WRITER_NAME" />
 	</resultMap>
 	
 	<resultMap type="Writer" id="resultWriterJoin">

@@ -146,7 +146,7 @@
 		                                    <td class="td-50">
 		                                        <input type="checkbox" name="check" value="" >
 		                                    </td>
-		                                    <td class="td-100">
+		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
 		                                            <input type="input" name="code" class="contents-input noline" value="${ contract.contrId }" readonly>
 		                                        </div>
@@ -166,12 +166,12 @@
 		                                            <input type="input" name="author" class="contents-input noline" value="${ contract.writerName }" readonly>
 		                                        </div>
 		                                    </td>
-		                                    <td class="td-100">
+		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
 		                                            <input type="input" name="manager" class="contents-input noline" value="${ contract.empId }" readonly>
 		                                        </div>
 		                                    </td>
-		                                    <td class="td-100">
+		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
 		                                            <input type="input" name=manager class="contents-input noline" value="${ contract.empName }" readonly>
 		                                        </div>
