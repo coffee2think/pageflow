@@ -167,24 +167,6 @@
                                             </div>
                                         </td>
                                     </tr>
-
-                                    <!--합계-->
-                                    <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>합계</td>
-                                        <td>100</td>
-                                        <td>150000</td>
-                                        <td>12000</td>
-                                        <td>12000</td>
-                                    </tr>
-                                    <!--합계end-->
-
                                 </table>
                             </div>
                         </div>
