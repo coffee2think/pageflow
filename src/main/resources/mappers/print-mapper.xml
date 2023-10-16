@@ -21,7 +21,7 @@
 		<result property="pubDate" column="PUB_DATE"/>
 	</resultMap>
 
-	<resultMap type="Client" id="resultClient">
+	<resultMap type="PrintOffice" id="resultPrintOffice">
 		<result property="clientId" column="CLIENT_ID"/>
 		<result property="category" column="CATEGORY"/>
 		<result property="clientName" column="CLIENT_NAME"/>
@@ -52,21 +52,29 @@
 		<result property="regDate" column="REG_DATE" />
 	</resultMap>
 	
-	<select id="select">
-	
-	</select>
 	
 	<select id="selectPrintOrderList" parameterType="Paging" resultMap="resultPrintOrder">
       <![CDATA[
       select * 
       from (select rownum rnum, sub.*
             from (select * from print_order 
-                 ORDER_ID desc) sub) 
+                order by ORDER_DATE desc) sub) 
+      where rnum >= #{ startRow } and rnum <= #{ endRow }
+      ]]>
+   </select>
+   
+   <select id="selectPrintOrderByDate" parameterType="Search" resultMap="resultPrintOrder">
+      <![CDATA[
+      select * 
+      from (select rownum rnum, sub.*
+            from (select * from print_order
+		where order_date between #{ begin } and #{ end } + 1 - 1/86400
+		order by order_date desc) sub) 
       where rnum >= #{ startRow } and rnum <= #{ endRow }
       ]]>
    </select>
 	
-	<select id="selectClientList" parameterType="Paging" resultMap="resultClient">
+	<!-- <select id="selectClientList" parameterType="Paging" resultMap="resultPrintOffice">
       <![CDATA[
       select * 
       from (select rownum rnum, sub.*
@@ -74,10 +82,23 @@
                  CLIENT_ID desc) sub) 
       where rnum >= #{ startRow } and rnum <= #{ endRow }
       ]]>
-   </select>
+   </select> -->
 	
+	<select id="selectPrintOrderListCount" resultType="_int" >
+		select count(*) from print_order
+	</select>
 	
+	<select id ="selectPrintOffice" parameterType="_int" resultMap="resultPrintOffice">
+		select *
+		from client
+		where CLIENT_ID = #{ printId }
+	</select>
 	
+	<select id="selectBook" parameterType="_int" resultMap="resultBook">
+		select *
+		from Book
+		where book_id = #{ bookId }
+	</select>
 	
 </mapper>
 
