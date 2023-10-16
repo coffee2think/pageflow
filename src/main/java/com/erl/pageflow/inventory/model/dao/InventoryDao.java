@@ -34,14 +34,7 @@ public class InventoryDao {
 		return (ArrayList<Inventory>) list;
 	}
 
-	// 첫번째 필터 검색 카운트
-	public int selectInventorfirstSearchCount(String keyword) {
-		return sqlSessionTemplate.selectOne("inventoryMapper.selectInventorfirstSearchCount");
-	}
-
-	// 첫번째 필터 검색
-	public ArrayList<Inventory> selectInventorfirstSearch(Search search) {
-		List<Inventory> list = sqlSessionTemplate.selectList("inventoryMapper.selectInventorfirstSearch");
-		return (ArrayList<Inventory>) list;
+	public int selectGetDateListCount(Search search) {
+		return sqlSessionTemplate.selectOne("inventoryMapper.selectGetDateListCount");
 	}
 }

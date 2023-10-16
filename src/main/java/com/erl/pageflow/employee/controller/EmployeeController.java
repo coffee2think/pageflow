@@ -23,8 +23,8 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 	
-	// ºä¸¸ º¸¿©ÁÖ´Â ¸Ş¼Òµå ---------------------------------------------------------------------------------
-	// ·Î±×ÀÎ ÆäÀÌÁö·Î ÀÌµ¿ÇÏ´Â ¸Ş¼Òµå
+	// ë·° ---------------------------------------------------------------------------------
+	// ë¡œê·¸ì¸ ë·°
 	@RequestMapping(value = "loginPage.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String moveLoginPage() {
 		return "member/login";
@@ -32,27 +32,25 @@ public class EmployeeController {
 	
 	
 	
-	// Àü´Ş°ª°¡Áö°í °¡¼­ ºäÆäÀÌÁö Ãâ·Â ¸Ş¼Òµå ---------------------------------------------------------------------
+	// ê°’---------------------------------------------------------------------
 	
-	// ·Î±×ÀÎ Ã³¸®¿ë ¸Ş¼Òµå (¾ÏÈ£È­ Ã³¸®µÇ¸é ¼öÁ¤ ¿¹Á¤)
+	// ë¡œê·¸ì¸ ê°’ì „ì†¡
 	@RequestMapping(value="login.do", method = RequestMethod.POST)
 	public String loginMethod(Employee employee, HttpSession session, SessionStatus status, Model model) {
-		logger.info("login.do : " + employee);
-		logger.info(employee.getEmpId() + "");
+
 		Employee loginMember = employeeService.selectEmployee(employee.getEmpId());
-		logger.info(loginMember + "");
-		
+
 		if(loginMember != null) {
 			session.setAttribute("loginMember", loginMember);
 			status.setComplete();
 			return "common/main";
 		}else {
-			model.addAttribute("message", "·Î±×ÀÎ ½ÇÆĞ!");
+			model.addAttribute("message", "ë¡œê·¸ì¸ ì‹¤íŒ¨");
 			return "common/error";
 		}
 	}
 	
-	// ·Î±×¾Æ¿ô Ã³¸®¿ë ¸Ş¼Òµå
+	// ë¡œê·¸ì•„ì›ƒ ê°’ì „ì†¡
 	@RequestMapping("logout.do")
 	public String logoutMethod(HttpServletRequest request, Model model) {
 		HttpSession session = request.getSession(false);
@@ -60,7 +58,7 @@ public class EmployeeController {
 			session.invalidate();
 			return "common/main";
 		}else {
-			model.addAttribute("message", "·Î±×ÀÎ ¼¼¼ÇÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.");
+			model.addAttribute("message", "ë¡œê·¸ì•„ì›ƒ ì‹¤íŒ¨");
 			return "common/error";
 		}
 	}

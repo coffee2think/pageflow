@@ -135,12 +135,14 @@
                                     <th>반품서점</th>
                                     <th>반품상태</th>
                                     <th>반품일자</th>
-                                    <th>반품부수</th>
                                     <th>정가</th>
+                                    <th>반품부수</th>                                 
                                     <th>반품금액</th>
                                     <th>비고</th>
                                     <th>수정</th>
                                 </tr>
+                                <c:set var="totalRefundNum" value="0"/>
+                                <c:set var="totalRefundPrice" value="0"/>
                     			<c:forEach var = "ref" items="${ requestScope.list }">
 	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
 	                                    <td class="td-50">
@@ -171,14 +173,14 @@
 	                                            <input type="input" name="refundDate" class="contents-input noline" value="${ ref.refundDate }">
 	                                        </div>
 	                                    </td>
-	                                    <td class="td-70">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="refundNum" class="contents-input noline" value="${ ref.refundNum }">
-	                                        </div>
-	                                    </td>
 	                                    <td class="td-100">
 	                                        <div class="contents-input-div">
 	                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ ref.bookPrice }">
+	                                        </div>
+	                                    </td>
+	                                    <td class="td-70">
+	                                        <div class="contents-input-div">
+	                                            <input type="input" name="refundNum" class="contents-input noline" value="${ ref.refundNum }">
 	                                        </div>
 	                                    </td>
 	                                    <td class="td-120">
@@ -195,6 +197,8 @@
 	                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
 	                                    </td>
 	                                </tr>
+	                            <c:set var="totalRefundNum" value="${ totalRefundNum + ref.refundNum }"/>
+	                             <c:set var="totalRefundPrice" value="${ totalRefundPrice + ref.refundAmount }"/>
 								</c:forEach>
                                 <!--합계-->
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
@@ -203,10 +207,10 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                     <td>합계</td>
-                                    <td>12123</td>
-                                    <td>100213</td>
-                                    <td>150000</td>
+                                    <td>${ totalRefundNum }</td>
+                                    <td>${ totalRefundPrice }</td>
                                     <td></td>
                                     <td></td>
                                 </tr>

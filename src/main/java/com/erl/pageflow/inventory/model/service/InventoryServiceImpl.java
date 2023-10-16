@@ -36,12 +36,7 @@ public class InventoryServiceImpl implements InventoryService {
 	}
 	
 	@Override
-	public int selectInventorfirstSearchCount(String keyword) {
-		return inventoryDao.selectInventorfirstSearchCount(keyword);
-	}
-
-	@Override
-	public ArrayList<Inventory> selectInventorfirst(Search search) {
-		return inventoryDao.selectInventorfirstSearch(search);
+	public int selectGetDateListCount(Search sarch) {
+		return inventoryDao.selectGetDateListCount(sarch);
 	}
 }

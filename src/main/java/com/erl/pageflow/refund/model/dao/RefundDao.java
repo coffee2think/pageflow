@@ -25,14 +25,14 @@ public class RefundDao {
 	}
 
 	public String selectRefundBookName(int bookId) {
-		return sqlSessionTemplate.selectOne("refundMapper/selectRefundBookName", bookId);
+		return sqlSessionTemplate.selectOne("refundMapper.selectRefundBookName", bookId);
 	}
 
 	public String selectRefundClientName(int clientId) {
-		return sqlSessionTemplate.selectOne("refundMapper/selectRefundClientName", clientId);
+		return sqlSessionTemplate.selectOne("refundMapper.selectRefundClientName", clientId);
 	}
 
 	public int selectRefundBookPrice(int bookId) {
-		return sqlSessionTemplate.selectOne("refundMapper/selectRefundBookPrice", bookId);
+		return sqlSessionTemplate.selectOne("refundMapper.selectRefundBookPrice", bookId);
 	}
 }

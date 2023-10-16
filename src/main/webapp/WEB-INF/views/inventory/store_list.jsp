@@ -134,12 +134,14 @@
                                     <th>도서명</th>
                                     <th>입고창고</th>
                                     <th>인수자</th>
-                                    <th>입고일자</th>
-                                    <th>입고부수</th>
+                                    <th>입고일자</th>  
                                     <th>정가</th>
+                                    <th>입고부수</th>
                                     <th>입고금액</th>
                                     <th>수정</th>
                                 </tr>
+                                <c:set var="totalStoreNum" value="0" />
+                                <c:set var="totalStorePrice" value="0" />
                                 <c:forEach var="sto" items="${ requestScope.list }">
 	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
 	                                    <td class="td-50">
@@ -172,23 +174,25 @@
 	                                    </td>
 	                                    <td class="td-70">
 	                                        <div class="contents-input-div">
-	                                            <input type="input" name="storeNum" class="contents-input noline" value="${ sto.storeNum }">
+	                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ sto.bookPrice }">
 	                                        </div>
 	                                    </td>
 	                                    <td class="td-70">
 	                                        <div class="contents-input-div">
-	                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ sto.bookPrice }">
+	                                            <input type="input" name="storeNum" class="contents-input noline" value="${ sto.storeNum }">
 	                                        </div>
-	                                    </td>
+	                                    </td>         
 	                                    <td class="td-100">
 	                                        <div class="contents-input-div">
-	                                            <input type="input" name="storeNum" class="contents-input noline" value="${ sto.storeNum }">
+	                                            <input type="input" name="storeNum" class="contents-input noline" value="${ sto.storePrice }">
 	                                        </div>
 	                                    </td>
 	                                    <td class="td-70">
 	                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
 	                                    </td>
 	                                </tr>
+	                            <c:set var="totalStoreNum" value="${ totalStoreNum + sto.storeNum }"/>
+	                             <c:set var="totalStorePrice" value="${ totalStorePrice + sto.storePrice }"/>
 								</c:forEach>
                                 <!--합계-->
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
@@ -197,10 +201,10 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
+                                    <td></td>
                                     <td>합계</td>
-                                    <td>12123</td>
-                                    <td>100213</td>
-                                    <td>150000</td>
+                                    <td>${ totalStoreNum }</td>
+                                    <td>${ totalStorePrice }</td>
                                     <td></td>
                                 </tr>
                                 <!--합계end-->
