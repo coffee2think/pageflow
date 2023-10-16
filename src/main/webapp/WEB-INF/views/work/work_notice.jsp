@@ -49,7 +49,8 @@
         	
         	//게시판 댓글 뎁스0
         	$('.reply-input-btn-depth0').on('click', function(){
-        		location.href = 'nlist.do';
+        		ajaxInsert(parent, 'second', empId, bundleId, bundleId2, parentId, depth, 
+					depth2, replyId, replyDetail2);
         	})
         	
         	
@@ -78,12 +79,13 @@
     function setId(parent){
     	
     	let data = {
-   			bundleId : Number(parent.attr('data-bundleId'))
-           	,bundleId2 : Number(parent.attr('data-bundleId2'))
-           	,parentId : Number(parent.attr('data-parentId'))
+            empId : Number(parent.attr('data-empid'))
+   			,bundleId : Number(parent.attr('data-bundleid'))
+           	,bundleId2 : Number(parent.attr('data-bundleid2'))
+           	,parentId : Number(parent.attr('data-parentid'))
            	,depth : Number(parent.attr('data-depth'))
            	,depth2 : Number(parent.attr('data-depth2'))
-           	,replyId : Number(parent.attr('data-replyId'))
+           	,replyId : Number(parent.attr('data-replyid'))
     	}
     	
 		return data;
@@ -110,8 +112,13 @@
 		//댓글 ajax 
 		let obj = setId(parent);
     	let replyId, bundleId, bundleId2, parentId, depth, depth2;
-    	let replyDetail = parent.find('.reply-input').text();
-		
+        let empId = obj.empId;
+    	let replyDetail = parent.find('.reply-input').html();
+        let arr = replyDetail.split('</em>');
+        arr.shift();
+        let replyDetail2 = arr.join(' ');
+        console.log('replyDetail2 : ' + replyDetail2);
+        
 		if(type == 'first'){
 			//bundlId는 depth가 -1일때는 최상위
 			//번들아이디를 ajax로 받아와야 함
@@ -122,8 +129,8 @@
 			depth = -1;
 			depth2 = -1;
 			
-			ajaxInsert($('.notice-reply-box'), 'first', bundleId, bundleId2, parentId, depth, 
-					depth2, replyId, replyDetail);
+			ajaxInsert($('.notice-reply-box'), 'first', empId, bundleId, bundleId2, parentId, depth, 
+					depth2, replyId, replyDetail2);
 			
 		}else{
 			//depth가 -1이 아닐때는 댓글의 댓글임
@@ -151,16 +158,16 @@
 			console.log('replyInsert - bundleId : ' + bundleId + ', bundleId2 : ' +
 					bundleId2 + ', parentId : ' + parentId + ', depth : ' + depth + 
 					', depth2 : ' + depth2 + ', replyId : ' + replyId + 
-					', replyDetail : ' + replyDetail);
-			ajaxInsert(parent, 'second', bundleId, bundleId2, parentId, depth, 
-					depth2, replyId, replyDetail);
+					', replyDetail : ' + replyDetail2);
+			ajaxInsert(parent, 'second', empId, bundleId, bundleId2, parentId, depth, 
+					depth2, replyId, replyDetail2);
 			
 		}
 		
 	}
     
   	//댓글 인서트
-	function ajaxInsert(parent, type, bundleId, bundleId2, parentId, depth, 
+	function ajaxInsert(parent, type, empId, bundleId, bundleId2, parentId, depth, 
 			depth2, replyId, replyDetail){
 		
 		console.log('ajaxReplyInsert - bundleId : ' + bundleId + ', bundleId2 : ' +
@@ -171,7 +178,8 @@
 		let jsonData = {
 			depId : ${ board.depId }
 			,boardId : ${ board.boardId }
-			,empId : 1
+			,empId : empId
+            ,empName : parent.find('.reply-ename').text()
 			,bundleId : bundleId
 			,bundleId2 : bundleId2
 			,parentId : parentId
@@ -180,64 +188,77 @@
 			,replyId : replyId
 			,replyDetail : replyDetail	
 		}
+
+        let formData = new FormData();
+        formData.append('depId', jsonData.depId);
+        formData.append('boardId', jsonData.boardId);
+        formData.append('empId', jsonData.empId);
+        formData.append('bundleId', jsonData.bundleId);
+        formData.append('bundleId2', jsonData.bundleId2);
+        formData.append('parentId', jsonData.parentId);
+        formData.append('depth', jsonData.depth);
+        formData.append('depth2', jsonData.depth2);
+        formData.append('replyId', jsonData.replyId);
+        formData.append('replyDetail', jsonData.replyDetail);
+        formData.append('upfile', $('#reply_' + jsonData.replyId + ' .file-btn')[0].files[0]);
 		
-        
 		$.ajax({
     		url : 'ryinsert.do'
     		,type : 'post'
-    		,data : jsonData
+            ,processData : false
+            ,contentType : false
+    		,data : formData
     		,success : function(data) {
     			
     			let str = JSON.stringify(data);
-    			let ajaxData = JSON.parse(str);
+    			var ajaxData = JSON.parse(str);
+                console.log('data : ' + data);
     	        console.log('ajaxData str : ' + str);
     	        console.log('ajaxData : ' + ajaxData);
-    	        console.log('ajaxData.replyId : ' + ajaxData.replyId);
+    	        console.log('ajaxData.reply_id : ' + ajaxData['reply_id']);
+                console.log('ajaxData.create_date : ' + ajaxData.create_date);
+                console.log('ajaxData.origin_file : ' + ajaxData.origin_file);
+
     			parent.find('.reply-input-box').hide();
     			parent.find('.reply-input').text('');
     			parent.find('.file-btn').val('');
     			
-    			let adata = {
-    				replyId : ajaxData.replyId
-    				,createDate : ajaxData.createDate
-    			}
-    			
-    			console.log('data.replyId : ' + data.replyId);
-    			if(type == 'first') parent.before(setTag(jsonData, adata));
-    			else parent.after(setTag(jsonData, adata));
+    			if(type == 'first') parent.before(setTag(jsonData, ajaxData));
+    			else parent.after(setTag(jsonData, ajaxData));
     			
     			console.log('parent : ' + parent.attr('class'));
-    			setReplyBtn(parent);
+    			setReplyBtn($('#reply_' + ajaxData.reply_id));
     		}
-    		,error: function(jqXHR, textStatus, errorThrown){
-    			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+    		,error: function(request, status, errorData){
+    			console.log("error : " + request + ", " + status + ", " + errorData);
     		}
     	})
 	}
   	
   	function setTag(jsonData, ajaxData){
-        let empName = '호호홓';
-        let parentEmpName = '????';
+        let empName = decodeURIComponent(ajaxData.emp_name);
+        let parentEmpName = jsonData.emp_name;
         let originFileName = '';
         let renameFileName = '';
+        let profile = (ajaxData.profile == undefined || ajaxData.profile == '') ? '' : decodeURIComponent(ajaxData.profile);
 
-        if(ajaxData.originFileName != undefined) {
-            originFileName = ajaxData.originFileName;
-            renameFileName = ajaxData.renameFileName;
+        if(ajaxData.origin_file != undefined && ajaxData.origin_file != '') {
+            originFileName = decodeURIComponent(ajaxData.origin_file);
+            renameFileName = ajaxData.rename_file;
         }
-        console.log('ajaxData.replyId : ' + ajaxData.replyId);
-        console.log('ajaxData.createDate : ' + ajaxData.createDate);
-        let replyId = ajaxData.replyId;
-        let createDate = ajaxData.createDate;
+        
+        let replyId = ajaxData.reply_id;
+        let createDate = ajaxData.create_date;
+        
   		let el = `
   		<div class="notice-reply-con depth`+jsonData.depth2+`" 
-        	data-empId="`+jsonData.empId+`"
-        	data-bundleId="`+jsonData.bundleId+`" 
-        	data-bundleId2="`+jsonData.bundleId2+`" 
-        	data-parentId="`+jsonData.parentId+`" 
+        	data-empid="`+jsonData.empId+`"
+        	data-bundleid="`+jsonData.bundleId+`" 
+        	data-bundleid2="`+jsonData.bundleId2+`" 
+        	data-parentid="`+jsonData.parentId+`" 
         	data-depth="`+jsonData.depth+`" 
         	data-depth2="`+jsonData.depth2+`" 
-        	data-replyId="`+replyId+`"
+        	data-replyid="`+replyId+`"
         	id = "reply_`+replyId+`"
         >`
         if(jsonData.depth2 >= 1) {
@@ -263,7 +284,7 @@
                 `+jsonData.replyDetail+`
             </div>`
         
-        if(originFileName == ''){
+        if(originFileName != ''){
 
             el += 
             `
@@ -333,7 +354,7 @@
             <!--header-container end-->
         </header>
         <!--헤더 end-->
-
+        
         <main class="main-wrapper">
             <!--main-side-->
             <div class="main-side">
@@ -501,13 +522,13 @@
                                     <c:forEach var="r" items="${ replyList }">
                                     	
                                         <div class="notice-reply-con depth${ r.depth2 }" 
-                                        	data-empId="${ r.empId }"
-                                        	data-bundleId="${ r.bundleId }" 
-                                        	data-bundleId2="${ r.bundleId2 }" 
-                                        	data-parentId="${ r.parentId }" 
+                                        	data-empid="${ r.empId }"
+                                        	data-bundleid="${ r.bundleId }" 
+                                        	data-bundleid2="${ r.bundleId2 }" 
+                                        	data-parentid="${ r.parentId }" 
                                         	data-depth="${ r.depth }" 
                                         	data-depth2="${ r.depth2 }" 
-                                        	data-replyId="${ r.replyId }"
+                                        	data-replyid="${ r.replyId }"
                                         	id = "reply_${ r.replyId }"
                                         >
                                             

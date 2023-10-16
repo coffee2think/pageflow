@@ -2,8 +2,11 @@ package com.erl.pageflow.reply.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -23,6 +26,7 @@ import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.UploadKeyword;
 import com.erl.pageflow.reply.model.service.ReplyService;
 import com.erl.pageflow.reply.model.vo.Reply;
+import com.erl.pageflow.reply.model.vo.ReplyUpload;
 
 @Controller
 public class ReplyController {
@@ -35,6 +39,7 @@ public class ReplyController {
 	@ResponseBody
 	public String insertReplyMethod(Reply reply, Model model,
 			HttpServletRequest request, 
+			HttpServletResponse response,
 			@RequestParam(name = "upfile", required = false) MultipartFile mfile) throws IOException{
 		
 		//ajax요청시 리턴방법은 여러가지가 있음
@@ -42,40 +47,12 @@ public class ReplyController {
 		//1. 출력 스트림으로 응답하는 방법(아이디 중복체크 예)
 		//2. 뷰리졸버로 리턴하는 방법 : response body에 내보낼 값을 저장함
 		//   JSON View 등록처리 되어 있어야 함 : servlet-cntext.xml
+		logger.info("reply : " + reply);
 		logger.info("mfile : " + mfile);
 		String fileName = null;
+		String renameFileName = null;
 		String savePath = request.getSession().getServletContext().getRealPath(
 				"resources/board_upfiles");
-		//첨부파일이 있을때 
-		if(mfile != null) {
-			if(!mfile.isEmpty()) {
-				//전송온 파일이름 추출함
-				fileName = mfile.getOriginalFilename();
-				String renameFileName = null;
-				
-				//저장폴더에는 변경된 이름을 저장 처리함
-				//파일 이름 바꾸기함 : 년월일시분초.확장자
-				if(fileName != null && fileName.length() > 0) {
-					//바꿀 파일명에 대한 문자열 만들기
-					renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmss");
-					logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
-					
-					try {
-						//저장폴더에 파일명 바꾸기 처리
-						mfile.transferTo(new File(savePath + "\\" + renameFileName));
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-						model.addAttribute("message", "파일명 바꾸기 또는 첨부파일 저장 실패");
-						return "common/error";
-					}
-				}
-				
-				//upload_reply에 첨부파일 정보 저장 처리
-				replyService.insertUploadReply(
-						new UploadKeyword(reply.getReplyId(), fileName, renameFileName));
-			}
-		}
 		
 		JSONObject sendJson = new JSONObject();
 		
@@ -83,10 +60,55 @@ public class ReplyController {
 			logger.info("??????????");
 			//전송용 json 객체 준비
 			Reply selReply = replyService.selectReplyRecent();
-			sendJson.put("replyId", selReply.getReplyId());
-			sendJson.put("createDate", selReply.getCreateDate());
+			
+			//첨부파일이 있을때 
+			if(mfile != null) {
+				if(!mfile.isEmpty()) {
+					//전송온 파일이름 추출함
+					fileName = mfile.getOriginalFilename();
+					renameFileName = null;
+					
+					//저장폴더에는 변경된 이름을 저장 처리함
+					//파일 이름 바꾸기함 : 년월일시분초.확장자
+					if(fileName != null && fileName.length() > 0) {
+						//바꿀 파일명에 대한 문자열 만들기
+						renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmss");
+						logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
+						
+						try {
+							//저장폴더에 파일명 바꾸기 처리
+							mfile.transferTo(new File(savePath + "\\" + renameFileName));
+							
+							//upload_reply에 첨부파일 정보 저장 처리
+							replyService.insertUploadReply(
+									new ReplyUpload (0, selReply.getReplyId(), fileName, renameFileName));
+							
+						} catch (Exception e) {
+							e.printStackTrace();
+							model.addAttribute("message", "파일명 바꾸기 또는 첨부파일 저장 실패");
+							return "common/error";
+						}
+					}
+					
+					
+				}
+			}
+			//response.setContentType("text/html; charset=utf-8");
+			
+			sendJson.put("reply_id", String.valueOf(selReply.getReplyId()));
+			sendJson.put("emp_name", URLEncoder.encode(selReply.getEmpName(), "utf-8"));
+			sendJson.put("profile", URLEncoder.encode((selReply.getProfile() == null) ? "" : selReply.getProfile(), "utf-8"));
+			sendJson.put("create_date", selReply.getCreateDate().toString());
+			sendJson.put("origin_file", URLEncoder.encode((fileName == null) ? "" : fileName, "utf-8"));
+			sendJson.put("rename_file", (renameFileName == null) ? "" : renameFileName);
+			
+			//PrintWriter out = response.getWriter();
+			//out.print(sendJson);
+			//out.flush();
+			//out.close();
+			
 		}
-
 		return sendJson.toJSONString();//뷰리졸버로 리턴함
+		
 	}
 }
