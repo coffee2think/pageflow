@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -64,55 +63,16 @@ public class InventoryController {
 		}
 
 	}
-
-//	// 첫번째 필터 검색용 메소드
-//	@RequestMapping(value = "invenfirstfilter.do", method = RequestMethod.POST)
-//	public ModelAndView inventorfirstSearch(Inventory inventory,
-//			@RequestParam(name = "storeNum", required = false) String storeNum,
-//			@RequestParam(name = "releaseNum", required = false) String releaseNum,
-//			@RequestParam("keyword") String keyword, @RequestParam(name = "limit", required = false) String slimit,
-//			@RequestParam(name = "paging", required = false) String page, ModelAndView mv) {
-//
+	
+//	@RequestMapping(value="invendate.do")
+//	public ModelAndView selectInventoryByDate(Search search, @RequestParam("action") String action) {
 //		int currentPage = 1;
-//
-//		if (page != null) {
-//			currentPage = Integer.parseInt(page);
-//		}
-//
 //		int limit = 10;
-//
-//		if (slimit != null) {
-//			limit = Integer.parseInt(slimit);
-//		}
-//
-//		int listCount = inventoryService.selectInventorfirstSearchCount(keyword);
-//
-//		Paging paging = new Paging(listCount, currentPage, limit, "invenfirstfilter.do");
-//		paging.calculator();
-//
-//		Search search = new Search();
-//		search.setStartRow(paging.getStartRow());
-//		search.setEndRow(paging.getEndRow());
-//		search.setKeyword(keyword);
-//
-//		ArrayList<Inventory> list = inventoryService.selectInventorfirst(search);
-//
-//		if (list != null && list.size() > 0) {
-//			mv.addObject("list", list);
-//			mv.addObject("paging", paging);
-//			mv.addObject("currentPage", list);
-//			mv.addObject("limit", list);
-//			mv.addObject("action", list);
-//			mv.addObject("keyword", list);
-//			mv.addObject("storeNum", storeNum);
-//			mv.addObject("releaseNum", releaseNum);
-//
-//			mv.setViewName("inventory/inven_list");
-//		} else {
-//			mv.addObject("message", keyword + " : 첫번쩨 검색 실패!");
-//
-//			mv.setViewName("common/error");
-//		}
-//		return mv;
+//		
+//		int listCount = inventoryService.selectGetDateListCount(search);
+//		
+//		
 //	}
+
+
 }

@@ -20,13 +20,21 @@ public class SalesDao {
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 
+	public int selectBookOrderCountByDate(Search search) {
+		return sqlSessionTemplate.selectOne("salesMapper.selectBookOrderCountByDate", search);
+	}
+	
 	public ArrayList<BookOrder> selectBookOrderByDate(Search search) {
 		List<BookOrder> list = sqlSessionTemplate.selectList("salesMapper.selectBookOrderByDate", search);
 		return (ArrayList<BookOrder>) list;
 	}
 	
-	public ArrayList<Sales> selectSalesByDate(Search search) {
-		List<Sales> list = sqlSessionTemplate.selectList("salesMapper.selectSalesByDate", search);
+	public int selectSalesCountByDate(Search search) {
+		return sqlSessionTemplate.selectOne("salesMapper.selectSalesCountByDate", search);
+	}
+	
+	public ArrayList<Sales> selectSalesListByDate(Search search) {
+		List<Sales> list = sqlSessionTemplate.selectList("salesMapper.selectSalesListByDate", search);
 		return (ArrayList<Sales>) list;
 	}
 
@@ -46,4 +54,34 @@ public class SalesDao {
 		List<Client> list = sqlSessionTemplate.selectList("salesMapper.selectClientList", paging);
 		return (ArrayList<Client>) list;
 	}
+
+	public int insertBookOrder(BookOrder bookOrder) {
+		return sqlSessionTemplate.insert("salesMapper.insertBookOrder", bookOrder);
+	}
+
+	public int updateBookOrder(BookOrder bookOrder) {
+		return sqlSessionTemplate.update("salesMapper.updateBookOrder", bookOrder);
+	}
+	
+	public int deleteBookOrder(int tradeId) {
+		return sqlSessionTemplate.delete("salesMapper.deleteBookOrder", tradeId);
+	}
+
+	public int insertClient(Client client) {
+		return sqlSessionTemplate.insert("salesMapper.insertClient", client);
+	}
+
+	public int updateClient(Client client) {
+		return sqlSessionTemplate.update("salesMapper.updateClient", client);
+	}
+
+	public int deleteClient(int clientId) {
+		return sqlSessionTemplate.delete("salesMapper.deleteClient", clientId);
+	}
+
+	
+
+	
+
+	
 }

@@ -18,7 +18,7 @@ public interface ReplyService {
 	
 	public int insertReply(Reply reply);
 
-	public int insertUploadReply(UploadKeyword uploadKeyword);
+	public int insertUploadReply(ReplyUpload replyUpload);
 	
 	public Reply selectReplyRecent();
 

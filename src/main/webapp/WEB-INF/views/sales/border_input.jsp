@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="rowNum" value="1" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,12 +16,12 @@
     const SUBPAGE = 1;
     const LNKPAGE = 2;
     
-    function addRow(index) {
+    function addRow(currentIndex) {
 		// table element 찾기
 		const table = document.getElementById('input_table');
 
 		// 새 행(Row) 추가 (테이블 중간에)
-		const newRow = table.insertRow();
+		const newRow = table.insertRow(currentIndex + 1);
 
 		// 새 행(Row)에 Cell 추가
 		const newCell1 = newRow.insertCell(0);
@@ -33,7 +35,7 @@
 
 		// Cell에 텍스트 추가
 		newCell1.innerHTML = '<div class="contents-check-div">'
-						+ '<button class="contents-input-plus" onclick="addRow(); return false;">'
+						+ '<button class="contents-input-plus" onclick="addRow(' + ( currentIndex + 1 ) + '); return false;">'
 						+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">'
 						+ '</button>'
 						+ '<button class="contents-input-minus" onclick="deleteRow(); return false;">'
@@ -76,6 +78,40 @@
 		newCell8.innerHTML = '<div class="contents-input-div">'
 						+ '<input type="input" name="state" class="contents-input" value="">'
 						+ '</div>';
+		
+		initRowIndex();
+	}
+    
+	function initRowIndex() {
+		var table = document.getElementById('input_table');
+		var rowList = table.rows;
+		
+		for (i = 1; i < rowList.length; i++) {
+			var row = rowList[i];
+			
+			console.log('현재 행 번호 : ' + i + '행');
+			
+			row.cells[0].innerHTML = '<div class="contents-check-div">'
+				+ '<button class="contents-input-plus" onclick="addRow(' + i + '); return false;">'
+				+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">'
+				+ '</button>'
+				+ '<button class="contents-input-minus" onclick="deleteRow(); return false;">'
+				+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">'
+				+ '</button>'
+				+ '</div>';
+		} //for
+		
+	} //initRowIndex
+	 
+	function calcTotalPrice(currentIndex) {
+		const table = document.getElementById('input_table');
+		
+		var row = table.rows[currentIndex];
+		var bookPrice = row.cells[4].children[0].children[0].value;
+		var orderQuantity = row.cells[5].children[0].children[0].value;
+		
+		var totalPrice = row.cells[6];
+		totalPrice.children[0].children[0].value = bookPrice * orderQuantity;
 	}
 </script>
 <title></title>
@@ -111,7 +147,12 @@
 
                 <!--form-->
                 <!-- <form class="input-form" action="/comi/partyi" method="post" enctype="multipart/form-data">-->
-                <form class="input-form" action="" method="post">
+                <form class="input-form" action="boinsert.do" method="post">
+                	<%-- <input type="hidden" name="empId" value="${ loginMember.empId }"> --%>
+                	<input type="hidden" name="empId" value="1"> <!-- 하드코딩 -->
+                	<%-- <input type="hidden" name="empName" value="${ loginMember.empName }"> --%>
+                	<input type="hidden" name="empName" value="홍길동"> <!-- 하드코딩 -->
+                	
                     <!--main-header-bar-->
                     <div class="main-header-bar">
                         <div class="main-title-box">
@@ -141,10 +182,9 @@
                                         <th>상태</th>
                                     </tr>
                                     <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                        
                                         <td class="td-50">
                                             <div class="contents-check-div">
-                                                <button class="contents-input-plus" onclick="addRow(); return false;">
+                                                <button class="contents-input-plus" onclick="addRow(1); return false;">
                                                     <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
                                                 </button>
                                                 <button class="contents-input-minus" onclick="deleteRow(); return false;">
@@ -157,7 +197,7 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="code" class="contents-input" value="">
+                                                <input type="input" name="bookId" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-200">
@@ -165,7 +205,7 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="name" class="contents-input" value="">
+                                                <input type="input" name="bookName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-100">
@@ -173,22 +213,24 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="store" class="contents-input" value="">
+                                                <!-- <input type="hidden" name="clientId" value=""> -->
+                                                <input type="hidden" name="clientId" value="1"> <!-- 하드코딩 -->
+                                                <input type="input" name="clientName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div">
-                                                <input type="number" name="price" class="contents-input">
+                                                <input type="number" name="bookPrice" class="contents-input" value="" onchange="calcTotalPrice(1); return false;">
                                             </div>
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="number" name="quantity" class="contents-input">
+                                                <input type="number" name="orderQuantity" class="contents-input" value="" onchange="calcTotalPrice(1); return false;">
                                             </div>
                                         </td>
                                         <td class="td-120">
                                             <div class="contents-input-div">
-                                                <input type="number" name="amount" class="contents-input" value="">
+                                                <input type="number" name="totalPrice" class="contents-input" value="0" readonly>
                                             </div>
                                         </td>
                                         <td class="td-120">
@@ -202,12 +244,12 @@
                             </div>
                         </div>
                         <!--컨텐츠영역 end-->
-                        
                     
                     </div>
+                    
                     <!--내용 end-->
                     <div class="submit-box">
-                        <input type="submit" class="contents-input-btn big noline" id="btn_save" value="저장">
+                        <input type="submit" class="contents-input-btn big noline" id="btn_save" value="등록">
                     </div>
 
                 </form>

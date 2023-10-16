@@ -8,6 +8,9 @@
 <c:set var="endPage" value="${ requestScope.paging.endPage }"/>
 <c:set var="maxPage" value="${ requestScope.paging.maxPage }"/>
 <c:set var="limit" value="${ requestScope.paging.limit }"/>
+<c:set var="urlMapping" value="${ requestScope.paging.urlMapping }"/>
+<c:set var="begin" value="${ requestScope.begin }" />
+<c:set var="end" value="${ requestScope.end }" />
 
 <!DOCTYPE html>
 <html>
@@ -45,11 +48,27 @@
 	</c:if>
 	
 	<c:forEach var="p" begin="${ startPage }" end="${ endPage }" step="1">
-		<c:if test="${ p eq currentPage }">
-			<a href="" class="paging-list-btn active"><span>${ p }</span></a>
+		<c:if test="${ !(!empty begin and !empty end) }">
+			<c:if test="${ p eq currentPage }">
+				<a href="" class="paging-list-btn active"><span>${ p }</span></a>
+			</c:if>
+			<c:if test="${ p ne currentPage }">
+				<a href="${ pageContext.servletContext.contextPath }/${ urlMapping }?page=${ p }&limit=${ limit }" class="paging-list-btn"><span>${ p }</span></a>
+			</c:if>
 		</c:if>
-		<c:if test="${ p ne currentPage }">
-			<a href="" class="paging-list-btn"><span>${ p }</span></a>
+		<c:if test="${ !empty begin and !empty end }">
+			<c:if test="${ p eq currentPage }">
+				<a href="" class="paging-list-btn active"><span>${ p }</span></a>
+			</c:if>
+			<c:if test="${ p ne currentPage }">
+				<c:url var="pUrl" value="${ urlMapping }">
+					<c:param name="page" value="${ p }" />
+					<c:param name="limit" value="${ limit }" />
+					<c:param name="begin" value="${ begin }" />
+					<c:param name="end" value="${ end }" />
+				</c:url>
+				<a href="${ pUrl }" class="paging-list-btn"><span>${ p }</span></a>
+			</c:if>
 		</c:if>
 	</c:forEach>
     
