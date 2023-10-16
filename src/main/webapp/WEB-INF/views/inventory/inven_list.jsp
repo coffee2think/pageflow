@@ -16,6 +16,8 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript">
+</script>
 <script>
     const NOWPAGE = 4;
     const SUBPAGE = 1; 
@@ -119,12 +121,12 @@
                                 <div class="select-pan-nemo">
                                     입고일
                                 </div>
-
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
-
-                                <input type="button" name="week" class="select-pan-btn" value="일주일">
-                                <input type="button" name="month" class="select-pan-btn" value="한달">
+								<form id="selectDate" action="invendate.do" method="post">
+	                                <input type="date" class="select-date select-date-first" name="begin">
+	                                <input type="date" class="select-date select-date-second" name="end">
+	                                <input type="button" class="select-pan-btn" value="일주일" name="week" >
+	                                <input type="button" class="select-pan-btn" value="한달" name="month">
+                                </form>
                             </div>
 
                         </form>
@@ -156,8 +158,11 @@
                                     <th>증감</th>
                                     <th>현재재고</th>
                                     <th>비고</th>
-                                    <th>수정</th>
+                                    
                                 </tr>
+                                <c:set var="totalPrevCurrInven" value="0" />
+                                <c:set var="totalIncrease" value="0" />
+                                <c:set var="totalCurrInven" value="0" />
                                 <c:forEach var = "inv" items="${ requestScope.list }">
 	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
 	                                    <td class="td-50">
@@ -175,39 +180,71 @@
 	                                    </td>
 	                                    <td class="td-70">
 	                                        <div class="contents-input-div">
-	                                            <input type="input" name="classify" class="contents-input noline" value="${ inv.classify }">
+	                                            <input type="input" name="clientName" class="contents-input noline" value="${ inv.storageName }">
 	                                        </div>
 	                                    </td>
 	                                    <td class="td-105">
 	                                        <div class="contents-input-div">
-	                                            <input type="input" name="clientName" class="contents-input noline" value="${ inv.storageName }">
+	                                            <input type="input" name="classify" class="contents-input noline" value="${ inv.classify }">
 	                                        </div>
 	                                    </td>
+	
 	                                    <td class="td-110">
 	                                        <div class="contents-input-div">
 	                                            <input type="input" name="currInven" class="contents-input noline" value="${ inv.currInven }">
 	                                        </div>
-	                                    </td>
-	                                    <td class="td-100">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="increase" class="contents-input noline" value="${ inv.increase }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-100">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="plus" class="contents-input noline" value="${ inv.increase + inv.currInven }">
-	                                        </div>
-	                                    </td>
+	                                    </td>        
+	                                    <c:if test="${ inv.classify eq '입고' }">
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="increase" class="contents-input noline" value="+${ inv.increase }">
+		                                        </div>
+		                                    </td>
+	                                    </c:if>
+	                                     <c:if test="${ inv.classify eq '출고' }">
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="increase" class="contents-input noline" value="-${ inv.increase }">
+		                                        </div>
+		                                    </td>
+	                                    </c:if>    
+	                                     <c:if test="${ inv.classify eq '반품' }">
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="increase" class="contents-input noline" value="+${ inv.increase }">
+		                                        </div>
+		                                    </td>
+	                                    </c:if>
+	                                    <c:if test="${ inv.classify eq '입고' or inv.classify eq '반품' }">
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="plus" class="contents-input noline" value="${ inv.currInven + inv.increase }">
+		                                        </div>
+		                                    </td>
+	                                    </c:if>
+	                                    <c:if test="${ inv.classify eq '출고' }">
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="plus" class="contents-input noline" value="${ inv.currInven - inv.increase }">
+		                                        </div>
+		                                    </td>
+	                                    </c:if>
 	                                    <td class="td-120">
 	                                        <div class="contents-input-div">
 	                                            <input type="input" name="remark" class="contents-input noline" value="${ inv.remark }">
-	                                        </div>s
-	                                    </td>
-	                                    <td class="td-70">
-	                                        <input type="button" name="" class="contents-input-btn noline" value="수정">
-	                                    </td>
+	                                        </div>
+		                               	</td>
+	                             
 	                                </tr>
+	                            <c:set var="totalPrevCurrInven" value="${ totalPrevCurrInven + inv.currInven }"/>
+	                            <c:if test="${ inv.classify eq '반품' or inv.classify eq '입고'}">
+	                            	<c:set var="totalIncrease" value="${ totalIncrease + inv.increase }" />
+	                            </c:if>
+	                            <c:if test="${ inv.classify eq '출고' }">
+	                            	<c:set var="totalIncrease" value="${ totalIncrease - inv.increase }" />
+	                            </c:if>
 								</c:forEach>
+								<c:set var="totalCurrInven" value="${ totalCurrInven + (totalPrevCurrInven + totalIncrease) }" />
                                 <!--합계-->
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
                                     <td></td>
@@ -215,10 +252,9 @@
                                     <td></td>
                                     <td></td>
                                     <td>합계</td>
-                                    <td>100213</td>
-                                    <td>12123</td>
-                                    <td>150000</td>
-                                    <td>150000</td>
+                                    <td>${ totalPrevCurrInven }</td>
+                                    <td>${ totalIncrease }</td>
+                                    <td>${ totalCurrInven }</td>
                                     <td></td>
                                     <td></td>
                                 </tr>
