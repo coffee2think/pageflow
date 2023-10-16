@@ -23,4 +23,8 @@ public interface ReplyService {
 	public Reply selectReplyRecent();
 
 	public ReplyUpload selectReplyListFile(int replyId);
+
+	public int selectReplyMaxCount();
+
+	public int insertReply2(Reply reply);
 }

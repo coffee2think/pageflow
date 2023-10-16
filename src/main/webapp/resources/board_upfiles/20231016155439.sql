@@ -74,8 +74,8 @@ DROP TABLE print_order
 DROP TABLE inventory 
 	CASCADE CONSTRAINTS;
 
-/* 주문관리 */
-DROP TABLE book_order 
+/* 주문/판매관리 */
+DROP TABLE trade 
 	CASCADE CONSTRAINTS;
 
 /* 도서 판매 랭킹 */
@@ -311,10 +311,8 @@ CREATE TABLE reply (
 	reply_id NUMBER NOT NULL, /* 댓글 번호 */
 	dep_id NUMBER NOT NULL, /* 부서 번호 */
 	board_id NUMBER NOT NULL, /* 게시글 번호 */
-	emp_id NUMBER NOT NULL, /* 작성자 번호 */
-	bundle_id NUMBER NOT NULL, /* 묶음 댓글 번호 */
-    bundle_id2 NUMBER NOT NULL, /* 묶음 댓글 번호2 */
-	parent_id NUMBER NOT NULL, /* 부모 댓글 번호 */
+	writer_id NUMBER NOT NULL, /* 작성자 번호 */
+	parent NUMBER NOT NULL, /* 부모 댓글 번호 */
 	depth NUMBER NOT NULL, /* 깊이 */
 	reply_detail VARCHAR2(1000) NOT NULL, /* 댓글 내용 */
 	create_date DATE DEFAULT sysdate NOT NULL, /* 댓글 작성 일자 */
@@ -330,12 +328,10 @@ COMMENT ON COLUMN reply.dep_id IS '부서 번호';
 
 COMMENT ON COLUMN reply.board_id IS '게시글 번호';
 
-COMMENT ON COLUMN reply.emp_id IS '작성자 번호';
+COMMENT ON COLUMN reply.writer_id IS '작성자 번호';
 
-COMMENT ON COLUMN reply.bundle_id IS '묶음 댓글 번호';
-COMMENT ON COLUMN reply.bundle_id2 IS '묶음 댓글 번호2';
+COMMENT ON COLUMN reply.parent IS '부모 댓글 번호';
 
-COMMENT ON COLUMN reply.parent_id IS '부모 댓글 번호';
 COMMENT ON COLUMN reply.depth IS '깊이';
 
 COMMENT ON COLUMN reply.reply_detail IS '댓글 내용';
@@ -633,7 +629,6 @@ ALTER TABLE book
 /* 편집관리 */
 CREATE TABLE edit (
 	edit_id NUMBER NOT NULL, /* 편집 번호 */
-	dep_id NUMBER NOT NULL, /* 부서 번호 */
 	emp_id NUMBER, /* 직원 번호(담당자) */
 	emp_name VARCHAR2(30), /* 직원 이름(담당자) */
 	book_name VARCHAR2(300) NOT NULL, /* 도서명 */
@@ -645,8 +640,6 @@ CREATE TABLE edit (
 COMMENT ON TABLE edit IS '편집관리';
 
 COMMENT ON COLUMN edit.edit_id IS '편집 번호';
-
-COMMENT ON COLUMN edit.dep_id IS '부서 번호';
 
 COMMENT ON COLUMN edit.emp_id IS '직원 번호(담당자)';
 
@@ -664,8 +657,7 @@ ALTER TABLE edit
 	ADD
 		CONSTRAINT PK_edit
 		PRIMARY KEY (
-			edit_id,
-            dep_id
+			edit_id
 		)
 		NOT DEFERRABLE
 		INITIALLY IMMEDIATE
@@ -681,7 +673,7 @@ CREATE TABLE contract (
 	emp_name VARCHAR2(30) NOT NULL, /* 직원 이름(담당자) */
 	contr_date DATE DEFAULT sysdate, /* 계약 일자 */
 	contr_doc VARCHAR2(255), /* 계약 문서url */
-	contr_state VARCHAR2(30) DEFAULT 'start' NOT NULL, /* 계약 진행상태 */
+	contr_state VARCHAR2(30) DEFAULT 'start' NOT NULL /* 계약 진행상태 */
 );
 
 COMMENT ON TABLE contract IS '계약관리';
@@ -715,14 +707,13 @@ ALTER TABLE contract
 
 /* 작가 */
 CREATE TABLE writer (
-   writer_id NUMBER NOT NULL, /* 작가 번호 */
-   writer_name VARCHAR2(30) NOT NULL, /* 작가명 */
-   phone VARCHAR2(30) NOT NULL, /* 연락처 */
-   writer_birth VARCHAR2(13) NOT NULL, /* 생년월일 */
-   email VARCHAR2(40) NOT NULL, /* 이메일 */
-   address VARCHAR2(255), /* 주소 */
-   bank VARCHAR2(30) NOT NULL, /* 은행명 */
-   account VARCHAR2(20) NOT NULL /* 계좌번호 */
+	writer_id NUMBER NOT NULL, /* 작가 번호 */
+	writer_name VARCHAR2(30) NOT NULL, /* 작가명 */
+	phone VARCHAR2(30) NOT NULL, /* 연락처 */
+	writer_birth VARCHAR2(13) NOT NULL, /* 생년월일 */
+	email VARCHAR2(40) NOT NULL, /* 이메일 */
+	address VARCHAR2(255), /* 주소 */
+	account NUMBER NOT NULL /* 계좌번호 */
 );
 
 COMMENT ON TABLE writer IS '작가';
@@ -738,8 +729,6 @@ COMMENT ON COLUMN writer.writer_birth IS '생년월일';
 COMMENT ON COLUMN writer.email IS '이메일';
 
 COMMENT ON COLUMN writer.address IS '주소';
-
-COMMENT ON COLUMN writer.bank IS '은행명';
 
 COMMENT ON COLUMN writer.account IS '계좌번호';
 
@@ -907,74 +896,55 @@ ALTER TABLE inventory
 		ENABLE
 		VALIDATE;
 
-/* 도서주문 */
-CREATE TABLE book_order (
-	order_id NUMBER NOT NULL, /* 주문번호 */
+/* 주문/판매관리 */
+CREATE TABLE trade (
+	trade_id NUMBER NOT NULL, /* 주문번호 */
 	book_id NUMBER NOT NULL, /* 도서번호 */
 	client_id NUMBER NOT NULL, /* 거래처 번호 */
 	emp_id NUMBER NOT NULL, /* 직원 번호(담당자) */
+	emp_name VARCHAR2(30) NOT NULL, /* 직원 이름(담당자) */
 	order_quantity NUMBER NOT NULL, /* 주문수량 */
 	order_date DATE DEFAULT sysdate NOT NULL, /* 주문일시 */
-	modify_date DATE, /* 수정일시 */
-	state VARCHAR2(30) NOT NULL /* 상태 */
+	state VARCHAR2(30) NOT NULL, /* 상태 */
+	collected_amount NUMBER DEFAULT 0, /* 수금액 */
+	collect_date DATE, /* 수금일시 */
+	classify VARCHAR2(20) NOT NULL /* 구분 */
 );
 
-COMMENT ON TABLE book_order IS '도서주문';
+COMMENT ON TABLE trade IS '주문/판매관리';
 
-COMMENT ON COLUMN book_order.order_id IS '주문번호';
+COMMENT ON COLUMN trade.trade_id IS '주문번호';
 
-COMMENT ON COLUMN book_order.book_id IS '도서번호';
+COMMENT ON COLUMN trade.book_id IS '도서번호';
 
-COMMENT ON COLUMN book_order.client_id IS '거래처 번호';
+COMMENT ON COLUMN trade.client_id IS '거래처 번호';
 
-COMMENT ON COLUMN book_order.emp_id IS '직원 번호(담당자)';
+COMMENT ON COLUMN trade.emp_id IS '직원 번호(담당자)';
 
-COMMENT ON COLUMN book_order.order_quantity IS '주문수량';
+COMMENT ON COLUMN trade.emp_name IS '직원 이름(담당자)';
 
-COMMENT ON COLUMN book_order.order_date IS '주문일시';
+COMMENT ON COLUMN trade.order_quantity IS '주문수량';
 
-COMMENT ON COLUMN book_order.modify_date IS '수정일시';
+COMMENT ON COLUMN trade.order_date IS '주문일시';
 
-COMMENT ON COLUMN book_order.state IS '상태';
+COMMENT ON COLUMN trade.state IS '상태';
 
-ALTER TABLE book_order
+COMMENT ON COLUMN trade.collected_amount IS '수금액';
+
+COMMENT ON COLUMN trade.collect_date IS '수금일시';
+
+COMMENT ON COLUMN trade.classify IS '구분';
+
+ALTER TABLE trade
 	ADD
-		CONSTRAINT PK_book_order
+		CONSTRAINT PK_trade
 		PRIMARY KEY (
-			order_id, book_id
+			trade_id
 		)
 		NOT DEFERRABLE
 		INITIALLY IMMEDIATE
 		ENABLE
 		VALIDATE;
-
-/* 판매 */
-CREATE TABLE sales (
-	sales_id NUMBER NOT NULL, /* 판매번호 */
-	order_id NUMBER NOT NULL, /* 주문번호 */
-	book_id NUMBER NOT NULL, /* 도서번호 */
-	collected_amount NUMBER DEFAULT 0 NOT NULL, /* 수금액 */
-	collect_date DATE DEFAULT sysdate NOT NULL /* 수금일시 */
-);
-
-COMMENT ON TABLE sales IS '판매';
-
-COMMENT ON COLUMN sales.sales_id IS '판매번호';
-
-COMMENT ON COLUMN sales.order_id IS '주문번호';
-
-COMMENT ON COLUMN sales.book_id IS '도서번호';
-
-COMMENT ON COLUMN sales.collected_amount IS '수금액';
-
-COMMENT ON COLUMN sales.collect_date IS '수금일시';
-
-ALTER TABLE sales
-	ADD
-		CONSTRAINT PK_sales
-		PRIMARY KEY (
-			sales_id
-		);
 
 /* 도서 판매 랭킹 */
 CREATE TABLE rank (
@@ -1017,7 +987,7 @@ CREATE TABLE client (
 	category VARCHAR2(20) NOT NULL, /* 거래처구분 */
 	client_name VARCHAR2(100) NOT NULL, /* 거래처명 */
 	client_address VARCHAR2(255) NOT NULL, /* 거래처 주소 */
-	CLIENT_CONTACT VARCHAR2(30) NOT NULL, /* 거래처 연락처 */
+	client_phone VARCHAR2(30) NOT NULL, /* 거래처 연락처 */
 	eid VARCHAR2(12) NOT NULL, /* 사업자등록번호 */
 	client_url VARCHAR2(255), /* 거래처 홈페이지 */
 	manager VARCHAR2(30), /* 거래처 담당자 */
@@ -1037,7 +1007,7 @@ COMMENT ON COLUMN client.client_name IS '거래처명';
 
 COMMENT ON COLUMN client.client_address IS '거래처 주소';
 
-COMMENT ON COLUMN client.CLIENT_CONTACT IS '거래처 연락처';
+COMMENT ON COLUMN client.client_phone IS '거래처 연락처';
 
 COMMENT ON COLUMN client.eid IS '사업자등록번호';
 
@@ -1392,12 +1362,12 @@ ALTER TABLE reply
 		INITIALLY IMMEDIATE
 		ENABLE
 		VALIDATE;
-/*
+
 ALTER TABLE reply
 	ADD
 		CONSTRAINT FK_reply_TO_reply
 		FOREIGN KEY (
-			parent_id
+			parent
 		)
 		REFERENCES reply (
 			reply_id
@@ -1406,12 +1376,12 @@ ALTER TABLE reply
 		INITIALLY IMMEDIATE
 		ENABLE
 		VALIDATE;
-*/
+
 ALTER TABLE reply
 	ADD
 		CONSTRAINT FK_employee_TO_reply
 		FOREIGN KEY (
-			emp_id
+			writer_id
 		)
 		REFERENCES employee (
 			emp_id
@@ -1675,20 +1645,6 @@ ALTER TABLE edit
 		ENABLE
 		VALIDATE;
 
-ALTER TABLE edit
-	ADD
-		CONSTRAINT FK_department_TO_edit
-		FOREIGN KEY (
-			dep_id
-		)
-		REFERENCES department (
-			dep_id
-		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
-
 ALTER TABLE contract
 	ADD
 		CONSTRAINT FK_employee_TO_contract
@@ -1843,9 +1799,9 @@ ALTER TABLE inventory
 		ENABLE
 		VALIDATE;
 
-ALTER TABLE book_order
+ALTER TABLE trade
 	ADD
-		CONSTRAINT FK_client_TO_book_order
+		CONSTRAINT FK_client_TO_trade
 		FOREIGN KEY (
 			client_id
 		)
@@ -1857,9 +1813,9 @@ ALTER TABLE book_order
 		ENABLE
 		VALIDATE;
 
-ALTER TABLE book_order
+ALTER TABLE trade
 	ADD
-		CONSTRAINT FK_employee_TO_book_order
+		CONSTRAINT FK_employee_TO_trade
 		FOREIGN KEY (
 			emp_id
 		)
@@ -1871,9 +1827,9 @@ ALTER TABLE book_order
 		ENABLE
 		VALIDATE;
 
-ALTER TABLE book_order
+ALTER TABLE trade
 	ADD
-		CONSTRAINT FK_book_TO_book_order
+		CONSTRAINT FK_book_TO_trade
 		FOREIGN KEY (
 			book_id
 		)
@@ -2068,40 +2024,3 @@ ALTER TABLE authority
 		INITIALLY IMMEDIATE
 		ENABLE
 		VALIDATE;
-
-ALTER TABLE sales
-	ADD
-		CONSTRAINT FK_book_order_TO_sales
-		FOREIGN KEY (
-			order_id,
-			book_id
-		)
-		REFERENCES book_order (
-			order_id,
-			book_id
-		);
-
-ALTER TABLE notice
-	ADD (notice_readcount number);
-    
-ALTER TABLE notice
-	ADD (NOTICE_ORIGINAL_FILENAME VARCHAR2(255));
-
-ALTER TABLE notice
-	ADD (NOTICE_RENAME_FILENAME VARCHAR2(255));
-    
-ALTER TABLE print_order
-	modify (UNIT VARCHAR2(20));   
-
-alter table contract
-modify contr_state default '진행중';
-
-alter table edit
-modify start_date default null;
-
-alter table book
-modify book_state default '정상';
-
-alter table contract 
-ADD (category VARCHAR2(30));
-

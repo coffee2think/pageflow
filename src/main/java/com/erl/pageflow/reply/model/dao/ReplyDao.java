@@ -46,6 +46,14 @@ public class ReplyDao {
 	public ReplyUpload selectReplyListFile(int replyId) {
 		return sqlSessionTemplate.selectOne("replyMapper.selectReplyListFile", replyId);
 	}
+
+	public int selectReplyMaxCount() {
+		return sqlSessionTemplate.selectOne("replyMapper.selectReplyMaxCount");
+	}
+
+	public int insertReply2(Reply reply) {
+		return sqlSessionTemplate.insert("replyMapper.insertReply2", reply);
+	}
 	
 	
 	
