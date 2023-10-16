@@ -11,11 +11,19 @@ import com.erl.pageflow.sales.model.vo.Client;
 import com.erl.pageflow.sales.model.vo.Sales;
 
 public interface SalesService {
+	public int selectBookOrderCountByDate(Search search);
 	public ArrayList<BookOrder> selectBookOrderByDate(Search search);
-	public ArrayList<Sales> selectSalesByDate(Search search);
+	public int selectSalesCountByDate(Search search);
+	public ArrayList<Sales> selectSalesListByDate(Search search);
 	public BookForSales selectBook(int bookId);
 	public BookStore selectBookStore(int clientId);
 	public int selectClientListCount();
 	public ArrayList<Client> selectClientList(Paging paging);
+	public int insertBookOrder(BookOrder bookOrder);
+	public int updateBookOrder(BookOrder bookOrder);
+	public int deleteBookOrder(int tradeId);
+	public int insertClient(Client client);
+	public int updateClient(Client client);
+	public int deleteClient(int clientId);
 
 }

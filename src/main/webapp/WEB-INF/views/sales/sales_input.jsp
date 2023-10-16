@@ -25,9 +25,6 @@
     	
     });
     
-    function setList(){
-    	console.log('!!!!!!!!');
-    }
 </script>
 <title></title>
 </head>
@@ -86,7 +83,6 @@
                                         <th>주문번호</th>
                                         <th>도서코드</th>
                                         <th>도서명</th>
-                                        <th>지역</th>
                                         <th>서점명</th>
                                         <th>주문일시</th>
                                         <th>정가</th>
@@ -113,7 +109,7 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="no" class="contents-input" value="">
+                                                <input type="input" name="tradeId" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-120">
@@ -130,11 +126,6 @@
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
                                                 <input type="input" name="name" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                        <td class="td-70">
-                                            <div class="contents-input-div">
-                                                <input type="input" name="location" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-100">
@@ -185,8 +176,8 @@
                                         <td></td>
                                         <td></td>
                                         <td></td>
+                                        <td></td>
                                         <td>합계</td>
-                                        <td>1200</td>
                                         <td>100</td>
                                         <td>150000</td>
                                         <td>12000</td>
