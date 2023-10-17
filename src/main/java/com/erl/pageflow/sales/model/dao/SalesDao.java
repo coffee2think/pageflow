@@ -49,9 +49,31 @@ public class SalesDao {
 	public int selectClientListCount() {
 		return sqlSessionTemplate.selectOne("salesMapper.selectClientListCount");
 	}
+	
+	public int selectClientCountByStartDate(Search search) {
+		return sqlSessionTemplate.selectOne("salesMapper.selectClientCountByStartDate", search);
+	}
+
+	public int selectClientCountByEndDate(Search search) {
+		return sqlSessionTemplate.selectOne("salesMapper.selectClientCountByEndDate", search);
+	}
+	
+	public int selectClientCountByDate(Search search) {
+		return sqlSessionTemplate.selectOne("salesMapper.selectClientCountByDate", search);
+	}
 
 	public ArrayList<Client> selectClientList(Paging paging) {
 		List<Client> list = sqlSessionTemplate.selectList("salesMapper.selectClientList", paging);
+		return (ArrayList<Client>) list;
+	}
+	
+	public ArrayList<Client> selectClientByStartDate(Search search) {
+		List<Client> list = sqlSessionTemplate.selectList("salesMapper.selectClientByStartDate", search);
+		return (ArrayList<Client>) list;
+	}
+
+	public ArrayList<Client> selectClientByEndDate(Search search) {
+		List<Client> list = sqlSessionTemplate.selectList("salesMapper.selectClientByEndDate", search);
 		return (ArrayList<Client>) list;
 	}
 
@@ -105,5 +127,11 @@ public class SalesDao {
 		List<BookOrder> list = sqlSessionTemplate.selectList("salesMapper.selectBookOrderByLocation", search);
 		return (ArrayList<BookOrder>) list;
 	}
+
+	
+
+	
+
+	
 	
 }

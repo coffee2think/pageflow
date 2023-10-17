@@ -13,6 +13,7 @@
 <c:set var="end" value="${ requestScope.end }" />
 <c:set var="searchType" value="${ searchType }" />
 <c:set var="keyword" value="${ keyword }" />
+<c:set var="dateType" value="${ dateType }" />
 
 <!DOCTYPE html>
 <html>
@@ -69,6 +70,11 @@
 				<c:if test="${ !empty begin and !empty end }">
 					<c:param name="begin" value="${ begin }" />
 					<c:param name="end" value="${ end }" />
+				</c:if>
+				
+				<!-- dateType이 있을 시 -->
+				<c:if test="${ !empty dateType }">
+					<c:param name="dateType" value="${ dateType }" />
 				</c:if>
 			</c:url>
 			<a href="${ pUrl }" class="paging-list-btn"><span>${ p }</span></a>

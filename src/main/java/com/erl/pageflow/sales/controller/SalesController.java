@@ -116,13 +116,7 @@ public class SalesController {
 		
 		if(list != null && list.size() > 0) {
 			for(BookOrder bo : list) {
-//				BookForSales book = salesService.selectBook(bo.getBookId());
-//				BookStore bookStore = salesService.selectBookStore(bo.getClientId());
-				
-//				bo.setBookName(book.getBookName());
-//				bo.setBookPrice(book.getBookPrice());
 				bo.calcTotalPrice();
-//				bo.setBookStoreName(bookStore.getClientName());
 			}
 	
 			model.addAttribute("list", list);
@@ -334,6 +328,55 @@ public class SalesController {
 		}
 	}
 	
+	// 날짜로 주문현황 검색
+	@RequestMapping("cllistdate.do")
+	public String clientListByDate(Search search,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			@RequestParam(name="dateType") String dateType,
+			Model model) {
+		
+		logger.info("cllistdate.do : page=" + page + ", limitStr=" + limitStr + ", dateType=" + dateType);
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		int listCount = 0; 
+		if(dateType.equals("startDate")) {
+			listCount = salesService.selectClientCountByStartDate(search);
+		} else {
+			listCount = salesService.selectClientCountByEndDate(search);
+		}
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "cllistdate.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<Client> list = null;
+		if(dateType.equals("startDate")) {
+			list = salesService.selectClientByStartDate(search);
+		} else {
+			list = salesService.selectClientByEndDate(search);
+		}
+		
+		if(list != null && list.size() > 0) {
+			model.addAttribute("list", list);
+			model.addAttribute("begin", search.getBegin().toString());
+			model.addAttribute("end", search.getEnd().toString());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			model.addAttribute("dateType", dateType);
+			
+			return "sales/client_list";
+		} else {
+			model.addAttribute("message", "주문현황 조회 실패");
+			return "common/error";
+		}
+	}
+	
 	// 거래처 정보 등록 요청 처리
 	@RequestMapping(value="clinsert.do", method=RequestMethod.POST)
 	public String clientInsertMethod(Client client, Model model) {
@@ -369,12 +412,12 @@ public class SalesController {
 	
 	// 거래처 정보 삭제 요청 처리
 	@RequestMapping(value="cldelete.do", method=RequestMethod.POST)
-	public String clientDeleteMethod(@RequestParam("clientIDs") String[] clientIDs, Model model) {
+	public String clientDeleteMethod(@RequestParam("IDs") int[] clientIDs, Model model) {
 		logger.info("cldelete.do : " + clientIDs);
 		
 		if(clientIDs != null) {
-			for(String clientId : clientIDs) {
-				if(salesService.deleteClient(Integer.parseInt(clientId)) == 0) {
+			for(int clientId : clientIDs) {
+				if(salesService.deleteClient(clientId) == 0) {
 					model.addAttribute("message", clientId + "번 거래처 삭제 실패!");
 					return "common/error";
 				}

@@ -129,11 +129,39 @@
 		select count(*) from client
 	</select>
 	
+	<select id="selectClientCountByStartDate" parameterType="Search" resultType="_int">
+		select count(*) from client
+		where start_date between #{ begin } and #{ end }
+	</select>
+	
+	<select id="selectClientCountByEndDate" parameterType="Search" resultType="_int">
+		select count(*) from client
+		where end_date between #{ begin } and #{ end }
+	</select>
+	
 	<select id="selectClientList" parameterType="Paging" resultMap="resultClient">
 		select *
 		from (select rownum rnum, sub.*
 			  from (select * from client
 					order by start_date desc, client_id desc) sub) 
+		where rnum between #{ startRow } and #{ endRow } 
+	</select>
+	
+	<select id="selectClientByStartDate" parameterType="Search" resultMap="resultClient">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from client
+					where start_date between #{ begin } and #{ end }
+					order by start_date desc, client_id desc) sub) 
+		where rnum between #{ startRow } and #{ endRow } 
+	</select>
+	
+	<select id="selectClientByEndDate" parameterType="Search" resultMap="resultClient">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from client
+					where end_date between #{ begin } and #{ end }
+					order by end_date desc, client_id desc) sub) 
 		where rnum between #{ startRow } and #{ endRow } 
 	</select>
 	

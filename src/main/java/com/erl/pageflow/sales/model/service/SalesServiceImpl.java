@@ -54,10 +54,30 @@ public class SalesServiceImpl implements SalesService {
 	public int selectClientListCount() {
 		return salesDao.selectClientListCount();
 	}
+	
+	@Override
+	public int selectClientCountByStartDate(Search search) {
+		return salesDao.selectClientCountByStartDate(search);
+	}
 
+	@Override
+	public int selectClientCountByEndDate(Search search) {
+		return salesDao.selectClientCountByEndDate(search);
+	}
+	
 	@Override
 	public ArrayList<Client> selectClientList(Paging paging) {
 		return salesDao.selectClientList(paging);
+	}
+	
+	@Override
+	public ArrayList<Client> selectClientByStartDate(Search search) {
+		return salesDao.selectClientByStartDate(search);
+	}
+
+	@Override
+	public ArrayList<Client> selectClientByEndDate(Search search) {
+		return salesDao.selectClientByEndDate(search);
 	}
 
 	@Override
