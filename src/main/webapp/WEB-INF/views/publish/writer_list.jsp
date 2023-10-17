@@ -11,7 +11,7 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 3;
-    const SUBPAGE = 3;
+    const SUBPAGE = 4;
     const LNKPAGE = 1;
 </script>
 <title>작가현황</title>
@@ -84,7 +84,7 @@
 
                             <div class="select-box">
                                 <div class="select-pan-nemo">
-                                    등록일자
+                                    계약일자
                                 </div>
 
                                 <input type="date" class="select-date select-date-first">
