@@ -80,7 +80,7 @@
 			writer_id = #{ writerId }, book_name = #{ bookName },
 			emp_name = #{ empName }, contr_date = #{ contrDate },
 			contr_doc = #{ contrDoc }, contr_state = #{ contrState }
-		where contr_id = #{ contrId } 
+		where contr_id = #{ contrId }
 	</update>
 	
 	<select id="deleteContract" parameterType="_int">
