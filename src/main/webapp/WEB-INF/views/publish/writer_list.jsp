@@ -11,10 +11,10 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 3;
-    const SUBPAGE = 2;
+    const SUBPAGE = 3;
     const LNKPAGE = 1;
 </script>
-<title>도서현황</title>
+<title>작가현황</title>
 </head>
 <body>
 	<div id="container">
@@ -67,9 +67,9 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">도서명</option>
-                                            <option value="">카테고리</option>
                                             <option value="">작가명</option>
+                                            <option value="">연락처</option>
+                                            <option value="">이메일</option>
                                         </select>
                                     </div>
                                 </div>
@@ -79,27 +79,6 @@
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
                                     <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
-                                </div>
-                            </div>
-
-                            <div class="select-box">
-                                <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
-                                        <option value="all">도서상태</option>
-                                        <option value="">정상</option>
-                                        <option value="">품절</option>
-                                        <option value="">절판</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
-                                        <option value="all">판쇄</option>
-                                        <option value="">초판</option>
-                                        <option value="">재판</option>
-                                    </select>
                                 </div>
                             </div>
 
@@ -136,81 +115,68 @@
                             <table class="contents-table">
                                 <tr>
                                     <th>체크</th>
-                                    <th>도서코드</th>
-                                    <th>도서명</th>
-                                    <th>카테고리</th>
+                                    <th>작가번호</th>
                                     <th>작가명</th>
-                                    <th>정가</th>
-                                    <th>국제표준도서번호</th>
-                                    <th>도서상태</th>
-                                    <th>판쇄</th>
-                                    <th>발행일자</th>
-                                    <th>등록일자</th>
+                                    <th>연락처</th>
+                                    <th>생년월일</th>
+                                    <th>이메일</th>
+                                    <th>주소</th>
+                                    <th>은행명</th>
+                                    <th>계좌번호</th>
                                     <th>수정</th>
                                 </tr>
-                                <c:if test="${ !empty bookList }">
-	                                <c:forEach items="${ bookList }" var="book">
+                                <c:if test="${ !empty writerList }">
+	                                <c:forEach items="${ writerList }" var="writer">
 		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
 		                                    <td class="td-50">
 		                                        <input type="checkbox" name="check" value="" >
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="code" class="contents-input noline" value="${ book.bookId }" readonly>
+		                                            <input type="input" name="code" class="contents-input noline" value="${ writer.writerId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-250">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="name" class="contents-input noline" value="${ book.bookName }" readonly>
+		                                            <input type="input" name="name" class="contents-input noline" value="${ writer.writerName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="category" class="contents-input noline" value="${ book.category }" readonly>
+		                                            <input type="input" name="phone" class="contents-input noline" value="${ writer.phone }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="author" class="contents-input noline" value="${ book.writerName }" readonly>
+		                                            <input type="input" name="birth" class="contents-input noline" value="${ writer.writerBirth }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="price" class="contents-input noline" value="${ book.bookPrice }" readonly>
+		                                            <input type="input" name="email" class="contents-input noline" value="${ writer.email }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="isbn" class="contents-input noline" value="${ book.isbn }" readonly>
+		                                            <input type="input" name="address" class="contents-input noline" value="${ writer.address }" readonly>
 		                                        </div>
 		                                    </td>
-		                                    <td class="td-100">
+		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="state" class="contents-input noline" value="${ book.bookState }" readonly>
+		                                            <input type="input" name="bank" class="contents-input noline" value="${ writer.bank }" readonly>
 		                                        </div>
 		                                    </td>
-		                                    <td class="td-100">
+		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="print" class="contents-input noline" value="${ book.engraving }" readonly>
-		                                        </div>
-		                                    </td>
-		                                    <td class="td-100">
-		                                        <div class="contents-input-div">
-		                                            <input type="input" name="pdate" class="contents-input noline" value="${ book.pubDate }" readonly>
-		                                        </div>
-		                                    </td>
-		                                    <td class="td-100">
-		                                        <div class="contents-input-div">
-		                                            <input type="input" name="rdate" class="contents-input noline" value="${ book.regDate }" readonly>
+		                                            <input type="input" name="acount" class="contents-input noline" value="${ writer.account }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
 		                                    </td>
 		                                </tr>
-		                            </c:forEach>
+									</c:forEach>
                                 </c:if>
-
                             </table>
                         </div>
                     </div>
