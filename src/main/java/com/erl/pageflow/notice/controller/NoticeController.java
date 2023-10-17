@@ -78,6 +78,7 @@ public class NoticeController {
 
 		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
 		logger.info("mfile : " + mfile);
+		logger.info("notice : " + notice);
 		// 첨부파일이 있을때
 		if ( !mfile.isEmpty()) {
 			
@@ -106,7 +107,7 @@ public class NoticeController {
 			}
 
 			if (noticeService.insertNotice(notice) > 0) {
-				model.addAttribute("empId", notice.getEmpid());
+				model.addAttribute("empId", notice.getEmpId());
 				return "redirect:nlist.do";
 			} else {
 				model.addAttribute("message", "새 게시글 등록 실패!");
