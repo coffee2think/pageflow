@@ -39,15 +39,15 @@
 		const newCell8 = newRow.insertCell(7);
 		newCell8.setAttribute('class', 'td-200');
 		const newCell9 = newRow.insertCell(8);
-		newCell8.setAttribute('class', 'td-70');
+		newCell9.setAttribute('class', 'td-70');
 		const newCell10 = newRow.insertCell(9);
-		newCell8.setAttribute('class', 'td-70');
+		newCell10.setAttribute('class', 'td-70');
 		const newCell11 = newRow.insertCell(10);
-		newCell8.setAttribute('class', 'td-100');
+		newCell11.setAttribute('class', 'td-100');
 		const newCell12 = newRow.insertCell(11);
-		newCell8.setAttribute('class', 'td-100');
+		newCell12.setAttribute('class', 'td-100');
 		const newCell13 = newRow.insertCell(12);
-		newCell8.setAttribute('class', 'td-100');
+		newCell13.setAttribute('class', 'td-100');
 
 		// Cell에 텍스트 추가
 		newCell1.innerHTML = '<div class="contents-input-div input-search">'
@@ -132,6 +132,8 @@
 	    	initRowIndex();
     	}
     }
+    
+    
 </script>
 <title></title>
 </head>
@@ -167,6 +169,7 @@
                 <!--form-->
                 <!-- <form class="input-form" action="/comi/partyi" method="post" enctype="multipart/form-data">-->
                 <form class="input-form" action="poinsert.do" method="post">
+                <input type="hidden" name="empName" class="select-date small">
                     <!--main-header-bar-->
                     <div class="main-header-bar">
                         <div class="main-title-box">
@@ -314,3 +317,4 @@
     </div>
 </body>
 </html>
+

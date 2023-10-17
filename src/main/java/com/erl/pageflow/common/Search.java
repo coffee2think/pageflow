@@ -6,22 +6,38 @@ import java.sql.Date;
 public class Search implements Serializable {
 
 	private static final long serialVersionUID = -806504296447948950L;
-	
+
 	private String keyword;
 	private Date begin;
 	private Date end;
 	private int startRow;
 	private int endRow;
-	
+	private Date week;
+	private Date month;
+
 	public Search() {
 	}
-
+	
 	public Search(String keyword, Date begin, Date end, int startRow, int endRow) {
+		super();
 		this.keyword = keyword;
 		this.begin = begin;
 		this.end = end;
 		this.startRow = startRow;
 		this.endRow = endRow;
+		this.week = week;
+		this.month = month;
+	}
+
+	public Search(String keyword, Date begin, Date end, int startRow, int endRow, Date week, Date month) {
+		super();
+		this.keyword = keyword;
+		this.begin = begin;
+		this.end = end;
+		this.startRow = startRow;
+		this.endRow = endRow;
+		this.week = week;
+		this.month = month;
 	}
 
 	public String getKeyword() {
@@ -64,10 +80,30 @@ public class Search implements Serializable {
 		this.endRow = endRow;
 	}
 
+	public Date getWeek() {
+		return week;
+	}
+
+	public void setWeek(Date week) {
+		this.week = week;
+	}
+
+	public Date getMonth() {
+		return month;
+	}
+
+	public void setMonth(Date month) {
+		this.month = month;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Override
 	public String toString() {
 		return "Search [keyword=" + keyword + ", begin=" + begin + ", end=" + end + ", startRow=" + startRow
-				+ ", endRow=" + endRow + "]";
+				+ ", endRow=" + endRow + ", week=" + week + ", month=" + month + "]";
 	}
 
 }

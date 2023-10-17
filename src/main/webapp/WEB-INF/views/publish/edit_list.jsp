@@ -14,7 +14,7 @@
     const SUBPAGE = 3;
     const LNKPAGE = 1;
 </script>
-<title></title>
+<title>편집현황</title>
 </head>
 <body>
 	<div id="container">
@@ -67,12 +67,9 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">도서코드</option>
+                                            <option value="">부서명</option>
+                                            <option value="">담당자명</option>
                                             <option value="">도서명</option>
-                                            <option value="">카테고리</option>
-                                            <option value="">저/역자</option>
-                                            <option value="">ISBN</option>
-                                            <option value="">정가</option>
                                         </select>
                                     </div>
                                 </div>
@@ -89,20 +86,10 @@
                                 <div class="select-pan">
                                     <label for="sel_code"></label>
                                     <select name="code" id="sel_code">
-                                        <option value="all">도서상태</option>
-                                        <option value="">정상</option>
-                                        <option value="">품절</option>
-                                        <option value="">절판</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
-                                        <option value="all">판쇄</option>
-                                        <option value="">초판</option>
-                                        <option value="">2쇄</option>
-                                        <option value="">3쇄</option>
+                                        <option value="all">편집상태</option>
+                                        <option value="">대기</option>
+                                        <option value="">진행중</option>
+                                        <option value="">완료</option>
                                     </select>
                                 </div>
                             </div>
@@ -152,77 +139,68 @@
                             <table class="contents-table">
                                 <tr>
                                     <th>체크</th>
-                                    <th>도서코드</th>
+                                    <th>편집번호</th>
                                     <th>도서명</th>
-                                    <th>카테고리</th>
-                                    <th>저/역자</th>
-                                    <th>ISBN</th>
-                                    <th>정가</th>
-                                    <th>도서상태</th>
-                                    <th>판쇄</th>
-                                    <th>발행일자</th>
-                                    <th>등록일자</th>
+                                    <th>직원번호</th>
+                                    <th>직원명</th>
+                                    <th>부서명</th>
+                                    <th>진행상태</th>
+                                    <th>시작일자</th>
+                                    <th>마감일자</th>
                                     <th>수정</th>
                                 </tr>
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                    <td class="td-50">
-                                        <input type="checkbox" name="check" value="" >
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="code" class="contents-input noline" value="10100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-250">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="no" class="contents-input noline" value="데이터베이스 개론과 실습" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="category" class="contents-input noline" value="IT" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="author" class="contents-input noline" value="전성훤" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="isbn" class="contents-input noline" value="900-12-3" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="price" class="contents-input noline" value="100000" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="state" class="contents-input noline" value="정상" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="state" class="contents-input noline" value="초판" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_pub" class="contents-input noline" value="2015.03.05" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-100">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="date_reg" class="contents-input noline" value="2015.03.05" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-                                    </td>
-                                </tr>
-
+                                <c:if test="${ !empty editList }">
+	                                <c:forEach items="${ editList }" var="edit">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                     <td class="td-50">
+		                                        <input type="checkbox" name="check" value="" >
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="code" class="contents-input noline" value="${ edit.editId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bname" class="contents-input noline" value="${ edit.bookName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-250">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="ecode" class="contents-input noline" value="${ edit.empId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="ename" class="contents-input noline" value="${ edit.empName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="dname" class="contents-input noline" value="${ edit.depName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="state" class="contents-input noline" value="${ edit.editState }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="date" class="contents-input noline" value="${ edit.startDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="date" class="contents-input noline" value="${ edit.endDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+		                                    </td>
+		                                </tr>
+									</c:forEach>
+                                </c:if>
                             </table>
                         </div>
                     </div>

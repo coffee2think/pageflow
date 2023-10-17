@@ -11,11 +11,36 @@
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script>
+<script type="text/javascript">
     const NOWPAGE = 1;
     const SUBPAGE = 2;
     const LNKPAGE = 1;
     
+    $(function(){
+        console.log('===');
+        newCount();
+
+        $('#btn_insert').click(function() {
+            $('#appendTextArea').val($('.content-input').html());
+
+            $("#myForm").submit();
+        });
+    })
+
+    function newCount(){
+        $.ajax({
+            url : 'bdlistnewcount.do'
+            ,type : 'get'
+    		,dataType : 'text'
+            ,success : function(data) {
+                console.log('data : ' + data);
+                $('#new_count').text(data);
+            },error: function(request, status, errorData){
+                console.log("error : " + request + ", " + status + ", " + errorData);
+            }
+        })
+    }
+
     function inputSubmit(){
     	$('#btn_insert').click(function() {
             $('#appendTextArea').val($('.content-input').html());
@@ -107,11 +132,12 @@
                             </div>
                             
 							<c:if test="${ empty board }">
-                            <form id="" action="bdinsert.do" method="post" onsubmit="inputSubmit();" enctype="multipart/form-data">
+                            <!-- <form id="myForm" action="bdinsert.do" method="post" onsubmit="inputSubmit();" enctype="multipart/form-data"> -->
+                            <form id="myForm" action="bdinsert.do" method="post" enctype="multipart/form-data"></form>
                             </c:if>
                             
                             <c:if test="${ !empty board }">
-                            <form id="" action="bdupdate.do" method="post" onsubmit="inputSubmit();" enctype="multipart/form-data">
+                            <form id="myForm" action="bdupdate.do" method="post" onsubmit="inputSubmit();" enctype="multipart/form-data">
                             	<input type="hidden" name="boardId" value="${ board.boardId }">
                             	<input type="hidden" name="empId" value="${ board.empId }">
                             	<input type="hidden" name="depId" value="${ board.depId }">
@@ -180,7 +206,7 @@
 								
                                 <div class="content-input-btn-box">
                                 	<c:if test="${ empty board }">
-                                    	<input type="submit" class="contents-input-btn big noline" id="btn_insert" value="입력">
+                                    	<input type="button" class="contents-input-btn big noline" id="btn_insert" value="입력">
                                 	</c:if>
                                 	<c:if test="${ !empty board }">
                                     	<input type="submit" class="contents-input-btn big noline" id="btn_insert" value="수정">

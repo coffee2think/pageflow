@@ -1,9 +1,13 @@
 package com.erl.pageflow.board.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +27,7 @@ import com.erl.pageflow.common.BoardKeyword;
 import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.ReplyKeyword;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.reply.model.service.ReplyService;
 import com.erl.pageflow.reply.model.vo.Reply;
 import com.erl.pageflow.reply.model.vo.ReplyUpload;
@@ -55,6 +60,49 @@ public class BoardController {
 		Paging paging = new Paging(listCount, 1, limit, "bdlist.do");
 		paging.calculator();
 		ArrayList<Board> list = boardService.selectBoardList(paging);
+		for(Board b : list) {
+			int replyCount = replyService.selectReplyListCount(new ReplyKeyword(b.getDepId(), b.getBoardId()));
+			b.setReplyCount(replyCount);
+		}
+		
+		if(list != null && list.size() > 0) {
+			model.addAttribute("paging", paging);
+			model.addAttribute("boardList", list);
+			return "work/work_list";
+		}else {
+			model.addAttribute("message", paging + " 업무게시판 조회 실패!");
+			return "common/error";
+		}
+	}
+	
+	private int duration = 7;
+	
+	//업무게시판 최신 게시글 리스트 갯수
+	@RequestMapping("bdlistnewcount.do")
+	public void selectBoardListNewCountMethod(HttpServletResponse response) throws IOException {
+		//3일까지만
+		int count = boardService.selectBoardListNewCount(duration);
+		//logger.info("count : " + count);
+		PrintWriter out = response.getWriter();
+		out.print(count);
+		//out.print(sendJson);
+		out.flush();
+		out.close();
+	}
+	
+	//업무게시판 최신 게시글 리스트 조회
+	@RequestMapping("bdlistnew.do")
+	public String selectBoardListNewMethod(
+			@RequestParam("begin") Date begin,
+			@RequestParam("end") Date end,
+			Model model) {
+		int listCount = boardService.selectBoardListNewCount(duration);
+		int limit = 10;
+		Paging paging = new Paging(listCount, 1, limit, "bdlistnew.do");
+		paging.calculator();
+		ArrayList<Board> list = boardService.selectBoardListDuration(
+				new Search("", begin, end, paging.getStartRow(), paging.getEndRow()));
+		
 		for(Board b : list) {
 			int replyCount = replyService.selectReplyListCount(new ReplyKeyword(b.getDepId(), b.getBoardId()));
 			b.setReplyCount(replyCount);
@@ -134,10 +182,11 @@ public class BoardController {
 	public String insertBoardMethod(Board board, Model model,
 			HttpServletRequest request, 
 			@RequestParam(name = "upfile", required = false) MultipartFile mfile) {
-		
+		logger.info("board : " + board);
+		logger.info("mfile : " + mfile);
 		String savePath = request.getSession().getServletContext().getRealPath(
 				"resources/board_upfiles");
-		logger.info("mfile : " + mfile);
+		
 		//첨부파일이 있을때 
 		if(mfile != null) {
 			if(!mfile.isEmpty()) {

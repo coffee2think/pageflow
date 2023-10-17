@@ -11,6 +11,7 @@ import com.erl.pageflow.board.model.vo.Board;
 import com.erl.pageflow.board.model.vo.BoardUpload;
 import com.erl.pageflow.common.BoardKeyword;
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 
 @Repository("boardDao")
 public class BoardDao {
@@ -69,6 +70,15 @@ public class BoardDao {
 	//업무게시판 게시글 수정
 	public int updateBoard(Board board) {
 		return sqlSessionTemplate.update("boardMapper.updateBoard", board);
+	}
+
+	public int selectBoardListNewCount(int duration) {
+		return sqlSessionTemplate.selectOne("boardMapper.selectBoardListNewCount", duration);
+	}
+
+	public ArrayList<Board> selectBoardListDuration(Search search) {
+		List<Board> list = sqlSessionTemplate.selectList("boardMapper.selectBoardListDuration", search);
+		return (ArrayList<Board>)list;
 	}
 
 }

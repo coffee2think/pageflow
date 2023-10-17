@@ -33,7 +33,7 @@ function updateContract(contrId) {
 }
 </script>
 
-<title></title>
+<title>계약현황</title>
 </head>
 <body>
 	<div id="container">
