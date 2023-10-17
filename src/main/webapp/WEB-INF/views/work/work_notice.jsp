@@ -3,7 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="board" value="${ requestScope.board }" />
 <c:set var="replyList" value="${ requestScope.replyList }" />
-
+<c:set var="loginCur" value="no" />
+<c:if test="${ !empty loginMember }">
+    <c:set var="loginCur" value="ok" />
+</c:if>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,11 +23,27 @@
     const SUBPAGE = 2;
     const LNKPAGE = 1;
     
-    document.addEventListener("DOMContentLoaded", function(){
-    	var workNotice = new Work_notice();
+    $(function(){
+        newCount();
+        var workNotice = new Work_notice();
     	workNotice.buttonEvent();
+        visibleReplyBtn();
     })
-	
+
+    function newCount(){
+        $.ajax({
+            url : 'bdlistnewcount.do'
+            ,type : 'get'
+    		,dataType : 'text'
+            ,success : function(data) {
+                console.log('data : ' + data);
+                $('#new_count').text(data);
+            },error: function(request, status, errorData){
+                console.log("error : " + request + ", " + status + ", " + errorData);
+            }
+        })
+    }
+
     function Work_notice() {
     }
     
@@ -337,6 +356,7 @@
     			console.log('parent : ' + parent.attr('class'));
     			setReplyBtn($('#reply_' + ajaxData.replyId));
                 viewReplyNum();
+                visibleReplyBtn();
     		}
     		,error: function(request, status, errorData){
     			console.log("error : " + request + ", " + status + ", " + errorData);
@@ -392,6 +412,7 @@
                 //console.log('#reply_'+ ajaxData.replyId);
                 setReplyBtn($('#reply_' + ajaxData.replyId));
                 viewReplyNum();
+                visibleReplyBtn();
             },error: function(request, status, errorData){
                 console.log("error : " + request + ", " + status + ", " + errorData);
             }
@@ -401,6 +422,49 @@
     function viewReplyNum(){
         let num = Number($('.reply-title span').text());
         $('.reply-title span').text(num+1);
+        
+    }
+
+    function visibleReplyBtn(){
+        let log = '<c:out value="${ loginCur }" />';
+        if(log == 'no') {
+            $('.reply-btn').each(function(){
+                $(this).hide();
+            })
+            $('.reply-input-box.depth1').hide();
+            
+            $('.button-update').hide();
+            $('.reply-right').each(function(){
+                $(this).hide();
+            })
+        }else{
+            $('.reply-btn').each(function(){
+                $(this).show();
+            })
+
+            $('.reply-input-box.depth1').show();
+
+            //만약 나라면
+            let myId = Number('<c:out value="${ loginMember.empId }" />');
+            let empId = Number('<c:out value="${ board.empId }" />');
+            console.log('myId : ' + myId + '  empId : ' + empId);
+            if(empId == myId){
+                $('.button-update').show();
+            }else{
+                $('.button-update').hide();
+            }
+
+            $('.notice-reply-con').each(function(){
+                let dataEmpId = Number($(this).attr('data-empid'));
+                console.log('myId : ' + myId + '  dataEmpId : ' + dataEmpId);
+                if(myId == dataEmpId){
+                    $(this).find('.reply-right').show();
+                }else{
+                    $(this).find('.reply-right').hide();
+                }
+            })
+
+        }
     }
 
   	function setTag(jsonData, ajaxData){

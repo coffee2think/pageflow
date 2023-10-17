@@ -7,6 +7,7 @@ import com.erl.pageflow.board.model.vo.Board;
 import com.erl.pageflow.board.model.vo.BoardUpload;
 import com.erl.pageflow.common.BoardKeyword;
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 
 public interface BoardService {
 	//업무게시판 게시글 리스트 갯수 조회
@@ -37,4 +38,8 @@ public interface BoardService {
 	public int updateBoardViewNum(BoardKeyword boardKeyword);
 
 	public int updateUploadBoard(Board board);
+
+	public int selectBoardListNewCount(int duration);
+
+	public ArrayList<Board> selectBoardListDuration(Search search);
 }

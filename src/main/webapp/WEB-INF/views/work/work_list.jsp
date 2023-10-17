@@ -13,10 +13,29 @@
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title></title>
-<script>
+<script type="text/javascript">
     const NOWPAGE = 1;
     const SUBPAGE = 2;
     const LNKPAGE = 1;
+
+    $(function(){
+        newCount();
+    })
+
+    function newCount(){
+        $.ajax({
+            url : 'bdlistnewcount.do'
+            ,type : 'get'
+    		,dataType : 'text'
+            ,success : function(data) {
+                console.log('data : ' + data);
+                $('#new_count').text(data);
+            },error: function(request, status, errorData){
+                console.log("error : " + request + ", " + status + ", " + errorData);
+            }
+        })
+    }
+
 </script>
 </head>
 <body>
@@ -43,7 +62,7 @@
                         <a href="bdmoveinsert.do?depId=${ depId }" class="side-write-btn">글쓰기</a>
                         <div class="side-icon-menu">
                             <a class="side-icon-btn" id="sideBtn_new" href="#">
-                                <span class="side-icon">3</span>
+                                <span class="side-icon" id="new_count">0</span>
                                 <span>최신글</span>
                             </a>
                             <a class="side-icon-btn" id="sideBtn_my" href="#">

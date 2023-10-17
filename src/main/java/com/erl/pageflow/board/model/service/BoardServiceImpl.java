@@ -10,6 +10,7 @@ import com.erl.pageflow.board.model.vo.Board;
 import com.erl.pageflow.board.model.vo.BoardUpload;
 import com.erl.pageflow.common.BoardKeyword;
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 
 @Service("boardService")
 public class BoardServiceImpl implements BoardService{
@@ -69,6 +70,16 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int updateUploadBoard(Board board) {
 		return boardDao.updateUploadBoard(board);
+	}
+
+	@Override
+	public int selectBoardListNewCount(int duration) {
+		return boardDao.selectBoardListNewCount(duration);
+	}
+
+	@Override
+	public ArrayList<Board> selectBoardListDuration(Search search) {
+		return boardDao.selectBoardListDuration(search);
 	}
 	
 	

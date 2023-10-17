@@ -57,6 +57,28 @@
 		]]>
 	</select>
 	
+	<select id="selectBoardListNewCount" parameterType="_int" resultType="_int">
+		SELECT count(*) from board
+		WHERE CREATE_DATE BETWEEN TRUNC(SYSDATE) - #{ duration } AND TRUNC(SYSDATE)
+	</select>
+	<!-- 
+	<select id="selectBoardListDuration" parameterType="Search" resultType="resultBoardJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
+		           BOARD_TITLE, BOARD_DETAIL, CREATE_DATE, 
+		           MODIFY_DATE, DELETE_DATE, VIEWS_NUM
+		      from (select * 
+		            from board
+		            where create_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+		            order by BOARD_ID desc))
+		left join department using(DEP_ID)
+		left join employee using(EMP_ID)
+		where rnum >= 1 and rnum <= 10
+		]]>
+	</select>
+	 -->
+	
 	<select id="selectBoardSearch" parameterType="Paging" resultMap="resultBoardJoin">
 		<![CDATA[
 		select * 
