@@ -57,7 +57,7 @@ public class BookController {
 		ArrayList<Book> list = bookService.selectBookList(paging);
 		
 		if(list != null && list.size() > 0) {
-			model.addAttribute("list", list);
+			model.addAttribute("bookList", list);
 			model.addAttribute("paging", paging);
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
