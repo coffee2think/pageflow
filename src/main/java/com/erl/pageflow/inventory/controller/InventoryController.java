@@ -2,20 +2,22 @@ package com.erl.pageflow.inventory.controller;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.inventory.model.service.InventoryService;
 import com.erl.pageflow.inventory.model.vo.Inventory;
-import com.erl.pageflow.store.model.vo.Store;
 
 @Controller
 public class InventoryController {
@@ -105,5 +107,21 @@ public class InventoryController {
 		}
 
 	}
+
+//	// 재고 키워드로 검색
+//	@RequestMapping(value = "selectkeyword.do", method = { RequestMethod.GET, RequestMethod.POST })
+//	@ResponseBody
+//	public String selectInvenSearchKeyword(HttpServletResponse response, @RequestParam("keyword") String keyword,
+//			Inventory inven) {
+//		ArrayList<Inventory> list = inventoryService.selectSearchTitle(keyword);
+//
+//		
+//		
+//		
+//		
+//		
+//		response.setContentType("application/json; charset=utf-8");
+//
+//	}
 
 }
