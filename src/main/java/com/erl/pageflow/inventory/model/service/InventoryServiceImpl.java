@@ -14,29 +14,40 @@ import com.erl.pageflow.inventory.model.vo.Inventory;
 public class InventoryServiceImpl implements InventoryService {
 	@Autowired
 	private InventoryDao inventoryDao;
-	
+
 	@Override
 	public int selectGetListCount() {
 		return inventoryDao.selectGetListCount();
 	}
-	
+
 	@Override
 	public String selectInventoryBookName(int bookId) {
 		return inventoryDao.selectInventoryBookName(bookId);
 	}
-	
+
 	@Override
 	public String selectInventoryClientName(int storageId) {
 		return inventoryDao.selectInventoryClientName(storageId);
 	}
-	
+
 	@Override
-	public ArrayList<Inventory> selectInventoryList(Paging paging){
+	public ArrayList<Inventory> selectInventoryList(Paging paging) {
 		return inventoryDao.selectInventoryList(paging);
 	}
-	
+
 	@Override
 	public int selectGetDateListCount(Search sarch) {
 		return inventoryDao.selectGetDateListCount(sarch);
 	}
+
+	@Override
+	public int selectInventoryCountByDate(Search search) {
+		return inventoryDao.selectInventoryCountByDate(search);
+	}
+
+	@Override
+	public ArrayList<Inventory> selectInventoryByDate(Search search) {
+		return inventoryDao.selectInventoryByDate(search);
+	}
+
 }

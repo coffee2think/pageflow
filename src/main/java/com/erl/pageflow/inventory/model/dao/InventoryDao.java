@@ -37,4 +37,14 @@ public class InventoryDao {
 	public int selectGetDateListCount(Search search) {
 		return sqlSessionTemplate.selectOne("inventoryMapper.selectGetDateListCount");
 	}
+	
+	public int selectInventoryCountByDate(Search search) {
+		return sqlSessionTemplate.selectOne("inventoryMapper.selectInventoryCountByDate", search);
+	}
+	
+	public ArrayList<Inventory> selectInventoryByDate(Search search) {
+		List<Inventory> list = sqlSessionTemplate.selectList("inventoryMapper.selectInventoryByDate", search);
+		return (ArrayList<Inventory>) list;
+	}
+
 }

@@ -60,14 +60,21 @@ Header.prototype = {
     </div>
 
     <div class="header-right">
+    <c:if test="${ empty sessionScope.loginMember }">
     	<button class="header-right-btn">
     		<img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
-        	<span>홍길동</span>
     	</button>
-    	
-        <a class="header-right-a" href="${ pageContext.servletContext.contextPath }/views/member/login.jsp">
+    	 <a class="header-right-a" href="loginPage.do" >
         	로그인
         </a>
+    </c:if>
+ 
+    <c:if test="${ !empty sessionScope.loginMember }">
+    	${ loginMember.empName }님
+    	<a href="logout.do">로그아웃</a>
+    	<a href="#">마이페이지</a>
+    </c:if>
+   
     </div>
 </body>
 </html>

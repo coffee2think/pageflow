@@ -25,8 +25,10 @@
 	<select id="selectRefundList" parameterType="Paging" resultMap="resultRefund">
 		<![CDATA[
 			SELECT *
-			FROM REFUND
-			WHERE SYSDATE - REFUND_DATE <= 7
+			FROM (SELECT ROWNUM RNUM, REFUND_ID, BOOK_ID, CLIENT_ID, EMP_ID, EMP_NAME, REFUND_NUM, REFUND_DATE, REFUND_AMOUNT, REFUND_STATE, REMARK 
+			            FROM (SELECT * FROM REFUND
+			                  ORDER BY REFUND_DATE DESC))
+			WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
 		]]>
 	</select>
 	
@@ -47,4 +49,31 @@
 		FROM BOOK
 		WHERE BOOK_ID = #{ bookId }
 	</select>
+	
+	<select id="selectRefundCountByDate" parameterType="Search" resultType="_int">
+		SELECT COUNT(*) FROM STORE
+		WHERE (STORE_DATE between to_date(#{ begin }) and to_date(#{ end }) + 1 - 1/86400) AND CLASSIFY = '출고'
+	</select>
+	
+	<select id="selectRefundByDate" parameterType="Search" resultMap="resultRefund">
+		<![CDATA[
+			SELECT *
+			FROM (SELECT ROWNUM RNUM, REFUND_ID, BOOK_ID, CLIENT_ID, EMP_ID, EMP_NAME, REFUND_NUM, REFUND_DATE, REFUND_AMOUNT, REFUND_STATE, REMARK
+			      FROM (SELECT *
+			            FROM REFUND
+			            WHERE REFUND_DATE between to_date(#{ begin }) and to_date(#{ end }) + 1 - 1/86400
+			            ORDER BY REFUND_DATE DESC
+			            )
+			      )
+			WHERE RNUM between #{ startRow } and #{ endRow }
+		]]>
+	</select>
+	
+	<delete id="deleteRefund" parameterType="_int">
+		DELETE FROM REFUND WHERE REFUND_ID = #{ refundId }
+	</delete>
+			
+	<delete id="deleteInventory" parameterType="_int">
+		DELETE FROM INVENTORY WHERE REFUND_ID = #{ refundId }
+	</delete>
 </mapper>

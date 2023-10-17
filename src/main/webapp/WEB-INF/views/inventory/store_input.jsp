@@ -15,6 +15,82 @@
     const LNKPAGE = 2;
 </script>
 <title></title>
+<script type="text/javascript">
+function addRow() {
+	const uniqueId = "row" + (new Date()).getTime();
+	
+	$("#row").append(
+		"<tr id='" + uniqueId + "'>"
+    	+ "<td class='td-50'>"
+        + "<div class='contents-check-div'>"
+        + "<button class='contents-input-plus' onclick='addRow(); return false'>"
+        + "<img src='${ pageContext.servletContext.contextPath }/resources/images/plus.png'>"
+        + "</button>"
+        + "<button class='contents-input-minus' onclick='minusRow(\"" + uniqueId + "\");'>"
+        + "<img src='${ pageContext.servletContext.contextPath }/resources/images/minus.png'>"
+        + "</button>"
+        + "</div>"
+        + "</td>"
+        + "<td class='td-100'>"
+        + "<div class='contents-input-div input-search'>"
+        + "<button class='input-search-btn'>"
+        + "<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
+        + "</button>"
+        + "<input type='input' name='code' class='contents-input' value=''>"
+        + "</div>"
+        + "</td>"
+        + "<td class='td-200'>"
+        + "<div class='contents-input-div input-search'>"
+        + "<button class='input-search-btn'>"
+        + "<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
+        + "</button>"
+        + "<input type='input' name='name' class='contents-input' value=''>"
+        + "</div>"
+        + "</td>"
+        + "<td class='td-100'>"
+        + "<div class='contents-input-div input-search'>"
+        + "<button class='input-search-btn'>"
+        + "<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
+        + "</button>"
+        + "<input type='input' name='store' class='contents-input' value=''>"
+        + "</div>"
+        + "</td>"
+        + "<td class='td-100'>"
+        + "<div class='contents-input-div input-search'>"
+        + "<button class='input-search-btn'>"
+        + "<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
+        + "</button>"
+        + "<input type='input' name='man' class='contents-input' value=''>"
+        + "</div>"
+        + "</td>"
+        + "<td class='td-70'>"
+        + "<div class='contents-input-div'>"
+        + "<input type='date' name='date' class='select-date small'>"
+        + "</div>"
+        + "</td>"
+        + "<td class='td-70'>"
+        + "<div class='contents-input-div'>"
+        + "<input type='number' name='count' class='contents-input'>"
+        + "</div>"
+        + "</td>"
+        + "<td class='td-70'>"
+        + "<div class='contents-input-div'>"
+        + "<input type='number' name='price' class='contents-input'>"
+        + "</div>"
+        + "</td>"
+        + "<td class='td-100'>"
+        + "<div class='contents-input-div'>"
+        + "<input type='number' name='amount' class='contents-input'>"
+        + "</div>"
+        + "</td>"
+	    + "</tr>");
+
+}
+function minusRow(rowId) {
+    $("#" + rowId).remove();
+}
+</script>
+
 </head>
 <body>
 	<div id="container">
@@ -65,7 +141,7 @@
                         <!--컨텐츠영역-->
                         <div class="contents-container sort-row">
                             <div class="contents-box">
-                                <table class="contents-table">
+                                <table class="contents-table" id="row">
                                     <tr>
                                         <th></th>
                                         <th>도서코드</th>
@@ -77,14 +153,13 @@
                                         <th>정가</th>
                                         <th>입고금액</th>
                                     </tr>
-                                    <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                        
+                                    <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">                   
                                         <td class="td-50">
                                             <div class="contents-check-div">
-                                                <button class="contents-input-plus">
+                                                <button class="contents-input-plus" onclick="addRow(); return false">
                                                     <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
                                                 </button>
-                                                <button class="contents-input-minus">
+                                                <button class="contents-input-minus" onclick="minusRow(); return false">
                                                     <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
                                                 </button>
                                             </div>
@@ -142,21 +217,21 @@
                                             </div>
                                         </td>
                                     </tr>
-
+                                </table>   
+								<table class="contents-table">
                                     <!--합계-->
                                     <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>합계</td>
-                                        <td>12123</td>
-                                        <td>100213</td>
-                                        <td>150000</td>
+                                      <td class="td-50"></td>
+                                      <td class="td-100"></td>
+                                      <td class="td-200"></td>
+                                      <td class="td-100"></td>
+                                      <td class="td-100"></td>
+                                      <td class="td-70">합계</td>
+                                      <td class="td-70">12123</td>
+                                      <td class="td-70">100213</td>
+                                      <td class="td-100">50000</td>
                                     </tr>
                                     <!--합계end-->
-
                                 </table>
                             </div>
                         </div>

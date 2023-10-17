@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.refund.model.vo.Refund;
+
 
 @Repository("refundDao")
 public class RefundDao {
@@ -34,5 +36,22 @@ public class RefundDao {
 
 	public int selectRefundBookPrice(int bookId) {
 		return sqlSessionTemplate.selectOne("refundMapper.selectRefundBookPrice", bookId);
+	}
+	
+	public int selectRefundCountByDate(Search search) {
+		return sqlSessionTemplate.selectOne("refundMapper.selectRefundCountByDate", search);
+	}
+	
+	public ArrayList<Refund> selectRefundByDate(Search search) {
+		List<Refund> list = sqlSessionTemplate.selectList("refundMapper.selectRefundByDate", search);
+		return (ArrayList<Refund>) list;
+	}
+	
+	public int deleteRefund(int refundId) {
+		return sqlSessionTemplate.delete("refundMapper.deleteRefund", refundId);
+	}
+	
+	public int deleteInventory(int refundId) {
+		return sqlSessionTemplate.delete("refundMapper.deleteInventory", refundId);
 	}
 }

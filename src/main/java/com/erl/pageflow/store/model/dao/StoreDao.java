@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
+import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.store.model.vo.Store;
 
 @Repository("storeDao")
@@ -43,23 +44,35 @@ public class StoreDao {
 		return (ArrayList<Store>) list;
 	}
 
-	public int deleteStore(ArrayList<String> storelist) {
-		return sqlSessionTemplate.delete("storeMapper.deleteStore", storelist);
-	}
-
-	public int deleteInventory(ArrayList<String> storelist) {
-		return sqlSessionTemplate.delete("storeMapper.deleteInventory", storelist);
-	}
-	
 	public int selectStoreCountByDate(Search search) {
 		return sqlSessionTemplate.selectOne("storeMapper.selectStoreCountByDate", search);
 	}
-	
+
 	public ArrayList<Store> selectStoreByDate(Search search) {
 		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectStoreByDate", search);
 		return (ArrayList<Store>) list;
 	}
 
+	public int selectReleaseCountByDate(Search search) {
+		return sqlSessionTemplate.selectOne("storeMapper.selectReleaseCountByDate", search);
+	}
+
+	public ArrayList<Store> selectReleaseByDate(Search search) {
+		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectReleaseByDate", search);
+		return (ArrayList<Store>) list;
+	}
+
 	
+	public int deleteStore(int storeId) {
+		return sqlSessionTemplate.delete("storeMapper.deleteStore", storeId);
+	}
 	
+	public int deleteRelease(int storeId) {
+		return sqlSessionTemplate.delete("storeMapper.deleteRelease", storeId);
+	}
+	
+	public int deleteInventory(int storeId) {
+		return sqlSessionTemplate.delete("storeMapper.deleteInventory", storeId);
+	}
+
 }

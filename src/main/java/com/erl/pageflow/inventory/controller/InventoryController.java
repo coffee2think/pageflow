@@ -15,6 +15,7 @@ import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.inventory.model.service.InventoryService;
 import com.erl.pageflow.inventory.model.vo.Inventory;
+import com.erl.pageflow.store.model.vo.Store;
 
 @Controller
 public class InventoryController {
@@ -63,16 +64,46 @@ public class InventoryController {
 		}
 
 	}
-	
-//	@RequestMapping(value="invendate.do")
-//	public ModelAndView selectInventoryByDate(Search search, @RequestParam("action") String action) {
-//		int currentPage = 1;
-//		int limit = 10;
-//		
-//		int listCount = inventoryService.selectGetDateListCount(search);
-//		
-//		
-//	}
 
+	// 재고 날짜 조회
+	@RequestMapping("invlistdate.do")
+	public String selectReleaseByDate(Search search, @RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String limitStr, Model model) {
+		int currentPage = 1;
+		int limit = 10;
+
+		int listCount = inventoryService.selectInventoryCountByDate(search);
+
+		Paging paging = new Paging(listCount, currentPage, limit, "invlistdate.do");
+		paging.calculator();
+
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+
+		ArrayList<Inventory> list = inventoryService.selectInventoryByDate(search);
+		logger.info("search : " + search);
+		if (list != null && list.size() > 0) {
+			for (Inventory inv : list) {
+				String bname = inventoryService.selectInventoryBookName(inv.getBookId());
+				String cname = inventoryService.selectInventoryClientName(inv.getStorageId());
+
+				inv.setBookName(bname);
+				inv.setStorageName(cname);
+			}
+
+			model.addAttribute("list", list);
+			model.addAttribute("begin", search.getBegin().toString());
+			model.addAttribute("end", search.getEnd().toString());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+
+			return "inventory/inven_list";
+		} else {
+			model.addAttribute("message", "날짜 검색 실패");
+			return "common/error";
+		}
+
+	}
 
 }

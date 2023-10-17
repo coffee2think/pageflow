@@ -17,4 +17,9 @@ public interface InventoryService {
 	public String selectInventoryClientName(int storageId);
 		
 	public int selectGetDateListCount(Search search);
+	
+	public int selectInventoryCountByDate(Search search);
+	
+	public ArrayList<Inventory> selectInventoryByDate(Search search);
+
 }
