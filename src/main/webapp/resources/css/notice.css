@@ -138,19 +138,19 @@
     border-bottom: 1px solid #e2e2e2;
 }
 
-.notice-reply-con.depth1, .notice-reply-con.depth2 {
+.notice-reply-con.depth1 {
     background-color: #f7f6f6;
     padding-left: 60px;
 }
 
 .notice-reply-con.depth2 {
     background-color: #f7f6f6;
-    padding-left: 120px;
+    padding-left: 90px;
 }
 
 .notice-reply-con.depth3 {
     background-color: #f7f6f6;
-    padding-left: 180px;
+    padding-left: 120px;
 }
 
 .contents-notice-text {
@@ -162,7 +162,7 @@
     color: #1a70d3;
 }
 
-.reply-btn {
+.reply-btn, .reply-up-btn {
     font-size: 13px;
     width: 50px;
     height: 25px;
@@ -170,6 +170,11 @@
     cursor: pointer;
     background-color: #fff;
 }
+
+.reply-up-btn {
+    display: none;
+}
+
 .tag-text {
     color: #1a70d3;
 }
@@ -191,6 +196,17 @@
 
 .reply-dropdown {
     display: none;
+    position: absolute;
+    right: 25px;
+    line-height: 20px;
+    padding: 5px 8px;
+    background-color: #fff;
+    border: 1px solid #eeeeee;
+    border-radius: 5px;
+}
+
+.reply-dropdown button {
+    cursor: pointer;
 }
 
 /*********************댓글 입력******************/

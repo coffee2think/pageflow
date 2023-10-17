@@ -13,7 +13,9 @@
 		<result property="orderQuantity" column="ORDER_QUANTITY" />
 		<result property="orderDate" column="ORDER_DATE" />
 		<result property="state" column="STATE" />
-		<result property="classify" column="CLASSIFY" />
+		<result property="bookName" column="BOOK_NAME" />
+		<result property="bookPrice" column="BOOK_PRICE" />
+		<result property="bookStoreName" column="CLIENT_NAME" />
 	</resultMap>
 	
 	<resultMap type="Sales" id="resultSales">
@@ -86,6 +88,8 @@
 		select *
 		from (select rownum rnum, sub.*
 			  from (select * from trade
+			  		join book using (book_id)
+			  		join client using (client_id)
 					where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
 						  and classify = '주문'
 					order by order_date desc, trade_id desc) sub)
@@ -187,6 +191,60 @@
 		delete from client
 		where client_id = #{ clientId }
 	</delete>
+	
+	<select id="selectBookOrderCountByBook" parameterType="Search" resultType="_int">
+		select count(*) from trade
+		join book using (book_id)
+		where book_name like '%' || #{ keyword } || '%'
+			  and classify = '주문'
+	</select>
+	
+	<select id="selectBookOrderCountByBookStore" parameterType="Search" resultType="_int">
+		select count(*) from trade
+		join client using (client_id)
+		where client_name like '%' || #{ keyword } || '%'
+			  and classify = '주문'
+	</select>
+	
+	<select id="selectBookOrderCountByLocation" parameterType="Search" resultType="_int">
+		select count(*) from trade
+		join client using (client_id)
+		where client_address like '%' || #{ keyword } || '%'
+			  and classify = '주문'
+	</select>
+	
+	<select id="selectBookOrderByBook" parameterType="Search" resultMap="resultBookOrder">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from trade
+			  		join book using (book_id)
+					where book_name like '%' || #{ keyword } || '%'
+						  and classify = '주문'
+					order by order_date desc, trade_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectBookOrderByBookStore" parameterType="Search" resultMap="resultBookOrder">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from trade
+			  		join client using (client_id)
+					where client_name like '%' || #{ keyword } || '%'
+						  and classify = '주문'
+					order by order_date desc, trade_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectBookOrderByLocation" parameterType="Search" resultMap="resultBookOrder">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from trade
+			  		join client using (client_id)
+					where client_address like '%' || #{ keyword } || '%'
+						  and classify = '주문'
+					order by order_date desc, trade_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
 
 </mapper>
 

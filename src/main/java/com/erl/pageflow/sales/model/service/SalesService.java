@@ -25,5 +25,11 @@ public interface SalesService {
 	public int insertClient(Client client);
 	public int updateClient(Client client);
 	public int deleteClient(int clientId);
+	public int selectBookOrderCountByBook(Search search);
+	public int selectBookOrderCountByBookStore(Search search);
+	public int selectBookOrderCountByLocation(Search search);
+	public ArrayList<BookOrder> selectBookOrderByBook(Search search);
+	public ArrayList<BookOrder> selectBookOrderByBookStore(Search search);
+	public ArrayList<BookOrder> selectBookOrderByLocation(Search search);
 
 }

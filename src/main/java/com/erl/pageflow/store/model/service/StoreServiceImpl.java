@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
+import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.store.model.dao.StoreDao;
 import com.erl.pageflow.store.model.vo.Store;
 
@@ -43,6 +45,26 @@ public class StoreServiceImpl implements StoreService{
 	@Override
 	public ArrayList<Store> selectStoreList(Paging paging){
 		return storeDao.selectStoreList(paging);
+	}
+
+	@Override
+	public int deleteStore(ArrayList<String> storelist) {
+		return storeDao.deleteStore(storelist);
+	}
+
+	@Override
+	public int deleteInventory(ArrayList<String> storelist) {
+		return storeDao.deleteInventory(storelist);
+	}
+
+	@Override
+	public int selectStoreCountByDate(Search search) {
+		return storeDao.selectStoreCountByDate(search);
+	}
+
+	@Override
+	public ArrayList<Store> selectStoreByDate(Search search) {
+		return storeDao.selectStoreByDate(search);
 	}
 	
 }

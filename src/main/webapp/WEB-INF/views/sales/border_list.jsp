@@ -15,7 +15,19 @@
     const SUBPAGE = 1;
     const LNKPAGE = 1;
     
- // 수정 버튼 클릭 시 수정 가능 상태로 변경
+    $(function() {
+    	const searchType = '${ searchType }';
+    	const selectBox = $('#search_type');
+    	const len = selectBox.options.length;
+    	
+    	for(i = 0; i < len; i++) {
+    		if(selectBox.options[i].value == searchType){
+    			selectBox.options[i].selected = true;
+    	    }
+    	}
+    }); // document ready
+    
+ 	// 수정 버튼 클릭 시 수정 가능 상태로 변경
     function onUpdate(tradeId) {
     	// 행 버튼 보이기/숨기기 상태 변경
     	$('#completeBtn_' + tradeId).show();
@@ -122,7 +134,7 @@
         form.setAttribute('method', 'post'); // 전송 방식 결정 (get or post)
         form.setAttribute('action', url); // 전송할 url 지정
     	
-    	$('#border_table').find('input[type="checkbox"]:checked').each(function() {
+    	$('#table_list').find('input[type="checkbox"]:checked').each(function() {
     	    const tradeId = $(this).val();
     		
     	    // input 태그 생성하여 데이터 담기
@@ -140,6 +152,37 @@
         form.submit();
     }
     
+    function search() {
+    	var search_type = $('#search_type').val();
+    	var keyword = $('input[type=search]').val();
+    	
+    	if(keyword == '') {
+    		alert('키워드를 입력해주세요.');
+    		return false;
+    	}
+    	
+    	// form 태그에 담아서 post 전송
+    	const form = document.createElement('form'); // form 태그 생성
+    	const url = 'bolistkw.do';
+        form.setAttribute('method', 'post'); // 전송 방식 결정 (get or post)
+        form.setAttribute('action', url); // 전송할 url 지정
+    	
+        const data1 = document.createElement('input');
+        data1.setAttribute('type', 'hidden');
+        data1.setAttribute('name', 'searchType'); // 데이터의 name
+        data1.setAttribute('value', search_type); // 데이터의 value
+        form.appendChild(data1);
+        
+        const data2 = document.createElement('input');
+        data2.setAttribute('type', 'hidden');
+        data2.setAttribute('name', 'keyword'); // 데이터의 name
+        data2.setAttribute('value', keyword); // 데이터의 value
+        form.appendChild(data2);
+        
+        // body에 form 태그 추가하고 submit 전송
+        document.body.appendChild(form);
+        form.submit();
+    } 
     
 </script>
 <title></title>
@@ -194,23 +237,19 @@
                                 <div class="select-box">
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
-                                            <option value="">주문번호</option>
-                                            <option value="">도서코드</option>
-                                            <option value="">도서명</option>
-                                            <option value="">서점명</option>
-                                            <option value="">정가</option>
-                                            <option value="">주문수량</option>
-                                            <option value="">금액</option>
+                                        <select name="searchType" id="search_type">
+                                            <option value="book">도서명</option>
+                                            <option value="bookStore">서점명</option>
+                                            <option value="location">지역</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="search-box">
-                                    <button class="search-btn">
+                                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
+                                    <button class="search-btn" onclick="search(); return false;">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="" name="keyword">
                                 </div>
                             </div>
 
@@ -273,7 +312,7 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <table class="contents-table" id="border_table">
+                            <table class="contents-table" id="table_list">
                                 <tr>
                                     <th>체크</th>
                                     <th>주문번호</th>
@@ -290,7 +329,7 @@
                                 </tr>
                                 <c:if test="${ !empty list }">
 	                                <c:forEach items="${ list }" var="bookOrder" >
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr-${ bookOrder.tradeId }">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ bookOrder.tradeId }">
 		                                    <td class="td-50">
 		                                        <input type="checkbox" name="check" value="" >
 		                                    </td>
@@ -345,9 +384,9 @@
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn-${ bookOrder.tradeId }" onclick="onUpdate(${ bookOrder.tradeId }); return false;">
-		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn-${ bookOrder.tradeId }"  onclick="submitUpdate(${ bookOrder.tradeId }); return false;" style="display: none;">
-		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn-${ bookOrder.tradeId }"  onclick="cancelUpdate(${ bookOrder.tradeId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ bookOrder.tradeId }" onclick="onUpdate(${ bookOrder.tradeId }); return false;">
+		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ bookOrder.tradeId }"  onclick="submitUpdate(${ bookOrder.tradeId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ bookOrder.tradeId }"  onclick="cancelUpdate(${ bookOrder.tradeId }); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
 	                                </c:forEach>
