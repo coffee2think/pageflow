@@ -1,13 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<c:set var="currentLimit" value="${ requestScope.limit }" />
-<c:set var="nowpage" value="1" />
-<c:if test="${ !empty requestScope.currentPage }">
-	<c:set var="nowpage" value="${ requestScope.currentPage }" />
-</c:if>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,6 +18,15 @@
     const LNKPAGE = 1;
 </script>
 <title></title>
+<script type="text/javascript">
+/* 	$(function(){
+		var jarr = new Array();
+		var pStr = $('#keyword').html();
+		
+		$('')
+		
+	}); */
+</script>
 </head>
 <body>
 	<div id="container">
@@ -64,7 +67,10 @@
                     </button>
                 </div>
                 <!--main-header-bar end-->
-
+				<script type="text/javascript">
+				
+				
+				</script>
                 <!--내용-->
                 <div class="main-contents-box">
 
@@ -85,16 +91,16 @@
                                         </select>
                                     </div>
                                 </div>
-
+					
                                 <div class="search-box">
-                                    <button class="search-btn">
+                                    <button class="search-btn" id="invenkeyword">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
                                     <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" name="keyword">
                                     <input type="hidden" name="limit" value="${ currentLimit }">
                                 </div>
                             </div>
-
+						</form>
                             <div class="select-box">
 
                                 <div class="select-pan">
@@ -119,17 +125,30 @@
 
                             <div class="select-box">
                                 <div class="select-pan-nemo">
-                                    입고일
+                                    날짜
                                 </div>
-								<form id="selectDate" action="invendate.do" method="post">
-	                                <input type="date" class="select-date select-date-first" name="begin">
-	                                <input type="date" class="select-date select-date-second" name="end">
-	                                <input type="button" class="select-pan-btn" value="일주일" name="week" >
-	                                <input type="button" class="select-pan-btn" value="한달" name="month">
-                                </form>
-                            </div>
-
-                        </form>
+								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
+                                <input type="date" class="select-date select-date-second" name="end" value=${ end }>
+								
+								<c:set var="today_" value="<%= new java.util.Date() %>" />
+								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+								
+								<c:url var="searchWeekUrl" value="invlistdate.do">
+									<c:param name="begin" value="${ weekago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+								
+								<c:url var="searchMonthUrl" value="invlistdate.do">
+									<c:param name="begin" value="${ monthago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+								
+                                <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
 
                         <div class="paging-box">
                             <!-- 페이징 -->
@@ -147,7 +166,7 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <table class="contents-table">
+                            <table class="contents-table" id="keyword">
                                 <tr>
                                     <th>체크</th>
                                     <th>도서코드</th>

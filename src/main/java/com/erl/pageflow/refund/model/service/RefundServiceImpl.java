@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.refund.model.dao.RefundDao;
 import com.erl.pageflow.refund.model.vo.Refund;
 
@@ -38,5 +39,25 @@ public class RefundServiceImpl implements RefundService{
 	@Override
 	public int selectRefundBookPrice(int bookId) {
 		return refundDao.selectRefundBookPrice(bookId);
+	}
+
+	@Override
+	public int selectRefundCountByDate(Search search) {
+		return refundDao.selectRefundCountByDate(search);
+	}
+
+	@Override
+	public ArrayList<Refund> selectRefundByDate(Search search) {
+		return refundDao.selectRefundByDate(search);
+	}
+	
+	@Override
+	public int deleteInventory(int refundId) {
+		return refundDao.deleteInventory(refundId);
+	}
+
+	@Override
+	public int deleteRefund(int refundId) {
+		return refundDao.deleteRefund(refundId);
 	}
 }
