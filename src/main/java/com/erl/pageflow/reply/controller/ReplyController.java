@@ -182,6 +182,15 @@ public class ReplyController {
 			 			+ "#%" + URLEncoder.encode((fileName == null) ? "" : fileName, "utf-8")
 			 			+ "#%" + ((renameFileName == null) ? "" : renameFileName);
 			
+//			response.setContentType("application/json; charset=utf-8");
+//			
+//			sendJson.put("reply_id", selReply.getReplyId());
+//			sendJson.put("emp_name", URLEncoder.encode(selReply.getEmpName(), "utf-8"));
+//			sendJson.put("profile", URLEncoder.encode((selReply.getProfile() == null) ? "" : selReply.getProfile(), "utf-8"));
+//			sendJson.put("create_date", selReply.getCreateDate().toString());
+//			sendJson.put("origin_file", URLEncoder.encode((fileName == null) ? "" : fileName, "utf-8"));
+//			sendJson.put("rename_file", ((renameFileName == null) ? "" : renameFileName));
+			
 			PrintWriter out = response.getWriter();
 			//out.print(sendJson);
 			out.print(rstr);
@@ -191,5 +200,78 @@ public class ReplyController {
 		}
 	}
 	
-	
+	//수정
+	@RequestMapping(value = "ryupdate.do", method = RequestMethod.POST)
+	@ResponseBody
+	public void updateReplyMethod(Reply reply, Model model,
+			HttpServletRequest request, 
+			HttpServletResponse response,
+			@RequestParam(name = "upfile", required = false) MultipartFile mfile) throws IOException {
+		
+		logger.info("ryupdate.do reply : " + reply);
+		String fileName = null;
+		String renameFileName = null;
+		String savePath = request.getSession().getServletContext().getRealPath(
+				"resources/board_upfiles");
+		
+		JSONObject sendJson = new JSONObject();
+		
+		if(replyService.updateReply(reply) > 0) {
+			
+			//첨부파일이 있을때 
+			if(mfile != null) {
+				if(!mfile.isEmpty()) {
+					
+					//전송온 파일이름 추출함
+					fileName = mfile.getOriginalFilename();
+					renameFileName = null;
+					
+					//저장폴더에는 변경된 이름을 저장 처리함
+					//파일 이름 바꾸기함 : 년월일시분초.확장자
+					if(fileName != null && fileName.length() > 0) {
+						//바꿀 파일명에 대한 문자열 만들기
+						renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmss");
+						
+						try {
+							//저장폴더에 파일명 바꾸기 처리
+							mfile.transferTo(new File(savePath + "\\" + renameFileName));
+							
+							//만약 해당 파일이 db에 없다면 인서트 있다면 업데이트
+							int result = replyService.selectUploadReply(new ReplyUpload (0, reply.getReplyId(), reply.getOriginFile(), null));
+							logger.info("result : " + result);
+							
+							if(result > 0) {//업데이트
+								logger.info("업데이트 첨부파일명 확인 fileName : " + fileName + ", renameFileName : " + renameFileName );
+								replyService.updateUploadReply(
+										new ReplyUpload (0, reply.getReplyId(), fileName, renameFileName));
+							}else {
+								//upload_reply에 첨부파일 정보 저장 처리
+								replyService.insertUploadReply(
+										new ReplyUpload (0, reply.getReplyId(), fileName, renameFileName));
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+							//model.addAttribute("message", "파일명 바꾸기 또는 첨부파일 저장 실패");
+							//return "common/error";
+						}
+					}
+					
+				}
+			}
+			
+			
+			Reply selReply = replyService.selectReply(reply.getReplyId());
+//			response.setContentType("application/json; charset=utf-8");
+//			sendJson.put("modify_date", selReply.getModifyDate().toString());
+//			sendJson.put("file_name", (fileName == null) ? fileName = "" : fileName);
+			String str = selReply.getModifyDate().toString() + "#%" + ((fileName == null) ? fileName = "" : fileName);
+			
+			PrintWriter out = response.getWriter();
+			out.print(str);
+			//out.print(sendJson);
+			out.flush();
+			out.close();
+			
+		}
+	}
 }

@@ -21,10 +21,17 @@ public class Board implements Serializable {
 	
 	private int replyCount = 0;
 	
-	private String renameFile;
-	private String originFile;
+	private String renameFile = null;
+	private String originFile = null;
 	
 	public Board() {}
+	
+	public Board(int depId, int boardId, int empId) {
+		super();
+		this.depId = depId;
+		this.boardId = boardId;
+		this.empId = empId;
+	}
 	
 	public Board(int depId, int boardId, int empId, String boardTitle, String boardDetail, Date createDate,
 			Date modifyDate, Date deleteDate, int viewsNum, String empName, String depName) {

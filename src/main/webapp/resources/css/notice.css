@@ -199,7 +199,7 @@
     position: absolute;
     right: 25px;
     line-height: 20px;
-    padding: 5px 8px;
+    padding: 5px 18px;
     background-color: #fff;
     border: 1px solid #eeeeee;
     border-radius: 5px;
@@ -392,4 +392,21 @@
     top: 0;
     right: 50000px;
     z-index: -9999999999;
+}
+
+.file-btn-update-div {
+    display: none;
+    margin: 8px 0px;
+}
+
+.contents-notice-down-box {
+    display: none;
+}
+
+.contents-notice-down-box.show {
+    display: block;
+}
+
+.margin-left20px {
+    margin-left: 20px;
 }

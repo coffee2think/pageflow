@@ -16,10 +16,6 @@
     const SUBPAGE = 2;
     const LNKPAGE = 1;
     
-    document.addEventListener('DOMContentLoaded', function(){
-        
-      
-    })
     function inputSubmit(){
     	$('#btn_insert').click(function() {
             $('#appendTextArea').val($('.content-input').html());
@@ -30,8 +26,9 @@
 <title></title>
 </head>
 <body>
+
 	<div id="container">
-        
+        ${ board }
         <!--헤더-->
         <header class="main-header">
             <!--header-container-->
@@ -108,39 +105,88 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <form action="bdinsert.do" method="post" onsubmit="inputSubmit();" enctype="multipart/form-data">
+                            
+							<c:if test="${ empty board }">
+                            <form id="" action="bdinsert.do" method="post" onsubmit="inputSubmit();" enctype="multipart/form-data">
+                            </c:if>
+                            
+                            <c:if test="${ !empty board }">
+                            <form id="" action="bdupdate.do" method="post" onsubmit="inputSubmit();" enctype="multipart/form-data">
+                            	<input type="hidden" name="boardId" value="${ board.boardId }">
+                            	<input type="hidden" name="empId" value="${ board.empId }">
+                            	<input type="hidden" name="depId" value="${ board.depId }">
+                            	<input type="hidden" name="createDate" value="${ board.createDate }">
+                            	<input type="hidden" name="modifyDate" value="${ board.modifyDate }">
+                            	<input type="hidden" name="originFile" value="${ board.originFile }">
+                            	<input type="hidden" name="renameFile" value="${ board.renameFile }">
+                            </c:if>
+                            	
                             	<input type="hidden" name="depId" value="${ depId }">
                                 <div class="select-box">
                                     <div class="select-pan-nemo">
                                         제목
                                     </div>
-
-                                    <div class="select-pan">
-                                        <input type="text" name="boardTitle" class="input-box-input noline" placeholder="제목을 입력하세요.">
-                                    </div>
+                                    <c:if test="${ empty board }">
+	                                    <div class="select-pan">
+	                                        <input type="text" name="boardTitle" class="input-box-input noline" placeholder="제목을 입력하세요.">
+	                                    </div>
+                                    </c:if>
+                                    <c:if test="${ !empty board and !empty board.boardTitle }">
+	                                    <div class="select-pan">
+	                                        <input type="text" name="boardTitle" class="input-box-input noline" value="${ board.boardTitle }">
+	                                    </div>
+                                    </c:if>
                                 </div>
 
                                 <div class="select-box">
                                     <div class="select-pan-nemo">
                                         파일첨부
                                     </div>
-
-                                    <div class="select-pan">
-                                        <input type="file" name="upfile" class="select-file">
-                                    </div>
+									
+									<c:if test="${ empty board }">
+	                                    <div class="select-pan">
+	                                        <input type="file" name="upfile" class="select-file">
+	                                    </div>
+                                    </c:if>
+                                    <c:if test="${ !empty board and !empty board.originFile }">
+                                    	<c:url var="bdown" value="bddown.do">
+											<c:param name="ofile" value="${ board.originFile }" />
+	                                        <c:param name="rfile" value="${ board.renameFile }" />
+	                                    </c:url>
+                                        <div class="contents-notice-down-box show">
+                                            <a class="contents-notice-down" href="${ bdown }">
+                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
+                                                <span class="origin-file-name">${ board.originFile }</span>
+                                                <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
+                                            </a>
+                                        </div>
+                                        
+	                                    <div class="select-pan margin-left20px">
+	                                        <input type="file" name="upfile" class="select-file">
+	                                    </div>
+	                                    
+                                    </c:if>
+                                    
                                 </div>
 
                                 <div class="content-input-area height-long">
                                     <div class="content-input" contenteditable="true">
-										
+										<c:if test="${ !empty board and !empty board.boardDetail }">
+											${ board.boardDetail }
+										</c:if>
                                     </div>
                                 </div>
-
+								
+								
                                 <div class="content-input-btn-box">
-                                    <input type="submit" class="contents-input-btn big noline" id="btn_insert" value="입력">
+                                	<c:if test="${ empty board }">
+                                    	<input type="submit" class="contents-input-btn big noline" id="btn_insert" value="입력">
+                                	</c:if>
+                                	<c:if test="${ !empty board }">
+                                    	<input type="submit" class="contents-input-btn big noline" id="btn_insert" value="수정">
+                                	</c:if>
                                 </div>
-                                
+	                            
                                 <textarea name="boardDetail" id="appendTextArea"></textarea> 
                             </form>
                         </div>

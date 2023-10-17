@@ -97,9 +97,27 @@
 		        #{depId}, #{boardId}, #{uploadUrl}, #{renameUrl})
 	</insert>
 	
+	<update id="updateBoardViewNum" parameterType="BoardKeyword">
+		update board set
+		VIEWS_NUM = VIEWS_NUM + 1
+		where DEP_ID = #{ depId } and BOARD_ID = #{ boardId }
+	</update>
 	
-	<update id="updateBoard" parameterType="_int">
-		
+	<update id="updateUploadBoard" parameterType="Board">
+		update upload_board set 
+		UPLOAD_URL = #{ originFile },
+		RENAME_URL = #{ renameFile }
+		where DEP_ID = #{ depId } 
+		and BOARD_ID = #{ boardId }
+	</update>
+	
+	<update id="updateBoard" parameterType="Board">
+		update board set
+		BOARD_TITLE = #{ boardTitle },
+		BOARD_DETAIL = #{ boardDetail },
+		MODIFY_DATE = sysdate
+		where DEP_ID = #{ depId }
+		and BOARD_ID = #{ boardId }
 	</update>
 	
 	<select id="deleteBoard" parameterType="_int">

@@ -71,3 +71,31 @@ select max(BUNDLE_ID) from reply;
 
 select * from reply
 where REPLY_ID = (select max(REPLY_ID) from reply);
+
+
+update upload_reply set   
+UPLOAD_URL = '3.jpg', 
+RENAME_URL = '20231017.jpg'
+where REPLY_ID = 11;
+
+update upload_board set 
+UPLOAD_URL = '',
+RENAME_URL = ''
+where DEP_ID = 1 
+and BOARD_ID = 1;
+
+update board set
+
+
+where DEP_ID = 1 
+and BOARD_ID = 1;
+
+DEP_ID
+BOARD_ID
+EMP_ID
+BOARD_TITLE
+BOARD_DETAIL
+CREATE_DATE
+MODIFY_DATE
+DELETE_DATE
+VIEWS_NUM

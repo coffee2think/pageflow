@@ -33,4 +33,8 @@ public interface BoardService {
 	public int insertUploadBoard(BoardUpload boardUpload);
 
 	public BoardUpload selectBoardListFile(BoardKeyword boardKeyword);
+
+	public int updateBoardViewNum(BoardKeyword boardKeyword);
+
+	public int updateUploadBoard(Board board);
 }
