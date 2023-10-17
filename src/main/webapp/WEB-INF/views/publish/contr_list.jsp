@@ -67,11 +67,10 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">도서코드</option>
                                             <option value="">도서명</option>
                                             <option value="">카테고리</option>
-                                            <option value="">저/역자</option>
-                                            <option value="">담당자</option>
+                                            <option value="">작가명</option>
+                                            <option value="">담당직원</option>
                                         </select>
                                     </div>
                                 </div>
@@ -98,7 +97,7 @@
 
                             <div class="select-box">
                                 <div class="select-pan-nemo">
-                                    주문일시
+                                    계약일자
                                 </div>
 
                                 <input type="date" class="select-date select-date-first">
