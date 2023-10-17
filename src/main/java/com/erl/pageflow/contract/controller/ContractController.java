@@ -1,6 +1,10 @@
 package com.erl.pageflow.contract.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,10 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.contract.model.service.ContractService;
 import com.erl.pageflow.contract.model.vo.Contract;
+import com.erl.pageflow.sales.model.vo.BookOrder;
 
 @Controller
 public class ContractController {
@@ -39,4 +46,23 @@ public class ContractController {
 		}
 	}
 		
+	//계약 수정 요청 처리
+	@RequestMapping(value = "ctrupdate.do", method = RequestMethod.POST)
+	public void contractUpdateMethod(Contract contract, HttpServletResponse response) throws IOException {
+		logger.info("ctrupdate.do : " + contract);
+		
+		String returnStr = null;
+		if(contractService.updateContract(contract) > 0) {
+			returnStr = "success";
+		} else {
+			returnStr = "fail";
+		}
+		
+		// response를 이용해서 클라이언트와 출력스트림을 열어서 값 보냄
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.append(returnStr);
+		out.flush();
+		out.close();
+	}
 }
