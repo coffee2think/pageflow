@@ -23,4 +23,8 @@ public class NoticeDao {
 	public int selectListCount() {
 		return sqlSessionTemplate.selectOne("noticeMapper.getListCount");
 	}
+	
+	public int insertNotice(Notice notice) {
+		return sqlSessionTemplate.insert("noticeMapper.insertNotice");
+	}
 }

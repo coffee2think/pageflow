@@ -42,8 +42,7 @@
 				<div class="side-container">
 					<div class="side-title"></div>
 					<div class="side-icon-box">
-						<a
-							href="${ pageContext.servletContext.contextPath }/views/work/notice_input.jsp"
+						  <a href="nemoveinsert.do?empId=${ empId }" class="side-write-btn">글쓰기</a>
 							class="side-write-btn margin-bottom-0">글쓰기</a>
 					</div>
 
@@ -140,12 +139,17 @@
 									<div class="contents-notice-line">
 										<span>${notice.noticeId }</span> 
 										<span>${notice.empName}</span>
+										<span>${notice.noticeCreateDate }</span>
 										<span>${notice.importance }</span>
 										<c:if test="${ notice.importance eq 'Y' }">
-											<h3>필독!</h3>
+											<p>필독!</p>
 										</c:if> 
 										<span>${notice.noticeReadCount }</span>
 										<span>${notice.noticeOriginalFileName }</span> 
+										<c:if test="${ !empty notice.noticeOriginalFileName  }">
+											<p>◎</p>
+										</c:if> 
+										
 										<span>${notice.noticeRenameFileName }</span>
 										<span><img
 											src="${ pageContext.servletContext.contextPath }/resources/images/msg.png">
