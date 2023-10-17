@@ -27,4 +27,12 @@ public interface ReplyService {
 	public int selectReplyMaxCount();
 
 	public int insertReply2(Reply reply);
+
+	public int updateReply(Reply reply);
+
+	public int updateUploadReply(ReplyUpload replyUpload);
+
+	public Reply selectReply(int replyId);
+
+	public int selectUploadReply(ReplyUpload replyUpload);
 }
