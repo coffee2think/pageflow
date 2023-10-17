@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,6 +16,37 @@
     const LNKPAGE = 1;
 </script>
 <title></title>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#btn_delete').click(function(){
+			const selectedCheckbokes = $('input[name="selectedItems"]:checked');
+			const selectedStoreIds = [];
+			
+			selectedCheckbokes.each(function(){
+				selectedStoreIds.push($(this).val());
+			});
+			
+			if(selectedStoreIds.length === 0){
+				alert('선택된 항목이 없습니다.');
+			}else{
+				$.ajax({
+					type:'post',
+					url:'storedelete.do',
+					dataType: "json",
+					data: { selectedStoreIds: selectedStoreIds.join(',') },
+					success: function(response){
+						alert('선택한 입고내역이 삭제되었습니다.');
+						location.reload();
+					},
+					error: function(){
+						alert('삭제 실패! 관리자에게 문의 하세요');
+					}
+				});
+			}
+			
+		});
+	});
+</script>
 
 </head>
 <body>
@@ -67,22 +99,22 @@
                                 <div class="select-box">
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
+                                        <select name="searchType" id="search_type">
                                             <option value="bookId">도서코드</option>
-                                            <option value="">도서명</option>
-                                            <option value="">입고부수</option>
-                                            <option value="">정가</option>
-                                            <option value="">입고금액</option>
-                                            <option value="">인수자</option>
+                                            <option value="bookName">도서명</option>
+                                            <option value="storeNum">입고부수</option>
+                                            <option value="bookPrice">정가</option>
+                                            <option value="storePrice">입고금액</option>
+                                            <option value="empName">인수자</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="search-box">
-                                    <button class="search-btn">
+                                	<input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
+                                    <button class="search-btn" onclick="search(); return false;">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                                 </div>
                             </div>
 
@@ -164,7 +196,7 @@
                                 <c:forEach var="sto" items="${ requestScope.list }">
 	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
 	                                    <td class="td-50">
-	                                        <input type="checkbox" name="check" value="" >
+	                                        <input type="checkbox" name="selectedItems" value="${ sto.storeId }">
 	                                    </td>
 	                                    <td class="td-100">
 	                                        <div class="contents-input-div">
@@ -236,10 +268,11 @@
                 </div>
                 <!--내용 end-->
 
-                
+
                 <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteStore(); return false;">
+                    <button class="contents-input-btn big noline" id="btn_delete">선택삭제</button> 
                 </div>
+                
                 
             </div>
             <!--main-container end-->

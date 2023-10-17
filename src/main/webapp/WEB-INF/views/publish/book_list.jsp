@@ -90,7 +90,8 @@
                                     <select name="code" id="sel_code">
                                         <option value="all">도서상태</option>
                                         <option value="">정상</option>
-                                        <option value="">비정상</option>
+                                        <option value="">품절</option>
+                                        <option value="">절판</option>
                                     </select>
                                 </div>
                                 
@@ -106,7 +107,7 @@
 
                             <div class="select-box">
                                 <div class="select-pan-nemo">
-                                    발행일자
+                                    등록일자
                                 </div>
 
                                 <input type="date" class="select-date select-date-first">
@@ -140,10 +141,13 @@
                                     <th>도서코드</th>
                                     <th>도서명</th>
                                     <th>카테고리</th>
-                                    <th>저/역자</th>
+                                    <th>작가명</th>
                                     <th>정가</th>
+                                    <th>국제표준도서번호</th>
                                     <th>도서상태</th>
                                     <th>판쇄</th>
+                                    <th>발행일자</th>
+                                    <th>등록일자</th>
                                     <th>수정</th>
                                 </tr>
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">

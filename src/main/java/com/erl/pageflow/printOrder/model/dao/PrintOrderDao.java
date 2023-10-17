@@ -18,25 +18,35 @@ public class PrintOrderDao {
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 	
+	//날짜로 조회
 	public ArrayList<PrintOrder> selectPrintOrderByDate(Search search) {
 		List<PrintOrder> list = sqlSessionTemplate.selectList("printMapper.selectPrintOrderByDate", search);
 		return (ArrayList<PrintOrder>) list;
 	}
 	
+	//거래처명 검색
 	public PrintOffice selectPrintOffice(int printId) {
 		return sqlSessionTemplate.selectOne("printMapper.selectPrintOffice", printId);
 	}
 	
+	//도서명 검색
 	public Book selectBook(int bookId) {
 		return sqlSessionTemplate.selectOne("printMapper.selectBook",bookId);
 	}
 	
+	//
 	public int selectPrintOrderListCount() {
 		return sqlSessionTemplate.selectOne("printMapper.selectPrintOrderListCount");
 	}
 	
+	//
 	public ArrayList<PrintOrder> selectPrintOrderList(Paging paging){
 		List<PrintOrder> list = sqlSessionTemplate.selectList("printMapper.selectPrintOrderList", paging);
 		return (ArrayList<PrintOrder>) list;
+	}
+	
+	//발주 등록
+	public int poinsert(PrintOrder printOrder) {
+		return sqlSessionTemplate.insert("printMapper.poinsert", printOrder);
 	}
 }

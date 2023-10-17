@@ -94,6 +94,16 @@
 		where REPLY_ID = #{ replyId }
 	</select>
 	
+	<select id="selectReply" parameterType="_int" resultMap="resultReply">
+		select * from reply
+		where REPLY_ID = #{ replyId }
+	</select>
+	
+	<select id="selectUploadReply" parameterType="ReplyUpload" resultType="_int" >
+		select count(*) from UPLOAD_REPLY
+		where REPLY_ID = #{ replyId } and UPLOAD_URL = #{ uploadUrl }
+	</select>
+	
 	<insert id="insertReply" parameterType="Reply">
 	     insert into reply values
 	    ((select max(REPLY_ID) + 1 from reply), #{ depId }, #{ boardId }, #{ empId },
@@ -114,6 +124,20 @@
 		insert into upload_reply values 
 		((select max(UPLOAD_ID) + 1 from upload_reply), #{ replyId }, #{ uploadUrl }, #{ renameUrl } )
 	</insert>
+	
+	<update id="updateReply" parameterType="Reply">
+		update reply 
+		set MODIFY_DATE = sysdate,
+			reply_detail = #{ replyDetail }
+		where REPLY_ID = #{ replyId }
+	</update>
+	
+	<update id="updateUploadReply" parameterType="ReplyUpload">
+		update upload_reply set 
+		UPLOAD_URL = #{ uploadUrl }, 
+		RENAME_URL = #{ renameUrl } 
+		where REPLY_ID = #{ replyId }
+	</update>
 	
 </mapper>
 

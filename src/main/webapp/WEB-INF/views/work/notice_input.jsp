@@ -72,7 +72,7 @@
                                 글쓰기
                             </div>
 
-                            <form>
+                            <form action="noinsert.do" method="post">
                                 <div class="select-box">
                                     <div class="select-pan-nemo">
                                         제목
@@ -96,18 +96,18 @@
                                     <div class="select-pan font-size13">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">내용</option>
+                                            <option value="">부서</option>
                                             <option value="">작성자</option>
-                                            <option value="">댓글</option>
+                                            <option value="">제목</option>
                                         </select>
                                     </div>
 
                                     <div class="select-pan font-size13">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">내용</option>
+                                            <option value="">부서</option>
                                             <option value="">작성자</option>
-                                            <option value="">댓글</option>
+                                            <option value="">제목</option>
                                         </select>
                                     </div>
 
@@ -120,7 +120,7 @@
                                     </div>
 
                                     <div class="select-pan">
-                                        <input type="file" class="select-file">
+                                        <input type="file" name="nfile" class="select-file">
                                     </div>
                                 </div>
 
@@ -131,7 +131,7 @@
                                 </div>
 
                                 <div class="content-input-btn-box">
-                                    <input type="button" class="contents-input-btn big noline" id="btn_insert" value="입력">
+                                    <input type="submit" class="contents-input-btn big noline" id="btn_insert" value="등록">
                                 </div>
                             </form>
                         </div>

@@ -14,6 +14,25 @@
     const SUBPAGE = 1;
     const LNKPAGE = 1;
 </script>
+
+<script type="text/javascript">
+function updateContract(contrId) {
+    $.ajax({
+        url: '/ctrupdate.do',
+        type: 'POST',
+        data: 
+        contentType: 'application/json',
+        success: function (response) {
+            if (response === 'success') {
+                alert('계약 정보가 성공적으로 수정되었습니다.');
+            } else {
+                alert('계약 정보 수정에 실패했습니다.');
+            }
+        }
+    });
+}
+</script>
+
 <title></title>
 </head>
 <body>
@@ -67,11 +86,10 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">도서코드</option>
                                             <option value="">도서명</option>
                                             <option value="">카테고리</option>
-                                            <option value="">저/역자</option>
-                                            <option value="">담당자</option>
+                                            <option value="">작가명</option>
+                                            <option value="">담당직원</option>
                                         </select>
                                     </div>
                                 </div>
@@ -98,7 +116,7 @@
 
                             <div class="select-box">
                                 <div class="select-pan-nemo">
-                                    주문일시
+                                    계약일자
                                 </div>
 
                                 <input type="date" class="select-date select-date-first">
@@ -192,7 +210,7 @@
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정" onclick="updateContract(${contract.contrId});">
 		                                    </td>
 		                                </tr>
     								</c:forEach>

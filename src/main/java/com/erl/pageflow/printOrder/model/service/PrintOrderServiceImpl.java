@@ -43,4 +43,8 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 		return printOrderDao.selectPrintOrderList(paging);
 	}
 	
+	@Override
+	public int poinsert(PrintOrder printOrder) {
+		return printOrderDao.poinsert(printOrder);
+	}
 }

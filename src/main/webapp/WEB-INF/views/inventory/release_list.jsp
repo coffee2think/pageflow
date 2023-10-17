@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,6 +16,38 @@
     const LNKPAGE = 1;
 </script>
 <title></title>
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#btn_delete').click(function(){
+			const selectedCheckbokes = $('input[name="selectedItems"]:checked');
+			const selectedStoreIds = [];
+			
+			selectedCheckbokes.each(function(){
+				selectedStoreIds.push($(this).val());
+			});
+			
+			if(selectedStoreIds.length === 0){
+				alert('선택된 항목이 없습니다.');
+			}else{
+				$.ajax({
+					type:'post',
+					url:'releasedelete.do',
+					dataType: "json",
+					data: { selectedStoreIds: selectedStoreIds.join(',') },
+					success: function(response){
+						alert('선택한 출고내역이 삭제되었습니다.');
+						location.reload();
+					},
+					error: function(){
+						alert('삭제 실패! 관리자에게 문의 하세요');
+					}
+				});
+			}
+			
+		});
+	});
+</script>
 </head>
 <body>
 	<div id="container">
@@ -102,11 +135,30 @@
                                     출고일자
                                 </div>
 
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
-
-                                <input type="button" name="week" class="select-pan-btn" value="일주일">
-                                <input type="button" name="month" class="select-pan-btn" value="한달">
+                                <input type="date" class="select-date select-date-first" name="begin" value="${ begin }">
+                                <input type="date" class="select-date select-date-second" name="end"  value="${ end }">
+                                
+                                <c:set var="today_" value="<%= new java.util.Date() %>" />
+                                <fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+     
+                                <input type="button" name="week" class="select-pan-btn" value="기간검색">
+                                
+                                <c:url var="searchWeekUrl" value="releasedate.do">
+                                	<c:param name="begin" value="${ weekago }" />
+                                	<c:param name="end" value="${ today }" />
+                                </c:url>
+                                
+                                <c:url var="searchMonthUrl" value="releasedate.do">
+                                	<c:param name="begin" value="${ monthago }" />
+                                	<c:param name="end" value="${ today }" />
+                                </c:url>
+                                
+                                <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
                             </div>
 
                         </form>
@@ -145,7 +197,7 @@
                                 <c:forEach var="rel" items="${ requestScope.list }">
 	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
 	                                    <td class="td-50">
-	                                        <input type="checkbox" name="check" value="" >
+	                                       <input type="checkbox" name="selectedItems" value="${ rel.storeId }">
 	                                    </td>
 	                                    <td class="td-100">
 	                                        <div class="contents-input-div">
@@ -219,7 +271,7 @@
 
                 
                 <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제">
+                    <button class="contents-input-btn big noline" id="btn_delete">선택삭제</button> 
                 </div>
                 
             </div>

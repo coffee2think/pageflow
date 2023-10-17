@@ -102,6 +102,10 @@ public class BoardController {
 				r.setParentEmpName(name);
 			}
 			
+			//보드 댓글 하나 올리기
+			boardService.updateBoardViewNum(new BoardKeyword(empId, depId, boardId));
+			board.setViewsNum(board.getViewsNum() + 1);
+			
 			//보드 첨부파일 찾기
 			BoardUpload boardUpload = boardService.selectBoardListFile(new BoardKeyword(empId, depId, boardId));
 			
@@ -203,9 +207,56 @@ public class BoardController {
 	}
 	
 	//업무게시판 게시글 수정
-	@RequestMapping(value = "bdupdate.do", method = RequestMethod.POST)
-	public String updateBoardMethod() {
-		return "";
+	@RequestMapping("bdmoveupdate.do")
+	public String updateMoveBoardMethod(Board board, Model model) {
+		logger.info("bdmoveupdate.do => board : " + board);
+		//보드 첨부파일 찾기
+		BoardUpload boardUpload = boardService.selectBoardListFile(
+				new BoardKeyword(board.getEmpId(), board.getDepId(), board.getBoardId()));
+		
+		if(boardUpload != null) {
+			board.setRenameFile(boardUpload.getRenameUrl());
+			board.setOriginFile(boardUpload.getUploadUrl());
+		}
+		
+		model.addAttribute("board", board);
+		return "work/work_input";
+	}
+	
+	//업무게시판 게시글 수정
+	@RequestMapping("bdupdate.do")
+	public String updateBoardMethod(
+			@RequestParam("boardId") int boardId,
+			@RequestParam("depId") int depId,
+			@RequestParam("empId") int empId,
+			@RequestParam("boardTitle") String boardTitle,
+			@RequestParam("boardDetail") String boardDetail,
+			Model model) {
+		logger.info("bdupdate.do => boardId : " + boardId);
+		logger.info("bdupdate.do => depId : " + depId);
+		//보드 첨부파일 찾기
+		BoardUpload boardUpload = boardService.selectBoardListFile(
+				new BoardKeyword(empId, depId, boardId));
+		
+		
+		if(boardUpload != null) {
+			Board board = new Board(depId, boardId, empId);
+			board.setRenameFile(boardUpload.getRenameUrl());
+			board.setOriginFile(boardUpload.getUploadUrl());
+			board.setBoardDetail(boardTitle);
+			board.setBoardDetail(boardDetail);
+			boardService.updateUploadBoard(board);
+			
+			if(boardService.updateBoard(board) > 0) {
+				model.addAttribute("message", "게시글 수정 실패!");
+				return "common/error";
+			}
+			
+		}
+		model.addAttribute("empId", empId);
+		model.addAttribute("depId", depId);
+		model.addAttribute("boardId", boardId);
+		return "redirect:bdselect.do";
 	}
 	
 	//업무게시판 게시글 삭제

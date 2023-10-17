@@ -18,10 +18,14 @@ public interface SalesService {
 	public BookForSales selectBook(int bookId);
 	public BookStore selectBookStore(int clientId);
 	public int selectClientListCount();
+	public int selectClientCountByStartDate(Search search);
+	public int selectClientCountByEndDate(Search search);
 	public ArrayList<Client> selectClientList(Paging paging);
+	public ArrayList<Client> selectClientByStartDate(Search search);
+	public ArrayList<Client> selectClientByEndDate(Search search);
 	public int insertBookOrder(BookOrder bookOrder);
 	public int updateBookOrder(BookOrder bookOrder);
-	public int deleteBookOrder(int tradeId);
+	public int deleteBookOrder(int orderId);
 	public int insertClient(Client client);
 	public int updateClient(Client client);
 	public int deleteClient(int clientId);

@@ -60,6 +60,26 @@ public class ReplyServiceImpl implements ReplyService {
 	public int insertReply2(Reply reply) {
 		return replyDao.insertReply2(reply);
 	}
+
+	@Override
+	public int updateReply(Reply reply) {
+		return replyDao.updateReply(reply);
+	}
+
+	@Override
+	public int updateUploadReply(ReplyUpload replyUpload) {
+		return replyDao.updateUploadReply(replyUpload);
+	}
+
+	@Override
+	public Reply selectReply(int replyId) {
+		return replyDao.selectReply(replyId);
+	}
+
+	@Override
+	public int selectUploadReply(ReplyUpload replyUpload) {
+		return replyDao.selectUploadReply(replyUpload);
+	}
 	
 	
 	

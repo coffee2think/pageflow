@@ -54,6 +54,23 @@ public class ReplyDao {
 	public int insertReply2(Reply reply) {
 		return sqlSessionTemplate.insert("replyMapper.insertReply2", reply);
 	}
+
+	public int updateReply(Reply reply) {
+		return sqlSessionTemplate.update("replyMapper.updateReply", reply);
+	}
+
+	public int updateUploadReply(ReplyUpload replyUpload) {
+		return sqlSessionTemplate.update("replyMapper.updateUploadReply", replyUpload);
+	}
+
+	public Reply selectReply(int replyId) {
+		return sqlSessionTemplate.selectOne("replyMapper.selectReply", replyId);
+	}
+
+	public int selectUploadReply(ReplyUpload replyUpload) {
+		return sqlSessionTemplate.selectOne("replyMapper.selectUploadReply", replyUpload);
+	}
+	
 	
 	
 	

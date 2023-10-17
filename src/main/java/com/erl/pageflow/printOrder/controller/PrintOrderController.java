@@ -3,12 +3,15 @@ package com.erl.pageflow.printOrder.controller;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.erl.pageflow.book.model.vo.Book;
@@ -125,10 +128,22 @@ public class PrintOrderController {
 	// 발주등록 페이지
 	@RequestMapping("poinsert.do")
 	public String PrintOrderInsert() {
-		return "print:porder_input";
+		return "print/porder_input";
 	}
 	
 	//발주 등록 요청 처리용
-	
+	@RequestMapping(value="poinsert.do", method=RequestMethod.POST)
+	public String printOrderInsertMethod(PrintOrder printOrder, Model model, 
+			HttpServletRequest request) {
+		logger.info("poinsert.do : " + printOrder);
+		
+		if(printOrderService.poinsert(printOrder) > 0) {
+			
+			return "redirect:polist.do";
+		} else {
+			model.addAttribute("message", "새 공지글 등록 실패");
+			return "common/error";
+		}
+	}
 	
 }

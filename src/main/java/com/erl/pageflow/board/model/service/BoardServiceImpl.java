@@ -60,6 +60,16 @@ public class BoardServiceImpl implements BoardService{
 	public BoardUpload selectBoardListFile(BoardKeyword boardKeyword) {
 		return boardDao.selectBoardListFile(boardKeyword);
 	}
+
+	@Override
+	public int updateBoardViewNum(BoardKeyword boardKeyword) {
+		return boardDao.updateBoardViewNum(boardKeyword);
+	}
+
+	@Override
+	public int updateUploadBoard(Board board) {
+		return boardDao.updateUploadBoard(board);
+	}
 	
 	
 	
