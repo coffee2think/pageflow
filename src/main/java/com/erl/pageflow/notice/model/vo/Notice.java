@@ -14,6 +14,7 @@ public class Notice {
 	private Date noticeDeleteDate;
 	private String classify;
 	private String importance;
+
 	private int noticeReadCount;
 	private String noticeOriginalFileName;
 	private String noticeRenameFileName;
@@ -65,13 +66,7 @@ public class Notice {
 		this.noticeId = noticeId;
 	}
 
-	public int getEmpid() {
-		return empId;
-	}
-
-	public void setEmpid(int empid) {
-		this.empId = empid;
-	}
+	
 
 	public String getNoticeDetail() {
 		return noticeDetail;

@@ -7,7 +7,7 @@
 	
 	<resultMap type="Notice" id="resultNotice">
 		<result column="NOTICE_ID" property="noticeId" />
-		<result column="EMP_ID" property="empid" />
+		<result column="EMP_ID" property="empId" />
 		<result column="EMP_Name" property="empName" />
 		<result column="NOTICE_TITLE" property="noticeTitle" />
 		<result column="NOTICE_DETAIL" property="noticeDetail" />
@@ -39,10 +39,12 @@
 	</select>
 	
 	<insert id="insertNotice" parameterType="Notice">
-		insert into notice
-		values ((select max(NOTICE_ID) + 1 from board), 
-		        #{EMP_ID}, #{NOTICE_TITLE}, #{NOTICE_DETAIL}, #{importance}, #{CREATE_DATE} 
-		        )
+		insert into notice 
+		values ((select max(NOTICE_ID) + 1 from notice), 
+				#{empId}, #{noticeTitle}, #{noticeDetail}, 
+				sysdate, default, default , #{classify},  
+				#{importance},default,#{noticeOriginalFileName},#{noticeRenameFileName})
+				
 	</insert>
 	
 </mapper>
