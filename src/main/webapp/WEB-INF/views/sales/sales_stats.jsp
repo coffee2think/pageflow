@@ -77,7 +77,7 @@
                                     <button class="search-btn">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
+                                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                                 </div>
                             </div>
 
@@ -93,44 +93,31 @@
                                 </div>
                                 
                                 <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
-                                        <option value="all">매출시작월</option>
-                                        <option value="">1월</option>
-                                        <option value="">2월</option>
-                                        <option value="">3월</option>
-                                        <option value="">4월</option>
-                                        <option value="">5월</option>
-                                        <option value="">6월</option>
-                                        <option value="">7월</option>
-                                        <option value="">8월</option>
-                                        <option value="">9월</option>
-                                        <option value="">10월</option>
-                                        <option value="">11월</option>
-                                        <option value="">12월</option>
+                                    <label for="start_month"></label>
+                                    <select name="startMonth" id="start_month">
+                                        <option value="all">매출월</option>
+                                        <option value="jan">1월</option>
+                                        <option value="feb">2월</option>
+                                        <option value="mar">3월</option>
+                                        <option value="apr">4월</option>
+                                        <option value="may">5월</option>
+                                        <option value="jun">6월</option>
+                                        <option value="jul">7월</option>
+                                        <option value="aug">8월</option>
+                                        <option value="sep">9월</option>
+                                        <option value="oct">10월</option>
+                                        <option value="nov">11월</option>
+                                        <option value="dec">12월</option>
                                     </select>
                                 </div>
 
-                                <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
-                                        <option value="all">매출종료월</option>
-                                        <option value="">1월</option>
-                                        <option value="">2월</option>
-                                        <option value="">3월</option>
-                                        <option value="">4월</option>
-                                        <option value="">5월</option>
-                                        <option value="">6월</option>
-                                        <option value="">7월</option>
-                                        <option value="">8월</option>
-                                        <option value="">9월</option>
-                                        <option value="">10월</option>
-                                        <option value="">11월</option>
-                                        <option value="">12월</option>
-                                    </select>
-                                </div>
-
-                                <input type="button" class="contents-input-btn big noline" id="btn_chart" value="차트보기">
+								<div>
+									기간 지정
+									<input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
+                                	<input type="date" class="select-date select-date-second" name="end" value=${ end }>
+								</div>
+                                
+								<input type="button" class="contents-input-btn big noline" id="btn_chart" value="차트보기" onclick="chart">
                             </div>
 
                         </form>
@@ -169,83 +156,87 @@
                                     <th>12월</th>
                                     <th>합계</th>
                                 </tr>
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="no" class="contents-input noline" value="1001" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-200">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="code" class="contents-input noline" value="데이터베이스 개론과 실습" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m1" class="contents-input noline" value="11" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m2" class="contents-input noline" value="22" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m3" class="contents-input noline" value="333" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m4" class="contents-input noline" value="34" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m5" class="contents-input noline" value="345" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m6" class="contents-input noline" value="45" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m7" class="contents-input noline" value="89" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m8" class="contents-input noline" value="90" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m9" class="contents-input noline" value="78" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m10" class="contents-input noline" value="89" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m11" class="contents-input noline" value="120" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-50">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m12" class="contents-input noline" value="100" readonly>
-                                        </div>
-                                    </td>
-                                    <td class="td-70">
-                                        <div class="contents-input-div">
-                                            <input type="input" name="m12" class="contents-input noline" value="1400" readonly>
-                                        </div>
-                                    </td>
-                                </tr>
+                                <c:if test="${ !empty list }">
+                                	<c:forEach items=${ list } var="sales">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookId" class="contents-input noline" value="${ sales.bookId }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-200">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookName" class="contents-input noline" value="${ sales.bookName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m1" class="contents-input noline" value="${ sales.m1 }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m2" class="contents-input noline" value="" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m3" class="contents-input noline" value="" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m4" class="contents-input noline" value="" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m5" class="contents-input noline" value="" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m6" class="contents-input noline" value="" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m7" class="contents-input noline" value="" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m8" class="contents-input noline" value="90" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m9" class="contents-input noline" value="78" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m10" class="contents-input noline" value="89" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m11" class="contents-input noline" value="120" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-50">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m12" class="contents-input noline" value="100" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="m12" class="contents-input noline" value="1400" readonly>
+		                                        </div>
+		                                    </td>
+		                                </tr>
+	                                </c:forEach>
+                                </c:if>
 
                                 <!--합계-->
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">

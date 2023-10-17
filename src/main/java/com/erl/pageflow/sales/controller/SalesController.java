@@ -91,6 +91,13 @@ public class SalesController {
 		return "sales/client_input";
 	}
 	
+	// 매출현황 페이지 이동
+	@RequestMapping("movestats.do")
+	public String moveStatistics() {
+		return "sales/sales_stats";
+	}
+	
+	
 	//**************요청 받아서 서비스로 넘기는 메소드****************
 	// 날짜로 주문현황 검색
 	@RequestMapping("bolistdate.do")
