@@ -17,6 +17,17 @@ public class Search implements Serializable {
 
 	public Search() {
 	}
+	
+	public Search(String keyword, Date begin, Date end, int startRow, int endRow) {
+		super();
+		this.keyword = keyword;
+		this.begin = begin;
+		this.end = end;
+		this.startRow = startRow;
+		this.endRow = endRow;
+		this.week = week;
+		this.month = month;
+	}
 
 	public Search(String keyword, Date begin, Date end, int startRow, int endRow, Date week, Date month) {
 		super();
