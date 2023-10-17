@@ -8,7 +8,7 @@ var MENU_INFO = [
         ,branch : [
             {
                 stitle : '공지사항'
-                ,slink : 'list.do'
+                ,slink : 'nlist.do'
                 ,sbranch : [
                 ]
             },

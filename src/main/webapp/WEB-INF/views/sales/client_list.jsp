@@ -10,151 +10,27 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
 <script>
     const NOWPAGE = 5;
     const SUBPAGE = 3;
     const LNKPAGE = 1;
     
-    var clientInfo;
-    
-	// 수정 버튼 클릭 시 수정 가능 상태로 변경
-    function onUpdate(clientId) {
-    	// 행 버튼 보이기/숨기기 상태 변경
-    	$('#completeBtn_' + clientId).show();
-    	$('#cancelBtn_' + clientId).show();
-    	$('#updateBtn_' + clientId).hide();
+    function searchByDate(dateType) {
+    	var begin = $('#begin_' + dateType).val();
+    	var end = $('#end_' + dateType).val();
     	
-    	// 정보 임시 보관
-    	var currentRow = $('#updateBtn_' + clientId).parent().parent();
-    	console.log(currentRow);
+    	var url = 'cllistdate.do?';
+    	url += 'begin=' + begin;
+    	url += '&end=' + end;
+    	url += '&dateType=' + dateType;
     	
-    	currentRow.children('td').each(function(index) {
-    		if(index <= 1 || index >= 13) {
-    			return; // 체크박스와 수정버튼 열의 정보는 건너뜀
-    		}
-    		
-    		console.log(index);
-    		console.log($(this).find('input').val());
-    	});
-    	
-    	// 수정 중인 행의 스타일 변경
-    	$('#tr_' + clientId).css('border', 'solid 3px #1a70d3');
-    	
-    	// class=changeable인 input 태그 값 변경 가능하도록 변경
-    	$('#tr_' + clientId + ' .changeable').attr('readonly', false);
+    	location.href = url;
     }
-    
-    // 취소 버튼 클릭 시 수정 가능 상태로 변경
-    function cancelUpdate(clientId) {
-    	// 같은 주문번호의 행들을 모두 선택
-    	
-    	// 원래 정보로 되돌리기(reset)
-    	
-    	
-    	// 수정 취소한 행의 스타일 원래대로 설정
-    	$('#tr_' + clientId).css('border', 'none');
-    	
-    	// 행 버튼 보이기/숨기기 상태 변경
-    	$('#completeBtn_' + clientId).hide();
-    	$('#cancelBtn_' + clientId).hide();
-    	$('#updateBtn_' + clientId).show();
-    	
-    	// 행의 모든 셀 readonly
-    	$('#tr_' + clientId + ' .changeable').attr('readonly', true);
-    }
-    
-    function submitUpdate(clientId) {
-    	var currentRow = $('#updateBtn_' + clientId).parent().parent();
-    	var json = {};
-    	
-    	currentRow.find('input').each(function(index) {
-    		if(index == 0 || index >= 13){
-    	        return;
-    	    }
-    		
-    		// 유효성 검사
-    		// endDate가 비었을 경우 json에 담지 않음
-    		if(index == 12 && $(this).val() == '') {
-    	        return;
-    	    }
-
-    		// input 태그을 이용하여 name:value로 json에 담기
-    	    json[$(this).attr('name')] = $(this).val();
-    	});
-    	
-    	// ajax로 update 요청 보내기
-    	$.ajax({
-    		url: "clupdate.do",
-    		type: "post",
-    		data: json,
-    		success: function(data){
-    			console.log("success : " + data);
-    			if(data == "success") {
-    				alert(clientId + " 거래처 정보 수정 성공");
-    			} else {
-    				alert("거래처 정보 수정 실패");
-    			}
-    			
-    			// 행 버튼 보이기/숨기기 상태 변경
-    	    	$('#completeBtn_' + clientId).hide();
-    	    	$('#cancelBtn_' + clientId).hide();
-    	    	$('#updateBtn_' + clientId).show();
-    	    	
-    	    	// 수정 취소한 행의 스타일 원래대로 설정
-    	    	$('#tr_' + clientId).css('border', 'none');
-    	    	
-    	    	// 행 버튼 보이기/숨기기 상태 변경
-    	    	$('#completeBtn_' + clientId).hide();
-    	    	$('#cancelBtn_' + clientId).hide();
-    	    	$('#updateBtn_' + clientId).show();
-    	    	
-    	    	// 행의 모든 셀 readonly
-    	    	$('#tr_' + clientId + ' .changeable').attr('readonly', true);
-    			
-    		},
-    		error: function(jqXHR, textStatus, errorThrown){
-    			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
-    		}
-    	});
-    }
-    
-    function deleteCheckedRow() {
-    	// form 태그에 담아서 post 전송
-    	const form = document.createElement('form'); // form 태그 생성
-    	const url = 'cldelete.do';
-        form.setAttribute('method', 'post'); // 전송 방식 결정 (get or post)
-        form.setAttribute('action', url); // 전송할 url 지정
-    	
-    	$('#client_table').find('input[type="checkbox"]:checked').each(function() {
-    	    const clientId = $(this).val();
-    		
-    	    // input 태그 생성하여 데이터 담기
-    	    const data = document.createElement('input');
-        	data.setAttribute('type', 'hidden');
-            data.setAttribute('name', 'clientIDs'); // 데이터의 name
-            data.setAttribute('value', clientId); // 데이터의 value
-            
-         	// form 태그에 input 태그 넣기 
-            form.appendChild(data);
-    	});
-    	
-        // body에 form 태그 추가하고 submit 전송
-        document.body.appendChild(form);
-        form.submit();
-    }
-    
 </script>
 <title>거래처 현황</title>
 </head>
 <body>
-	<c:set var="page" value="1" />
-	<c:if test="${ !empty currentPage }">
-		<c:set var="page" value="${ currentPage }" />
-	</c:if>
-	<c:set var="limit" value="10" />
-	<c:if test="${ !empty limit }">
-		<c:set var="limit" value="${ limit }" />
-	</c:if>
 	<div id="container">
         
         <!--헤더-->
@@ -200,13 +76,11 @@
                     <!--서치영역-->
                     <div class="search-container">
                         <form class="search-form">
-                        	<input type="hidden" name="page" value="${ currentPage }">
-                        	<input type="hidden" name="limit" value="${ limit }">
                             <div class="select-search">
                                 <div class="select-box">
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
+                                        <select name="searchType" id="search_type">
                                             <option value="">코드</option>
                                             <option value="">거래처명</option>
                                             <option value="">사업자등록번호</option>
@@ -222,7 +96,7 @@
                                     <button class="search-btn">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
+                                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }">
                                 </div>
                             </div>
 
@@ -240,33 +114,80 @@
 
                             <div class="select-box">
                                 <div class="select-pan-nemo">
-                                    기간
+                                	거래시작일
+                                    <!-- <label for="date_type"></label>
+                                    <select name="date_type" id="date_type">
+                                        <option value="startDate">거래시작일</option>
+                                        <option value="endDate">거래종료일</option>
+                                    </select> -->
                                 </div>
 
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
+                                <input type="date" class="select-date select-date-first" id="begin_startDate" value="${ begin_startDate }">
+                                <input type="date" class="select-date select-date-second" id="end_startDate" value="${ end_startDate }">
 
                                 <c:set var="today_" value="<%= new java.util.Date() %>" />
 								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
-								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
+								
+								<!-- LocalDate 객체를 통해 일주일 전 날짜를 구한 후 Date 객체로 변환 -->
+								<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
 								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
-								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
+								
+								<!-- LocalDate 객체를 통해 한달 전 날짜를 구한 후 Date 객체로 변환 -->
+								<c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
 								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
 								
-								<c:url var="searchWeekUrl" value="bolistdate.do">
+								<c:url var="searchWeekUrl" value="cllistdate.do">
 									<c:param name="begin" value="${ weekago }" />
 									<c:param name="end" value="${ today }" />
+									<c:param name="dateType" value="startDate" />
 								</c:url>
 								
-								<c:url var="searchMonthUrl" value="bolistdate.do">
+								<c:url var="searchMonthUrl" value="cllistdate.do">
 									<c:param name="begin" value="${ monthago }" />
 									<c:param name="end" value="${ today }" />
+									<c:param name="dateType" value="startDate" />
 								</c:url>
                                 
                                 <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
                                 <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+                                <input type="button" name="month" class="select-pan-btn" value="검색" onclick="searchByDate('startDate'); return false;">
                             </div>
+                            
+                            <div class="select-box">
+                                <div class="select-pan-nemo">
+                                	거래종료일
+                                </div>
 
+                                <input type="date" class="select-date select-date-first" id="begin_endDate" value="${ begin_endDate }">
+                                <input type="date" class="select-date select-date-second" id="end_endDate" value="${ end_endDate }">
+
+                                <c:set var="today_" value="<%= new java.util.Date() %>" />
+								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+								
+								<!-- LocalDate 객체를 통해 일주일 전 날짜를 구한 후 Date 객체로 변환 -->
+								<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+								
+								<!-- LocalDate 객체를 통해 한달 전 날짜를 구한 후 Date 객체로 변환 -->
+								<c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+								
+								<c:url var="searchWeekUrl" value="cllistdate.do">
+									<c:param name="begin" value="${ weekago }" />
+									<c:param name="end" value="${ today }" />
+									<c:param name="dateType" value="endDate" />
+								</c:url>
+								
+								<c:url var="searchMonthUrl" value="cllistdate.do">
+									<c:param name="begin" value="${ monthago }" />
+									<c:param name="end" value="${ today }" />
+									<c:param name="dateType" value="endDate" />
+								</c:url>
+                                
+                                <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+                                <input type="button" name="month" class="select-pan-btn" value="검색" onclick="searchByDate('endDate'); return false;">
+                            </div>
                         </form>
 
                         <div class="paging-box">
@@ -285,7 +206,7 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <table class="contents-table" id="client_table">
+                            <table class="contents-table" id="table_list">
                                 <tr>
                                     <th>체크</th>
                                     <th>거래처코드</th>
@@ -370,7 +291,7 @@
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ client.clientId }" onclick="onUpdate(${ client.clientId }); return false;">
-		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ client.clientId }"  onclick="submitUpdate(${ client.clientId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ client.clientId }"  onclick="submitUpdate(${ client.clientId }, 'clupdate.do'); return false;" style="display: none;">
 		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ client.clientId }"  onclick="cancelUpdate(${ client.clientId }); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
@@ -387,7 +308,7 @@
 
                 
                 <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow(); return false;">
+                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('cldelete.do'); return false;">
                 </div>
                 
             </div>
