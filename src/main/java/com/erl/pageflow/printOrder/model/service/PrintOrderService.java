@@ -19,4 +19,6 @@ public interface PrintOrderService {
 	
 	public ArrayList<PrintOrder> selectPrintOrderList(Paging paging);
 	
+	public int poinsert(PrintOrder printOrder);
+	
 }
