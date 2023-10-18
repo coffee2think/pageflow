@@ -49,4 +49,9 @@ public class PrintOrderDao {
 	public int poinsert(PrintOrder printOrder) {
 		return sqlSessionTemplate.insert("printMapper.poinsert", printOrder);
 	}
+	
+	//발주 수정
+	public int poupdate(PrintOrder printOrder) {
+		return sqlSessionTemplate.insert("printMapper.poupdate", printOrder);
+	}
 }
