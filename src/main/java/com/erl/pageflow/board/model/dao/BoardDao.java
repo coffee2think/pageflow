@@ -44,11 +44,6 @@ public class BoardDao {
 		return sqlSessionTemplate.selectOne("boardMapper.selectBoardListFile", boardKeyword);
 	}
 	
-	//업무게시판 게시글 삭제
-	public int deletBoard(Board board) {
-		return sqlSessionTemplate.delete("boardMapper.deletBoard", board);
-	}
-
 	public int insertUploadBoard(BoardUpload boardUpload) {
 		return sqlSessionTemplate.insert("boardMapper.insertUploadBoard", boardUpload);
 	}
@@ -116,6 +111,15 @@ public class BoardDao {
 
 	public String selectDepName(int depId) {
 		return sqlSessionTemplate.selectOne("boardMapper.selectDepName", depId);
+	}
+	
+	//업무게시판 게시글 삭제
+	public int deleteBoard(Board board) {
+		return sqlSessionTemplate.delete("boardMapper.deleteBoard", board);
+	}
+
+	public int selectBoardId() {
+		return sqlSessionTemplate.selectOne("boardMapper.selectBoardId");
 	}
 	
 }

@@ -2105,3 +2105,9 @@ modify book_state default '정상';
 alter table contract 
 ADD (category VARCHAR2(30));
 
+ALTER TABLE book
+MODIFY BOOK_PRICE_S number NULL;
+
+ALTER TABLE book
+MODIFY PUB_DATE date NULL;
+

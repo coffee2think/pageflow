@@ -51,7 +51,7 @@ Header.prototype = {
 <title></title>
 </head>
 <body>
-	<a class="header-left" href="${ pageContext.servletContext.contextPath }/main.jsp">
+	<a class="header-left" href="${ pageContext.servletContext.contextPath }/main.do">
         <img src="${ pageContext.servletContext.contextPath }/resources/images/logo.png">
     </a>
 

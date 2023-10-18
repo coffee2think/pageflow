@@ -12,6 +12,7 @@
 <c:set var="end" value="${ requestScope.end }" scope="session" />
 <c:set var="keyword" value="${ requestScope.keyword }" scope="session" />
 <c:set var="searchType" value="${ requestScope.searchType }" scope="session" />
+<c:set var="firstType" value="${ requestScope.firstType }" scope="session" />
 
 <!DOCTYPE html>
 <html>
@@ -52,7 +53,7 @@
         	//보드 삭제
         	$('.button-delete').on('click', function(){
         		if(confirm('정말 삭제하시겠습니까?')) {
-                    location.href = 'bddelete.do?board=${ board }';
+                    location.href = 'bddelete.do?boardId=${ board.boardId }';//&depId=${ board.depId }&empId=${ board.empId }&boardTitle=${ board.boardTitle }&boardDetail=${ board.boardDetail }&originFile=${ board.originFile }&renameFile=${ board.renameFile }';
                 }
         	})
         	
@@ -143,7 +144,6 @@
             let dropdown = $(this).parent().parent().parent('.notice-reply-con').find('.reply-dropdown');
             dropdown.hide();
 
-            
         })
 
         //댓글 로그인 안했을때 
@@ -461,7 +461,7 @@
     }
 
   	function setTag(jsonData, ajaxData){
-        let empName = '전성훤';//내이름 쓰기
+        let empName = '<c:out value="${ loginMember.empName }" />';//내이름 쓰기
         let parentEmpName = jsonData.empName;
         let originFileName = '';
         let renameFileName = '';
@@ -582,7 +582,6 @@
 <body>
 	
 	<div id="container">
-        
         <!--헤더-->
         <header class="main-header">
             <!--header-container-->
@@ -625,10 +624,17 @@
 
                 <!--내용-->
                 <div class="main-contents-box normal">
-
+                    
                     <!--서치영역-->
                     <div class="search-container noline">
-                        <c:import url="./work_search.jsp" />
+                        <div class="search-form">
+                            <c:import url="./work_search.jsp" />
+                        </div>
+
+                        <button class="search-visible-btn" id="search_visible_btn">
+                            <img class="search-close" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
+                            <img class="search-open" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
+                        </button>
                     </div>
                     <!--서치영역 end-->
 
@@ -838,19 +844,33 @@
                             </div>
                             <!--contents-notice end-->
 
+
+                            <c:url var="bdlist_bottom" value="bdlistdate.do">
+                                <c:param name="begin" value="${ begin }" />
+                                <c:param name="end" value="${ end }" />
+                                <c:param name="depId" value="${ depId }" />
+                            </c:url>
+
+                            <c:url var="bdlist_next" value="bdselect.do">
+                                <c:param name="begin" value="${ begin }" />
+                                <c:param name="end" value="${ end }" />
+                                <c:param name="empId" value="${ board.empId }" />
+                                <c:param name="boardId" value="${ board.boardId }" />
+                                <c:param name="depId" value="${ depId }" />
+                            </c:url>
+
                             <div class="button-box">
-                                <a class="button-a button-list">
-                                    목록
+                                <a class="button-a button-list" style="width: 100px; height: 30px;" href="${ bdlist_bottom }">
+                                    목록으로
                                 </a>
+                                <!--
                                 <a class="button-a button-prev">
                                     ▲
                                 </a>
                                 <a class="button-a button-next">
                                     ▼
                                 </a>
-                                <a class="button-a button-top" href="#body-top">
-                                    위로
-                                </a>
+                                -->
                             </div>
 
                         </div>

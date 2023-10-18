@@ -59,27 +59,69 @@ public class BoardController {
 	
 	//업무게시판 게시글 리스트 조회
 	@RequestMapping("bdlist.do")
-	public String selectBoardListMethod(Model model) {
+	public String selectBoardListMethod(Model model,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr) {
+		
+		int depId = 1;
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		int listCount = boardService.selectBoardListCount();
+		String depName = boardService.selectDepName(depId);
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "bdlist.do");
+		//"bdlistdate.do?begin="+search.getBegin().toString()+"&end="+search.getEnd().toString());
+		paging.calculator();
+		ArrayList<Board> list = boardService.selectBoardList(paging);
+		
+		for(Board b : list) {
+			int replyCount = replyService.selectReplyListCount(new ReplyKeyword(b.getDepId(), b.getBoardId()));
+			b.setReplyCount(replyCount);
+		}
 		
 		LocalDate today = LocalDate.now();
-//		model.addAttribute("begin", today.minusDays(today.getDayOfMonth() - 1)); // 이번달 1일부터
+		//model.addAttribute("begin", today.minusDays(today.getDayOfMonth() - 1)); // 이번달 1일부터
 		model.addAttribute("begin", today.minusWeeks(1).plusDays(1)); // 일주일 전부터
 		model.addAttribute("end", today); // 오늘까지
-		model.addAttribute("depId", 1);//개발팀 지정!
 		
-		return "redirect:bdlistdate.do";
+		
+		model.addAttribute("paging", paging);
+		model.addAttribute("depId", depId);
+		model.addAttribute("depName", depName);
+		model.addAttribute("firstType", "first");
+		
+		if(list != null && list.size() > 0) {
+			model.addAttribute("boardList", list);
+			//return "work/work_list";
+		}else {
+			//model.addAttribute("message", paging + " 업무게시판 조회 실패!");
+			//return "common/error";
+		}
+		return "work/work_list";
+		
 	}
 	
 	//업무게시판 게시글 최신 리스트 조회
 	@RequestMapping("bdlistnew.do")
-	public String selectBoardListNewMethod(Board board, Model model) {
+	public String selectBoardListNewMethod(Board board, Model model, 
+			@RequestParam("newdays") int newdays,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr) {
 		
 		LocalDate today = LocalDate.now();
 //			model.addAttribute("begin", today.minusDays(today.getDayOfMonth() - 1)); // 이번달 1일부터
-		model.addAttribute("begin", today.minusDays(3)); // 3일 전부터
+		model.addAttribute("begin", today.minusDays(newdays)); // 3일 전부터
 		model.addAttribute("end", today); // 오늘까지
 		model.addAttribute("depId", board.getDepId());//
 		model.addAttribute("empId", board.getEmpId());//
+		model.addAttribute("firstType", "date");
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		model.addAttribute("page", currentPage);//
+		model.addAttribute("limit", limit);
 		
 		return "redirect:bdlistdate.do";
 	}
@@ -88,14 +130,19 @@ public class BoardController {
 	//업무게시판 게시글 리스트 조회
 	@RequestMapping("bdlistmy.do")
 	public String selectBoardListMyMethod(Board board, Model model,
-			@RequestParam(name = "searchType", required=false) String searchType) {
+			@RequestParam(name = "searchType", required=false) String searchType,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr) {
 		
 		int listCount = boardService.selectBoardListCountMy(
 				new BoardKeyword(board.getEmpId(), board.getDepId()));
 		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
 		String depName = boardService.selectDepName(board.getDepId());
-		int limit = 10;
-		Paging paging = new Paging(listCount, 1, limit, "bdlistmy.do");
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "bdlistmy.do");
 		paging.calculator();
 		ArrayList<Board> list = boardService.selectBoardListMy(
 				new Search(board.getEmpId(), board.getDepId(), paging.getStartRow(), paging.getEndRow()));
@@ -108,7 +155,7 @@ public class BoardController {
 		model.addAttribute("depId", board.getDepId());
 		model.addAttribute("depName", depName);
 		model.addAttribute("searchType", searchType);
-		
+		model.addAttribute("firstType", "first");
 		if(list != null && list.size() > 0) {
 			
 			model.addAttribute("boardList", list);
@@ -135,38 +182,21 @@ public class BoardController {
 		out.close();
 	}
 	
-	//업무게시판 게시글 필터링된 리스트 숫자 조회 ajax
-	@RequestMapping(value = "bdlistdatecountajax.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public void selectBoardListDateCountMethodAjax(
-			HttpServletResponse response, 
-			@RequestBody String param) throws IOException, ParseException {
-		
-		JSONParser jparser = new JSONParser();
-	    JSONObject job = (JSONObject) jparser.parse(param);
-	    
-	    Search search = new Search();
-	    search.setBegin((Date) job.get("begin"));
-	    search.setEnd((Date) job.get("end"));
-	    
-		int count = boardService.selectBoardListDateCount(search);
-		
-		PrintWriter out = response.getWriter();
-		out.print(count);
-		out.flush();
-		out.close();
-	}
-	
 	//업무게시판 게시글 필터링된 리스트 조회
 	@RequestMapping("bdlistdate.do")
-	public String selectBoardListDateMethod(Search search, Model model) {
+	public String selectBoardListDateMethod(Search search, Model model,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr) {
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 		
 		int listCount = boardService.selectBoardListDateCount(search);
 		String depName = boardService.selectDepName(search.getDepId());
-		int limit = 10;
 		
 		logger.info("depName : " + depName);
 		logger.info("listCount : " + listCount);
-		Paging paging = new Paging(listCount, 1, limit, "bdlistdate.do");
+		Paging paging = new Paging(listCount, currentPage, limit, "bdlistdate.do");
 				//"bdlistdate.do?begin="+search.getBegin().toString()+"&end="+search.getEnd().toString());
 		paging.calculator();
 		search.setStartRow(paging.getStartRow());
@@ -184,7 +214,7 @@ public class BoardController {
 		model.addAttribute("searchType", search.getSearchType());
 		model.addAttribute("begin", search.getBegin().toString());
 		model.addAttribute("end", search.getEnd().toString());
-		
+		model.addAttribute("firstType", "date");
 		if(list != null && list.size() > 0) {
 			model.addAttribute("boardList", list);
 			//return "work/work_list";
@@ -252,6 +282,7 @@ public class BoardController {
 			model.addAttribute("replyList", replyList);
 			model.addAttribute("begin", search.getBegin().toString());
 			model.addAttribute("end", search.getEnd().toString());
+			model.addAttribute("firstType", "first");
 			return "work/work_notice";
 		}else {
 			model.addAttribute("message", "업무게시판 조회 실패!");
@@ -262,7 +293,10 @@ public class BoardController {
 	//----------------서치-----------------
 	//업무게시판 게시글 검색
 	@RequestMapping(value = "bdsearch.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String searchBoardMethod(Search search, Model model) {
+	public String searchBoardMethod(Search search, Model model,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr) {
+		
 		String searchType = search.getSearchType();
 		int listCount = 0;
 		String depName = boardService.selectDepName(search.getDepId());
@@ -282,10 +316,11 @@ public class BoardController {
 			
 		}
 		
-		int limit = 10;
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 		logger.info("listCount : " + listCount);
-		Paging paging = new Paging(listCount, 1, limit, "bdsearch.do");
-				//"bdlistdate.do?begin="+search.getBegin().toString()+"&end="+search.getEnd().toString());
+		Paging paging = new Paging(listCount, currentPage, limit, 
+				"bdsearch.do?depId="+search.getDepId() + "&searchType=" + searchType);
 		paging.calculator();
 		search.setStartRow(paging.getStartRow());
 		search.setEndRow(paging.getEndRow());
@@ -314,7 +349,7 @@ public class BoardController {
 		model.addAttribute("searchType", searchType);
 		model.addAttribute("begin", search.getBegin().toString());
 		model.addAttribute("end", search.getEnd().toString());
-		
+		model.addAttribute("firstType", "first");
 		if(list != null && list.size() > 0) {
 			
 			for(Board b : list) {
@@ -340,40 +375,42 @@ public class BoardController {
 		String savePath = request.getSession().getServletContext().getRealPath(
 				"resources/board_upfiles");
 		
-		//첨부파일이 있을때 
-		if(mfile != null) {
-			if(!mfile.isEmpty()) {
-				//전송온 파일이름 추출함
-				String fileName = mfile.getOriginalFilename();
-				String renameFileName = null;
-				
-				//저장폴더에는 변경된 이름을 저장 처리함
-				//파일 이름 바꾸기함 : 년월일시분초.확장자
-				if(fileName != null && fileName.length() > 0) {
-					//바꿀 파일명에 대한 문자열 만들기
-					renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmss");
-					logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
-					
-					try {
-						//저장폴더에 파일명 바꾸기 처리
-						mfile.transferTo(new File(savePath + "\\" + renameFileName));
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-						model.addAttribute("message", "파일명 바꾸기 또는 첨부파일 저장 실패");
-						return "common/error";
-					}
-				}
-				//첨부파일 정보 저장 처리
-				BoardUpload boardUpload = new BoardUpload(
-						0, board.getDepId(), board.getBoardId(), fileName, renameFileName);
-						
-				boardService.insertUploadBoard(boardUpload);
-			}
-		}
-		
 		if(boardService.insertBoard(board) > 0) {
 			model.addAttribute("depId", board.getDepId());
+			int boardId = boardService.selectBoardId();
+			
+			//첨부파일이 있을때 
+			if(mfile != null) {
+				if(!mfile.isEmpty()) {
+					//전송온 파일이름 추출함
+					String fileName = mfile.getOriginalFilename();
+					String renameFileName = null;
+					
+					//저장폴더에는 변경된 이름을 저장 처리함
+					//파일 이름 바꾸기함 : 년월일시분초.확장자
+					if(fileName != null && fileName.length() > 0) {
+						//바꿀 파일명에 대한 문자열 만들기
+						renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmss");
+						logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
+						
+						try {
+							//저장폴더에 파일명 바꾸기 처리
+							mfile.transferTo(new File(savePath + "\\" + renameFileName));
+							
+						} catch (Exception e) {
+							e.printStackTrace();
+							model.addAttribute("message", "파일명 바꾸기 또는 첨부파일 저장 실패");
+							return "common/error";
+						}
+					}
+					//첨부파일 정보 저장 처리
+					BoardUpload boardUpload = new BoardUpload(
+							0, board.getDepId(), boardId, fileName, renameFileName);
+							
+					boardService.insertUploadBoard(boardUpload);
+				}
+			}
+			
 			return "redirect:bdlist.do";
 		}else {
 			model.addAttribute("message", "새 게시글 등록 실패!");
@@ -463,9 +500,14 @@ public class BoardController {
 	}
 	
 	//업무게시판 게시글 삭제
-	@RequestMapping(value = "bddelete.do", method = RequestMethod.POST)
-	public String deleteBoardMethod() {
-		return "";
+	@RequestMapping("bddelete.do")
+	public String deleteBoardMethod(Board board) {
+		
+		if(boardService.deleteBoard(board) > 0) {
+			
+		}
+		
+		return "redirect:bdlist.do";
 	}
 	
 }

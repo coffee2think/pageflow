@@ -8,6 +8,7 @@
 <c:set var="end" value="${ requestScope.end }" scope="session" />
 <c:set var="keyword" value="${ requestScope.keyword }" scope="session" />
 <c:set var="searchType" value="${ requestScope.searchType }" scope="session" />
+<c:set var="firstType" value="${ requestScope.firstType }" scope="session" />
 
 <!DOCTYPE html>
 <html>
@@ -74,7 +75,9 @@
 
                     <!--서치영역-->
                     <div class="search-container noline">
-                        <c:import url="./work_search.jsp" />
+                        <div class="search-form">
+                            <c:import url="./work_search.jsp" />
+                        </div>
 
                         <div class="paging-box">
                             <!-- 페이징 -->

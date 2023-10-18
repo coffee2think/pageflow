@@ -25,9 +25,6 @@ public interface BoardService {
 	//업무게시판 게시글 수정
 	public int updateBoard(Board board);
 	
-	//업무게시판 게시글 삭제
-	public int deletBoard(Board board);
-
 	public int insertUploadBoard(BoardUpload boardUpload);
 
 	public BoardUpload selectBoardListFile(BoardKeyword boardKeyword);
@@ -61,5 +58,8 @@ public interface BoardService {
 
 	public String selectDepName(int depId);
 	
-	
+	//업무게시판 게시글 삭제
+	public int deleteBoard(Board board);
+
+	public int selectBoardId();
 }
