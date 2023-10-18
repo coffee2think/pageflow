@@ -124,14 +124,25 @@
 					<!--서치영역 end-->
 
 					<!--컨텐츠영역-->
+					
+					
+					
+					
 
 					<div class="contents-container sort-row">
 						<div class="contents-box notice">
 
 							<div class="contents-title notice-tit">공지사항</div>
 							<c:forEach items="${ requestScope.list }" var="notice">
+							<c:url var="listUrl" value="nolist.do">
+									<c:param name="noticeId" value="${ notice.noticeId }" />
+                            		<c:param name="empId" value="${ notice.empId }" />
+                            		<c:param name="noticeTitle" value="${ notice.noticeTitle }" />
+                            		<c:param name="EmpName" value="${ notice.empName }" />
+                    		</c:url>
+							
 								<a class="contents-notice"
-									href="${ pageContext.servletContext.contextPath }/views/work/notice_input.jsp">
+									href="${ listUrl}">
 									<div class="contents-notice-title">
 										<span class="alarm">${notice.noticeTitle }</span>
 									</div>

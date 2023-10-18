@@ -11,4 +11,5 @@ public interface NoticeService {
 	ArrayList<Notice> selectList(Paging paging);
 	int selectListCount();
 	int insertNotice(Notice notice);
+	Notice selectOne(int noticeId);
 }
