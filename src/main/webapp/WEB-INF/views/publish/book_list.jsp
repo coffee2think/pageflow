@@ -156,12 +156,12 @@
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="code" class="contents-input noline" value="${ book.bookId }" readonly>
+		                                            <input type="input" name="bookId" class="contents-input noline" value="${ book.bookId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-250">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="name" class="contents-input noline" value="${ book.bookName }" readonly>
+		                                            <input type="input" name="bookName" class="contents-input noline" value="${ book.bookName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
@@ -171,12 +171,12 @@
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="author" class="contents-input noline" value="${ book.writerName }" readonly>
+		                                            <input type="input" name="writerName" class="contents-input noline" value="${ book.writerName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="price" class="contents-input noline" value="${ book.bookPrice }" readonly>
+		                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ book.bookPrice }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
@@ -186,22 +186,22 @@
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="state" class="contents-input noline" value="${ book.bookState }" readonly>
+		                                            <input type="input" name="bookState" class="contents-input noline" value="${ book.bookState }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="print" class="contents-input noline" value="${ book.engraving }" readonly>
+		                                            <input type="input" name="engraving" class="contents-input noline" value="${ book.engraving }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="pdate" class="contents-input noline" value="${ book.pubDate }" readonly>
+		                                            <input type="date" name="pubDate" class="contents-input noline" value="${ book.pubDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="rdate" class="contents-input noline" value="${ book.regDate }" readonly>
+		                                            <input type="date" name="regDate" class="contents-input noline" value="${ book.regDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">

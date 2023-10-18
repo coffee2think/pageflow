@@ -61,7 +61,7 @@ var MENU_INFO = [
                 ,slink : 'ctrlist.do'
                 ,sbranch : [
                     {mtitle : '계약현황', mlink : 'ctrlist.do'},
-                    {mtitle : '계약등록', mlink : 'ctrinsert.do'}
+                    {mtitle : '계약등록', mlink : 'movectrinsert.do'}
                 ]
             },
             {
@@ -69,7 +69,7 @@ var MENU_INFO = [
                 ,slink : 'edlist.do'
                 ,sbranch : [
                     {mtitle : '편집현황', mlink : 'edlist.do'},
-                    {mtitle : '편집등록', mlink : 'edinsert.do'}
+                    {mtitle : '편집등록', mlink : 'moveedinsert.do'}
                 ]
             },
             {
@@ -77,7 +77,7 @@ var MENU_INFO = [
                 ,slink : 'bklist.do'
                 ,sbranch : [
                     {mtitle : '도서현황', mlink : 'bklist.do'},
-                    {mtitle : '도서등록', mlink : 'bkinsert.do'}
+                    {mtitle : '도서등록', mlink : 'movebkinsert.do'}
                 ]
             },
             {
@@ -85,7 +85,7 @@ var MENU_INFO = [
                 ,slink : 'wtlist.do'
                 ,sbranch : [
                     {mtitle : '작가현황', mlink : 'wtlist.do'},
-                    {mtitle : '작가등록', mlink : 'wtinsert.do'}
+                    {mtitle : '작가등록', mlink : 'movewtinsert.do'}
                 ]
             }
         ]

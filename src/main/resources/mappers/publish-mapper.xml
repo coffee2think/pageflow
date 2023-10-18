@@ -27,6 +27,8 @@
 		<result property="account" column="ACCOUNT" />
 	</resultMap>
 	
+	
+	
 	<!-- Edit 편집 resultMap -->
 	<resultMap type="Edit" id="resultEdit">
 		<result property="editId" column="EDIT_ID" />
@@ -39,6 +41,8 @@
 		<result property="endDate" column="END_DATE" />
 		<result property="depName" column="DEP_NAME" />
 	</resultMap>
+	
+	
 	
 	<!-- Book 도서 resultMap -->
 	<resultMap type="Book" id="resultBook">
@@ -57,6 +61,8 @@
 		<result property="regDate" column="REG_DATE" />
 	</resultMap>
 
+
+
 	<!-- Writer 작가 resultMap -->
 	<resultMap type="Writer" id="resultWriter">
 		<result property="writerId" column="WRITER_ID" />
@@ -68,6 +74,8 @@
 		<result property="bank" column="BANK" />
 		<result property="account" column="ACCOUNT" />
 	</resultMap>
+
+
 
 	<!-- Contract 계약 -->
 	<select id="selectContractListCount" resultType="_int">
@@ -107,7 +115,7 @@
 		insert into contract 
 		values ((select max(CONTR_ID) + 1 from contract), 
 		        #{ empId }, #{ writerId }, #{ bookName }, 
-		        #{ empName }, #{ contrDate }, null, default)
+		        #{ empName }, #{ contrDate }, null, default, #{ category })
 	</insert>
 	
 	<update id="updateContract" parameterType="_int">
@@ -123,6 +131,8 @@
 		delete from contract
 		where contr_id = #{ contrId }
 	</select>
+		
+		
 		
 	<!-- Edit 편집 -->
 	<select id="selectEditList" parameterType="Paging" resultMap="resultEdit">
@@ -144,6 +154,8 @@
 		select count(*) from edit
 	</select>
 	
+	
+	
 	<!-- Book 도서 -->
 	<select id="selectBookList" parameterType="Paging" resultMap="resultBook">
 		select *
@@ -162,6 +174,14 @@
 	<select id="selectBookListCount" resultType="_int">
 		select count(*) from book
 	</select>
+	
+	<insert id="insertBook" parameterType="Book">
+		insert into Book 
+		values ((select max(BOOK_ID) + 1 from book), 
+		        #{ writerId }, #{ bookName }, #{ writerName }, 
+		        null, null, #{ bookPrice }, #{ category }, #{ isbn },
+		        #{ bookState }, #{ engraving }, null, #{ regDate })
+	</insert>
 	
 	<!-- Writer 작가 -->
 	<select id="selectWriterList" parameterType="Paging" resultMap="resultWriter">
@@ -182,4 +202,10 @@
 		select count(*) from writer
 	</select>
 	
+	<insert id="insertWriter" parameterType="Writer">
+		insert into Writer 
+		values ((select max(WRITER_ID) + 1 from Writer), 
+		        #{ writerName }, #{ phone }, #{ writerBirth }, 
+		        #{ Email }, #{ address }, #{ bank }, #{ account })
+	</insert>
 </mapper>

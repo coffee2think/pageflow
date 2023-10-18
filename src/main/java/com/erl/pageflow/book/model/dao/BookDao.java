@@ -34,7 +34,7 @@ public class BookDao {
 	}
 
 	// 도서 조회
-	public Book selectBook(String bookId) {
+	public Book selectBook(int bookId) {
 		return sqlSessionTemplate.selectOne("publishMapper.selectBook", bookId);
 	}
 	

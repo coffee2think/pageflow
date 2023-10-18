@@ -157,42 +157,42 @@
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="code" class="contents-input noline" value="${ edit.editId }" readonly>
+		                                            <input type="input" name="editId" class="contents-input noline" value="${ edit.editId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bname" class="contents-input noline" value="${ edit.bookName }" readonly>
+		                                            <input type="input" name="bookName" class="contents-input noline" value="${ edit.bookName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-250">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="ecode" class="contents-input noline" value="${ edit.empId }" readonly>
+		                                            <input type="input" name="empId" class="contents-input noline" value="${ edit.empId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="ename" class="contents-input noline" value="${ edit.empName }" readonly>
+		                                            <input type="input" name="empName" class="contents-input noline" value="${ edit.empName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="dname" class="contents-input noline" value="${ edit.depName }" readonly>
+		                                            <input type="input" name="depName" class="contents-input noline" value="${ edit.depName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="state" class="contents-input noline" value="${ edit.editState }" readonly>
+		                                            <input type="input" name="editState" class="contents-input noline" value="${ edit.editState }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="date" class="contents-input noline" value="${ edit.startDate }" readonly>
+		                                            <input type="input" name="startDate" class="contents-input noline" value="${ edit.startDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="date" class="contents-input noline" value="${ edit.endDate }" readonly>
+		                                            <input type="input" name="endDate" class="contents-input noline" value="${ edit.endDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">

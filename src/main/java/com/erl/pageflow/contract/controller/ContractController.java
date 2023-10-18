@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.contract.model.service.ContractService;
 import com.erl.pageflow.contract.model.vo.Contract;
@@ -26,6 +27,17 @@ public class ContractController {
 
 	@Autowired
 	private ContractService contractService;
+	
+	// ****************** 뷰페이지 이동 **********************
+	
+	// 계약 등록 페이지 이동
+	@RequestMapping("movectrinsert.do")
+	public String moveContractInsertPage() {
+		return "publish/contr_input";
+	}
+	
+
+	// ****************** 요청 받아서 서비스로 넘기는 메소드 **********************
 	
 	//계약 리스트 조회
 	@RequestMapping("ctrlist.do")
@@ -64,5 +76,18 @@ public class ContractController {
 		out.append(returnStr);
 		out.flush();
 		out.close();
+	}
+	
+	// 계약 정보 등록 요청 처리
+	@RequestMapping(value="ctrinsert.do", method=RequestMethod.POST)
+	public String contractInsertMethod(Contract contract, Model model) {
+		logger.info("ctrinsert.do : " + contract);
+		
+		if(contractService.insertContract(contract) > 0) {
+			return "redirect:ctrlist.do";
+		} else {
+			model.addAttribute("message", "계약 등록 실패!");
+			return "common/error";
+		}
 	}
 }
