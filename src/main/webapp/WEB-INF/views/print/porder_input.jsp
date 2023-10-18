@@ -169,7 +169,8 @@
                 <!--form-->
                 <!-- <form class="input-form" action="/comi/partyi" method="post" enctype="multipart/form-data">-->
                 <form class="input-form" action="poinsert.do" method="post">
-                <input type="hidden" name="empName" class="select-date small">
+                <input type="hidden" name="empName" class="select-date small" value="${ sessionScope.loginMember.empName }">
+                <input type="hidden" name="empId" class="select-date small" value="${ sessionScope.loginMember.empId }">
                     <!--main-header-bar-->
                     <div class="main-header-bar">
                         <div class="main-title-box">
@@ -264,7 +265,7 @@
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="number" name="unit" class="contents-input" value="${ printOrder.unit }">
+                                                <input type="input" name="unit" class="contents-input" value="${ printOrder.unit }">
                                             </div>
                                         </td>
                                         <td class="td-70">
