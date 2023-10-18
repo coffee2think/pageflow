@@ -11,7 +11,7 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 3;
-    const SUBPAGE = 2;
+    const SUBPAGE = 3;
     const LNKPAGE = 1;
 </script>
 <title>도서현황</title>

@@ -3,7 +3,7 @@
 "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="publishMapper">
-	<!-- contract 계약 resultMap -->
+	<!-- Contract 계약 resultMap -->
 	<resultMap type="Contract" id="resultContract">
 		<result property="contrId" column="CONTR_ID" />
 		<result property="empId" column="EMP_ID" />
@@ -27,7 +27,7 @@
 		<result property="account" column="ACCOUNT" />
 	</resultMap>
 	
-	<!-- edit 편집 resultMap -->
+	<!-- Edit 편집 resultMap -->
 	<resultMap type="Edit" id="resultEdit">
 		<result property="editId" column="EDIT_ID" />
 		<result property="depId" column="DEP_ID" />
@@ -37,9 +37,10 @@
 		<result property="editState" column="EDIT_STATE" />
 		<result property="startDate" column="START_DATE" />
 		<result property="endDate" column="END_DATE" />
+		<result property="depName" column="DEP_NAME" />
 	</resultMap>
 	
-	<!-- book 도서 resultMap -->
+	<!-- Book 도서 resultMap -->
 	<resultMap type="Book" id="resultBook">
 		<result property="bookId" column="BOOK_ID" />
 		<result property="writerId" column="WRITER_ID" />
@@ -56,7 +57,7 @@
 		<result property="regDate" column="REG_DATE" />
 	</resultMap>
 
-	<!-- writer 작가 resultMap -->
+	<!-- Writer 작가 resultMap -->
 	<resultMap type="Writer" id="resultWriter">
 		<result property="writerId" column="WRITER_ID" />
 		<result property="writerName" column="WRITER_NAME" />
@@ -68,7 +69,7 @@
 		<result property="account" column="ACCOUNT" />
 	</resultMap>
 
-	<!-- contract 계약 -->
+	<!-- Contract 계약 -->
 	<select id="selectContractListCount" resultType="_int">
 		select count(*) from contract
 	</select>
@@ -123,12 +124,13 @@
 		where contr_id = #{ contrId }
 	</select>
 		
-	<!-- edit 편집 -->
+	<!-- Edit 편집 -->
 	<select id="selectEditList" parameterType="Paging" resultMap="resultEdit">
 		select *
 		from (select rownum rnum, sub.*
 			  from (select * from edit
-					order by edit_id desc) sub)
+			  		left join department using(DEP_ID)
+					order by edit_id desc, dep_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow } 
 	</select>
 	
@@ -142,7 +144,7 @@
 		select count(*) from edit
 	</select>
 	
-	<!-- book 도서 -->
+	<!-- Book 도서 -->
 	<select id="selectBookList" parameterType="Paging" resultMap="resultBook">
 		select *
 		from (select rownum rnum, sub.*
@@ -161,7 +163,7 @@
 		select count(*) from book
 	</select>
 	
-	<!-- writer 작가 -->
+	<!-- Writer 작가 -->
 	<select id="selectWriterList" parameterType="Paging" resultMap="resultWriter">
 		select *
 		from (select rownum rnum, sub.*
