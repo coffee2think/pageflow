@@ -36,11 +36,90 @@
     			// 수금액 계산 반영
     			var balance = tr.find('input[name=balance]');
     			balance.val(totalPrice - collectedAmount);
-    			
-    			// 
     		});
     	});
     });
+ 	
+    function submitUpdate(id, url) {
+        var currentRow = $('#completeBtn_' + id).parent().parent();
+        var json = {};
+        
+        // 서버로 전송할 값 json에 담기
+        var len = currentRow.children('td').length;
+        currentRow.find('input').each(function(index) {
+            // 양끝열(체크박스와 수정버튼 열)은 건너뜀
+            if(index == 0 || index >= len - 1) {
+                return; 
+            }
+            
+            // endDate에 값이 들어있지 않다면 담지 않고 건너뜀
+            if($(this).attr('name') == 'endDate' && $(this).val() == '') {
+    			return;
+    		}
+            
+            // 콤마를 삭제한 value 값이 숫자라면 숫자로 파싱
+            if(!isNaN($(this).val().replace(/,/g, ''))) {
+    			$(this).val(Number($(this).val()));
+    		}
+            
+            json[$(this).attr('name')] = $(this).val();
+        });
+        
+        // ajax로 update 요청 보내기
+        $.ajax({
+            url: url,
+            type: "post",
+            data: json,
+            success: function(data){
+                console.log("success : " + data);
+                if(data == "success") {
+                    alert(id + "번 정보 수정 성공");
+                } else {
+                    alert("정보 수정 실패");
+                }
+                
+                // 수정 이전 스타일로 되돌리기
+                offUpdate(id);
+                totalCalc();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+            }
+        });
+    }
+ 	
+ 	// 집계영역 재계산
+ 	function totalCalc() {
+ 		var sumQuantity = 0;
+ 		var sumTotalPrice = 0;
+ 		var sumCollectedAmount = 0;
+ 		var sumBalance = 0;
+ 		
+ 		var table = $('#table_list');
+ 		table.find('tr.content-row').each(function() {
+ 			sumQuantity += parseInt($(this).find('input[name=orderQuantity]').val());
+ 			sumTotalPrice += parseInt($(this).find('input[name=totalPrice]').val());
+ 			sumCollectedAmount += parseInt($(this).find('input[name=collectedAmount]').val());
+ 			sumBalance += parseInt($(this).find('input[name=balance]').val());
+ 		});
+ 		
+ 		$('#td_sumQuantity').text(sumQuantity);
+ 		$('#td_sumTotalPrice').text(sumTotalPrice);
+ 		$('#td_sumCollectedAmount').text(sumCollectedAmount);
+ 		$('#td_sumBalance').text(sumBalance);
+ 	}
+ 	
+    // 날짜 검색 버튼 클릭시
+ 	function searchByDate() {
+    	var begin = $('#begin').val();
+    	var end = $('#end').val();
+    	
+    	var url = 'sslistdate.do?';
+    	url += 'begin=' + begin;
+    	url += '&end=' + end;
+    	
+    	location.href = url;
+    }
 </script>
 <title></title>
 </head>
@@ -128,8 +207,8 @@
                                     기간
                                 </div>
 
-								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
-                                <input type="date" class="select-date select-date-second" name="end" value=${ end }>
+								<input type="date" class="select-date select-date-first" name="begin" id="begin" value=${ begin }>
+                                <input type="date" class="select-date select-date-second" name="end" id="end" value=${ end }>
 								
 								<c:set var="today_" value="<%= new java.util.Date() %>" />
 								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
@@ -154,6 +233,7 @@
 								
                                 <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
                                 <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+                                <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
                             </div>
 
                         </form>
@@ -214,7 +294,7 @@
 		                                <c:set var="sumCollectedAmount" value="${ sumCollectedAmount + sales.collectedAmount }" />
 		                                <c:set var="sumBalance" value="${ sumBalance + (sales.totalPrice - sales.collectedAmount) }" />
 		                                
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ sales.salesId }">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 content-row" id="tr_${ sales.salesId }">
 		                                    <td class="td-50">
 		                                        <input type="checkbox" name="check" value="${ sales.salesId }" >
 		                                    </td>
@@ -297,10 +377,10 @@
                                     <td></td>
                                     <td></td>
                                     <td>합계</td>
-                                    <td>${ sumQuantity }</td>
-                                    <td>${ sumTotalPrice }</td>
-                                    <td>${ sumCollectedAmount }</td>
-                                    <td>${ sumBalance }</td>
+                                    <td id="td_sumQuantity">${ sumQuantity }</td>
+                                    <td id="td_sumTotalPrice">${ sumTotalPrice }</td>
+                                    <td id="td_sumCollectedAmount">${ sumCollectedAmount }</td>
+                                    <td id="td_sumBalance">${ sumBalance }</td>
                                     <td></td>
                                 </tr>
                                 <!--합계end-->

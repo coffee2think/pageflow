@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -200,7 +202,7 @@ public class SalesController {
 			
 			return "sales/border_list";
 		} else {
-			model.addAttribute("message", "주문현황 조회 실패");
+			model.addAttribute("message", "\"" + searchType + "\" 분류에 대한 \"" + search.getKeyword() + "\" 검색어에 대한 주문현황 조회 실패");
 			return "common/error";
 		}
 	}
@@ -268,15 +270,47 @@ public class SalesController {
 	
 	// 주문 정보 등록 요청 처리
 	@RequestMapping(value="boinsert.do", method=RequestMethod.POST)
-	public String bookOrderInsertMethod(BookOrder bookOrder, Model model) {
-		logger.info("boinsert.do : " + bookOrder);
+	public String bookOrderInsertMethod(HttpServletRequest request, Model model) {
+		String[] bookIds = request.getParameterValues("bookId");
+		String[] clientIds = request.getParameterValues("clientId");
+		String[] empIds = request.getParameterValues("empId");
+		String[] orderQuantities = request.getParameterValues("orderQuantity");
+		String[] states = request.getParameterValues("state");
 		
-		if(salesService.insertBookOrder(bookOrder) > 0) {
-			return "redirect:movebolist.do";
-		} else {
-			model.addAttribute("message", "주문 등록 실패!");
-			return "common/error";
+		logger.info("boinsert.do ---------------------------- START");
+		logger.info("bookIds : " + Arrays.toString(bookIds));
+		logger.info("clientIds : " +  Arrays.toString(clientIds));
+		logger.info("empIds : " + Arrays.toString(empIds));
+		logger.info("orderQuantities : " + Arrays.toString(orderQuantities));
+		logger.info("states : " + Arrays.toString(states));
+		logger.info("boinsert.do ---------------------------- END");
+		
+		// 주문번호 생성
+		
+		int orderId = salesService.selectMaxOrderId() + 1;
+		
+		ArrayList<BookOrder> bookOrders = new ArrayList<>();
+		for(int i = 0; i < bookIds.length; i++) {
+			BookOrder bookOrder = new BookOrder();
+			
+			bookOrder.setOrderId(orderId);
+			bookOrder.setBookId(Integer.parseInt(bookIds[i]));
+			bookOrder.setClientId(Integer.parseInt(clientIds[i]));
+			bookOrder.setEmpId(Integer.parseInt(empIds[i]));
+			bookOrder.setOrderQuantity(Integer.parseInt(orderQuantities[i]));
+			bookOrder.setState(states[i]);
+			
+			bookOrders.add(bookOrder);
 		}
+		
+		for(BookOrder bookOrder : bookOrders) {
+			if(salesService.insertBookOrder(bookOrder) == 0) {
+				model.addAttribute("message", "주문 등록 실패!");
+				return "common/error";
+			}
+		}
+		
+		return "redirect:movebolist.do";
 	}
 	
 	// 주문 정보 수정 요청 처리(ajax 통신)

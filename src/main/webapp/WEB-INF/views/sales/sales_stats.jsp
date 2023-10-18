@@ -156,8 +156,8 @@
                                     <th>12월</th>
                                     <th>합계</th>
                                 </tr>
-                                <c:if test="${ !empty list }">
-                                	<c:forEach items=${ list } var="sales">
+                                <%-- <c:if test="${ !empty list }">
+                                	<c:forEach items=${ list } var="sales"> --%>
 		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
@@ -235,8 +235,8 @@
 		                                        </div>
 		                                    </td>
 		                                </tr>
-	                                </c:forEach>
-                                </c:if>
+	                                <%-- </c:forEach>
+                                </c:if> --%>
 
                                 <!--합계-->
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
