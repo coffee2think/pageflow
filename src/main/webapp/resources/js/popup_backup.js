@@ -42,7 +42,7 @@ Popup.prototype = {
 			$(this).parent().parent().parent('.modal-pop-area').hide();
 		})
 		
-		$('.search-btn').each(function(){
+		$('.search-btn-pop').each(function(){
 			$(this).on('click', function(){
 				_this.insertVal();
 			})

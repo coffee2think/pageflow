@@ -15,6 +15,7 @@ public interface SalesService {
 	public ArrayList<BookOrder> selectBookOrderByDate(Search search);
 	public int selectSalesCountByDate(Search search);
 	public ArrayList<Sales> selectSalesListByDate(Search search);
+	public int updateSales(Sales sales);
 	public BookForSales selectBook(int bookId);
 	public BookStore selectBookStore(int clientId);
 	public int selectClientListCount();

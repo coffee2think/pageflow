@@ -115,6 +115,13 @@
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
+	<update id="updateSales" parameterType="Sales">
+		update sales
+		set collected_amount = #{ collectedAmount },
+			collect_date = sysdate
+		where sales_id = #{ salesId }
+	</update>
+	
 	<select id="selectBook" parameterType="_int" resultMap="resultBook">
 		select * from book
 		where book_id = #{ bookId }

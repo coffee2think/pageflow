@@ -91,7 +91,7 @@ public class SalesController {
 	// 매출현황 페이지 이동
 	@RequestMapping("movestats.do")
 	public String moveStatistics() {
-		return "sales/sales_stats";
+		return "statslist.do";
 	}
 	
 	
@@ -244,6 +244,26 @@ public class SalesController {
 			model.addAttribute("message", "판매현황 조회 실패");
 			return "common/error";
 		}
+	}
+	
+	// 판매 정보 수정 요청 처리(ajax 통신)
+	@RequestMapping(value="ssupdate.do", method=RequestMethod.POST)
+	public void salesUpdateMethod(Sales sales, HttpServletResponse response) throws IOException {
+		logger.info("ssupdate.do : " + sales);
+		
+		String returnStr = null;
+		if(salesService.updateSales(sales) > 0) {
+			returnStr = "success";
+		} else {
+			returnStr = "fail";
+		}
+		
+		// response를 이용해서 클라이언트와 출력스트림을 열어서 값 보냄
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.append(returnStr);
+		out.flush();
+		out.close();
 	}
 	
 	// 주문 정보 등록 요청 처리
@@ -424,4 +444,43 @@ public class SalesController {
 		
 		return "redirect:moveclient.do";
 	}
+	
+	// 매출통계 조회 요청 처리
+	@RequestMapping("statslist.do")
+	public String salesStatisticsMethod(
+			@RequestParam("page") String page,
+			@RequestParam("limit") String limitStr,
+			Model model) {
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		// 1년동안 매출이 있는 도서 정보 목록을 가져옴
+//		int listCount = salesService.selectSalesCountForStats();
+		int listCount = 0;
+		
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "sslistdate.do");
+		paging.calculator();
+		
+//		ArrayList<Sales> list = salesService.selectSalesForStats(paging);
+		ArrayList<Sales> list = null;
+		
+		if(list != null && list.size() > 0) {
+			for(Sales sales : list) {
+				sales.calcTotalPrice();
+			}
+	
+			model.addAttribute("list", list);
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "sales/sales_stats";
+		} else {
+			model.addAttribute("message", "매출통계 조회 실패");
+			return "common/error";
+		}
+	}
+	
 }

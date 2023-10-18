@@ -20,7 +20,12 @@
 
     document.addEventListener("DOMContentLoaded", function(){
     	$('.input-search-btn').on('click', function() {
-    		var type = $(this).attr('class').split(' ')[1];
+    		var input = $(this).parent().children('input');
+    		var type = input.attr('name');
+    		if(type.includes('book')) {
+    			type = 'book';
+    		}
+    		console.log('type : ' + type);
     		popup.showPopup(type);
     		curinput = $(this).parent('.input-search').find('input[type=input]');
     		return false;
@@ -67,21 +72,21 @@
 						+ '</div>';
 		
 		newCell2.innerHTML = '<div class="contents-input-div input-search">'
-						+ '<button class="input-search-btn book">'
+						+ '<button class="input-search-btn">'
 						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 						+ '</button>'
 						+ '<input type="input" name="bookId" class="contents-input" value="">'
 						+ '</div>';
 		
 		newCell3.innerHTML = '<div class="contents-input-div input-search">'
-						+ '<button class="input-search-btn book">'
+						+ '<button class="input-search-btn">'
 						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 						+ '</button>'
 						+ '<input type="input" name="bookName" class="contents-input" value="">'
 						+ '</div>';
 		
 		newCell4.innerHTML = '<div class="contents-input-div input-search">'
-						+ '<button class="input-search-btn book-store">'
+						+ '<button class="input-search-btn">'
 						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 						+ '</button>'
 						+ '<input type="input" name="clientId" class="contents-input" value="">'
@@ -225,7 +230,7 @@
                                         </td>
                                         <td class="td-120">
                                             <div class="contents-input-div input-search">
-                                                <button class="input-search-btn book">
+                                                <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
                                                 <input type="input" name="bookId" class="contents-input" value="">
@@ -233,7 +238,7 @@
                                         </td>
                                         <td class="td-200">
                                             <div class="contents-input-div input-search">
-                                                <button class="input-search-btn book">
+                                                <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
                                                 <input type="input" name="bookName" class="contents-input" value="">
@@ -241,7 +246,7 @@
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div input-search">
-                                                <button class="input-search-btn book-store">
+                                                <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
                                                 <!-- <input type="hidden" name="clientId" value=""> -->
@@ -292,7 +297,7 @@
             <div class="modal-pop-area">
                 <!-- 팝업 들어감 -->
                 <%-- <c:import url="../common/popup.jsp" /> --%>
-                <c:import url="../common/popup_test.jsp" />
+                <c:import url="../common/popup.jsp" />
             </div>
             <!--modal-pop-area end-->
 

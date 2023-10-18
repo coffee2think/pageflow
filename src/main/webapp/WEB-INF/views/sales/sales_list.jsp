@@ -197,11 +197,17 @@
                                 
                                 <c:if test="${ !empty list }">
 									<c:forEach items="${ list }" var="sales">
-		                                <fmt:formatNumber var="bookPrice" value="${ sales.bookPrice }" type="number" />
+		                                <!-- 3자리 콤마 포맷 -->
+		                                <%-- <fmt:formatNumber var="bookPrice" value="${ sales.bookPrice }" type="number" />
 		                                <fmt:formatNumber var="orderQuantity" value="${ sales.orderQuantity }" type="number" />
 		                                <fmt:formatNumber var="totalPrice" value="${ sales.totalPrice }" type="number" />
 		                                <fmt:formatNumber var="collectedAmount" value="${ sales.collectedAmount }" type="number" />
 		                                <fmt:formatNumber var="balance" value="${ sales.totalPrice - sales.collectedAmount }" type="number" />
+		                                
+		                                <c:set var="sumQuantity" value="${ sumQuantity + sales.orderQuantity }" />
+		                                <c:set var="sumTotalPrice" value="${ sumTotalPrice + sales.totalPrice }" />
+		                                <c:set var="sumCollectedAmount" value="${ sumCollectedAmount + sales.collectedAmount }" />
+		                                <c:set var="sumBalance" value="${ sumBalance + (sales.totalPrice - sales.collectedAmount) }" /> --%>
 		                                
 		                                <c:set var="sumQuantity" value="${ sumQuantity + sales.orderQuantity }" />
 		                                <c:set var="sumTotalPrice" value="${ sumTotalPrice + sales.totalPrice }" />
@@ -244,27 +250,27 @@
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ bookPrice }" readonly>
+		                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ sales.bookPrice }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="orderQuantity" class="contents-input noline" value="${ orderQuantity }" readonly>
+		                                            <input type="input" name="orderQuantity" class="contents-input noline" value="${ sales.orderQuantity }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="totalPrice" class="contents-input noline" value="${ totalPrice }" readonly>
+		                                            <input type="input" name="totalPrice" class="contents-input noline" value="${ sales.totalPrice }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="collectedAmount" class="contents-input noline changeable" value="${ collectedAmount }" readonly>
+		                                            <input type="input" name="collectedAmount" class="contents-input noline changeable" value="${ sales.collectedAmount }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="balance" class="contents-input noline" value="${ balance }" readonly>
+		                                            <input type="input" name="balance" class="contents-input noline" value="${ sales.totalPrice - sales.collectedAmount }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">

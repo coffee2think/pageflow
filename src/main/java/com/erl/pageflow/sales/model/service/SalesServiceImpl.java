@@ -39,6 +39,11 @@ public class SalesServiceImpl implements SalesService {
 	public ArrayList<Sales> selectSalesListByDate(Search search) {
 		return salesDao.selectSalesListByDate(search);
 	}
+	
+	@Override
+	public int updateSales(Sales sales) {
+		return salesDao.updateSales(sales);
+	}
 
 	@Override
 	public BookForSales selectBook(int bookId) {
