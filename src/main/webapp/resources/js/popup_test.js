@@ -55,9 +55,9 @@ Popup.prototype = {
 		setList();
 	}
 	,
-	showPopup:function(type){
+	showPopup:function(){
 		$('.modal-pop-area').show();
-    	$('.modal-pop-box').$('.' + type).show();
+    	$('.modal-pop-box').$().show();
 	}
 
     ,

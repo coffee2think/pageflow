@@ -310,7 +310,7 @@
             <!--modal-pop-area-->
             <div class="modal-pop-area">
                 <!-- 팝업 들어감 -->
-                <c:import url="../common/popup.jsp" />
+                <c:import url="../common/popup_test.jsp" />
             </div>
             <!--modal-pop-area end-->
 

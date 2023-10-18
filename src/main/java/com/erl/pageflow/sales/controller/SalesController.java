@@ -16,13 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.sales.model.service.SalesService;
-import com.erl.pageflow.sales.model.vo.BookForSales;
 import com.erl.pageflow.sales.model.vo.BookOrder;
-import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.Client;
 import com.erl.pageflow.sales.model.vo.Sales;
 
@@ -191,13 +188,7 @@ public class SalesController {
 		
 		if(list != null && list.size() > 0) {
 			for(BookOrder bo : list) {
-				BookForSales book = salesService.selectBook(bo.getBookId());
-				BookStore bookStore = salesService.selectBookStore(bo.getClientId());
-				
-				bo.setBookName(book.getBookName());
-				bo.setBookPrice(book.getBookPrice());
 				bo.calcTotalPrice();
-				bo.setBookStoreName(bookStore.getClientName());
 			}
 	
 			model.addAttribute("list", list);
