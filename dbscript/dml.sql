@@ -111,7 +111,8 @@ from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID,
             order by BOARD_ID desc))
 left join department using(DEP_ID)
 left join employee using(EMP_ID)
-where rnum >= 1 and rnum <= 10;
+where rnum >= 1 and rnum <= 10
+order by BOARD_ID desc;
 
 
 select * 
@@ -132,11 +133,12 @@ from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID,
            MODIFY_DATE, DELETE_DATE, VIEWS_NUM
       from (select * 
             from board
-            where create_date between '2023-10-11' and (to_date('2023-10-17') + 1 - 1/86400)
+            where create_date between '2023-10-01' and (to_date('2023-10-18') + 1 - 1/86400)
             order by BOARD_ID desc))
 left join department using(DEP_ID)
 left join employee using(EMP_ID)
-where rnum >= 1 and rnum <= 1;
+where rnum >= 1 and rnum <= 10
+order by BOARD_ID desc;
 
 
 

@@ -5,10 +5,11 @@
 
 <c:set var="today_" value="<%= new java.util.Date() %>" />
 <fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+<c:set var="newdays" value="3" />
 
 <!-- LocalDate 객체를 통해 일주일 전 날짜를 구한 후 Date 객체로 변환 -->
-<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
-<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+<c:set var="before_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusDays(3).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+<fmt:formatDate var="before" value="${ before_ }" pattern="yyyy-MM-dd" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,12 +24,16 @@
 
     function newCount(){
 		
+		let begin = '<c:out value="${ before }" />';
+		let end = '<c:out value="${ today }" />';
+		console.log('begin : ' + begin + ', end : ' + end);
+
         $.ajax({
-            url : 'bdlistdatecountajax.do'
+            url : 'bdlistdatecount.do'
             ,type : 'get'
             ,data: {
-            	begin : '<c:out value="${ weekago }" />'
-            	,end : '<c:out value="${ today }" />'
+            	begin : begin
+            	,end : end
             }
             ,contentType: "application/json; charset=utf-8" // mimiType
     		,dataType : 'text'
@@ -53,6 +58,7 @@
 	        <c:url var="bdselnew" value="bdlistnew.do">
 	            <c:param name="empId" value="${ loginMember.empId }"/>
 	            <c:param name="depId" value="${ depId }"/>
+				<c:param name="newdays" value="${ newdays }"/>
 	        </c:url>
 	        <a class="side-icon-btn" id="sideBtn_new" href="${ bdselnew }">
 	            <span class="side-icon" id="new_count">0</span>

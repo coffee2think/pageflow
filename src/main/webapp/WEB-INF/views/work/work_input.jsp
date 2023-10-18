@@ -6,6 +6,7 @@
 <c:set var="end" value="${ requestScope.end }" scope="session" />
 <c:set var="keyword" value="${ requestScope.keyword }" scope="session" />
 <c:set var="searchType" value="${ requestScope.searchType }" scope="session" />
+<c:set var="firstType" value="${ requestScope.firstType }" scope="session" />
 
 <!DOCTYPE html>
 <html>
@@ -136,30 +137,31 @@
                                         파일첨부
                                     </div>
 									
-									<c:if test="${ empty board }">
-	                                    <div class="select-pan">
-	                                        <input type="file" name="upfile" class="select-file">
-	                                    </div>
-                                    </c:if>
-                                    <c:if test="${ !empty board and !empty board.originFile }">
-                                    	<c:url var="bdown" value="bddown.do">
-											<c:param name="ofile" value="${ board.originFile }" />
-	                                        <c:param name="rfile" value="${ board.renameFile }" />
-	                                    </c:url>
-                                        <div class="contents-notice-down-box show">
-                                            <a class="contents-notice-down" href="${ bdown }">
-                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
-                                                <span class="origin-file-name">${ board.originFile }</span>
-                                                <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
-                                            </a>
-                                        </div>
+                                    <c:choose> 
+                                        <c:when test="${ !empty board and !empty board.originFile }">
+                                            <c:url var="bdown" value="bddown.do">
+                                                <c:param name="ofile" value="${ board.originFile }" />
+                                                <c:param name="rfile" value="${ board.renameFile }" />
+                                            </c:url>
+                                            <div class="contents-notice-down-box show">
+                                                <a class="contents-notice-down" href="${ bdown }">
+                                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
+                                                    <span class="origin-file-name">${ board.originFile }</span>
+                                                    <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
+                                                </a>
+                                            </div>
+                                            <div class="select-pan margin-left20px">
+                                                <input type="file" name="upfile" class="select-file">
+                                            </div>
+                                        </c:when> 
                                         
-	                                    <div class="select-pan margin-left20px">
-	                                        <input type="file" name="upfile" class="select-file">
-	                                    </div>
-	                                    
-                                    </c:if>
-                                    
+                                        <c:otherwise>
+                                            <div class="select-pan">
+                                                <input type="file" name="upfile" class="select-file">
+                                            </div>
+                                        </c:otherwise> 
+                                    </c:choose> 
+
                                 </div>
 
                                 <div class="content-input-area height-long">
