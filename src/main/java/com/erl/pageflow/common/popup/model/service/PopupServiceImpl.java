@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.erl.pageflow.common.popup.model.dao.PopupDao;
 
 @Service("popupService")
-public class PopupServiceImpl {
+public class PopupServiceImpl implements PopupService {
 	
 	@Autowired
 	private PopupDao popupDao;
