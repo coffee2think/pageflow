@@ -166,12 +166,12 @@ function updateContract(contrId) {
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="code" class="contents-input noline" value="${ contract.contrId }" readonly>
+		                                            <input type="input" name="contrId" class="contents-input noline" value="${ contract.contrId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-250">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="name" class="contents-input noline" value="${ contract.bookName }" readonly>
+		                                            <input type="input" name="bookName" class="contents-input noline" value="${ contract.bookName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
@@ -181,32 +181,32 @@ function updateContract(contrId) {
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="author" class="contents-input noline" value="${ contract.writerName }" readonly>
+		                                            <input type="input" name="writerName" class="contents-input noline" value="${ contract.writerName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="manager" class="contents-input noline" value="${ contract.empId }" readonly>
+		                                            <input type="input" name="empId" class="contents-input noline" value="${ contract.empId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name=manager class="contents-input noline" value="${ contract.empName }" readonly>
+		                                            <input type="input" name=empName class="contents-input noline" value="${ contract.empName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="state" class="contents-input noline" value="${ contract.contrState }" readonly>
+		                                            <input type="input" name="contrState" class="contents-input noline" value="${ contract.contrState }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="date" class="contents-input noline" value="${ contract.contrDate }" readonly>
+		                                            <input type="input" name="contrDate" class="contents-input noline" value="${ contract.contrDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="doc" class="contents-input noline" value="${ contract.contrDoc }" readonly>
+		                                            <input type="input" name="contrDoc" class="contents-input noline" value="${ contract.contrDoc }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">

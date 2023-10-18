@@ -30,7 +30,7 @@ public class BookServiceImpl implements BookService {
 	}
 	
 	@Override
-	public Book selectBook(String bookId) {
+	public Book selectBook(int bookId) {
 		return bookDao.selectBook(bookId);
 	}
 	

@@ -51,6 +51,24 @@
 				
 	</insert>
 	
+	<update id="updateNotice" parameterType="Notice">
+		update notice 
+		<if test="noticeOriginalFileName == null">
+		set NOTICE_TITLE = #{noticeTitle}, 
+			NOTICE_DETAIL = #{noticeDetail}, 
+			NOTICE_ORIGINAL_FILENAME = null, NOTICE_RENAME_FILENAME = null,
+			importance = #{importance} 
+		where NOTICE_ID = #{noticeId}
+		</if>
+		<if test="noticeOriginalFileName != null">
+		set NOTICE_TITLE = #{noticeTitle},  
+			NOTICE_DETAIL = #{noticeDetail}, 
+			NOTICE_ORIGINAL_FILENAME = #{noticeOriginalFileName}, NOTICE_RENAME_FILENAME = #{noticeRenameFileName}, 
+			importance = #{importance}
+		where NOTICE_ID = #{noticeId}
+		</if>
+	</update>
+	
 </mapper>
 
 

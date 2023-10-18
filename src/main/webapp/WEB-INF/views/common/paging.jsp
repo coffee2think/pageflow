@@ -14,6 +14,7 @@
 <c:set var="searchType" value="${ searchType }" />
 <c:set var="keyword" value="${ keyword }" />
 <c:set var="dateType" value="${ dateType }" />
+<c:set var="firstType" value="${ requestScope.firstType }" />
 
 <!DOCTYPE html>
 <html>
@@ -26,7 +27,7 @@
 <title></title>
 </head>
 <body>
-
+	
 	<c:if test="${ currentPage eq 1 }">
 		<span class="paging-list-btn prev greybtn">
 	        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/left-btn2.png"></span>
@@ -59,7 +60,8 @@
 			<c:url var="pUrl" value="${ urlMapping }">
 				<c:param name="page" value="${ p }" />
 				<c:param name="limit" value="${ limit }" />
-				
+				<c:param name="firstType" value="${ firstType }" />
+
 				<!-- 키워드 검색 시 -->
 				<c:if test="${ !empty searchType and !empty keyword }">
 					<c:param name="searchType" value="${ searchType }" />
@@ -77,6 +79,7 @@
 					<c:param name="dateType" value="${ dateType }" />
 				</c:if>
 			</c:url>
+			
 			<a href="${ pUrl }" class="paging-list-btn"><span>${ p }</span></a>
 		</c:if>
 	</c:forEach>

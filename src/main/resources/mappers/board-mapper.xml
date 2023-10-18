@@ -54,6 +54,7 @@
 		left join department using(DEP_ID)
 		left join employee using(EMP_ID)
 		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by BOARD_ID desc
 		]]>
 	</select>
 	
@@ -71,6 +72,7 @@
 		left join employee using(EMP_ID)
 		where EMP_ID = #{ empId } and 
 		(rnum >= #{ startRow } and rnum <= #{ endRow })
+		order by BOARD_ID desc
 		]]>
 	</select>
 	
@@ -98,6 +100,7 @@
 		left join department using(DEP_ID)
 		left join employee using(EMP_ID)
 		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by BOARD_ID desc
 		]]>
 	</select>
 	
@@ -132,6 +135,7 @@
 		left join department using(DEP_ID)
 		left join employee using(EMP_ID)
 		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by BOARD_ID desc
 		]]>
 	</select>
 	
@@ -148,6 +152,7 @@
 		left join department using(DEP_ID)
 		left join employee using(EMP_ID)
 		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by BOARD_ID desc
 		]]>
 	</select>
 	
@@ -162,6 +167,7 @@
 		            where emp_name like '%' || #{ keyword } || '%'
 		            order by BOARD_ID desc) sub)
 		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by BOARD_ID desc
 		]]>
 	</select>
 	
@@ -183,6 +189,10 @@
 	<select id="selectDepName" parameterType="_int" resultType="string">
 		select dep_name from department
 		where dep_id = #{ depId }
+	</select>
+	
+	<select id="selectBoardId" resultType="_int">
+		select max(BOARD_ID) from board
 	</select>
 	
 	<insert id="insertBoard" parameterType="Board">
@@ -221,10 +231,12 @@
 		and BOARD_ID = #{ boardId }
 	</update>
 	
-	<select id="deleteBoard" parameterType="_int">
-	</select>	
+	<delete id="deleteBoard" parameterType="Board">
+		delete from board 
+		where board_id = #{ boardId }
+	</delete>	
 	
-
+	
 </mapper>
 
 

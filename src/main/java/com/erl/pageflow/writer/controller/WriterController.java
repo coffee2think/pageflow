@@ -8,8 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.writer.model.service.WriterService;
 import com.erl.pageflow.writer.model.vo.Writer;
@@ -20,6 +22,17 @@ public class WriterController {
 
 	@Autowired
 	private WriterService writerService;
+	
+	// ****************** 뷰페이지 이동 **********************
+	
+	// 작가 등록 페이지 이동
+	@RequestMapping("movewtinsert.do")
+	public String moveWriterInsertPage() {
+		return "publish/writer_input";
+	}
+	
+
+	// ****************** 요청 받아서 서비스로 넘기는 메소드 **********************
 	
 	// 작가 리스트 조회
 	@RequestMapping("wtlist.do")
@@ -52,6 +65,19 @@ public class WriterController {
 			return "publish/writer_list";
 		} else {
 			model.addAttribute("message", "작가 목록 조회 실패!");
+			return "common/error";
+		}
+	}
+	
+	// 작가 정보 등록 요청 처리
+	@RequestMapping(value="wtinsert.do", method=RequestMethod.POST)
+	public String writerInsertMethod(Writer writer, Model model) {
+		logger.info("wtinsert.do : " + writer);
+		
+		if(writerService.insertWriter(writer) > 0) {
+			return "redirect:wtlist.do";
+		} else {
+			model.addAttribute("message", "작가 등록 실패!");
 			return "common/error";
 		}
 	}

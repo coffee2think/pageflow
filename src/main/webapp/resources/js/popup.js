@@ -42,7 +42,7 @@ Popup.prototype = {
 			$(this).parent().parent().parent('.modal-pop-area').hide();
 		})
 		
-		$('.search-btn').each(function(){
+		$('.search-btn-pop').each(function(){
 			$(this).on('click', function(){
 				_this.insertVal();
 			})
@@ -55,9 +55,13 @@ Popup.prototype = {
 		setList();
 	}
 	,
-	showPopup:function(){
+	showPopup:function(type){
 		$('.modal-pop-area').show();
-    	$('.modal-pop-box').show();
+    	//$('.modal-pop-box#' + type).show();
+    	$('.modal-pop-box').each(function(){
+			$(this).hide();
+		})
+    	$('#' + type).show();
 	}
 
     ,

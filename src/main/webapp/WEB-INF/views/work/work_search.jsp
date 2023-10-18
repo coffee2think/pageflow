@@ -17,7 +17,7 @@
 
     $(function(){
         //서치 버튼 클릭 시
-        $('.search-btn').on('click', function(){
+        $('#search_keyword').on('click', function(){
             searchKey();
         })
         $('.search-box-text').on('keyup',function(key){
@@ -69,7 +69,7 @@
             <div class="select-pan">
                 <label for="sel_code"></label>
                 <select name="code" id="sel_code">
-                    <option value="title">제목</option>
+                    <option value="title" selected>제목</option>
                     <option value="content">내용</option>
                     <option value="writer">작성자</option>
                 </select>
@@ -77,7 +77,7 @@
         </div>
 
         <div class="search-box">
-            <button class="search-btn">
+            <button class="search-btn" id="search_keyword">
                 <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
             </button>
             <c:if test="${ empty keyword }">
@@ -93,9 +93,18 @@
         <div class="select-pan-nemo">
             작성날짜
         </div>
-        <input type="date" class="select-date select-date-first" id="begin_startDate" value="${ begin }">
-        <input type="date" class="select-date select-date-second" id="end_startDate" value="${ end }">
-
+        <c:choose> 
+            <c:when test="${ !empty firstType and firstType eq 'first' }">
+                <input type="date" class="select-date select-date-first" id="begin_startDate">
+                <input type="date" class="select-date select-date-second" id="end_startDate">
+            </c:when> 
+            
+            <c:otherwise>
+                <input type="date" class="select-date select-date-first" id="begin_startDate" value="${ begin }">
+                <input type="date" class="select-date select-date-second" id="end_startDate" value="${ end }">
+            </c:otherwise> 
+        </c:choose> 
+        
         <c:set var="today_" value="<%= new java.util.Date() %>" />
         <fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
 
@@ -110,12 +119,14 @@
         <c:url var="searchWeekUrl" value="bdlistdate.do">
             <c:param name="begin" value="${ weekago }" />
             <c:param name="end" value="${ today }" />
+            <c:param name="depId" value="${ depId }" />
             <c:param name="dateType" value="startDate" />
         </c:url>
 
         <c:url var="searchMonthUrl" value="bdlistdate.do">
             <c:param name="begin" value="${ monthago }" />
             <c:param name="end" value="${ today }" />
+            <c:param name="depId" value="${ depId }" />
             <c:param name="dateType" value="startDate" />
         </c:url>
 

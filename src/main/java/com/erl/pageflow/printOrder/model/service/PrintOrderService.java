@@ -21,4 +21,8 @@ public interface PrintOrderService {
 	
 	public int poinsert(PrintOrder printOrder);
 	
+	public int poupdate(PrintOrder printOrder);
+	
+	
+	
 }

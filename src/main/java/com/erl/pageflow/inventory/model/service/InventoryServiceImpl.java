@@ -50,4 +50,71 @@ public class InventoryServiceImpl implements InventoryService {
 		return inventoryDao.selectInventoryByDate(search);
 	}
 
+	@Override
+	public ArrayList<Inventory> selectSearchKeyword(String keyword) {
+		return inventoryDao.selectSearchKeyword(keyword);
+	}
+
+	@Override
+	public int selectInventoryCountBybookId(Search search) {
+		return inventoryDao.selectInventoryCountBybookId(search);
+	}
+
+	@Override
+	public int selectInventoryCountBybookName(Search search) {
+		return inventoryDao.selectInventoryCountBybookId(search);
+	}
+
+	@Override
+	public int selectInventoryCountBystorageName(Search search) {
+		return inventoryDao.selectInventoryCountBybookId(search);
+	}
+
+	@Override
+	public int selectInventoryCountBystore(Search search) {
+		return inventoryDao.selectInventoryCountBybookId(search);
+	}
+
+	@Override
+	public int selectInventoryCountByrelease(Search search) {
+		return inventoryDao.selectInventoryCountBybookId(search);
+	}
+
+	@Override
+	public int selectInventoryCountByrefund(Search search) {
+		return inventoryDao.selectInventoryCountBybookId(search);
+	}
+
+	@Override
+	public ArrayList<Inventory> selectInventoryBybookId(Search search) {
+		return inventoryDao.selectInventoryBybookId(search);
+		
+	}
+
+	@Override
+	public ArrayList<Inventory> selectInventoryBybookName(Search search) {
+		return inventoryDao.selectInventoryBybookName(search);
+		
+	}
+
+	@Override
+	public ArrayList<Inventory> selectInventoryBystorageName(Search search) {
+		return inventoryDao.selectInventoryBystorageName(search);
+	}
+
+	@Override
+	public ArrayList<Inventory> selectInventoryBystore(Search search) {
+		return inventoryDao.selectInventoryBystore(search);
+	}
+
+	@Override
+	public ArrayList<Inventory> selectInventoryByrelease(Search search) {
+		return inventoryDao.selectInventoryByrelease(search);
+	}
+
+	@Override
+	public ArrayList<Inventory> selectInventoryByrefund(Search search) {
+		return inventoryDao.selectInventoryByrefund(search);
+	}
+
 }

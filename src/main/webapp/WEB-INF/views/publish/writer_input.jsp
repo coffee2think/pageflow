@@ -47,7 +47,7 @@
 
                 <!--form-->
                 <!-- <form class="input-form" action="/comi/partyi" method="post" enctype="multipart/form-data">-->
-                <form class="input-form" action="" method="post">
+                <form class="input-form" action="wtinsert.do" method="post">
                     <!--main-header-bar-->
                     <div class="main-header-bar">
                         <div class="main-title-box">

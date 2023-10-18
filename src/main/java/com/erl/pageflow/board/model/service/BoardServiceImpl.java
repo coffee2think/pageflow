@@ -48,11 +48,6 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int deletBoard(Board board) {
-		return boardDao.deletBoard(board);
-	}
-
-	@Override
 	public BoardUpload selectBoardListFile(BoardKeyword boardKeyword) {
 		return boardDao.selectBoardListFile(boardKeyword);
 	}
@@ -125,7 +120,15 @@ public class BoardServiceImpl implements BoardService{
 		return boardDao.selectDepName(depId);
 	}
 
-	
+	@Override
+	public int deleteBoard(Board board) {
+		return boardDao.deleteBoard(board);
+	}
+
+	@Override
+	public int selectBoardId() {
+		return boardDao.selectBoardId();
+	}
 	
 	
 }

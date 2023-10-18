@@ -51,6 +51,7 @@
 		
 		<!-- 출판관리 -->
 		<typeAlias type="com.erl.pageflow.book.model.vo.Book" alias="Book" />
+		<typeAlias type="com.erl.pageflow.book.model.vo.BookWithStock" alias="BookWithStock" />
 		<typeAlias type="com.erl.pageflow.contract.model.vo.Contract" alias="Contract" />
 		<typeAlias type="com.erl.pageflow.edit.model.vo.Edit" alias="Edit" />
 		<typeAlias type="com.erl.pageflow.writer.model.vo.Writer" alias="Writer" />
@@ -69,5 +70,6 @@
 		<mapper resource="mappers/print-mapper.xml" />
 		<mapper resource="mappers/employee-mapper.xml" />
 		<mapper resource="mappers/publish-mapper.xml" />
+		<mapper resource="mappers/popup-mapper.xml" />
 	</mappers>
 </configuration>

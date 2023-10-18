@@ -14,11 +14,18 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery-ui-zoom.js"></script>
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.ui.touch-punch.min.js"></script>
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/popup.js"></script>
+<script>
+$(function() {
+	$.ajax({
+		
+	});
+});
+</script>
 <title></title>
 </head>
 <body>
 	<!-- modal-pop-box -->
-    <div class="modal-pop-box small pop-box-1">
+    <div class="modal-pop-box small pop-box-1" id="book">
         <div class="modal-pop-title">
             도서검색
             <button class="modal-pop-close">
@@ -39,7 +46,7 @@
                     </div>
                 </div>
                 <div class="search-box">
-                    <button class="search-btn">
+                    <button class="search-btn-pop">
                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                     </button>
                     <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
@@ -88,7 +95,7 @@
     <!-- modal-pop-box end -->
 
     <!-- modal-pop-box -->
-    <div class="modal-pop-box small pop-box-1">
+    <div class="modal-pop-box small pop-box-1" id="printoffice">
         <div class="modal-pop-title">
             인쇄소 검색
             <button class="modal-pop-close">
@@ -109,7 +116,7 @@
                     </div>
                 </div>
                 <div class="search-box">
-                    <button class="search-btn">
+                    <button class="search-btn-pop">
                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                     </button>
                     <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">

@@ -82,7 +82,7 @@
                                 </div>
                             </div>
 
-                            <div class="select-box">
+ <!--                            <div class="select-box">
                                 <div class="select-pan-nemo">
                                     계약일자
                                 </div>
@@ -92,7 +92,7 @@
 
                                 <input type="button" name="week" class="select-pan-btn" value="일주일">
                                 <input type="button" name="month" class="select-pan-btn" value="한달">
-                            </div>
+                            </div> -->
 
                         </form>
 
@@ -133,12 +133,12 @@
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="code" class="contents-input noline" value="${ writer.writerId }" readonly>
+		                                            <input type="input" name="writerId" class="contents-input noline" value="${ writer.writerId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-250">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="name" class="contents-input noline" value="${ writer.writerName }" readonly>
+		                                            <input type="input" name="writerName" class="contents-input noline" value="${ writer.writerName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
@@ -148,7 +148,7 @@
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="birth" class="contents-input noline" value="${ writer.writerBirth }" readonly>
+		                                            <input type="input" name="writerBirth" class="contents-input noline" value="${ writer.writerBirth }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
