@@ -15,10 +15,30 @@
 <script type="text/javascript"
 	src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title></title>
-<script>
+<script type="text/javascript">
 	const NOWPAGE = 1;
 	const SUBPAGE = 1;
 	const LNKPAGE = 1;
+	
+	$(function(){
+		//공지사항 수정페이지로 이동
+    	$('.notice-update').on('click', function(){
+            if(confirm('수정 화면으로 이동하시겠습니까?')) {
+                location.href = 
+                'ndmoveupdate.do?noticeId=${ notice.noticeId }';
+            }
+    	});
+    	
+    	//보드 삭제
+    	$('.notice-delete').on('click', function(){
+    		if(confirm('정말 삭제하시겠습니까?')) {
+                location.href = 'bddelete.do?notice=${ notice }';
+            }
+    	});
+	});
+		
+    	
+		
 </script>
 </head>
 <body>
@@ -144,6 +164,7 @@
 
 
 				<!--내용-->
+			
 				<div class="main-contents-box normal">
 
 					<!--컨텐츠
@@ -204,13 +225,16 @@
 
 						<div class="notice-contents-box">${ notice.noticeDetail }</div>
 						<div class="contents-notice-buttonbox">
-							<div class="button-box">
-
-								<a class="button-a button-update" href="#"> 수정 </a>
-
-								<c:if test="${ replyList.size() <= 0 }">
-									<a class="button-a button-delete" href="#"> 삭제 </a>
-								</c:if>
+						
+						<div class="button-box" text-align:center;>
+					
+						<a class="button-a notice-update" href="#"> 수정 </a>
+					   	<a class="button-a notice-delete" href="#"> 삭제 </a>
+					   	
+					   	</div>
+						
+					   
+							
 
 
 								<!--내용 end-->
@@ -220,7 +244,7 @@
                     <input type="button" class="contents-input-btn big noline" id="btn_write" value="글쓰기">
                 </div>
                 -->
-							</div>
+							
 							<!--main-container end-->
 		</main>
 
