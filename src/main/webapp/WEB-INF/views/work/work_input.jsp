@@ -1,6 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="depId" value="${ requestScope.depId }" scope="session" />
+<c:set var="begin" value="${ requestScope.begin }" scope="session" />
+<c:set var="end" value="${ requestScope.end }" scope="session" />
+<c:set var="keyword" value="${ requestScope.keyword }" scope="session" />
+<c:set var="searchType" value="${ requestScope.searchType }" scope="session" />
 
 <!DOCTYPE html>
 <html>
@@ -16,35 +21,8 @@
     const SUBPAGE = 2;
     const LNKPAGE = 1;
     
-    $(function(){
-        console.log('===');
-        newCount();
-
-        $('#btn_insert').click(function() {
-            $('#appendTextArea').val($('.content-input').html());
-
-            $("#myForm").submit();
-        });
-    })
-
-    function newCount(){
-        $.ajax({
-            url : 'bdlistnewcount.do'
-            ,type : 'get'
-    		,dataType : 'text'
-            ,success : function(data) {
-                console.log('data : ' + data);
-                $('#new_count').text(data);
-            },error: function(request, status, errorData){
-                console.log("error : " + request + ", " + status + ", " + errorData);
-            }
-        })
-    }
-
     function inputSubmit(){
-    	$('#btn_insert').click(function() {
-            $('#appendTextArea').val($('.content-input').html());
-        });
+    	$('#appendTextArea').val($('.content-input').text());
     }
     
 </script>
@@ -53,7 +31,6 @@
 <body>
 
 	<div id="container">
-        ${ board }
         <!--헤더-->
         <header class="main-header">
             <!--header-container-->
@@ -71,21 +48,10 @@
             <div class="main-side">
                 <div class="side-container">
                     <div class="side-title"></div>
-                    <div class="side-icon-box">
-                        <a href="bdmoveinsert.do?depId=${ depId }" class="side-write-btn">글쓰기</a>
-                        <div class="side-icon-menu">
-                            <button class="side-icon-btn" id="sideBtn_new">
-                                <span class="side-icon">3</span>
-                                <span>최신글</span>
-                            </button>
-                            <button class="side-icon-btn" id="sideBtn_my">
-                                <span class="side-icon">
-                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/my_1.png">
-                                </span>
-                                <span>내 게시글</span>
-                            </button>
-                        </div>
-                    </div>
+
+                    <c:if test="${ !empty loginMember }">
+                        <c:import url="../common/side_icon.jsp" />
+                    </c:if>
 
                     <!-- 리스트 들어감 -->
                     <c:import url="../common/side.jsp" />
@@ -132,8 +98,9 @@
                             </div>
                             
 							<c:if test="${ empty board }">
-                            <!-- <form id="myForm" action="bdinsert.do" method="post" onsubmit="inputSubmit();" enctype="multipart/form-data"> -->
-                            <form id="myForm" action="bdinsert.do" method="post" enctype="multipart/form-data"></form>
+                            <form id="myForm" action="bdinsert.do" method="post" onsubmit="inputSubmit();" enctype="multipart/form-data">
+                                <input type="hidden" name="empId" value="${ loginMember.empId }">
+                            <!-- <form id="myForm" action="bdinsert.do" method="post" enctype="multipart/form-data"></form> -->
                             </c:if>
                             
                             <c:if test="${ !empty board }">
@@ -206,14 +173,14 @@
 								
                                 <div class="content-input-btn-box">
                                 	<c:if test="${ empty board }">
-                                    	<input type="button" class="contents-input-btn big noline" id="btn_insert" value="입력">
+                                    	<input type="submit" class="contents-input-btn big noline" id="btn_insert" value="입력">
                                 	</c:if>
                                 	<c:if test="${ !empty board }">
                                     	<input type="submit" class="contents-input-btn big noline" id="btn_insert" value="수정">
                                 	</c:if>
                                 </div>
 	                            
-                                <textarea name="boardDetail" id="appendTextArea"></textarea> 
+                                <textarea name="boardDetail" id="appendTextArea"></textarea>
                             </form>
                         </div>
                     </div>

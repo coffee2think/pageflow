@@ -16,9 +16,6 @@ public interface BoardService {
 	//업무게시판 게시글 리스트 조회
 	public ArrayList<Board> selectBoardList(Paging paging);
 	
-	//업무게시판 게시글 필터링된 리스트 조회
-	public ArrayList<Board> selectBoardSearch(Paging paging);
-	
 	//업무게시판 게시글 조회
 	public Board selectBoard(BoardKeyword boardKeyword);
 	
@@ -38,8 +35,31 @@ public interface BoardService {
 	public int updateBoardViewNum(BoardKeyword boardKeyword);
 
 	public int updateUploadBoard(Board board);
+	
+	//----------------마이-----------------
+	public int selectBoardListCountMy(BoardKeyword boardKeyword);
 
-	public int selectBoardListNewCount(int duration);
+	public ArrayList<Board> selectBoardListMy(Search search);
+	
+	//----------------날짜-----------------
+	public int selectBoardListDateCount(Search search);
 
-	public ArrayList<Board> selectBoardListDuration(Search search);
+	public ArrayList<Board> selectBoardListDate(Search search);
+	
+	//----------------서치-----------------
+	public int selectBoardSearchCountContent(Search search);
+
+	public int selectBoardSearchCountWriter(Search search);
+	
+	public int selectBoardSearchCountTitle(Search search);
+	
+	public ArrayList<Board> selectBoardSearchTitle(Search search);
+	
+	public ArrayList<Board> selectBoardSearchContent(Search search);
+	
+	public ArrayList<Board> selectBoardSearchWriter(Search search);
+
+	public String selectDepName(int depId);
+	
+	
 }

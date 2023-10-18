@@ -7,6 +7,8 @@ public class Search implements Serializable {
 
 	private static final long serialVersionUID = -806504296447948950L;
 
+	private int empId;
+	private int depId;
 	private String keyword;
 	private Date begin;
 	private Date end;
@@ -14,8 +16,29 @@ public class Search implements Serializable {
 	private int endRow;
 	private Date week;
 	private Date month;
+	private String searchType = null;
 
 	public Search() {
+	}
+	
+	public Search(int empId, int depId, int startRow, int endRow) {
+		super();
+		this.empId = empId;
+		this.depId = depId;
+		this.startRow = startRow;
+		this.endRow = endRow;
+	}
+	
+	public Search(String keyword, Date begin, Date end, int startRow, int endRow, String searchType) {
+		super();
+		this.keyword = keyword;
+		this.begin = begin;
+		this.end = end;
+		this.startRow = startRow;
+		this.endRow = endRow;
+		this.week = week;
+		this.month = month;
+		this.searchType = searchType;
 	}
 	
 	public Search(String keyword, Date begin, Date end, int startRow, int endRow) {
@@ -96,10 +119,30 @@ public class Search implements Serializable {
 		this.month = month;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public int getEmpId() {
+		return empId;
 	}
 
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}
+	
+	public int getDepId() {
+		return depId;
+	}
+
+	public void setDepId(int depId) {
+		this.depId = depId;
+	}
+	
+	public String getSearchType() {
+		return searchType;
+	}
+
+	public void setSearchType(String searchType) {
+		this.searchType = searchType;
+	}
+	
 	@Override
 	public String toString() {
 		return "Search [keyword=" + keyword + ", begin=" + begin + ", end=" + end + ", startRow=" + startRow

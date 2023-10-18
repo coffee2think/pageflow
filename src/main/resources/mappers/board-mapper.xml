@@ -53,16 +53,39 @@
 		            order by BOARD_ID desc))
 		left join department using(DEP_ID)
 		left join employee using(EMP_ID)
-		where rnum >= 1 and rnum <= 10
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
 		]]>
 	</select>
 	
-	<select id="selectBoardListNewCount" parameterType="_int" resultType="_int">
-		SELECT count(*) from board
-		WHERE CREATE_DATE BETWEEN TRUNC(SYSDATE) - #{ duration } AND TRUNC(SYSDATE)
+	<!-- 마이 -->
+	<select id="selectBoardListMy" parameterType="Search" resultMap="resultBoardJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
+		           BOARD_TITLE, BOARD_DETAIL, CREATE_DATE, 
+		           MODIFY_DATE, DELETE_DATE, VIEWS_NUM
+		      from (select * 
+		            from board
+		            order by BOARD_ID desc))
+		left join department using(DEP_ID)
+		left join employee using(EMP_ID)
+		where EMP_ID = #{ empId } and 
+		(rnum >= #{ startRow } and rnum <= #{ endRow })
+		]]>
 	</select>
-	<!-- 
-	<select id="selectBoardListDuration" parameterType="Search" resultType="resultBoardJoin">
+	
+	<select id="selectBoardListCountMy" parameterType="BoardKeyword" resultType="_int">
+		SELECT count(*) from board
+		WHERE emp_id = #{ empId } and dep_id = #{ depId }
+	</select>
+	
+	<!-- 날짜 -->
+	<select id="selectBoardListDateCount" parameterType="Search" resultType="_int" >
+		SELECT count(*) from board
+		where create_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+	</select>
+	
+	<select id="selectBoardListDate" parameterType="Search" resultMap="resultBoardJoin">
 		<![CDATA[
 		select * 
 		from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
@@ -74,24 +97,75 @@
 		            order by BOARD_ID desc))
 		left join department using(DEP_ID)
 		left join employee using(EMP_ID)
-		where rnum >= 1 and rnum <= 10
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
 		]]>
 	</select>
-	 -->
 	
-	<select id="selectBoardSearch" parameterType="Paging" resultMap="resultBoardJoin">
+	
+	<!-- 서치 -->
+	<select id="selectBoardSearchCountTitle" parameterType="Search" resultType="_int" >
+		SELECT count(*) from board
+		where BOARD_TITLE like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectBoardSearchCountContent" parameterType="Search" resultType="_int" >
+		SELECT count(*) from board
+		where BOARD_DETAIL like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectBoardSearchCountWriter" parameterType="Search" resultType="_int" >
+		SELECT count(*) from board
+		join employee using (EMP_ID)
+		where emp_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectBoardSearchTitle" parameterType="Search" resultMap="resultBoardJoin">
 		<![CDATA[
 		select * 
 		from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
-				   BOARD_TITLE, BOARD_DETAIL, CREATE_DATE, 
-		           MODIFY_DATE, DELETE_DATE, VIEWS_NUM 
-		      from (select * from board 
-		           order by BOARD_ID desc)) 
+		           BOARD_TITLE, BOARD_DETAIL, CREATE_DATE, 
+		           MODIFY_DATE, DELETE_DATE, VIEWS_NUM
+		      from (select * 
+		            from board
+		            where BOARD_TITLE like '%' || #{ keyword } || '%'
+		            order by BOARD_ID desc))
+		left join department using(DEP_ID)
 		left join employee using(EMP_ID)
 		where rnum >= #{ startRow } and rnum <= #{ endRow }
 		]]>
 	</select>
 	
+	<select id="selectBoardSearchContent" parameterType="Search" resultMap="resultBoardJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
+		           BOARD_TITLE, BOARD_DETAIL, CREATE_DATE, 
+		           MODIFY_DATE, DELETE_DATE, VIEWS_NUM
+		      from (select * 
+		            from board
+		            where BOARD_DETAIL like '%' || #{ keyword } || '%'
+		            order by BOARD_ID desc))
+		left join department using(DEP_ID)
+		left join employee using(EMP_ID)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		]]>
+	</select>
+	
+	<select id="selectBoardSearchWriter" parameterType="Search" resultMap="resultBoardJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select * 
+		            from board
+		            join department using (DEP_ID)
+		            join employee using (EMP_ID)
+		            where emp_name like '%' || #{ keyword } || '%'
+		            order by BOARD_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		]]>
+	</select>
+	
+	<!-- 하나 -->
 	<select id="selectBoard" parameterType="BoardKeyword" resultMap="resultBoardJoin">
 		select *
 		from (select * 
@@ -104,6 +178,11 @@
 	<select id="selectBoardListFile" parameterType="BoardKeyword" resultMap="resultBoardUpload">
 		select * from UPLOAD_BOARD
 		where DEP_ID = #{ depId } and BOARD_ID = #{ boardId }
+	</select>
+	
+	<select id="selectDepName" parameterType="_int" resultType="string">
+		select dep_name from department
+		where dep_id = #{ depId }
 	</select>
 	
 	<insert id="insertBoard" parameterType="Board">
