@@ -94,3 +94,73 @@ and BOARD_ID = 1;
 
 select count(*) from board
 WHERE CREATE_DATE >= SYSDATE - INTERVAL '7' DAY AND CREATE_DATE <= SYSDATE;
+
+
+SELECT count(*) from board
+WHERE CREATE_DATE BETWEEN TRUNC(SYSDATE) - 30 AND TRUNC(SYSDATE);
+
+
+
+select * 
+from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
+           BOARD_TITLE, BOARD_DETAIL, CREATE_DATE, 
+           MODIFY_DATE, DELETE_DATE, VIEWS_NUM
+      from (select * 
+            from board
+            where create_date between '2023/10/16' and (to_date('2023/10/17') + 1 - 1/86400)
+            order by BOARD_ID desc))
+left join department using(DEP_ID)
+left join employee using(EMP_ID)
+where rnum >= 1 and rnum <= 10;
+
+
+select * 
+from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
+           BOARD_TITLE, BOARD_DETAIL, CREATE_DATE, 
+           MODIFY_DATE, DELETE_DATE, VIEWS_NUM
+      from (select * 
+            from board
+            order by BOARD_ID desc))
+left join department using(DEP_ID)
+left join employee using(EMP_ID)
+where EMP_ID = 1 and 
+(rnum >= 1 and rnum <= 10);
+
+select * 
+from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
+           BOARD_TITLE, BOARD_DETAIL, CREATE_DATE, 
+           MODIFY_DATE, DELETE_DATE, VIEWS_NUM
+      from (select * 
+            from board
+            where create_date between '2023-10-11' and (to_date('2023-10-17') + 1 - 1/86400)
+            order by BOARD_ID desc))
+left join department using(DEP_ID)
+left join employee using(EMP_ID)
+where rnum >= 1 and rnum <= 1;
+
+
+
+select * 
+from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
+           BOARD_TITLE, BOARD_DETAIL, CREATE_DATE, 
+           MODIFY_DATE, DELETE_DATE, VIEWS_NUM
+      from (select * 
+            from board
+            where BOARD_TITLE like '%' || 'zx' || '%'
+            order by BOARD_ID desc))
+left join department using(DEP_ID)
+where rnum >= 1 and rnum <= 10;
+
+select * 
+from (select rownum rnum, sub.*
+      from (select * 
+            from board
+            join department using (DEP_ID)
+            join employee using (EMP_ID)
+            where emp_name like '%' || '홍' || '%'
+            order by BOARD_ID desc) sub)
+where rnum >= 1 and rnum <= 10;
+
+
+SELECT count(*) from board
+where BOARD_TITLE like '%' || 'zx' || '%'
