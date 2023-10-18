@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +54,7 @@ public class InventoryController {
 		}
 
 		if (list != null && list.size() > 0) {
-			model.addAttribute("list", list);
+			model.addAttribute("invenList", list);
 			model.addAttribute("paging", paging);
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
@@ -108,20 +110,77 @@ public class InventoryController {
 
 	}
 
-//	// 재고 키워드로 검색
-//	@RequestMapping(value = "selectkeyword.do", method = { RequestMethod.GET, RequestMethod.POST })
-//	@ResponseBody
-//	public String selectInvenSearchKeyword(HttpServletResponse response, @RequestParam("keyword") String keyword,
-//			Inventory inven) {
-//		ArrayList<Inventory> list = inventoryService.selectSearchTitle(keyword);
-//
-//		
-//		
-//		
-//		
-//		
-//		response.setContentType("application/json; charset=utf-8");
-//
-//	}
+	// 재고 키워드로 검색
+	@RequestMapping(value = "selectkeyword.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String selectInvenSearchKeyword(Search search, Model model) {
+		String searchType = search.getSearchType();
+		int listCount = 0;
+
+		if (searchType != null) {
+			switch (searchType) {
+			case "bookId":
+				listCount = inventoryService.selectInventoryCountBybookId(search);
+				break;
+			case "bookName":
+				listCount = inventoryService.selectInventoryCountBybookName(search);
+				break;
+			case "storageName":
+				listCount = inventoryService.selectInventoryCountBystorageName(search);
+				break;
+			case "store":
+				listCount = inventoryService.selectInventoryCountBystore(search);
+				break;
+			case "release":
+				listCount = inventoryService.selectInventoryCountByrelease(search);
+				break;
+			case "refund":
+				listCount = inventoryService.selectInventoryCountByrefund(search);
+				break;
+			}
+		}
+		int limit = 10;
+		Paging paging = new Paging(listCount, 1, limit, "selectkeyword.do");
+
+		paging.calculator();
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+
+		ArrayList<Inventory> list = null;
+		if (searchType != null) {
+			switch (searchType) {
+			case "bookId":
+				list = inventoryService.selectInventoryBybookId(search);
+				break;
+			case "bookName":
+				list = inventoryService.selectInventoryBybookName(search);
+				break;
+			case "storageName":
+				list = inventoryService.selectInventoryBystorageName(search);
+				break;
+			case "store":
+				list = inventoryService.selectInventoryBystore(search);
+				break;
+			case "release":
+				list = inventoryService.selectInventoryByrelease(search);
+				break;
+			case "refund":
+				list = inventoryService.selectInventoryByrefund(search);
+				break;
+			}
+		}
+
+		model.addAttribute("keyword", search.getKeyword());
+		model.addAttribute("paging", paging);
+		model.addAttribute("searchType", searchType);
+
+		
+		model.addAttribute("invenList", list);
+		
+		if(list != null && list.size() > 0) {
+			return "inventory/inven_list";
+		}
+
+		return "common/error";
+	}
 
 }
