@@ -16,8 +16,23 @@
     const SUBPAGE = 1;
     const LNKPAGE = 2;
     
+    let curinput;
+
+    document.addEventListener("DOMContentLoaded", function(){
+    	$('.input-search-btn').on('click', function() {
+    		var type = $(this).attr('class').split(' ')[1];
+    		popup.showPopup(type);
+    		curinput = $(this).parent('.input-search').find('input[type=input]');
+    		return false;
+    	})
+    });
+    
     function addRow(currentIndex) {
-		// table element 찾기
+    	if($('#input_table').find('tr').length >= 10) {
+    		return;
+    	}
+    	
+    	// table element 찾기
 		const table = document.getElementById('input_table');
 
 		// 새 행(Row) 추가 (테이블 중간에)
@@ -45,28 +60,28 @@
 		newCell1.innerHTML = '<div class="contents-check-div">'
 						+ '<button class="contents-input-plus" onclick="addRow(' + ( currentIndex + 1 ) + '); return false;">'
 						+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">'
-						+ '</button>'
+						+ '</button> '
 						+ '<button class="contents-input-minus" onclick="removeRow(' + ( currentIndex + 1 ) + '); return false;">'
 						+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">'
 						+ '</button>'
 						+ '</div>';
 		
 		newCell2.innerHTML = '<div class="contents-input-div input-search">'
-						+ '<button class="input-search-btn">'
+						+ '<button class="input-search-btn book">'
 						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 						+ '</button>'
 						+ '<input type="input" name="bookId" class="contents-input" value="">'
 						+ '</div>';
 		
 		newCell3.innerHTML = '<div class="contents-input-div input-search">'
-						+ '<button class="input-search-btn">'
+						+ '<button class="input-search-btn book">'
 						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 						+ '</button>'
 						+ '<input type="input" name="bookName" class="contents-input" value="">'
 						+ '</div>';
 		
 		newCell4.innerHTML = '<div class="contents-input-div input-search">'
-						+ '<button class="input-search-btn">'
+						+ '<button class="input-search-btn book-store">'
 						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 						+ '</button>'
 						+ '<input type="input" name="clientId" class="contents-input" value="">'
@@ -202,7 +217,7 @@
                                             <div class="contents-check-div">
                                                 <button class="contents-input-plus" onclick="addRow(1); return false;">
                                                     <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
-                                                </button>
+                                                </button> 
                                                 <button class="contents-input-minus" onclick="removeRow(1); return false;">
                                                     <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
                                                 </button>
@@ -210,7 +225,7 @@
                                         </td>
                                         <td class="td-120">
                                             <div class="contents-input-div input-search">
-                                                <button class="input-search-btn">
+                                                <button class="input-search-btn book">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
                                                 <input type="input" name="bookId" class="contents-input" value="">
@@ -218,7 +233,7 @@
                                         </td>
                                         <td class="td-200">
                                             <div class="contents-input-div input-search">
-                                                <button class="input-search-btn">
+                                                <button class="input-search-btn book">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
                                                 <input type="input" name="bookName" class="contents-input" value="">
@@ -226,7 +241,7 @@
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div input-search">
-                                                <button class="input-search-btn">
+                                                <button class="input-search-btn book-store">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
                                                 <!-- <input type="hidden" name="clientId" value=""> -->
@@ -276,7 +291,8 @@
             <!--modal-pop-area-->
             <div class="modal-pop-area">
                 <!-- 팝업 들어감 -->
-                <c:import url="../common/popup.jsp" />
+                <%-- <c:import url="../common/popup.jsp" /> --%>
+                <c:import url="../common/popup_test.jsp" />
             </div>
             <!--modal-pop-area end-->
 
