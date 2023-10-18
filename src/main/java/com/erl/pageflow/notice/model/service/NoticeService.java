@@ -12,4 +12,5 @@ public interface NoticeService {
 	int selectListCount();
 	int insertNotice(Notice notice);
 	Notice selectOne(int noticeId);
+	int updateNotice(Notice notice);
 }

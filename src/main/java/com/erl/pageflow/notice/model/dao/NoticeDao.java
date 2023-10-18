@@ -31,4 +31,8 @@ public class NoticeDao {
 	public Notice selectOne( int noticeId) {
 		return sqlSessionTemplate.selectOne("noticeMapper.selectOne", noticeId);
 	}
+	
+	public int updateNotice(Notice notice) {
+		return sqlSessionTemplate.update("noticeMapper.updateNotice", notice);
+	}
 }

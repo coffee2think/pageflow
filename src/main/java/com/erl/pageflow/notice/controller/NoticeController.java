@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.erl.pageflow.board.model.vo.Board;
+import com.erl.pageflow.board.model.vo.BoardUpload;
+import com.erl.pageflow.common.BoardKeyword;
 import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.employee.model.vo.Employee;
@@ -36,6 +39,24 @@ public class NoticeController {
 	public String moveWritePage() {
 		return "work/notice_input";
 	}
+	
+	//공지글 수정페이지로 이동 처리용
+		@RequestMapping("ndmoveupdate.do")
+		public ModelAndView moveUpdatePage(
+				@RequestParam("noticeId") int noticeId, ModelAndView mv) {
+			//수정페이지에 출력할 공지글 조회해 옴
+			Notice notice = noticeService.selectOne(noticeId);
+			
+			if(notice != null) {
+				mv.addObject("notice", notice);
+				mv.setViewName("work/notice_update");
+			}else {
+				mv.addObject("message", noticeId + "번 공지글 수정페이지로 이동 실패!");
+				mv.setViewName("common/error");
+			}
+			
+			return mv;
+		}	
 
 	// 공지사항 전체 목록보기 요청 처리용
 	@RequestMapping("nlist.do")
@@ -138,4 +159,68 @@ public class NoticeController {
 
 		return mv;
 	}
+	
+		//공지글 수정 요청 처리용 (파일 업로드 기능 사용
+		@RequestMapping(value="noupdate.do", method=RequestMethod.POST)
+		public String noticeUpdateMethod(Notice notice, Model model, 
+				HttpServletRequest request, 
+				@RequestParam(name="deleteFlag", required=false) String delFlag,
+				@RequestParam(name="upfile", required=false) MultipartFile mfile) {
+			logger.info("noupdate.do : " + notice);
+			
+			//공지사항 첨부파일 저장 폴더 경로 지정
+			String savePath = request.getSession().getServletContext().getRealPath(
+					"resources/notice_upfiles");
+			
+			//첨부파일이 변경된 경우의 처리 --------------------------------------------------------
+			//1. 원래 첨부파일이 있는데 '파일삭제'를 선택한 경우
+			//   또는 원래 첨부파일이 있는데 새로운 첨부파일이 업로드된 경우
+			if(notice.getNoticeOriginalFileName() != null && 
+					(delFlag != null && delFlag.equals("yes")) || (mfile != null &&!mfile.isEmpty())) {
+				//저장 폴더에서 파일 삭제함
+				
+				new File(savePath + "\\" + notice.getNoticeRenameFileName()).delete();
+				//notice 안의 파일정보도 제거함
+				notice.setNoticeOriginalFileName(null);
+				notice.setNoticeRenameFileName(null);
+			}
+			
+			//2. 새로운 첨부파일이 있을 때 (공지글 첨부파일은 1개임)
+			if((mfile !=null ) && !mfile.isEmpty()) {			
+			//전송온 파일이름 추출함
+				String fileName = mfile.getOriginalFilename();
+				String renameFileName = null;
+				
+				//저장폴더에는 변경된 이름을 저장 처리함
+				//파일 이름바꾸기함 : 년월일시분초.확장자
+				if(fileName != null && fileName.length() > 0) {				
+					//바꿀 파일명에 대한 문자열 만들기
+					renameFileName = FileNameChange.change(fileName, 	"yyyyMMddHHmmss");
+				logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
+					try {	
+						//저장 폴더에 파일명 바꾸기 처리
+						mfile.transferTo(new File(savePath + "\\" + renameFileName));
+					
+					}catch(Exception e) {
+						model.addAttribute("message", "첨부파일 저장 실패!");
+						return "common/error";
+					}
+				}  //파일명 바꾸기
+			//notice 객체에 첨부파일 정보 저장 처리
+				notice.setNoticeOriginalFileName(fileName);
+				notice.setNoticeRenameFileName(renameFileName);
+			} //첨부파일 있을 때	
+			
+			if(noticeService.updateNotice(notice) > 0) {
+				//공지글 수정 성공시 목록 보기 페이지로 이동
+				return "redirect:nlist.do";
+			}else {
+				model.addAttribute("message", notice.getNoticeId() + "번 공지 수정 실패!");
+				return "common/error";
+		}
+		}
+	
+	
+	
+	
 }
