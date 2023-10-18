@@ -16,7 +16,7 @@ public interface BookService {
 	public ArrayList<Book> selectBookSearch(Paging paging);
 	
 	// 도서 조회
-	public Book selectBook(String bookId);
+	public Book selectBook(int bookId);
 	
 	// 도서 등록
 	public int insertBook(Book book);

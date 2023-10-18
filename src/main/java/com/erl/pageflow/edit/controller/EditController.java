@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.contract.model.vo.Contract;
 import com.erl.pageflow.edit.model.service.EditService;
 import com.erl.pageflow.edit.model.vo.Edit;
 
@@ -20,6 +22,17 @@ public class EditController {
 
 	@Autowired
 	private EditService editService;
+	
+	// ****************** 뷰페이지 이동 **********************
+	
+	// 편집 등록 페이지 이동
+	@RequestMapping("moveedinsert.do")
+	public String moveEditInsertPage() {
+		return "publish/edit_input";
+	}
+	
+
+	// ****************** 요청 받아서 서비스로 넘기는 메소드 **********************
 	
 	// 편집 리스트 조회
 	@RequestMapping("edlist.do")
@@ -52,6 +65,19 @@ public class EditController {
 			return "publish/edit_list";
 		} else {
 			model.addAttribute("message", "편집 목록 조회 실패!");
+			return "common/error";
+		}
+	}
+	
+	// 편집 정보 등록 요청 처리
+	@RequestMapping(value="edinsert.do", method=RequestMethod.POST)
+	public String editInsertMethod(Edit edit, Model model) {
+		logger.info("edinsert.do : " + edit);
+		
+		if(editService.insertEdit(edit) > 0) {
+			return "redirect:edlist.do";
+		} else {
+			model.addAttribute("message", "계약 등록 실패!");
 			return "common/error";
 		}
 	}
