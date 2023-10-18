@@ -1,9 +1,12 @@
 package com.erl.pageflow.printOrder.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,12 +16,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.printOrder.model.service.PrintOrderService;
 import com.erl.pageflow.printOrder.model.vo.PrintOrder;
+import com.erl.pageflow.sales.model.vo.Client;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 
 @Controller
@@ -144,6 +150,28 @@ public class PrintOrderController {
 			model.addAttribute("message", "새 공지글 등록 실패");
 			return "common/error";
 		}
+	}
+	
+	//발주 수정 요청 처리용
+	@RequestMapping(value="poupdate.do", method= {RequestMethod.GET, RequestMethod.POST})
+	@ResponseBody
+	public void printOrderUpdateMethod(
+			HttpServletResponse response,
+			PrintOrder printOrder,
+			Model model, HttpServletRequest request) throws IOException {
+		logger.info("poupdate.do : " + printOrder);
+		
+		int result = printOrderService.poupdate(printOrder);
+		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		
+		if(result == 1) {
+			out.append("ok");
+		}
+		
+		out.flush();
+		out.close();
 	}
 	
 }
