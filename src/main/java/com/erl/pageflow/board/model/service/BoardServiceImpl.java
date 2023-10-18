@@ -28,11 +28,6 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public ArrayList<Board> selectBoardSearch(Paging paging) {
-		return boardDao.selectBoardSearch(paging);
-	}
-	
-	@Override
 	public Board selectBoard(BoardKeyword boardKeyword) {
 		return boardDao.selectBoard(boardKeyword);
 	}
@@ -71,16 +66,65 @@ public class BoardServiceImpl implements BoardService{
 	public int updateUploadBoard(Board board) {
 		return boardDao.updateUploadBoard(board);
 	}
-
+	
+	//----------------마이-----------------
 	@Override
-	public int selectBoardListNewCount(int duration) {
-		return boardDao.selectBoardListNewCount(duration);
+	public int selectBoardListCountMy(BoardKeyword boardKeyword) {
+		return boardDao.selectBoardListCountMy(boardKeyword);
 	}
 
 	@Override
-	public ArrayList<Board> selectBoardListDuration(Search search) {
-		return boardDao.selectBoardListDuration(search);
+	public ArrayList<Board> selectBoardListMy(Search search) {
+		return boardDao.selectBoardListMy(search);
 	}
+	
+	//----------------날짜-----------------
+	@Override
+	public int selectBoardListDateCount(Search search) {
+		return boardDao.selectBoardListDateCount(search);
+	}
+
+	@Override
+	public ArrayList<Board> selectBoardListDate(Search search) {
+		return boardDao.selectBoardListDate(search);
+	}
+	
+	//----------------서치-----------------
+	@Override
+	public int selectBoardSearchCountTitle(Search search) {
+		return boardDao.selectBoardSearchCountTitle(search);
+	}
+	
+	@Override
+	public int selectBoardSearchCountContent(Search search) {
+		return boardDao.selectBoardSearchCountContent(search);
+	}
+	
+	@Override
+	public int selectBoardSearchCountWriter(Search search) {
+		return boardDao.selectBoardSearchCountWriter(search);
+	}
+	
+	@Override
+	public ArrayList<Board> selectBoardSearchTitle(Search search) {
+		return boardDao.selectBoardSearchTitle(search);
+	}
+	
+	@Override
+	public ArrayList<Board> selectBoardSearchContent(Search search) {
+		return boardDao.selectBoardSearchContent(search);
+	}
+
+	@Override
+	public ArrayList<Board> selectBoardSearchWriter(Search search) {
+		return boardDao.selectBoardSearchWriter(search);
+	}
+
+	@Override
+	public String selectDepName(int depId) {
+		return boardDao.selectDepName(depId);
+	}
+
 	
 	
 	

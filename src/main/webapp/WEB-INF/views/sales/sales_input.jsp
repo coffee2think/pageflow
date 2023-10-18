@@ -13,17 +13,140 @@
     const NOWPAGE = 5;
     const SUBPAGE = 2;
     const LNKPAGE = 2;
+    
     let curinput;
 
     document.addEventListener("DOMContentLoaded", function(){
     	$('.input-search-btn').on('click', function(){
-    		console.log('-----')
     		popup.showPopup();
     		curinput = $(this).parent('.input-search').find('input[type=input]');
     		return false;
     	})
-    	
     });
+    
+    function addRow(currentIndex) {
+		// table element 찾기
+		const table = document.getElementById('input_table');
+		
+		// 새 행(Row) 추가 (테이블 중간에)
+		const newRow = table.insertRow(currentIndex + 1);
+
+		// 새 행(Row)에 Cell 추가
+		const newCell1 = newRow.insertCell(0);
+		newCell1.setAttribute('class', 'td-50');
+		const newCell2 = newRow.insertCell(1);
+		newCell2.setAttribute('class', 'td-120');
+		const newCell3 = newRow.insertCell(2);
+		newCell3.setAttribute('class', 'td-120');
+		const newCell4 = newRow.insertCell(3);
+		newCell4.setAttribute('class', 'td-200');
+		const newCell5 = newRow.insertCell(4);
+		newCell5.setAttribute('class', 'td-100');
+		const newCell6 = newRow.insertCell(5);
+		newCell6.setAttribute('class', 'td-120');
+		const newCell7 = newRow.insertCell(6);
+		newCell7.setAttribute('class', 'td-100');
+		const newCell8 = newRow.insertCell(7);
+		newCell8.setAttribute('class', 'td-70');
+		const newCell9 = newRow.insertCell(8);
+		newCell9.setAttribute('class', 'td-120');
+		const newCell10 = newRow.insertCell(9);
+		newCell10.setAttribute('class', 'td-120');
+		const newCell11 = newRow.insertCell(10);
+		newCell11.setAttribute('class', 'td-120');
+
+		// Cell에 텍스트 추가
+		newCell1.innerHTML = '<div class="contents-check-div">'
+					+ '<button class="contents-input-plus" onclick="addRow(' + ( currentIndex + 1 ) + '); return false;">'
+					+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">'
+					+ '</button> '
+					+ '<button class="contents-input-minus" onclick="removeRow(' + ( currentIndex + 1 ) + '); return false;">'
+					+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">'
+					+ '</button>'
+					+ '</div>';
+		
+		newCell2.innerHTML = '<div class="contents-input-div input-search">'
+					+ '<button class="input-search-btn">'
+					+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
+					+ '</button>'
+					+ '<input type="input" name="orderId" class="contents-input" value="">'
+					+ '</div>';
+		
+		newCell3.innerHTML = '<div class="contents-input-div input-search">'
+					+ '<button class="input-search-btn">'
+					+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
+					+ '</button>'
+					+ '<input type="input" name="bookId" class="contents-input" value="">'
+					+ '</div>';
+		
+		newCell4.innerHTML = '<div class="contents-input-div input-search">'
+					+ '<button class="input-search-btn">'
+					+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
+					+ '</button>'
+					+ '<input type="input" name="bookName" class="contents-input" value="">'
+					+ '</div>';
+		
+		newCell5.innerHTML = '<div class="contents-input-div input-search">'
+					+ '<button class="input-search-btn">'
+					+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
+					+ '</button>'
+					+ '<input type="input" name="clientName" class="contents-input" value="">'
+					+ '</div>';
+
+		newCell6.innerHTML = '<div class="contents-input-div">'
+					+ '<input type="date" name="orderDate" class="select-date small">'
+					+ '</div>';
+		
+		newCell7.innerHTML = '<div class="contents-input-div">'
+					+ '<input type="number" name="bookPrice" class="contents-input">'
+					+ '</div>';
+		
+		newCell8.innerHTML = '<div class="contents-input-div">'
+					+ '<input type="number" name="orderQuantity" class="contents-input">'
+					+ '</div>';
+		
+		newCell9.innerHTML = '<div class="contents-input-div">'
+					+ '<input type="number" name="totalPrice" class="contents-input" value="">'
+					+ '</div>';
+		
+		newCell10.innerHTML = '<div class="contents-input-div">'
+					+ '<input type="number" name="collectedAmount" class="contents-input" value="">'
+					+ '</div>';
+		
+		newCell11.innerHTML = '<div class="contents-input-div">'
+					+ '<input type="number" name="balance" class="contents-input" value="">'
+					+ '</div>';
+		
+		initRowIndex();
+	}
+    
+    function removeRow(currentIndex) {
+    	var trList = $('#input_table').find('tr');
+    	if(trList.length > 2) {
+	    	trList.eq(currentIndex).remove();
+	    	initRowIndex();
+    	}
+    }
+    
+    // 행 추가 삭제를 위한 함수 인덱스 초기화
+	function initRowIndex() {
+		var table = document.getElementById('input_table');
+		var rowList = table.rows;
+		
+		for (i = 1; i < rowList.length; i++) {
+			var row = rowList[i];
+			
+			row.cells[0].innerHTML = '<div class="contents-check-div">'
+				+ '<button class="contents-input-plus" onclick="addRow(' + ( i ) + '); return false;">'
+				+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">'
+				+ '</button>'
+				+ '<button class="contents-input-minus" onclick="removeRow(' + ( i ) + '); return false;">'
+				+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">'
+				+ '</button>'
+				+ '</div>';
+		} //for
+		
+	} //initRowIndex
     
 </script>
 <title></title>
@@ -77,7 +200,7 @@
                         <!--컨텐츠영역-->
                         <div class="contents-container sort-row">
                             <div class="contents-box">
-                                <table class="contents-table">
+                                <table class="contents-table" id="input_table">
                                     <tr>
                                         <th></th>
                                         <th>주문번호</th>
@@ -96,10 +219,10 @@
                                         
                                         <td class="td-50">
                                             <div class="contents-check-div">
-                                                <button class="contents-input-plus">
+                                                <button class="contents-input-plus" onclick="addRow(1); return false;">
                                                     <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
                                                 </button>
-                                                <button class="contents-input-minus">
+                                                <button class="contents-input-minus" onclick="removeRow(1); return false;">
                                                     <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
                                                 </button>
                                             </div>
@@ -109,7 +232,7 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="tradeId" class="contents-input" value="">
+                                                <input type="input" name="orderId" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-120">
@@ -117,7 +240,7 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="code" class="contents-input" value="">
+                                                <input type="input" name="bookId" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-200">
@@ -125,7 +248,7 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="name" class="contents-input" value="">
+                                                <input type="input" name="bookName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-100">
@@ -133,32 +256,32 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="store" class="contents-input" value="">
+                                                <input type="input" name="clientName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-120">
                                             <div class="contents-input-div">
-                                                <input type="date" name="date" class="select-date small">
+                                                <input type="date" name="orderDate" class="select-date small">
                                             </div>
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div">
-                                                <input type="number" name="price" class="contents-input">
+                                                <input type="number" name="bookPrice" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="number" name="quantity" class="contents-input">
+                                                <input type="number" name="orderQuantity" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-120">
                                             <div class="contents-input-div">
-                                                <input type="number" name="amount" class="contents-input" value="">
+                                                <input type="number" name="totalPrice" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-120">
                                             <div class="contents-input-div">
-                                                <input type="number" name="collection" class="contents-input" value="">
+                                                <input type="number" name="collectedAmount" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-120">
@@ -187,7 +310,7 @@
             <!--modal-pop-area-->
             <div class="modal-pop-area">
                 <!-- 팝업 들어감 -->
-                <c:import url="../common/popup.jsp" />
+                <c:import url="../common/popup_test.jsp" />
             </div>
             <!--modal-pop-area end-->
 

@@ -2,11 +2,17 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="board" value="${ requestScope.board }" />
+<c:set var="depId" value="${ depId }" scope="session" />
 <c:set var="replyList" value="${ requestScope.replyList }" />
 <c:set var="loginCur" value="no" />
 <c:if test="${ !empty loginMember }">
     <c:set var="loginCur" value="ok" />
 </c:if>
+<c:set var="begin" value="${ requestScope.begin }" scope="session" />
+<c:set var="end" value="${ requestScope.end }" scope="session" />
+<c:set var="keyword" value="${ requestScope.keyword }" scope="session" />
+<c:set var="searchType" value="${ requestScope.searchType }" scope="session" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,25 +30,10 @@
     const LNKPAGE = 1;
     
     $(function(){
-        newCount();
         var workNotice = new Work_notice();
     	workNotice.buttonEvent();
         visibleReplyBtn();
     })
-
-    function newCount(){
-        $.ajax({
-            url : 'bdlistnewcount.do'
-            ,type : 'get'
-    		,dataType : 'text'
-            ,success : function(data) {
-                console.log('data : ' + data);
-                $('#new_count').text(data);
-            },error: function(request, status, errorData){
-                console.log("error : " + request + ", " + status + ", " + errorData);
-            }
-        })
-    }
 
     function Work_notice() {
     }
@@ -427,6 +418,7 @@
 
     function visibleReplyBtn(){
         let log = '<c:out value="${ loginCur }" />';
+        
         if(log == 'no') {
             $('.reply-btn').each(function(){
                 $(this).hide();
@@ -434,6 +426,7 @@
             $('.reply-input-box.depth1').hide();
             
             $('.button-update').hide();
+            $('.button-delete').hide();
             $('.reply-right').each(function(){
                 $(this).hide();
             })
@@ -606,21 +599,10 @@
             <div class="main-side">
                 <div class="side-container">
                     <div class="side-title"></div>
-                    <div class="side-icon-box">
-                        <a href="bdmoveinsert.do?depId=${ board.depId }" class="side-write-btn">글쓰기</a>
-                        <div class="side-icon-menu">
-                            <button class="side-icon-btn" id="sideBtn_new">
-                                <span class="side-icon">3</span>
-                                <span>최신글</span>
-                            </button>
-                            <button class="side-icon-btn" id="sideBtn_my">
-                                <span class="side-icon">
-                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/my_1.png">
-                                </span>
-                                <span>내 게시글</span>
-                            </button>
-                        </div>
-                    </div>
+
+                    <c:if test="${ !empty loginMember }">
+                        <c:import url="../common/side_icon.jsp" />
+                    </c:if>
 
                     <!-- 리스트 들어감 -->
                     <c:import url="../common/side.jsp" />
@@ -646,47 +628,7 @@
 
                     <!--서치영역-->
                     <div class="search-container noline">
-                        <form class="search-form">
-
-                            <div class="select-search">
-                                <div class="select-box">
-                                    <div class="select-pan">
-                                        <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
-                                            <option value="">내용</option>
-                                            <option value="">작성자</option>
-                                            <option value="">댓글</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="search-box">
-                                    <button class="search-btn">
-                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                                    </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
-                                </div>
-                            </div>
-
-                            <div class="select-box">
-                                <div class="select-pan-nemo">
-                                    작성날짜
-                                </div>
-
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
-
-                                <input type="button" name="week" class="select-pan-btn" value="일주일">
-                                <input type="button" name="month" class="select-pan-btn" value="한달">
-                            </div>
-
-                        </form>
-
-                        <button class="search-visible-btn" id="search_visible_btn">
-                            <img class="search-close" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
-                            <img class="search-open" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
-                        </button>
-
+                        <c:import url="./work_search.jsp" />
                     </div>
                     <!--서치영역 end-->
 

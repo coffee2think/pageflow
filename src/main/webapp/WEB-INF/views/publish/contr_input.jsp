@@ -14,7 +14,7 @@
     const SUBPAGE = 1;
     const LNKPAGE = 2;
 </script>
-<title></title>
+<title>계약등록</title>
 </head>
 <body>
 	<div id="container">

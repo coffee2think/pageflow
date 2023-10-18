@@ -34,6 +34,10 @@
 		
 	</select>
 	
+	<select id="selectOne" parameterType="_int" resultMap="resultNotice">
+		select * from notice join employee using (EMP_ID) where NOTICE_ID = #{ noticeId}
+	</select>	
+	
 	<select id="getListCount" resultType="_int">
 		select count(*) from notice
 	</select>

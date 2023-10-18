@@ -30,12 +30,6 @@ public class BoardDao {
 		return (ArrayList<Board>) list;
 	}
 	
-	//업무게시판 게시글 필터링된 리스트 조회
-	public ArrayList<Board> selectBoardSearch(Paging paging) {
-		List<Board> list = sqlSessionTemplate.selectList("boardMapper.selectFilterBoardList", paging);
-		return (ArrayList<Board>)list;
-	}
-	
 	//업무게시판 게시글 조회
 	public Board selectBoard(BoardKeyword boardKeyword) {
 		return sqlSessionTemplate.selectOne("boardMapper.selectBoard", boardKeyword);
@@ -71,14 +65,57 @@ public class BoardDao {
 	public int updateBoard(Board board) {
 		return sqlSessionTemplate.update("boardMapper.updateBoard", board);
 	}
-
-	public int selectBoardListNewCount(int duration) {
-		return sqlSessionTemplate.selectOne("boardMapper.selectBoardListNewCount", duration);
+	
+	//----------------마이-----------------
+	public int selectBoardListCountMy(BoardKeyword boardKeyword) {
+		return sqlSessionTemplate.selectOne("boardMapper.selectBoardListCountMy", boardKeyword);
 	}
 
-	public ArrayList<Board> selectBoardListDuration(Search search) {
-		List<Board> list = sqlSessionTemplate.selectList("boardMapper.selectBoardListDuration", search);
+	public ArrayList<Board> selectBoardListMy(Search search) {
+		List<Board> list = sqlSessionTemplate.selectList("boardMapper.selectBoardListMy", search);
+		return (ArrayList<Board>)list;
+	}
+	
+	//----------------날짜-----------------
+	public int selectBoardListDateCount(Search search) {
+		return sqlSessionTemplate.selectOne("boardMapper.selectBoardListDateCount", search);
+	}
+
+	public ArrayList<Board> selectBoardListDate(Search search) {
+		List<Board> list = sqlSessionTemplate.selectList("boardMapper.selectBoardListDate", search);
+		return (ArrayList<Board>)list;
+	}
+	
+	//----------------서치-----------------
+	public int selectBoardSearchCountTitle(Search search) {
+		return sqlSessionTemplate.selectOne("boardMapper.selectBoardSearchCountTitle", search);
+	}
+	
+	public int selectBoardSearchCountContent(Search search) {
+		return sqlSessionTemplate.selectOne("boardMapper.selectBoardSearchCountContent", search);
+	}
+	
+	public int selectBoardSearchCountWriter(Search search) {
+		return sqlSessionTemplate.selectOne("boardMapper.selectBoardSearchCountWriter", search);
+	}
+	
+	public ArrayList<Board> selectBoardSearchTitle(Search search) {
+		List<Board> list = sqlSessionTemplate.selectList("boardMapper.selectBoardSearchTitle", search);
+		return (ArrayList<Board>)list;
+	}
+	
+	public ArrayList<Board> selectBoardSearchContent(Search search) {
+		List<Board> list = sqlSessionTemplate.selectList("boardMapper.selectBoardSearchContent", search);
+		return (ArrayList<Board>)list;
+	}
+	
+	public ArrayList<Board> selectBoardSearchWriter(Search search) {
+		List<Board> list = sqlSessionTemplate.selectList("boardMapper.selectBoardSearchWriter", search);
 		return (ArrayList<Board>)list;
 	}
 
+	public String selectDepName(int depId) {
+		return sqlSessionTemplate.selectOne("boardMapper.selectDepName", depId);
+	}
+	
 }

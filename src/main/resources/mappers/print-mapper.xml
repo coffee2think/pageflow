@@ -146,6 +146,7 @@
 		values ((select max(ORDER_ID) + 1 from print_order), #{bookId}, 
 		#{printId}, #{empId}, #{empName}, #{classify}, #{unit}, #{quantity}, 
 		#{price}, #{amount}, #{state}, sysdate, #{endDate}, #{pubDate})
+		
 	</insert>
 </mapper>
 

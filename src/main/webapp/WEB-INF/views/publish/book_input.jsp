@@ -11,10 +11,10 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 3;
-    const SUBPAGE = 2;
+    const SUBPAGE = 3;
     const LNKPAGE = 2;
 </script>
-<title></title>
+<title>도서등록</title>
 </head>
 <body>
 	<div id="container">

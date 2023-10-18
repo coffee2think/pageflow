@@ -4,16 +4,21 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,74 +60,155 @@ public class BoardController {
 	//업무게시판 게시글 리스트 조회
 	@RequestMapping("bdlist.do")
 	public String selectBoardListMethod(Model model) {
-		int listCount = boardService.selectBoardListCount();
+		
+		LocalDate today = LocalDate.now();
+//		model.addAttribute("begin", today.minusDays(today.getDayOfMonth() - 1)); // 이번달 1일부터
+		model.addAttribute("begin", today.minusWeeks(1).plusDays(1)); // 일주일 전부터
+		model.addAttribute("end", today); // 오늘까지
+		model.addAttribute("depId", 1);//개발팀 지정!
+		
+		return "redirect:bdlistdate.do";
+	}
+	
+	//업무게시판 게시글 최신 리스트 조회
+	@RequestMapping("bdlistnew.do")
+	public String selectBoardListNewMethod(Board board, Model model) {
+		
+		LocalDate today = LocalDate.now();
+//			model.addAttribute("begin", today.minusDays(today.getDayOfMonth() - 1)); // 이번달 1일부터
+		model.addAttribute("begin", today.minusDays(3)); // 3일 전부터
+		model.addAttribute("end", today); // 오늘까지
+		model.addAttribute("depId", board.getDepId());//
+		model.addAttribute("empId", board.getEmpId());//
+		
+		return "redirect:bdlistdate.do";
+	}
+	
+	//----------------마이-----------------
+	//업무게시판 게시글 리스트 조회
+	@RequestMapping("bdlistmy.do")
+	public String selectBoardListMyMethod(Board board, Model model,
+			@RequestParam(name = "searchType", required=false) String searchType) {
+		
+		int listCount = boardService.selectBoardListCountMy(
+				new BoardKeyword(board.getEmpId(), board.getDepId()));
+		
+		String depName = boardService.selectDepName(board.getDepId());
 		int limit = 10;
-		Paging paging = new Paging(listCount, 1, limit, "bdlist.do");
+		Paging paging = new Paging(listCount, 1, limit, "bdlistmy.do");
 		paging.calculator();
-		ArrayList<Board> list = boardService.selectBoardList(paging);
+		ArrayList<Board> list = boardService.selectBoardListMy(
+				new Search(board.getEmpId(), board.getDepId(), paging.getStartRow(), paging.getEndRow()));
 		for(Board b : list) {
 			int replyCount = replyService.selectReplyListCount(new ReplyKeyword(b.getDepId(), b.getBoardId()));
 			b.setReplyCount(replyCount);
 		}
 		
+		model.addAttribute("paging", paging);
+		model.addAttribute("depId", board.getDepId());
+		model.addAttribute("depName", depName);
+		model.addAttribute("searchType", searchType);
+		
 		if(list != null && list.size() > 0) {
-			model.addAttribute("paging", paging);
+			
 			model.addAttribute("boardList", list);
-			return "work/work_list";
+			
 		}else {
-			model.addAttribute("message", paging + " 업무게시판 조회 실패!");
-			return "common/error";
+			//model.addAttribute("message", paging + " 업무게시판 조회 실패!");
+			//return "common/error";
 		}
+		
+		return "work/work_list";
 	}
 	
-	private int duration = 7;
-	
-	//업무게시판 최신 게시글 리스트 갯수
-	@RequestMapping("bdlistnewcount.do")
-	public void selectBoardListNewCountMethod(HttpServletResponse response) throws IOException {
-		//3일까지만
-		int count = boardService.selectBoardListNewCount(duration);
-		//logger.info("count : " + count);
+	//----------------날짜-----------------
+	//업무게시판 게시글 필터링된 리스트 숫자 조회
+	@RequestMapping(value = "bdlistdatecount.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public void selectBoardListDateCountMethod(Search search, 
+				HttpServletResponse response) throws IOException {
+		
+		int count = boardService.selectBoardListDateCount(search);
+		
 		PrintWriter out = response.getWriter();
 		out.print(count);
-		//out.print(sendJson);
 		out.flush();
 		out.close();
 	}
 	
-	//업무게시판 최신 게시글 리스트 조회
-	@RequestMapping("bdlistnew.do")
-	public String selectBoardListNewMethod(
-			@RequestParam("begin") Date begin,
-			@RequestParam("end") Date end,
-			Model model) {
-		int listCount = boardService.selectBoardListNewCount(duration);
-		int limit = 10;
-		Paging paging = new Paging(listCount, 1, limit, "bdlistnew.do");
-		paging.calculator();
-		ArrayList<Board> list = boardService.selectBoardListDuration(
-				new Search("", begin, end, paging.getStartRow(), paging.getEndRow()));
+	//업무게시판 게시글 필터링된 리스트 숫자 조회 ajax
+	@RequestMapping(value = "bdlistdatecountajax.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public void selectBoardListDateCountMethodAjax(
+			HttpServletResponse response, 
+			@RequestBody String param) throws IOException, ParseException {
 		
+		JSONParser jparser = new JSONParser();
+	    JSONObject job = (JSONObject) jparser.parse(param);
+	    
+	    Search search = new Search();
+	    search.setBegin((Date) job.get("begin"));
+	    search.setEnd((Date) job.get("end"));
+	    
+		int count = boardService.selectBoardListDateCount(search);
+		
+		PrintWriter out = response.getWriter();
+		out.print(count);
+		out.flush();
+		out.close();
+	}
+	
+	//업무게시판 게시글 필터링된 리스트 조회
+	@RequestMapping("bdlistdate.do")
+	public String selectBoardListDateMethod(Search search, Model model) {
+		
+		int listCount = boardService.selectBoardListDateCount(search);
+		String depName = boardService.selectDepName(search.getDepId());
+		int limit = 10;
+		
+		logger.info("depName : " + depName);
+		logger.info("listCount : " + listCount);
+		Paging paging = new Paging(listCount, 1, limit, "bdlistdate.do");
+				//"bdlistdate.do?begin="+search.getBegin().toString()+"&end="+search.getEnd().toString());
+		paging.calculator();
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<Board> list = boardService.selectBoardListDate(search);
+		logger.info("list : " + list);
 		for(Board b : list) {
 			int replyCount = replyService.selectReplyListCount(new ReplyKeyword(b.getDepId(), b.getBoardId()));
 			b.setReplyCount(replyCount);
 		}
+		model.addAttribute("paging", paging);
+		model.addAttribute("depId", search.getDepId());
+		model.addAttribute("depName", depName);
+		model.addAttribute("searchType", search.getSearchType());
+		model.addAttribute("begin", search.getBegin().toString());
+		model.addAttribute("end", search.getEnd().toString());
 		
 		if(list != null && list.size() > 0) {
-			model.addAttribute("paging", paging);
 			model.addAttribute("boardList", list);
-			return "work/work_list";
+			//return "work/work_list";
 		}else {
-			model.addAttribute("message", paging + " 업무게시판 조회 실패!");
-			return "common/error";
+			//model.addAttribute("message", paging + " 업무게시판 조회 실패!");
+			//return "common/error";
 		}
+		return "work/work_list";
 	}
 	
+	
 	@RequestMapping("bdselect.do")
-	public String selectBoardMethod(@RequestParam("empId") int empId, 
-							 @RequestParam("depId") int depId,
-							 @RequestParam("boardId") int boardId, Model model) {
+	public String selectBoardMethod(Search search, Board b, Model model) {
+//							 @RequestParam("empId") int empId, 
+//							 @RequestParam("depId") int depId,
+//							 @RequestParam("boardId") int boardId, Model model) {
+		
+		
+		int empId = b.getEmpId();
+		int depId = b.getDepId();
+		int boardId = b.getBoardId();
+		
 		logger.info("empId : " + empId + " depId : " + depId + " boardId : " + boardId);
+		
 		Board board = boardService.selectBoard(new BoardKeyword(empId, depId, boardId));
 		
 		if(board != null) {
@@ -164,6 +250,8 @@ public class BoardController {
 			
 			model.addAttribute("board", board);
 			model.addAttribute("replyList", replyList);
+			model.addAttribute("begin", search.getBegin().toString());
+			model.addAttribute("end", search.getEnd().toString());
 			return "work/work_notice";
 		}else {
 			model.addAttribute("message", "업무게시판 조회 실패!");
@@ -171,10 +259,75 @@ public class BoardController {
 		}
 	}
 	
-	//업무게시판 게시글 필터링된 리스트 조회
-	@RequestMapping("bdsearch.do")
-	public String selectBoardSearchMethod() {
-		return "";
+	//----------------서치-----------------
+	//업무게시판 게시글 검색
+	@RequestMapping(value = "bdsearch.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String searchBoardMethod(Search search, Model model) {
+		String searchType = search.getSearchType();
+		int listCount = 0;
+		String depName = boardService.selectDepName(search.getDepId());
+		logger.info("searchType : " + searchType);
+		if(searchType != null) {
+			switch (searchType) {
+				case "content":
+					listCount = boardService.selectBoardSearchCountContent(search);
+					break;
+				case "writer":
+					listCount = boardService.selectBoardSearchCountWriter(search);
+					break;
+				case "title":
+					listCount = boardService.selectBoardSearchCountTitle(search);
+					break;
+			}
+			
+		}
+		
+		int limit = 10;
+		logger.info("listCount : " + listCount);
+		Paging paging = new Paging(listCount, 1, limit, "bdsearch.do");
+				//"bdlistdate.do?begin="+search.getBegin().toString()+"&end="+search.getEnd().toString());
+		paging.calculator();
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<Board> list = null;
+		if(searchType != null) {
+			switch (searchType) {
+				case "content":
+					list = boardService.selectBoardSearchContent(search);
+					break;
+				case "writer":
+					list = boardService.selectBoardSearchWriter(search);
+					break;
+				case "title":
+					list = boardService.selectBoardSearchTitle(search);
+					break;
+			}
+		}
+		
+		logger.info("list : " + list);
+		
+		model.addAttribute("keyword", search.getKeyword());
+		model.addAttribute("paging", paging);
+		model.addAttribute("depId", search.getDepId());
+		model.addAttribute("depName", depName);
+		model.addAttribute("searchType", searchType);
+		model.addAttribute("begin", search.getBegin().toString());
+		model.addAttribute("end", search.getEnd().toString());
+		
+		if(list != null && list.size() > 0) {
+			
+			for(Board b : list) {
+				int replyCount = replyService.selectReplyListCount(new ReplyKeyword(b.getDepId(), b.getBoardId()));
+				b.setReplyCount(replyCount);
+			}
+			model.addAttribute("boardList", list);
+		}else {
+			//model.addAttribute("message", paging + " 업무게시판 서치 실패!");
+			//return "common/error";
+		}
+		
+		return "work/work_list";
 	}
 	
 	//업무게시판 게시글 등록
@@ -269,6 +422,7 @@ public class BoardController {
 		}
 		
 		model.addAttribute("board", board);
+		model.addAttribute("depId", board.getDepId());
 		return "work/work_input";
 	}
 	

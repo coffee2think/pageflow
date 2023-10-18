@@ -101,8 +101,8 @@
 									</div>
 
 									<input type="date"
-										class="select-date select-date-first font-size13"
-										 >
+											class="select-date select-date-first font-size13"
+									>
 								</div>
 
 								<div class="select-box">
