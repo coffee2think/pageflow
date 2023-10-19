@@ -19,7 +19,7 @@
     // 수량 변경 시 총액 계산
     $(function() {
     	$('#table_list').find('input[name=orderQuantity]').each(function() {
-    		$(this).change(function() {
+    		$(this).change(function() { 
     			var tr = $(this).parent().parent().parent();
     			var bookPrice = tr.find('input[name=bookPrice]').val();
     			var quantity = $(this).val();

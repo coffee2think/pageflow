@@ -56,10 +56,15 @@
 		<typeAlias type="com.erl.pageflow.edit.model.vo.Edit" alias="Edit" />
 		<typeAlias type="com.erl.pageflow.writer.model.vo.Writer" alias="Writer" />
 		
+		<!-- 전자결재 -->
+		<typeAlias type="com.erl.pageflow.approval.model.vo.Approval" alias="Approval" />
+		<typeAlias type="com.erl.pageflow.common.ApprovalKeyword" alias="ApprovalKeyword" />
+		
 	</typeAliases>
 	
 	<mappers>
 		<!-- 존재하지 않는 파일을 등록하면, 톰켓 구동 안 됨 -->
+		<mapper resource="mappers/approval-mapper.xml" />
 		<mapper resource="mappers/board-mapper.xml" />
 		<mapper resource="mappers/reply-mapper.xml" />
 		<mapper resource="mappers/notice-mapper.xml" />
