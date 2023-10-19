@@ -217,7 +217,31 @@ public class NoticeController {
 			}else {
 				model.addAttribute("message", notice.getNoticeId() + "번 공지 수정 실패!");
 				return "common/error";
+			}
 		}
+		
+		//공지글 삭제 요청 처리용
+		@RequestMapping("ndelete.do")
+		public String noticeDeleteMethod(
+				@RequestParam("noticeId") int noticeid,
+				@RequestParam(name="rfile", required=false) String renameFileName,
+				HttpServletRequest request, Model model) {
+			
+			if(noticeService.deleteNotice(noticeid) > 0) {
+				//공지글 삭제 성공시 저장 폴더에 있는 첨부파일도 삭제함
+				if(renameFileName != null) {
+					//공지사항 첨부파일 저장 폴더 경로 지정
+					String savePath = request.getSession().getServletContext().getRealPath(
+							"resources/notice_upfiles");
+					//저장 폴더에서 파일 삭제함
+					new File(savePath + "\\" + renameFileName).delete();
+				}
+				
+				return "redirect:nlist.do";
+			}else {
+				model.addAttribute("message", noticeid + "번 공지 삭제 실패!");
+				return "common/error";
+			}
 		}
 	
 	

@@ -13,4 +13,5 @@ public interface NoticeService {
 	int insertNotice(Notice notice);
 	Notice selectOne(int noticeId);
 	int updateNotice(Notice notice);
+	int deleteNotice(int noticeId);
 }
