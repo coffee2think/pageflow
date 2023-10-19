@@ -58,6 +58,7 @@
 		
 		<!-- 전자결재 -->
 		<typeAlias type="com.erl.pageflow.approval.model.vo.Approval" alias="Approval" />
+		<typeAlias type="com.erl.pageflow.approval.model.vo.Draft" alias="Draft" />
 		<typeAlias type="com.erl.pageflow.common.ApprovalKeyword" alias="ApprovalKeyword" />
 		
 	</typeAliases>

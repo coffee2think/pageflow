@@ -17,6 +17,7 @@
     const LNKPAGE = 2;
     
     let curinput;
+    let client_type = 'bookstore'; 
 
     document.addEventListener("DOMContentLoaded", function(){
     	$('.input-search-btn').on('click', function() {
@@ -25,6 +26,11 @@
     		if(type.includes('book')) {
     			type = 'book';
     		}
+    		
+    		if(type.includes('client')) {
+    			type = client_type;
+    		}
+    		
     		console.log('type : ' + type);
     		var tr = $(this).parent().parent().parent();
     		var trValue = tr.val();
