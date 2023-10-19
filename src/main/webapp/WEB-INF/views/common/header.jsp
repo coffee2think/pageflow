@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="empId" value="-1"/>
+<c:if test="${ !empty loginMember }">
+    <c:set var="empId" value="${ loginMember.empId }"/>
+</c:if>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,41 +15,54 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/page_info.js"></script>
 <script type="text/javascript">
-document.addEventListener("DOMContentLoaded", function(){
-    var header = new Header();
-	header.init();
-});
+    document.addEventListener("DOMContentLoaded", function(){
+        var header = new Header();
+        header.init();
 
-function Header(){
-    
-}
+        let empId = Number('<c:out value="${ empId }" />');
 
-Header.prototype = {
-    init : function(){
-		
-        var el = ``;
-        for(var i=0; i<MENU_INFO.length; i++){
-            el += `
-            <div class="header-table-div">
-                <a class="header-btn" id="headerBtn_`+(i+1)+`" href="`+MENU_INFO[i].link+`">`
-                +MENU_INFO[i].title+
-                `</a>
-            </div>`;
-
-            if(i != MENU_INFO.length-1) {
-                el += `<span class="header-sep"></span>`;
-            }
-        }
-
-        $('.header-table').append(el);
-
-        $('#headerBtn_'+NOWPAGE).addClass('active');
+        //로그인 안했을때 나의 결재페이지 안보이게
         
-        $('.header-right').on('click', function(){
-			
-		})
+        if(empId == -1) {
+            //전자결재 로그인 안했을 시 링크 변경
+            $('#headerTable_'+MENU_INFO.length).hide();
+            $('#header_sep_'+(MENU_INFO.length-1)).hide();
+        }else{
+            console.log('empId : ' + empId);
+            $('#headerBtn_'+MENU_INFO.length).attr('href', 'aplist.do?empId='+empId);
+        }
+    });
+
+    function Header(){
+        
     }
-}
+
+    Header.prototype = {
+        init : function(){
+            
+            var el = ``;
+            for(var i=0; i<MENU_INFO.length; i++){
+                el += `
+                <div class="header-table-div" id="headerTable_`+(i+1)+`">
+                    <a class="header-btn" id="headerBtn_`+(i+1)+`" href="`+MENU_INFO[i].link+`">`
+                    +MENU_INFO[i].title+
+                    `</a>
+                </div>`;
+
+                if(i != MENU_INFO.length-1) {
+                    el += `<span class="header-sep" id="header_sep_`+(i+1)+`"></span>`;
+                }
+            }
+
+            $('.header-table').append(el);
+
+            $('#headerBtn_'+NOWPAGE).addClass('active');
+            
+            $('.header-right').on('click', function(){
+                
+            })
+        }
+    }
 
 </script>
 <title></title>
