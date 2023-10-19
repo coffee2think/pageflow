@@ -123,8 +123,10 @@ function minusRow(rowId) {
 
                 <!--form-->
                 <!-- <form class="input-form" action="/comi/partyi" method="post" enctype="multipart/form-data">-->
-                <form class="input-form" action="" method="post">
+                <form class="input-form" action="stoinsert.do" method="post">
                     <!--main-header-bar-->
+                	<input type="hidden" name="empId" value="1"> <!-- 하드코딩 -->
+                	<input type="hidden" name="storageId" value="1"> <!-- 하드코딩 -->
                     <div class="main-header-bar">
                         <div class="main-title-box">
                             <img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
@@ -169,7 +171,7 @@ function minusRow(rowId) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="code" class="contents-input" value="">
+                                                <input type="input" name="bookId" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-200">
@@ -177,7 +179,7 @@ function minusRow(rowId) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="name" class="contents-input" value="">
+                                                <input type="input" name="bookName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-100">
@@ -185,7 +187,7 @@ function minusRow(rowId) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="store" class="contents-input" value="">
+                                                <input type="input" name="clientName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-100">
@@ -193,27 +195,27 @@ function minusRow(rowId) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="man" class="contents-input" value="">
+                                                <input type="input" name="empName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="date" name="date" class="select-date small">
+                                                <input type="date" name="storeDate" class="select-date small">
                                             </div>
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="number" name="count" class="contents-input">
+                                                <input type="input" name="storeNum" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="number" name="price" class="contents-input">
+                                                <input type="input" name="bookPrice" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div">
-                                                <input type="number" name="amount" class="contents-input">
+                                                <input type="input" name="storePrice" class="contents-input">
                                             </div>
                                         </td>
                                     </tr>

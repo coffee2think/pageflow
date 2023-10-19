@@ -34,20 +34,51 @@ public interface StoreService {
 	public int selectStoreCountByDate(Search search);
 
 	public ArrayList<Store> selectStoreByDate(Search search);
-	
+
 	public int selectStoreCountByBookId(Search search);
-	
+
 	public int selectStoreCountByBookName(Search search);
-	
+
 	public int selectStoreCountByEmpName(Search search);
-	
-	public int selectStoreCountByClientName (Search search);
-	
+
+	public int selectStoreCountByClientName(Search search);
+
 	public ArrayList<Store> selectStoreByBookId(Search search);
-	
+
 	public ArrayList<Store> selectStoreByBookName(Search search);
-	
+
 	public ArrayList<Store> selectStoreByEmpName(Search search);
-	
+
 	public ArrayList<Store> selectStoreByClientName(Search search);
+
+	public int selectReleaseCountByBookId(Search search);
+
+	public int selectReleaseCountByBookName(Search search);
+
+	public int selectReleaseCountByEmpName(Search search);
+
+	public int selectReleaseCountByClientName(Search search);
+
+	public ArrayList<Store> selectReleaseByBookId(Search search);
+
+	public ArrayList<Store> selectReleaseByBookName(Search search);
+
+	public ArrayList<Store> selectReleaseByEmpName(Search search);
+
+	public ArrayList<Store> selectReleaseByClientName(Search search);
+
+	public int insertStore(Store store);
+
+	public int insertInventory(Store store);
+
+	public int selectPreInvenId();
+
+	public int selectCurrInven();
+
+	public int updateStore(Store store);
+
+	public int updateInventory(Store store);
+
+	public int selectMaxStoreId();
+
 }

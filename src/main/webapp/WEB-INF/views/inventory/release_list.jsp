@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<c:set var="storeList" value="${ requestScope.storeList }" />
+<c:set var="relList" value="${ requestScope.relList }" />
 <c:set var="keyword" value="${ requestScope.keyword }" />
 <c:set var="searchType" value="${ requestScope.searchType }" />
 <c:set var="firstType" value="${ requestScope.firstType }" />
@@ -59,7 +59,7 @@
 	var curinput = "";
 	$(function(){
 		// 서치 버튼 클릭
-		$('.search-button').on('click', function(){
+		$('.search-btn').on('click', function(){
 			searchKey();
 		})
 		// 엔터 누르고 난뒤
@@ -78,7 +78,7 @@
         var begin = '<c:out value="${ begin }" />';
     	var end = '<c:out value="${ end }" />';
 		
-    	var url = 'invselectkeyword.do?';
+    	var url = 'relselectkeyword.do?';
             url += '&keyword=' + $('.search-box-text').val();
             url += '&searchType='+ $('#sel_code option:selected').val();
             
@@ -89,7 +89,7 @@
 	    	var begin = $('#begin_' + dateType).val();
 	    	var end = $('#end_' + dateType).val();
 	    	
-	    	var url = 'invlistdate.do?';
+	    	var url = 'releasedate.do?';
 	    	url += 'begin=' + begin;
 	    	url += '&end=' + end;
 	    	url += '&dateType=' + dateType;
@@ -157,7 +157,7 @@
                                 </div>
 
                                 <div class="search-box">
-                                    <button class="search-btn">
+                                    <button class="search-btn" onclick="search(); return false;">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
                                     <c:if test="${ empty keyword }">
@@ -195,13 +195,13 @@
 							        <c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
 							        <fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
 							
-							        <c:url var="searchWeekUrl" value="stolistdate.do">
+							        <c:url var="searchWeekUrl" value="releasedate.do">
 							            <c:param name="begin" value="${ weekago }" />
 							            <c:param name="end" value="${ today }" />
 							            <c:param name="dateType" value="startDate" />
 							        </c:url>
 							
-							        <c:url var="searchMonthUrl" value="stolistdate.do">
+							        <c:url var="searchMonthUrl" value="releasedate.do">
 							            <c:param name="begin" value="${ monthago }" />
 							            <c:param name="end" value="${ today }" />
 							            <c:param name="dateType" value="startDate" />
@@ -242,7 +242,7 @@
                                 </tr>
                                 <c:set var="totalStoreNum" value="0" />
                                 <c:set var="totalStorePrice" value="0" />
-                                <c:forEach var="rel" items="${ storeList }">
+                                <c:forEach var="rel" items="${ relList }">
 	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
 	                                    <td class="td-50">
 	                                       <input type="checkbox" name="selectedItems" value="${ rel.storeId }">

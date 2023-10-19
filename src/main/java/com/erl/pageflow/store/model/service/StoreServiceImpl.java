@@ -122,4 +122,79 @@ public class StoreServiceImpl implements StoreService {
 		return storeDao.selectStoreByClientName(search);
 	}
 
+	@Override
+	public int selectReleaseCountByBookId(Search search) {
+		return storeDao.selectReleaseCountByBookId(search);
+	}
+
+	@Override
+	public int selectReleaseCountByBookName(Search search) {
+		return storeDao.selectReleaseCountByBookName(search);
+	}
+
+	@Override
+	public int selectReleaseCountByEmpName(Search search) {
+		return storeDao.selectReleaseCountByEmpName(search);
+	}
+
+	@Override
+	public int selectReleaseCountByClientName(Search search) {
+		return storeDao.selectReleaseCountByClientName(search);
+	}
+
+	@Override
+	public ArrayList<Store> selectReleaseByBookId(Search search) {
+		return storeDao.selectReleaseByBookId(search);
+	}
+
+	@Override
+	public ArrayList<Store> selectReleaseByBookName(Search search) {
+		return storeDao.selectReleaseByBookName(search);
+	}
+
+	@Override
+	public ArrayList<Store> selectReleaseByEmpName(Search search) {
+		return storeDao.selectReleaseByEmpName(search);
+	}
+
+	@Override
+	public ArrayList<Store> selectReleaseByClientName(Search search) {
+		return storeDao.selectReleaseByClientName(search);
+	}
+
+	@Override
+	public int insertStore(Store store) {
+		return storeDao.insertStore(store);
+	}
+
+	@Override
+	public int insertInventory(Store store) {
+		return storeDao.insertInventory(store);
+	}
+
+	@Override
+	public int selectPreInvenId() {
+		return storeDao.selectPreInvenId();
+	}
+
+	@Override
+	public int selectCurrInven() {
+		return storeDao.selectCurrInven();
+	}
+
+	@Override
+	public int updateStore(Store store) {
+		return storeDao.updateStore(store);
+	}
+
+	@Override
+	public int updateInventory(Store store) {
+		return storeDao.updateInventory(store);
+	}
+	
+	@Override
+	public int selectMaxStoreId() {
+		return storeDao.selectMaxStoreId();
+	}
+
 }
