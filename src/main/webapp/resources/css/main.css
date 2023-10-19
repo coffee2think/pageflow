@@ -742,3 +742,8 @@ body {
     opacity: .3;
     cursor: default;
 }
+
+.search-pop-draft {
+    background: none;
+    border: none;
+}

@@ -168,12 +168,22 @@ SELECT count(*) from board
 where BOARD_TITLE like '%' || 'zx' || '%';
 
 --전자결재
+
+
+
+
+
+
 select * 
 from (select rownum rnum, sub.*
-      from (select * 
-            from approval
+      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+            ED.emp_name AS drafter_name,
+            EA.emp_name AS approver_name
+            from approval A
             join draft using (DRAFT_TYPE)
-            join employee on (DRAFTER = emp_id)
+            join employee ED on (A.DRAFTER = ED.emp_id)
+            join employee EA on (A.approver = EA.emp_id)
             where drafter = 1
             order by APPR_ID desc) sub)
 where rnum >= 1 and rnum <= 10
@@ -187,6 +197,20 @@ from (select rownum rnum, sub.*
             where APPR_ID = 1
             and DRAFT_TYPE = 'annual'
             order by APPR_ID desc) sub)
-where rnum >= #{ startRow } and rnum <= #{ endRow }
-order by APPR_ID desc
+where rnum >= 1 and rnum <= 10
+order by APPR_ID desc;
 
+select * 
+from (select rownum rnum, sub.*
+      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+            ED.emp_name AS drafter_name,
+            EA.emp_name AS approver_name
+            from approval A
+            join draft using (DRAFT_TYPE)
+            join employee ED on (A.DRAFTER = ED.emp_id)
+            join employee EA on (A.approver = EA.emp_id)
+            where drafter = 1
+            order by APPR_ID desc) sub)
+where rnum >= 1 and rnum <= 10
+order by APPR_ID desc;

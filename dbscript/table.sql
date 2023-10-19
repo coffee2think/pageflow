@@ -2111,3 +2111,8 @@ MODIFY BOOK_PRICE_S number NULL;
 ALTER TABLE book
 MODIFY PUB_DATE date NULL;
 
+ALTER TABLE draft_annual
+ADD (title VARCHAR2(500) NULL );
+
+alter TABLE book
+MODIFY PUB_DATE date sysdate;

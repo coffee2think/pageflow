@@ -171,17 +171,17 @@ var MENU_INFO = [
     ,
     {
         title : '전자결재'
-        ,link : 'aplist.do'
+        ,link : 'aplist.do?apType=my'
         ,branch : [
             {
                 stitle : '내결재관리'
-                ,slink : 'aplist.do'
+                ,slink : 'aplist.do?apType=my'
                 ,sbranch : [
                 ]
             },
             {
                 stitle : '기안서통합관리'
-                ,slink : 'aplistall.do'
+                ,slink : 'aplist.do?apType=all'
                 ,sbranch : [
                 ]
             },

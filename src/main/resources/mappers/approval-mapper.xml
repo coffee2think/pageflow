@@ -14,6 +14,9 @@
 		<result property="apprDate" column="APPR_DATE" />
 		<result property="receiptDate" column="RECEIPT_DATE" />
 		<result property="rejectionDate" column="REJECTION_DATE" />
+		<result property="drafterName" column="DRAFTER_NAME" />
+		<result property="approverName" column="APPROVER_NAME" />
+		
 	</resultMap>
 	
 	<resultMap type="Approval" id="resultApproval">
@@ -28,6 +31,16 @@
 		<result property="rejectionDate" column="REJECTION_DATE" />
 	</resultMap>
 	
+	<resultMap type="Draft" id="resultDraft">
+		<result property="apprId" column="APPR_ID" />
+		<result property="draftType" column="DRAFT_TYPE" />
+		<result property="detail" column="DETAIL" />
+		<result property="emergency" column="EMERGENCY" />
+		<result property="startDate" column="START_DATE" />
+		<result property="endDate" column="END_DATE" />
+		<result property="title" column="TITLE" />
+	</resultMap>
+	
 	<select id="selectApprovalListCount" parameterType="_int" resultType="_int">
 		select count(*) from approval
 		where DRAFTER = #{ empId }
@@ -37,10 +50,14 @@
 		<![CDATA[
 		select * 
 		from (select rownum rnum, sub.*
-		      from (select * 
-		            from approval
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
 		            join draft using (DRAFT_TYPE)
-		            join employee on (DRAFTER = emp_id)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
 		            where drafter = #{ empId }
 		            order by APPR_ID desc) sub)
 		where rnum >= #{ startRow } and rnum <= #{ endRow }
@@ -56,19 +73,122 @@
 		
 	</select>
 	
-	<select id="selectDraft" parameterType="ApprovalKeyword" resultMap="resultApprovalJoin">
-		<![CDATA[
-		select * 
-		from (select rownum rnum, sub.*
-		      from (select * 
-		            from draft_annual
-		            where APPR_ID = #{ apprId }
-		            and DRAFT_TYPE = #{ draftType }
-		            order by APPR_ID desc) sub)
-		where rnum >= #{ startRow } and rnum <= #{ endRow }
-		order by APPR_ID desc
-		]]>
+	<select id="selectApprovalListDateCount" parameterType="Search" resultType="_int">
+		
+		
 	</select>
+	
+	<select id="selectApprovalListDate" parameterType="Search" resultMap="resultApprovalJoin">
+		
+		
+	</select>
+	
+	<select id="selectApprovalListAllDateCount" parameterType="Search" resultType="_int">
+		
+		
+	</select>
+	
+	<select id="selectApprovalListAllDate" parameterType="Search" resultMap="resultApprovalJoin">
+		
+		
+	</select>
+	
+	<select id="selectDraft" parameterType="ApprovalKeyword" resultMap="resultDraft">
+		select * 
+		from draft_annual
+		where APPR_ID = #{ apprId }
+		and DRAFT_TYPE = #{ draftType }
+	</select>
+	
+	
+	<!-- 서치!!! --> 
+	
+	<select id="selectApprSearchAllCountComplete" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchAllCountContinue" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchAllCountCompanion" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchAllCountApprover" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchAllCountDrafter" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchAllComplete" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchAllContinue" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchAllCompanion" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchAllApprover" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchAllDrafter" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	
+	
+	
+	
+	<select id="selectApprSearchCountComplete" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchCountContinue" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchCountCompanion" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchCountApprover" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchCountDrafter" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchComplete" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchContinue" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchCompanion" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchApprover" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectApprSearchDrafter" parameterType="Search" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	
+	
 	
 	
 	<insert id="insertApproval">
