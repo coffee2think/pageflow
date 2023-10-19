@@ -34,8 +34,8 @@ function registerPrintOffice() {
 	$('.modal-pop-close').parent().parent('.modal-pop-box').hide();
 	$('.modal-pop-close').parent().parent().parent('.modal-pop-area').hide();
 	
-	$('input[name=clientId]').eq(rowIndex_popup).val(json_global.list[index_global].bookId);
-	$('input[name=clientName]').eq(rowIndex_popup).val(decodeURIComponent(json_global.list[index_global].bookName).replace(/\+/gi, ' '));
+	$('input[name=printId]').eq(rowIndex_popup).val(json_global.list[index_global].clientId);
+	$('input[name=clientName]').eq(rowIndex_popup).val(decodeURIComponent(json_global.list[index_global].clientName).replace(/\+/gi, ' '));
 	
 	console.log(json_global.list[index_global]);
 }
@@ -60,6 +60,8 @@ function selectBook() {
 			// string => parsing : json object
 			var json = JSON.parse(jsonStr);
 			json_global = json;
+			
+			console.log(json);
 			
 			// json 객체 안의 list를 하나씩 꺼내서 새로운 행으로 추가 처리
 			// 기존 행 정보 삭제
@@ -110,6 +112,8 @@ function selectPrintOffice() {
 			// string => parsing : json object
 			var json = JSON.parse(jsonStr);
 			json_global = json;
+			
+			console.log(json);
 			
 			// json 객체 안의 list를 하나씩 꺼내서 새로운 행으로 추가 처리
 			// 기존 행 정보 삭제
@@ -179,7 +183,7 @@ function selectPrintOffice() {
             </div>
 
             <div class="modal-pan-center">
-                <table class="contents-table" id="table_list">
+                <table class="contents-table" id="table_list_book">
                     <thead>
                         <th></th>
                         <th>
@@ -247,7 +251,7 @@ function selectPrintOffice() {
             </div>
 
             <div class="modal-pan-center">
-                <table class="contents-table" id="table_list">
+                <table class="contents-table" id="table_list_printoffice">
                     <thead>
                         <th></th>
                         <th>
@@ -277,7 +281,7 @@ function selectPrintOffice() {
             </div>
 
             <div class="modal-pan-bottom flex-center">
-                <input type="button" class="contents-input-btn big noline" id="btn_register" value="등록" onclick="registerClient()">
+                <input type="button" class="contents-input-btn big noline" id="btn_register" value="등록" onclick="registerPrintOffice();">
             </div>
         </div>
         <!--modal-pop end-->
