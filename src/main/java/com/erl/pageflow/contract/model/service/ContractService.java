@@ -16,7 +16,7 @@ public interface ContractService {
 	public ArrayList<Contract> selectContractSearch(Paging paging);
 	
 	// 계약 조회
-	public Contract selectContract(String contrId);
+	public Contract selectContract(int contrId);
 	
 	// 계약 등록
 	public int insertContract(Contract contract);
@@ -25,5 +25,9 @@ public interface ContractService {
 	public int updateContract(Contract contract);
 	
 	// 계약 삭제
-	public int deleteContract(String contrId);
-}
+	public int deleteContract(int contrId);
+	
+	// 계약 등록 계약번호 +1 처리
+	public int selectMaxContrId();
+	
+}	

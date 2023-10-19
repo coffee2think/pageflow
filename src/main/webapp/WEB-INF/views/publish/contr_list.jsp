@@ -14,25 +14,6 @@
     const SUBPAGE = 1;
     const LNKPAGE = 1;
 </script>
-
-<script type="text/javascript">
-function updateContract(contrId) {
-    $.ajax({
-        url: '/ctrupdate.do',
-        type: 'POST',
-        data: 
-        contentType: 'application/json',
-        success: function (response) {
-            if (response === 'success') {
-                alert('계약 정보가 성공적으로 수정되었습니다.');
-            } else {
-                alert('계약 정보 수정에 실패했습니다.');
-            }
-        }
-    });
-}
-</script>
-
 <title>계약현황</title>
 </head>
 <body>

@@ -22,7 +22,7 @@ public class Contract implements java.io.Serializable {
 		super();
 	}
 	
-	public Contract(int contrId, int empId, int writerId, String bookName, String empName, String contrState, String writerName, String category) {
+	public Contract(int contrId, int empId, int writerId, String bookName, String empName, String contrState) {
 		super();
 		this.contrId = contrId;
 		this.empId = empId;
@@ -30,8 +30,6 @@ public class Contract implements java.io.Serializable {
 		this.bookName = bookName;
 		this.empName = empName;
 		this.contrState = contrState;
-		this.writerName = writerName;
-		this.category = category;
 	}
 
 	public Contract(int contrId, int empId, int writerId, String bookName, String empName, Date contrDate,
@@ -132,12 +130,12 @@ public class Contract implements java.io.Serializable {
 	public void setWriterName(String writerName) {
 		this.writerName = writerName;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Contract [contrId=" + contrId + ", empId=" + empId + ", writerId=" + writerId + ", bookName=" + bookName
 				+ ", empName=" + empName + ", contrDate=" + contrDate + ", contrDoc=" + contrDoc + ", contrState="
-				+ contrState + ", category=" + category + ", writerName=" + writerName + "]";
+				+ contrState + ", writerName=" + writerName + ", category=" + category + "]";
 	}
 	
 }

@@ -3,7 +3,9 @@ package com.erl.pageflow.contract.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -19,6 +21,7 @@ import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.contract.model.service.ContractService;
 import com.erl.pageflow.contract.model.vo.Contract;
+import com.erl.pageflow.edit.model.vo.Edit;
 import com.erl.pageflow.sales.model.vo.BookOrder;
 
 @Controller
@@ -77,17 +80,39 @@ public class ContractController {
 		out.flush();
 		out.close();
 	}
-	
+
 	// 계약 정보 등록 요청 처리
 	@RequestMapping(value="ctrinsert.do", method=RequestMethod.POST)
-	public String contractInsertMethod(Contract contract, Model model) {
-		logger.info("ctrinsert.do : " + contract);
+	public String contractInsertMethod(HttpServletRequest request, Model model) {
+		String[] empIds = request.getParameterValues("empId");
+		String[] writerIds = request.getParameterValues("writerId");
+		String[] bookNames = request.getParameterValues("bookName");
+		String[] category = request.getParameterValues("category");
 		
-		if(contractService.insertContract(contract) > 0) {
-			return "redirect:ctrlist.do";
-		} else {
-			model.addAttribute("message", "계약 등록 실패!");
-			return "common/error";
+		// 주문번호 생성
+		int contrId = contractService.selectMaxContrId() + 1;
+		
+		ArrayList<Contract> contracts = new ArrayList<>();
+		for(int i = 0; i < empIds.length; i++) {
+			Contract contract = new Contract();
+			
+			contract.setContrId(contrId);
+			contract.setEmpId(Integer.parseInt(empIds[i]));
+			contract.setWriterId(Integer.parseInt(writerIds[i]));
+			contract.setBookName(bookNames[i]);
+			contract.setCategory(category[i]);
+			
+			contracts.add(contract);
 		}
+		
+		for(Contract contract : contracts) {
+			if(contractService.insertContract(contract) == 0) {
+				model.addAttribute("message", "계약 등록 실패!");
+				return "common/error";
+			}
+		}
+		
+		return "redirect:edlist.do";
 	}
+	
 }
