@@ -132,4 +132,8 @@ public class SalesDao {
 		return (ArrayList<BookOrder>) list;
 	}
 
+	public int selectMaxOrderId() {
+		return sqlSession.selectOne("salesMapper.selectMaxOrderId");
+	}
+
 }

@@ -36,5 +36,6 @@ public interface SalesService {
 	public ArrayList<BookOrder> selectBookOrderByBook(Search search);
 	public ArrayList<BookOrder> selectBookOrderByBookStore(Search search);
 	public ArrayList<BookOrder> selectBookOrderByLocation(Search search);
+	public int selectMaxOrderId();
 
 }
