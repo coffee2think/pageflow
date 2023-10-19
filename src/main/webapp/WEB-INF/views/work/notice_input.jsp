@@ -20,10 +20,14 @@
 	const SUBPAGE = 1;
 	const LNKPAGE = 1;
 	
-	function inputSubmit(){
-    	$('#btn_insert').click(function() {
+	$(function(){
+		$('#btn_insert').click(function() {
             $('#appendTextArea').val($('.content-input').html());
         });
+	});
+	
+	function inputSubmit(){
+    	$('#btn_insert').click();
     }
 </script>
 </head>
@@ -97,7 +101,7 @@
 
 								<div class="select-box">
 									<div class="select-pan-nemo">
-										<input type="checkbox" class="select-checkbox" name="importance" value="Y"> 필독
+										<input type="checkbox" class="select-checkbox" name="importance" value="Y" checked> 필독
 									</div>
 
 									<input type="date"
@@ -142,7 +146,7 @@
 
 								<div class="content-input-area">
 									<div class="content-input" contenteditable="true">
-									<input type="textarea" name="noticeDetail" class="content-input">
+									<!-- <input type="textarea" name="noticeDetail" class="content-input"> -->
 											
 									</div>
 								</div>
@@ -150,7 +154,7 @@
 								<div class="content-input-btn-box">
 									<input type="submit" class="contents-input-btn big noline" id="btn_insert" value="등록">
 								</div>
-								  <textarea name="noticearea" id="appendTextArea"></textarea> 
+								  <textarea name="noticeDetail" id="appendTextArea"></textarea> 
 							</form>
 						</div>
 					</div>

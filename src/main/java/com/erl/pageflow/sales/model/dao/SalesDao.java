@@ -136,4 +136,13 @@ public class SalesDao {
 		return sqlSession.selectOne("salesMapper.selectMaxOrderId");
 	}
 
+	public int selectSalesCountForStats() {
+		return sqlSession.selectOne("salesMapper.selectSalesCountForStats");
+	}
+
+	public ArrayList<Sales> selectSalesForStats(Paging paging) {
+		List<Sales> list = sqlSession.selectList("salesMapper.selectSalesForStats", paging);
+		return (ArrayList<Sales>) list;
+	}
+
 }

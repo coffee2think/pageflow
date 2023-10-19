@@ -150,4 +150,14 @@ public class SalesServiceImpl implements SalesService {
 		return salesDao.selectMaxOrderId();
 	}
 
+	@Override
+	public int selectSalesCountForStats() {
+		return salesDao.selectSalesCountForStats();
+	}
+
+	@Override
+	public ArrayList<Sales> selectSalesForStats(Paging paging) {
+		return salesDao.selectSalesForStats(paging);
+	}
+
 }

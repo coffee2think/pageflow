@@ -26,10 +26,18 @@
     			type = 'book';
     		}
     		console.log('type : ' + type);
+    		var tr = $(this).parent().parent().parent();
+    		var trValue = tr.val();
+    		console.log('tr : ' + tr);
+    		console.log(tr);
+    		console.log('trValue : ' + trValue);
     		popup.showPopup(type);
+    		
+    		
+    		
     		curinput = $(this).parent('.input-search').find('input[type=input]');
     		return false;
-    	})
+    	});
     });
     
     function addRow(currentIndex) {
@@ -70,51 +78,59 @@
 		newCell8.setAttribute('class', 'td-120');
 
 		// Cell에 텍스트 추가
-		newCell1.innerHTML = '<div class="contents-check-div">'
-						+ '<button class="contents-input-plus" onclick="addRow(' + ( currentIndex + 1 ) + '); return false;">'
-						+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">'
-						+ '</button> '
-						+ '<button class="contents-input-minus" onclick="removeRow(' + ( currentIndex + 1 ) + '); return false;">'
-						+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">'
-						+ '</button>'
-						+ '</div>';
+		newCell1.innerHTML = `
+					<div class="contents-check-div">
+						<button class="contents-input-plus" onclick="addRow(` + ( currentIndex + 1 ) + `); return false;">
+							<img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
+						</button> 
+						<button class="contents-input-minus" onclick="removeRow(` + ( currentIndex + 1 ) + `); return false;">
+							<img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
+						</button>
+					</div>`;
 		
-		newCell2.innerHTML = '<div class="contents-input-div input-search">'
-						+ '<button class="input-search-btn">'
-						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
-						+ '</button>'
-						+ '<input type="input" name="bookId" class="contents-input" value="">'
-						+ '</div>';
+		newCell2.innerHTML = `
+					<div class="contents-input-div input-search">
+						<button class="input-search-btn">
+							<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+						</button>
+						<input type="input" name="bookId" class="contents-input" value="">
+					</div>`;
 		
-		newCell3.innerHTML = '<div class="contents-input-div input-search">'
-						+ '<button class="input-search-btn">'
-						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
-						+ '</button>'
-						+ '<input type="input" name="bookName" class="contents-input" value="">'
-						+ '</div>';
+		newCell3.innerHTML = `
+					<div class="contents-input-div input-search">
+						<button class="input-search-btn">
+							<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+						</button>
+						<input type="input" name="bookName" class="contents-input" value="">
+					</div>`;
 		
-		newCell4.innerHTML = '<div class="contents-input-div input-search">'
-						+ '<button class="input-search-btn">'
-						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
-						+ '</button>'
-						+ '<input type="input" name="clientId" class="contents-input" value="10001">'
-						+ '<input type="input" name="clientName" class="contents-input" value="">'
-						+ '</div>';
-		newCell5.innerHTML = '<div class="contents-input-div">'
-						+ '<input type="number" name="bookPrice" class="contents-input">'
-						+ '</div>';
+		newCell4.innerHTML = `
+					<div class="contents-input-div input-search">
+						<button class="input-search-btn">
+							<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+						</button>
+						<input type="input" name="clientId" class="contents-input" value="10001">
+						<input type="input" name="clientName" class="contents-input" value="">
+					</div>`;
+		newCell5.innerHTML = `
+					<div class="contents-input-div">
+						<input type="number" name="bookPrice" class="contents-input">
+					</div>`;
 		
-		newCell6.innerHTML = '<div class="contents-input-div">'
-						+ '<input type="number" name="orderQuantity" class="contents-input">'
-						+ '</div>';
+		newCell6.innerHTML = `
+					<div class="contents-input-div">
+						<input type="number" name="orderQuantity" class="contents-input">
+					</div>`;
 		
-		newCell7.innerHTML = '<div class="contents-input-div">'
-						+ '<input type="number" name="totalPrice" class="contents-input" value="">'
-						+ '</div>';
+		newCell7.innerHTML = `
+					<div class="contents-input-div">
+						<input type="number" name="totalPrice" class="contents-input" value="">
+					</div>`;
 
-		newCell8.innerHTML = '<div class="contents-input-div">'
-						+ '<input type="input" name="state" class="contents-input" value="">'
-						+ '</div>';
+		newCell8.innerHTML = `
+					<div class="contents-input-div">
+						<input type="input" name="state" class="contents-input" value="">
+					</div>`;
 		
 		initRowIndex();
 	}
@@ -134,16 +150,35 @@
 		
 		for (i = 1; i < rowList.length; i++) {
 			var row = rowList[i];
+			row.setAttribute('value', i);
 			
-			row.cells[0].innerHTML = '<div class="contents-check-div">'
-				+ '<button class="contents-input-plus" onclick="addRow(' + i + '); return false;">'
-				+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">'
-				+ '</button> '
-				+ '<button class="contents-input-minus" onclick="removeRow(' + i + '); return false;">'
-				+ '<img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">'
-				+ '</button>'
-				+ '</div>';
+			row.cells[0].innerHTML = `
+					<div class="contents-check-div">
+						<button class="contents-input-plus" onclick="addRow(` + i + `); return false;">
+							<img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
+						</button>
+						<button class="contents-input-minus" onclick="removeRow(` + i + `); return false;">
+							<img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
+						</button>
+					</div>`;
 		} //for
+		
+		$('.input-search-btn').each(function(index) {
+			$(this).click(function(){
+				var input = $(this).parent().children('input');
+				var type = input.attr('name');
+	    		if(type.includes('book')) {
+	    			type = 'book';
+	    		}
+	    		console.log('type : ' + type);
+	    		var tr = $(this).parent().parent().parent();
+	    		var rowIndex = tr.attr('value');
+	    		rowIndex_popup = rowIndex - 1;
+	    		popup.showPopup(type);
+	    		curinput = $(this).parent('.input-search').find('input[type=input]');
+	    		return false;
+			});
+    	});
 		
 	} //initRowIndex
 	 
@@ -161,6 +196,12 @@
 <title></title>
 </head>
 <body>
+	<form>
+		<table >
+		
+		</table>
+	</form>
+	
 	<div id="container">
         
         <!--헤더-->
