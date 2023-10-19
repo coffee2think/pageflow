@@ -97,6 +97,47 @@
 	    	location.href = url;
 	    }
 	
+	function submitUpdate (id, url) {
+		var currentRow = $('#completeBtn_' + id).parent().parent();
+		var json = {};
+		
+		var len = currnetRow.children('td').length;
+		currnetRow.find('input').each(function(index){
+			
+			if(index == 0 || index >= len - 1){
+				return;
+			}
+			
+			if($(this).attr('name') == 'endDate' && $(this).val() == '' ){
+				return;
+			}
+			
+			if(!isNan($(this).val().replace(/,/g, ''))){
+				$(this).val(Number($(this).val()));
+			}
+			json[$(this).attr('name')] = $(this).val();
+		});
+		
+		$.ajax({
+			url: url,
+			type: "post",
+			data: json,
+			success: function(data){
+				console.log("success : " + data);
+				if(data == "success"){
+					alert(id + "번 정보 수정 성공");
+				}else{
+					alert("정보수정 실패");
+				}
+				offUpdate(id);
+				totalCalc();
+			},
+			 error: function(jqXHR, textStatus, errorThrown){
+	                console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+	            }
+		});
+		
+	}
 </script>
 
 </head>
@@ -149,7 +190,7 @@
                                 <div class="select-box">
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
-                                         <select name="code" id="sel_code">
+                                        <select name="searchType" id="sel_code">
                                             <option value="bookId">도서코드</option>
                                             <option value="bookName">도서명</option>
                                             <option value="empName">인수자</option>
@@ -213,6 +254,7 @@
 							        <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
 							        <input type="button" name="search" class="select-pan-btn" value="검색" onclick="searchByDate('startDate'); return false;">
                             </div>
+
 
                         <div class="paging-box">
                             <!-- 페이징 -->
@@ -291,7 +333,9 @@
 	                                        </div>
 	                                    </td>
 	                                    <td class="td-70">
-	                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+	                                       <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ sto.storeId }" onclick="onUpdate(${ sto.storeId }); return false;">
+	                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ sto.storeId }"  onclick="submitUpdate(${ sto.storeId }, 'stoupdate.do'); return false;" style="display: none;">
+	                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ sto.storeId }"  onclick="cancelUpdate(${ sto.storeId }); return false;" style="display: none;">
 	                                    </td>
 	                                </tr>
 	                            <c:set var="totalStoreNum" value="${ totalStoreNum + sto.storeNum }"/>
