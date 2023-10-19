@@ -19,10 +19,11 @@ public interface PrintOrderService {
 	
 	public ArrayList<PrintOrder> selectPrintOrderList(Paging paging);
 	
-	public int poinsert(PrintOrder printOrder);
+	public int printOrderUpdate(PrintOrder printOrder);
 	
-	public int poupdate(PrintOrder printOrder);
+	public int selectMaxPrintOrderId();
 	
+	public int insertPrintOrder(PrintOrder printOrder);
 	
-	
+	public int deletePrintOrder(int orderId);
 }

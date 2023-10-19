@@ -63,21 +63,24 @@ $('#cancel').click(function(){
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#btn_delete').click(function(){
-			const selectedCheckbox = $('input[name="selecteItems"]:checked');
-			const selectedPrintOrder = [];
+			const selectedCheckbox = $('input[name="check"]:checked');
+			const selectedPrintOrderIds = [];
 			
 			selectedCheckbox.each(function(){
-				selectedPrintOrder.push($(this).val());
+				var p_id = $(this).parent().parent().attr('id');
+				selectedPrintOrderIds.push(p_id.split('_').pop());
+				
+				
 			});
-			
-			if(selectedPrintOrder.length === 0){
+			console.log(selectedPrintOrderIds);
+			if(selectedPrintOrderIds.length === 0){
 				alert('선택된 항목이 없습니다.');
 			} else{
 				$.ajax({
 					url: 'podelete.do',
 					type: 'post',
 					dataType: 'json',
-					data: { selectedPrintOrder: selectedPrintOrder.join(',') },
+					data: { selectedPrintOrderIds: selectedPrintOrderIds.join(',') },
 					success: function(response){
 						alert('선택한 인쇄소가 없습니다.');
 						location.reload();
@@ -329,7 +332,7 @@ $('#cancel').click(function(){
 								</tr>
 								<c:if test="${ !empty list }">
 									<c:forEach items="${ list }" var="printOrder">
-										<tr id="printtr_${ printOrder.printId }" data-parent="1" data-num="1" data-depth="1"
+										<tr id="printtr_${ printOrder.orderId }" data-parent="1" data-num="1" data-depth="1"
 											class="table-td-depth1">
 											<td class="td-50"><input type="checkbox" name="check" value=""></td>
 											<td class="td-100">
@@ -427,7 +430,7 @@ $('#cancel').click(function(){
 
 
 				<div class="submit-box">
-					<button class="contents-input-btn big noline" id="btn_delete">선택삭제</button> 
+					<button type="button" class="contents-input-btn big noline" id="btn_delete">선택삭제</button> 
 				</div>
 
 			</div>

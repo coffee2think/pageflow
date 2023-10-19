@@ -35,7 +35,7 @@ public class EditDao {
 	}
 	
 	// 편집 조회
-	public Edit selectEdit(String editId) {
+	public Edit selectEdit(int editId) {
 		return sqlSessionTemplate.selectOne("publishMapper.selectEdit", editId);
 	}
 	
@@ -50,7 +50,12 @@ public class EditDao {
 	}
 	
 	// 편집 삭제
-	public int deleteEdit(String editId) {
+	public int deleteEdit(int editId) {
 		return sqlSessionTemplate.delete("publishMapper.deleteEdit", editId);
+	}
+	
+	// 편집 등록 편집번호 +1 처리
+	public int selectMaxEditId() {
+		return sqlSessionTemplate.selectOne("publishMapper.selectMaxEditId");
 	}
 }

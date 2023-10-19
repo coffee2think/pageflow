@@ -49,7 +49,12 @@ public class BookDao {
 	}
 	
 	// 도서 삭제
-	public int deleteBook(String bookId) {
+	public int deleteBook(int bookId) {
 		return sqlSessionTemplate.delete("publishMapper.deleteBook", bookId);
+	}
+	
+	// 도서 등록 도서번호 +1 처리
+	public int selectMaxBookId() {
+		return sqlSessionTemplate.selectOne("publishMapper.selectMaxBookId");
 	}
 }

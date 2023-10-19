@@ -30,7 +30,7 @@ public class WriterServiceImpl implements WriterService{
 	}
 	
 	@Override
-	public Writer selectWriter(String writerId) {
+	public Writer selectWriter(int writerId) {
 		return writerDao.selectWriter(writerId);
 	}
 	
@@ -45,7 +45,12 @@ public class WriterServiceImpl implements WriterService{
 	}
 	
 	@Override
-	public int deleteWriter(String writerId) {
+	public int deleteWriter(int writerId) {
 		return writerDao.deleteWriter(writerId);
+	}
+	
+	@Override
+	public int selectMaxWriterId() {
+		return writerDao.selectMaxWriterId();
 	}
 }

@@ -1,13 +1,13 @@
 package com.erl.pageflow.store.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,7 +74,7 @@ public class StoreController {
 		}
 
 		if (list != null && list.size() > 0) {
-			model.addAttribute("storeList", list);
+			model.addAttribute("relList", list);
 			model.addAttribute("paging", paging);
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
@@ -163,31 +163,23 @@ public class StoreController {
 	@RequestMapping("releasedate.do")
 	public String selectReleaseByDate(Search search, @RequestParam(name = "page", required = false) String page,
 			@RequestParam(name = "limit", required = false) String limitStr, Model model) {
-		int currentPage = 1;
-		int limit = 10;
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 
-		int listCount = storeService.selectReleaseCountByDate(search);
+		int listCount = storeService.selectStoreCountByDate(search);
 
 		Paging paging = new Paging(listCount, currentPage, limit, "releasedate.do");
-		paging.calculator();
 
+		paging.calculator();
 		search.setStartRow(paging.getStartRow());
 		search.setEndRow(paging.getEndRow());
 
-		ArrayList<Store> list = storeService.selectReleaseByDate(search);
-		// logger.info("search : " + search);
+		ArrayList<Store> list = storeService.selectStoreByDate(search);
+		logger.info("search : " + search);
+
 		if (list != null && list.size() > 0) {
-			for (Store sto : list) {
-				String bname = storeService.selectStoreBookName(sto.getBookId());
-				String cname = storeService.selectStoreClientName(sto.getStorageId());
-				int bprice = storeService.selectStoreBookPrice(sto.getBookId());
 
-				sto.setBookName(bname);
-				sto.setClientName(cname);
-				sto.setBookPrice(bprice);
-			}
-
-			model.addAttribute("list", list);
+			model.addAttribute("relList", list);
 			model.addAttribute("begin", search.getBegin().toString());
 			model.addAttribute("end", search.getEnd().toString());
 			model.addAttribute("paging", paging);
@@ -214,11 +206,11 @@ public class StoreController {
 		for (int i = 0; i < storeArray.length; i++) {
 
 			int sId = Integer.parseInt(storeArray[i].toString());
-			logger.info("sId  : "+ sId);
+			logger.info("sId  : " + sId);
 			if (storeService.deleteInventory(sId) > 0) {
-				logger.info("deleteInventory : "+ sId);
+				logger.info("deleteInventory : " + sId);
 				if (storeService.deleteStore(sId) > 0) {
-					logger.info("deleteStore : "+ sId);
+					logger.info("deleteStore : " + sId);
 					count++;
 				} else {
 					model.addAttribute("message", sId + "번 입고 삭제 실패");
@@ -273,7 +265,7 @@ public class StoreController {
 
 	// 입고 키워드로 검색
 	@RequestMapping(value = "stoselectkeyword.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public String selectInvenSearchKeyword(Search search, @RequestParam(name = "searchType") String searchType,
+	public String selectStoreSearchKeyword(Search search, @RequestParam(name = "searchType") String searchType,
 			@RequestParam(name = "page", required = false) String page,
 			@RequestParam(name = "limit", required = false) String limitStr, Model model) {
 
@@ -337,6 +329,151 @@ public class StoreController {
 			return "common/error";
 		}
 
+	}
+
+	// 출고 키워드로 검색
+	@RequestMapping(value = "relselectkeyword.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String selectReleaseSearchKeyword(Search search, @RequestParam(name = "searchType") String searchType,
+			@RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String limitStr, Model model) {
+
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+
+		int listCount = 0;
+
+		logger.info("searchType : " + searchType);
+
+		switch (searchType) {
+		case "bookId":
+			listCount = storeService.selectReleaseCountByBookId(search);
+			break;
+		case "bookName":
+			listCount = storeService.selectReleaseCountByBookName(search);
+			break;
+		case "empName":
+			listCount = storeService.selectReleaseCountByEmpName(search);
+			break;
+		case "clientName":
+			listCount = storeService.selectReleaseCountByClientName(search);
+			break;
+		}
+
+		Paging paging = new Paging(listCount, currentPage, limit, "relselectkeyword.do");
+		paging.calculator();
+
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+
+		logger.info("search : " + search);
+		ArrayList<Store> list = null;
+
+		switch (searchType) {
+		case "bookId":
+			list = storeService.selectReleaseByBookId(search);
+			break;
+		case "bookName":
+			list = storeService.selectReleaseByBookName(search);
+			break;
+		case "empName":
+			list = storeService.selectReleaseByEmpName(search);
+			break;
+		case "clientName":
+			list = storeService.selectReleaseByClientName(search);
+			break;
+		}
+		if (list != null && list.size() > 0) {
+
+			model.addAttribute("searchType", searchType);
+			model.addAttribute("keyword", search.getKeyword());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			model.addAttribute("relList", list);
+
+			return "inventory/release_list";
+		} else {
+			model.addAttribute("message", "키워드 검색 실패");
+			return "common/error";
+		}
+
+	}
+
+	@RequestMapping(value = "stoinsert.do", method = RequestMethod.POST)
+	public String insertStore(HttpServletRequest request, Model model) {
+		String[] bookIds = request.getParameterValues("bookId");
+		String[] storageIds = request.getParameterValues("storageId");
+		String[] empIds = request.getParameterValues("empId");
+		String[] empNames = request.getParameterValues("empName");
+		String[] storeNums = request.getParameterValues("storeNum");
+		String[] storePrice = request.getParameterValues("storePrice");
+		String[] storeDate = request.getParameterValues("storeDate");
+		// ----------------------------------------
+		String[] prevInvenIds = request.getParameterValues("prevInvenId");
+		String[] currInvens = request.getParameterValues("currInven");
+		
+		int storeId = storeService.selectMaxStoreId() + 1;
+
+		ArrayList<Store> storeList = new ArrayList<>();
+		
+		for (int i = 0; i < bookIds.length; i++) {
+			Store store = new Store();
+
+			store.setStoreId(storeId);
+			store.setBookId(Integer.parseInt(bookIds[i]));
+			store.setStorageId(Integer.parseInt(storageIds[i]));
+			store.setEmpId(Integer.parseInt(empIds[i]));
+			store.setEmpName(empNames[i]);
+			store.setStoreNum(Integer.parseInt(storeNums[i]));
+			store.setStorePrice(Integer.parseInt(storePrice[i]));
+			store.setStoreDate(Date.valueOf(storeDate[i]));
+			store.setPrevInvenId(Integer.parseInt(prevInvenIds[i]));
+			store.setCurrInven(Integer.parseInt(currInvens[i]));
+			
+			storeList.add(store);
+		}
+
+		logger.info("storeList : " + storeList);
+		for (Store store : storeList) {
+			if (storeService.insertStore(store) > 0 && storeService.insertInventory(store) > 0) {
+
+				int preinvenId = storeService.selectPreInvenId();
+				store.setPrevInvenId(preinvenId);
+
+				int currInven = storeService.selectCurrInven();
+				store.setCurrInven(currInven);
+				
+				logger.info("currInven : " + currInven);
+			}
+		}
+		model.addAttribute("message", "입고 등록 실패!");
+		return "common/error";
+	}
+
+	@RequestMapping(value = "stoupdate.do", method = RequestMethod.POST)
+	public void storeUpdate(Store store, HttpServletResponse response) throws IOException {
+
+		String returnStr = null;
+		if (storeService.updateStore(store) > 0) {
+
+			int preinvenId = storeService.selectPreInvenId();
+			store.setPrevInvenId(preinvenId);
+
+			int currInven = storeService.selectCurrInven();
+			store.setPrevInvenId(currInven);
+
+			if (storeService.updateInventory(store) > 0) {
+				returnStr = "success";
+			}
+		} else {
+			returnStr = "false";
+		}
+
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.append(returnStr);
+		out.flush();
+		out.close();
 	}
 
 }

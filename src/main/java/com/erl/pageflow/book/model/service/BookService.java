@@ -25,5 +25,9 @@ public interface BookService {
 	public int updateBook(Book book);
 	
 	// 도서 삭제
-	public int deleteBook(String bookId);
+	public int deleteBook(int bookId);
+	
+	// 도서 등록 도서번호 +1 처리
+	public int selectMaxBookId();
+	
 }

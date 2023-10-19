@@ -61,53 +61,116 @@ public class StoreDao {
 		return (ArrayList<Store>) list;
 	}
 
-	
 	public int deleteStore(int storeId) {
 		return sqlSessionTemplate.delete("storeMapper.deleteStore", storeId);
 	}
-	
+
 	public int deleteRelease(int storeId) {
 		return sqlSessionTemplate.delete("storeMapper.deleteRelease", storeId);
 	}
-	
+
 	public int deleteInventory(int storeId) {
 		return sqlSessionTemplate.delete("storeMapper.deleteInventory", storeId);
 	}
-	
+
 	public int selectStoreCountByBookId(Search search) {
 		return sqlSessionTemplate.selectOne("storeMapper.selectStoreCountByBookId", search);
 	}
-	
+
 	public int selectStoreCountByBookName(Search search) {
 		return sqlSessionTemplate.selectOne("storeMapper.selectStoreCountByBookName", search);
 	}
-	
+
 	public int selectStoreCountByEmpName(Search search) {
 		return sqlSessionTemplate.selectOne("storeMapper.selectStoreCountByEmpName", search);
 	}
-	
+
 	public int selectStoreCountByClientName(Search search) {
 		return sqlSessionTemplate.selectOne("storeMapper.selectStoreCountByClientName", search);
 	}
-	
+
 	public ArrayList<Store> selectStoreByBookId(Search search) {
 		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectStoreByBookId", search);
 		return (ArrayList<Store>) list;
 	}
-	
+
 	public ArrayList<Store> selectStoreByBookName(Search search) {
 		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectStoreByBookName", search);
 		return (ArrayList<Store>) list;
 	}
-	
+
 	public ArrayList<Store> selectStoreByEmpName(Search search) {
 		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectStoreByEmpName", search);
 		return (ArrayList<Store>) list;
 	}
-	
+
 	public ArrayList<Store> selectStoreByClientName(Search search) {
 		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectStoreByClientName", search);
 		return (ArrayList<Store>) list;
+	}
+
+	public int selectReleaseCountByBookId(Search search) {
+		return sqlSessionTemplate.selectOne("storeMapper.selectReleaseCountByBookId", search);
+	}
+
+	public int selectReleaseCountByBookName(Search search) {
+		return sqlSessionTemplate.selectOne("storeMapper.selectReleaseCountByBookName", search);
+	}
+
+	public int selectReleaseCountByEmpName(Search search) {
+		return sqlSessionTemplate.selectOne("storeMapper.selectReleaseCountByEmpName", search);
+	}
+
+	public int selectReleaseCountByClientName(Search search) {
+		return sqlSessionTemplate.selectOne("storeMapper.selectReleaseCountByClientName", search);
+	}
+
+	public ArrayList<Store> selectReleaseByBookId(Search search) {
+		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectReleaseByBookId", search);
+		return (ArrayList<Store>) list;
+	}
+
+	public ArrayList<Store> selectReleaseByBookName(Search search) {
+		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectReleaseByBookName", search);
+		return (ArrayList<Store>) list;
+	}
+
+	public ArrayList<Store> selectReleaseByEmpName(Search search) {
+		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectReleaseByEmpName", search);
+		return (ArrayList<Store>) list;
+	}
+
+	public ArrayList<Store> selectReleaseByClientName(Search search) {
+		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectReleaseByClientName", search);
+		return (ArrayList<Store>) list;
+	}
+
+	public int insertStore(Store store) {
+		return sqlSessionTemplate.insert("storeMapper.insertStore", store);
+	}
+
+	public int insertInventory(Store store) {
+		return sqlSessionTemplate.insert("storeMapper.insertInventory", store);
+	}
+
+	public int selectPreInvenId() {
+		return sqlSessionTemplate.selectOne("storeMapper.selectPreInvenId");
+	}
+
+	public int selectCurrInven() {
+		return sqlSessionTemplate.selectOne("storeMapper.selectCurrInven");
+	}
+
+	public int updateStore(Store store) {
+		return sqlSessionTemplate.update("storeMapper.updateStore", store);
+	}
+
+	public int updateInventory(Store store) {
+		return sqlSessionTemplate.update("storeMapper.updateInventory", store);
+	}
+	
+	public int selectMaxStoreId() {
+		return sqlSessionTemplate.selectOne("storeMapper.selectMaxStoreId");
 	}
 	
 

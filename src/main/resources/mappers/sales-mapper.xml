@@ -282,5 +282,13 @@
 	<select id="selectMaxOrderId" resultType="_int">
 		select nvl(max(order_id), 0) from book_order
 	</select>
+	
+	<select id="selectSalesCountForStats" resultType="_int">
+		
+	</select>
+	
+	<select id="selectSalesForStats" parameterType="Paging" resultMap="resultSales">
+		
+	</select>
 
 </mapper>

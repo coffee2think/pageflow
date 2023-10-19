@@ -52,7 +52,7 @@ Popup.prototype = {
     ,
     insertVal : function(){
 		console.log('curinput : ' + curinput);
-		setList();
+		//setList();
 	}
 	,
 	showPopup:function(type){
@@ -63,7 +63,6 @@ Popup.prototype = {
 		})
     	$('#' + type).show();
 	}
-
     ,
     append:function(data){
         var str = `
@@ -149,11 +148,5 @@ Popup.prototype = {
         </tr>
         `
         $('.contents-table').append(str);
-
-
     }
-
-
-
-
 }
