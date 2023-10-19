@@ -45,13 +45,23 @@ public class PrintOrderDao {
 		return (ArrayList<PrintOrder>) list;
 	}
 	
-	//발주 등록
-	public int poinsert(PrintOrder printOrder) {
-		return sqlSessionTemplate.insert("printMapper.poinsert", printOrder);
+	//발주 수정
+	public int printOrderUpdate(PrintOrder printOrder) {
+		return sqlSessionTemplate.insert("printMapper.printOrderUpdate", printOrder);
 	}
 	
-	//발주 수정
-	public int poupdate(PrintOrder printOrder) {
-		return sqlSessionTemplate.insert("printMapper.poupdate", printOrder);
+	//
+	public int selectMaxPrintOrderId() {
+		return sqlSessionTemplate.selectOne("printMapper.selectMaxPrintOrderId");
+	}
+	
+	//발주 등록
+	public int insertPrintOrder(PrintOrder printOrder) {
+		return sqlSessionTemplate.insert("printMapper.insertPrintOrder", printOrder);
+	}
+	
+	//발주 삭제
+	public int deletePrintOrder(int orderId) {
+		return sqlSessionTemplate.delete("printMapper.deletePrintOrder", orderId);
 	}
 }
