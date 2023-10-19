@@ -19,6 +19,16 @@
 	const NOWPAGE = 1;
 	const SUBPAGE = 1;
 	const LNKPAGE = 1;
+	
+	function search(){
+		url = "nsearch.do?action=" + $("#sel_code").val() + "&keyword=" + $("#nkeyword").val();
+		location.href = url;
+		console.log(url);
+		
+
+				
+	}
+	
 </script>
 </head>
 <body>
@@ -42,8 +52,7 @@
 				<div class="side-container">
 					<div class="side-title"></div>
 					<div class="side-icon-box">
-						  <a href="nemoveinsert.do?empId=${ empId }" class="side-write-btn">글쓰기</a>
-							class="side-write-btn margin-bottom-0">글쓰기</a>
+						  <a href="nemoveinsert.do?empId=${ empId }" class="side-write-btn">글쓰기</a>		
 					</div>
 
 					<!-- 리스트 들어감 -->
@@ -70,28 +79,30 @@
 				<div class="main-contents-box">
 
 					<!--서치영역-->
+					
+					
 					<div class="search-container noline">
 						<form class="search-form">
 
 							<div class="select-search">
 								<div class="select-box">
 									<div class="select-pan">
-										<label for="sel_code"></label> <select name="code"
+										<label for="sel_code"></label> <select name="action"
 											id="sel_code">
-											<option value="">내용</option>
-											<option value="">작성자</option>
+											<option value="title">제목</option>
+											<option value="writer">작성자</option>
 
 										</select>
 									</div>
 								</div>
 
 								<div class="search-box">
-									<button class="search-btn">
+									<button class="search-btn" onclick="search(); return false;">
 										<img class="search-image"
 											src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
 									</button>
-									<input type="text" placeholder="키워드를 입력하세요."
-										class="search-box-text" value="">
+									<input type="search" placeholder="키워드를 입력하세요." name="keyword"
+										class="search-box-text" value="" id="nkeyword">
 								</div>
 							</div>
 
@@ -125,9 +136,8 @@
 
 					<!--컨텐츠영역-->
 					
-					
-					
-					
+					<%-- 조회된 공지사항 목록 출력 --%>
+									
 
 					<div class="contents-container sort-row">
 						<div class="contents-box notice">
@@ -148,23 +158,27 @@
 									</div>
 
 									<div class="contents-notice-line">
-										<span>${notice.noticeId }</span> 
+										<span>${notice.noticeId }</span>
+										<span>|</span> 
 										<span>${notice.empName}</span>
+										<span>|</span>
 										<span>${notice.noticeCreateDate }</span>
+										<span>|</span>
 										<span>${notice.importance }</span>
 										<c:if test="${ notice.importance eq 'Y' }">
 											<span>필독!</span>
 										</c:if> 
+										<span>|</span>
 										<span>${notice.noticeReadCount }</span>
+										<span>|</span>
 										<span>${notice.noticeOriginalFileName }</span> 
 										<c:if test="${ !empty notice.noticeOriginalFileName  }">
 											<p>◎</p>
-										</c:if> 
+										</c:if>
+										<span>|</span> 
 										
 										<span>${notice.noticeRenameFileName }</span>
-										<span><img
-											src="${ pageContext.servletContext.contextPath }/resources/images/msg.png">
-											0</span> <span>|</span>
+										 <span>|</span>
 									</div>
 							</c:forEach>
 							</a>
@@ -188,7 +202,7 @@
 			</div>
 			<!--main-container end-->
 
-			<%-- 조회된 공지사항 목록 출력 --%>
+			
 
 			<br>
 
