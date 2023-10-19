@@ -95,3 +95,15 @@ values (1, 1, 1, 'icon.png', '202310140305.png');
 insert into upload_reply 
 values (1, 1, 'mascot.png', '202310140306.png');
 
+
+insert into draft
+values ('annual', '연차신청서');
+
+insert into approval
+values (1, 1, 3, 'annual', null, 'draft', sysdate, null, null);
+commit;
+
+
+insert into draft_annual 
+values (1, 'annual', '연차를 신청합니다. 병원방문', '010-1234-1234', '2023-10-19', '2023-10-23');
+commit;

@@ -18,17 +18,18 @@
     const LNKPAGE = 1;
     
 $(function(){
-	$('#poupdate.do').click(function(){
+	
+	
+	$('${ printOrder.printId }').click(function(){
 		
-		var inputs = document.getElementsByClassName('contents-input-div changeable');
+		var inputs = $('.changeable input');
 		
-		for(var i = 0; i< inputs.length; i++){
-			inputs[i].readOnly = false;
-		}
 		
-		for(var i = 0; i< inputs.length; i++){
-			inputs[i].readOnly = true;
-		}
+		inputs.each(function(){
+			$(this).attr('readonly', false);
+		});
+		
+		console.log("=========================확인============================");
 		
 		//ajax 사용
 		$.ajax({
@@ -45,11 +46,51 @@ $(function(){
 					alert("수정되었습니다.");
 				}
 			}	
-		})		//ajax 의 닫기태그
-	})			//click 의 닫기태그
+		});		//ajax 의 닫기태그
+	});			//click 의 닫기태그
+	
+$('#cancel').click(function(){
+		
+		var inputs = document.getElementsByClassName('contents-input-div changeable');
+		
+		for(var i = 0; i< inputs.length; i++){
+			inputs[i].readonly = true;
+			}
+	});	
 })				//document.ready 의 닫기 태그    
 </script>
 <title></title>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#btn_delete').click(function(){
+			const selectedCheckbox = $('input[name="selecteItems"]:checked');
+			const selectedPrintOrder = [];
+			
+			selectedCheckbox.each(function(){
+				selectedPrintOrder.push($(this).val());
+			});
+			
+			if(selectedPrintOrder.length === 0){
+				alert('선택된 항목이 없습니다.');
+			} else{
+				$.ajax({
+					url: 'podelete.do',
+					type: 'post',
+					dataType: 'json',
+					data: { selectedPrintOrder: selectedPrintOrder.join(',') },
+					success: function(response){
+						alert('선택한 인쇄소가 없습니다.');
+						location.reload();
+					},
+					error: function(){
+						alert('삭제 실패! 관리자에게 문의 하세요');
+					}
+				});
+			}
+		});
+	});
+</script>
+
 </head>
 <body>
 	<div id="container">
@@ -284,7 +325,7 @@ $(function(){
 									<th>단가</th>
 									<th>합계</th>
 									<th>상태</th>
-									<th>수정</th>
+									<th>수정</th>  
 								</tr>
 								<c:if test="${ !empty list }">
 									<c:forEach items="${ list }" var="printOrder">
@@ -364,7 +405,14 @@ $(function(){
 												</div>
 											</td>
 											<td class="td-70">
-												<input type="button" name="update" class="contents-input-btn noline" value="수정">
+												<input id="updateBtn_${ printOrder.printId }" type="button" name="update" class="contents-input-btn noline" 
+												value="수정" onclick="onUpdate(${ printOrder.printId }); return false;">
+												
+												<input id="completeBtn_${ printOrder.printId }" type="button" name="update" class="contents-input-btn noline" 
+												value="완료" onclick="submitUpdate(${ printOrder.printId }, 'poupdate.do'); return false;" style="display: none;">
+												
+												<input id="cancelBtn_${ printOrder.printId }" type="button" name="update" class="contents-input-btn noline" 
+												value="취소" onclick="cancelUpdate(${ printOrder.printId }); return false;" style="display: none;">
 											</td>
 										</tr>
 									</c:forEach>
@@ -379,8 +427,7 @@ $(function(){
 
 
 				<div class="submit-box">
-					<input type="button" class="contents-input-btn big noline"
-						id="btn_delete" value="선택삭제">
+					<button class="contents-input-btn big noline" id="btn_delete">선택삭제</button> 
 				</div>
 
 			</div>

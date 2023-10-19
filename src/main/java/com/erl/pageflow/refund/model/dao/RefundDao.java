@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
+import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.refund.model.vo.Refund;
-
 
 @Repository("refundDao")
 public class RefundDao {
@@ -37,21 +37,58 @@ public class RefundDao {
 	public int selectRefundBookPrice(int bookId) {
 		return sqlSessionTemplate.selectOne("refundMapper.selectRefundBookPrice", bookId);
 	}
-	
+
 	public int selectRefundCountByDate(Search search) {
 		return sqlSessionTemplate.selectOne("refundMapper.selectRefundCountByDate", search);
 	}
-	
+
 	public ArrayList<Refund> selectRefundByDate(Search search) {
 		List<Refund> list = sqlSessionTemplate.selectList("refundMapper.selectRefundByDate", search);
 		return (ArrayList<Refund>) list;
 	}
-	
+
 	public int deleteRefund(int refundId) {
 		return sqlSessionTemplate.delete("refundMapper.deleteRefund", refundId);
 	}
-	
+
 	public int deleteInventory(int refundId) {
 		return sqlSessionTemplate.delete("refundMapper.deleteInventory", refundId);
 	}
+
+	public int selectrefundCountByBookId(Search search) {
+		return sqlSessionTemplate.selectOne("refundMapper.selectrefundCountByBookId", search);
+	}
+
+	public int selectrefundCountByBookName(Search search) {
+		return sqlSessionTemplate.selectOne("refundMapper.selectrefundCountByBookName", search);
+	}
+
+	public int selectrefundCountByEmpName(Search search) {
+		return sqlSessionTemplate.selectOne("refundMapper.selectrefundCountByEmpName", search);
+	}
+
+	public int selectrefundCountByClientName(Search search) {
+		return sqlSessionTemplate.selectOne("refundMapper.selectrefundCountByClientName", search);
+	}
+
+	public ArrayList<Refund> selectrefundBybookId(Search search) {
+		List<Refund> list = sqlSessionTemplate.selectList("refundMapper.selectrefundBybookId", search);
+		return (ArrayList<Refund>) list;
+	}
+
+	public ArrayList<Refund> selectrefundBybookName(Search search) {
+		List<Refund> list = sqlSessionTemplate.selectList("refundMapper.selectrefundBybookName", search);
+		return (ArrayList<Refund>) list;
+	}
+
+	public ArrayList<Refund> selectrefundByEmpName(Search search) {
+		List<Refund> list = sqlSessionTemplate.selectList("refundMapper.selectrefundByEmpName", search);
+		return (ArrayList<Refund>) list;
+	}
+
+	public ArrayList<Refund> selectrefundByClientName(Search search) {
+		List<Refund> list = sqlSessionTemplate.selectList("refundMapper.selectrefundByClientName", search);
+		return (ArrayList<Refund>) list;
+	}
+
 }

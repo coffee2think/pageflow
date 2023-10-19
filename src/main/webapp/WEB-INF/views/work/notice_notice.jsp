@@ -29,10 +29,10 @@
             }
     	});
     	
-    	//보드 삭제
+    	//공지사항 삭제
     	$('.notice-delete').on('click', function(){
     		if(confirm('정말 삭제하시겠습니까?')) {
-                location.href = 'bddelete.do?notice=${ notice }';
+                location.href = 'ndelete.do?noticeId=${ notice.noticeId }';
             }
     	});
 	});
