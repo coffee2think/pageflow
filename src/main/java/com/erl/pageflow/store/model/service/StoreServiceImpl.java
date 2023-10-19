@@ -82,4 +82,44 @@ public class StoreServiceImpl implements StoreService {
 		return storeDao.deleteRelease(storeId);
 	}
 
+	@Override
+	public int selectStoreCountByBookId(Search search) {
+		return storeDao.selectStoreCountByBookId(search);
+	}
+
+	@Override
+	public int selectStoreCountByBookName(Search search) {
+		return storeDao.selectStoreCountByBookName(search);
+	}
+
+	@Override
+	public int selectStoreCountByEmpName(Search search) {
+		return storeDao.selectStoreCountByEmpName(search);
+	}
+
+	@Override
+	public int selectStoreCountByClientName(Search search) {
+		return storeDao.selectStoreCountByClientName(search);
+	}
+
+	@Override
+	public ArrayList<Store> selectStoreByBookId(Search search) {
+		return storeDao.selectStoreByBookId(search);
+	}
+
+	@Override
+	public ArrayList<Store> selectStoreByBookName(Search search) {
+		return storeDao.selectStoreByBookName(search);
+	}
+
+	@Override
+	public ArrayList<Store> selectStoreByEmpName(Search search) {
+		return storeDao.selectStoreByEmpName(search);
+	}
+
+	@Override
+	public ArrayList<Store> selectStoreByClientName(Search search) {
+		return storeDao.selectStoreByClientName(search);
+	}
+
 }

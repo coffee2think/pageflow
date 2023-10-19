@@ -62,27 +62,27 @@ public class InventoryServiceImpl implements InventoryService {
 
 	@Override
 	public int selectInventoryCountBybookName(Search search) {
-		return inventoryDao.selectInventoryCountBybookId(search);
+		return inventoryDao.selectInventoryCountBybookName(search);
 	}
 
 	@Override
 	public int selectInventoryCountBystorageName(Search search) {
-		return inventoryDao.selectInventoryCountBybookId(search);
+		return inventoryDao.selectInventoryCountBystorageName(search);
 	}
 
 	@Override
 	public int selectInventoryCountBystore(Search search) {
-		return inventoryDao.selectInventoryCountBybookId(search);
+		return inventoryDao.selectInventoryCountBystore(search);
 	}
 
 	@Override
 	public int selectInventoryCountByrelease(Search search) {
-		return inventoryDao.selectInventoryCountBybookId(search);
+		return inventoryDao.selectInventoryCountByrelease(search);
 	}
 
 	@Override
 	public int selectInventoryCountByrefund(Search search) {
-		return inventoryDao.selectInventoryCountBybookId(search);
+		return inventoryDao.selectInventoryCountByrefund(search);
 	}
 
 	@Override

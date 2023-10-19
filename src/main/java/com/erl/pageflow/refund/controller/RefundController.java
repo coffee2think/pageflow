@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
+import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.refund.model.service.RefundService;
 import com.erl.pageflow.refund.model.vo.Refund;
 
@@ -62,7 +63,7 @@ public class RefundController {
 		}
 
 		if (list != null && list.size() > 0) {
-			model.addAttribute("list", list);
+			model.addAttribute("refundList", list);
 			model.addAttribute("paging", paging);
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
@@ -78,31 +79,22 @@ public class RefundController {
 	@RequestMapping("refunddate.do")
 	public String selectReleaseByDate(Search search, @RequestParam(name = "page", required = false) String page,
 			@RequestParam(name = "limit", required = false) String limitStr, Model model) {
-		int currentPage = 1;
-		int limit = 10;
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 
 		int listCount = refundService.selectRefundCountByDate(search);
 
 		Paging paging = new Paging(listCount, currentPage, limit, "refunddate.do");
-		paging.calculator();
 
+		paging.calculator();
 		search.setStartRow(paging.getStartRow());
 		search.setEndRow(paging.getEndRow());
 
 		ArrayList<Refund> list = refundService.selectRefundByDate(search);
 		logger.info("search : " + search);
+
 		if (list != null && list.size() > 0) {
-			for (Refund ref : list) {
-				String bname = refundService.selectRefundBookName(ref.getBookId());
-				String cname = refundService.selectRefundClientName(ref.getClientId());
-				int bprice = refundService.selectRefundBookPrice(ref.getBookId());
-
-				ref.setBookName(bname);
-				ref.setClientName(cname);
-				ref.setBookPrice(bprice);
-			}
-
-			model.addAttribute("list", list);
+			model.addAttribute("refundList", list);
 			model.addAttribute("begin", search.getBegin().toString());
 			model.addAttribute("end", search.getEnd().toString());
 			model.addAttribute("paging", paging);
@@ -116,42 +108,112 @@ public class RefundController {
 		}
 
 	}
-	
+
 	// 반품 삭제
-		@RequestMapping(value = "redelect.do", method = RequestMethod.POST)
-		@ResponseBody
-		public void deleteRefund(@RequestParam(name = "selectedRefundIds") String selectedRefundIds,
-				HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
+	@RequestMapping(value = "redelect.do", method = RequestMethod.POST)
+	@ResponseBody
+	public void deleteRefund(@RequestParam(name = "selectedRefundIds") String selectedRefundIds,
+			HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
 
-			int count = 0;
-			String[] refundArray = selectedRefundIds.split(",");
-			// logger.info("selectedStoreIds" + selectedStoreIds);
-			// logger.info("storeArray length : " + storeArray.length);
-			for (int i = 0; i < refundArray.length; i++) {
+		int count = 0;
+		String[] refundArray = selectedRefundIds.split(",");
+		// logger.info("selectedStoreIds" + selectedStoreIds);
+		// logger.info("storeArray length : " + storeArray.length);
+		for (int i = 0; i < refundArray.length; i++) {
 
-				int sId = Integer.parseInt(refundArray[i].toString());
+			int sId = Integer.parseInt(refundArray[i].toString());
 
-				if (refundService.deleteInventory(sId) > 0) {
+			if (refundService.deleteInventory(sId) > 0) {
 
-					// logger.info("deleteInventory " + i);
-					if (refundService.deleteRefund(sId) > 0) {
-						// logger.info("deleteStore " + i);
-						count++;
-					} else {
-						model.addAttribute("message", sId + "번 반품 삭제 실패");
-						// return "common/error";
-					}
+				// logger.info("deleteInventory " + i);
+				if (refundService.deleteRefund(sId) > 0) {
+					// logger.info("deleteStore " + i);
+					count++;
 				} else {
-					model.addAttribute("message", sId + "번 재고 삭제 실패");
+					model.addAttribute("message", sId + "번 반품 삭제 실패");
 					// return "common/error";
 				}
+			} else {
+				model.addAttribute("message", sId + "번 재고 삭제 실패");
+				// return "common/error";
 			}
-
-			// return "redirect:storelist.do";
-			if (count >= refundArray.length) {
-				response.getWriter().append(String.valueOf(count)).flush();
-			}
-
 		}
+
+		// return "redirect:storelist.do";
+		if (count >= refundArray.length) {
+			response.getWriter().append(String.valueOf(count)).flush();
+		}
+
+	}
+	
+	// 반품 키워드 검색
+	
+	@RequestMapping(value = "refselectkeyword.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String selectInvenSearchKeyword(Search search, @RequestParam(name = "searchType") String searchType,
+			@RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String limitStr, Model model) {
+
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+
+		int listCount = 0;
+
+		logger.info("searchType : " + searchType);
+
+		switch (searchType) {
+		case "bookId":
+			listCount = refundService.selectrefundCountByBookId(search);
+			break;
+		case "bookName":
+			listCount = refundService.selectrefundCountByBookName(search);
+			break;
+		case "empName":
+			listCount = refundService.selectrefundCountByEmpName(search);
+			break;
+		case "clientName":
+			listCount = refundService.selectrefundCountByClientName(search);
+			break;
+		}
+
+		Paging paging = new Paging(listCount, currentPage, limit, "refselectkeyword.do");
+		paging.calculator();
+
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+
+		logger.info("search : " + search);
+		ArrayList<Refund> list = null;
+
+		switch (searchType) {
+		case "bookId":
+			list = refundService.selectrefundBybookId(search);
+			break;
+		case "bookName":
+			list = refundService.selectrefundBybookName(search);
+			break;
+		case "empName":
+			list = refundService.selectrefundByEmpName(search);
+			break;
+		case "clientName":
+			list = refundService.selectrefundByClientName(search);
+			break;	
+	
+		}
+		if (list != null && list.size() > 0) {
+
+			model.addAttribute("searchType", searchType);
+			model.addAttribute("keyword", search.getKeyword());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			model.addAttribute("refundList", list);
+
+			return "inventory/refund_list";
+		} else {
+			model.addAttribute("message", "키워드 검색 실패");
+			return "common/error";
+		}
+
+	}
 
 }

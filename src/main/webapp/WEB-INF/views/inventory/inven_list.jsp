@@ -6,6 +6,9 @@
 <c:set var="invenList" value="${ requestScope.invenList }" />
 <c:set var="keyword" value="${ requestScope.keyword }" />
 <c:set var="searchType" value="${ requestScope.searchType }" />
+<c:set var="firstType" value="${ requestScope.firstType }" />
+<c:set var="begin" value="${ requestScope.begin }" />
+<c:set var="end" value="${ requestScope.end }" />
 
 <!DOCTYPE html>
 <html>
@@ -47,12 +50,25 @@
         var begin = '<c:out value="${ begin }" />';
     	var end = '<c:out value="${ end }" />';
 		
-    	var url = 'selectkeyword.do?';
+    	var url = 'invselectkeyword.do?';
             url += '&keyword=' + $('.search-box-text').val();
             url += '&searchType='+ $('#sel_code option:selected').val();
             
             location.href = url;
 	}
+	 
+	function searchByDate(dateType) {
+	    	var begin = $('#begin_' + dateType).val();
+	    	var end = $('#end_' + dateType).val();
+	    	
+	    	var url = 'invlistdate.do?';
+	    	url += 'begin=' + begin;
+	    	url += '&end=' + end;
+	    	url += '&dateType=' + dateType;
+	        
+	    	location.href = url;
+	    }
+	
 	
 </script>
 </head>
@@ -140,37 +156,46 @@
 								</div>
 							</div>
 
-							<div class="select-box">
-								<div class="select-pan-nemo">날짜</div>
-								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }> 
-								<input type="date" class="select-date select-date-second" name="end" value=${ end }>
-
-								<c:set var="today_" value="<%=new java.util.Date()%>" />
-								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
-								
-								<c:set var="weekago_" value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 6)%>" />
-								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
-								
-								<c:set var="monthago_" value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 30)%>" />
-								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
-
-								<c:url var="searchWeekUrl" value="invlistdate.do">
-									<c:param name="begin" value="${ weekago }" />
-									<c:param name="end" value="${ today }" />
-									<c:param name="dateType" value="startDate" />
-								</c:url>
-
-								<c:url var="searchMonthUrl" value="invlistdate.do">
-									<c:param name="begin" value="${ monthago }" />
-									<c:param name="end" value="${ today }" />
-									<c:param name="dateType" value="startDate" />
-								</c:url>
-
-								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
-								<input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
-								<input type="button" name="search" class="select-pan-btn" value="검색" onclick="searchByDate('startDate'); return false;">
-							</div>
-						</div>	
+						<div class="select-box">
+						   <div class="select-pan-nemo">날짜 </div>
+						        <c:choose> 
+						            <c:when test="${ !empty firstType and firstType eq 'first' }">
+						                <input type="date" class="select-date select-date-first" id="begin_startDate">
+						                <input type="date" class="select-date select-date-second" id="end_startDate">
+						            </c:when> 
+						            
+						            <c:otherwise>
+						                <input type="date" class="select-date select-date-first" id="begin_startDate" value="${ begin }">
+						                <input type="date" class="select-date select-date-second" id="end_startDate" value="${ end }">
+						            </c:otherwise> 
+						        </c:choose> 
+						        
+						        <c:set var="today_" value="<%= new java.util.Date() %>" />
+						        <fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+						
+						        <c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+						        <fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+						
+		
+						        <c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+						        <fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+						
+						        <c:url var="searchWeekUrl" value="invlistdate.do">
+						            <c:param name="begin" value="${ weekago }" />
+						            <c:param name="end" value="${ today }" />
+						            <c:param name="dateType" value="startDate" />
+						        </c:url>
+						
+						        <c:url var="searchMonthUrl" value="invlistdate.do">
+						            <c:param name="begin" value="${ monthago }" />
+						            <c:param name="end" value="${ today }" />
+						            <c:param name="dateType" value="startDate" />
+						        </c:url>
+						
+						        <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+						        <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+						        <input type="button" name="search" class="select-pan-btn" value="검색" onclick="searchByDate('startDate'); return false;">
+						 </div>
 
 						<div class="paging-box">
 							<!-- 페이징 -->
@@ -208,7 +233,8 @@
 									<c:set var="totalCurrInven" value="0" />
 									<c:forEach var="inv" items="${ invenList }">
 										<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-											<td class="td-50"><input type="checkbox" name="cheack">
+											<td class="td-50">
+											<input type="checkbox" name="cheack">
 											</td>
 											<td class="td-155">
 												<div class="contents-input-div">

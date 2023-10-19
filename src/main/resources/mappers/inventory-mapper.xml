@@ -16,6 +16,8 @@
 		<result property="invenDate" column="INVEN_DATE" />
 		<result property="classify" column="CLASSIFY" />
 		<result property="remark" column="REMARK" />
+		<result property="bookName" column="BOOK_NAME" />
+		<result property="storageName" column="CLIENT_NAME" />
 	</resultMap>
 	
 	<select id="selectGetListCount" resultType="_int">
@@ -53,20 +55,21 @@
 	
 	<select id="selectInventoryCountByDate" parameterType="Search" resultType="_int">
 		SELECT COUNT(*) FROM INVENTORY
-		WHERE INVEN_DATE between to_date(#{ begin }) and to_date(#{ end }) + 1 - 1/86400
+		WHERE INVEN_DATE BETWEEN #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
 	</select>
 	
 	<select id="selectInventoryByDate" parameterType="Search" resultMap="resultInventory">
 		<![CDATA[
-			SELECT *
-			FROM (SELECT ROWNUM RNUM, INVEN_ID, BOOK_ID, STORAGE_ID, STORE_ID, REFUND_ID, PREV_INVEN_ID, INCREASE, CURR_INVEN, INVEN_DATE, CLASSIFY, REMARK 
-			      FROM (SELECT *
-			            FROM INVENTORY
-			            WHERE INVEN_DATE between to_date(#{ begin }) and to_date(#{ end }) + 1 - 1/86400
-			            ORDER BY INVEN_DATE DESC
-			            )
-			      )
-			WHERE RNUM between #{ startRow } and #{ endRow }
+		SELECT *
+		FROM (SELECT ROWNUM RNUM, INVEN_ID, BOOK_ID,  STORAGE_ID, STORE_ID, REFUND_ID, PREV_INVEN_ID, 
+		                            INCREASE, CURR_INVEN, INVEN_DATE, CLASSIFY, REMARK, BOOK_NAME, CLIENT_NAME
+		            FROM (SELECT *
+		                        FROM INVENTORY
+		                        LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+		                        LEFT JOIN BOOK USING (BOOK_ID)   
+		                        WHERE INVEN_DATE BETWEEN #{ begin } AND (TO_DATE(#{ end }) + 1 - 1/86400)))
+		WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
+		ORDER BY INVEN_DATE DESC
 		]]>
 	</select>
 	<select id="selectSearchKeyword" parameterType="string" resultMap="resultInventory">
@@ -120,10 +123,9 @@
 		<![CDATA[
 			SELECT *
 			FROM(SELECT ROWNUM RUM, SUB.*
-			            FROM(SELECT *
-			                        FROM INVENTORY
-			                        WHERE BOOK_ID LIKE '%' || #{ keyword } || '%'
-			                        ORDER BY BOOK_ID DESC) SUB)
+			            FROM(SELECT * FROM INVENTORY
+	                        WHERE BOOK_ID LIKE '%' || #{ keyword } || '%'
+	                        ORDER BY BOOK_ID DESC) SUB)
 			LEFT JOIN BOOK USING (BOOK_ID)
 			LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow }
@@ -133,27 +135,24 @@
 	<select id="selectInventoryBybookName" parameterType="Search" resultMap="resultInventory" >
 		<![CDATA[
 			SELECT *
-			FROM(SELECT ROWNUM RUM, SUB.*
-			            FROM(SELECT *
-			                        FROM INVENTORY
-			                        WHERE BOOK_ID LIKE '%' || #{ keyword } || '%'
-			                        ORDER BY BOOK_ID DESC) SUB)
-			LEFT JOIN BOOK USING (BOOK_ID)
-			LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+						FROM (SELECT ROWNUM RUM, SUB.*
+					           FROM (SELECT * FROM INVENTORY
+			                               LEFT JOIN BOOK USING (BOOK_ID)
+			                              LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+			                                WHERE BOOK_NAME LIKE '%' || #{ keyword } || '%'
+			                                ORDER BY BOOK_ID DESC) SUB)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow }
 		]]>
 	</select>
 	
 	<select id="selectInventoryBystorageName" parameterType="Search" resultMap="resultInventory" >
 		<![CDATA[
-			SELECT *
-			FROM(SELECT ROWNUM RUM, SUB.*
-			            FROM(SELECT *
-			                        FROM INVENTORY
-			                        WHERE BOOK_ID LIKE '%' || #{ keyword } || '%'
-			                        ORDER BY BOOK_ID DESC) SUB)
-			LEFT JOIN BOOK USING (BOOK_ID)
-			LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+			SELECT * FROM(SELECT ROWNUM RUM, SUB.*
+			FROM(SELECT *FROM INVENTORY
+				LEFT JOIN BOOK USING (BOOK_ID)
+                LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+                WHERE CLIENT_NAME LIKE '%' || #{ keyword } || '%'
+                ORDER BY BOOK_ID DESC) SUB)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow }
 		]]>
 	</select>
