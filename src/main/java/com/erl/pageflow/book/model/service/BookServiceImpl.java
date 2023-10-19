@@ -45,7 +45,12 @@ public class BookServiceImpl implements BookService {
 	}
 	
 	@Override
-	public int deleteBook(String bookId) {
+	public int deleteBook(int bookId) {
 		return bookDao.deleteBook(bookId);
+	}
+	
+	@Override
+	public int selectMaxBookId() {
+		return bookDao.selectMaxBookId();
 	}
 }

@@ -34,7 +34,7 @@ public class WriterDao {
 	}
 	
 	// 작가 조회
-	public Writer selectWriter(String writerId) {
+	public Writer selectWriter(int writerId) {
 		return sqlSessionTemplate.selectOne("publishMapper.selectWriter", writerId);
 	}
 	
@@ -49,7 +49,12 @@ public class WriterDao {
 	}
 	
 	// 작가 삭제
-	public int deleteWriter(String writerId) {
+	public int deleteWriter(int writerId) {
 		return sqlSessionTemplate.delete("publishMapper.deleteWriter", writerId);
+	}
+	
+	// 작가 등록 작가번호 +1 처리
+	public int selectMaxWriterId() {
+		return sqlSessionTemplate.selectOne("publishMapper.selectMaxWriterId");
 	}
 }

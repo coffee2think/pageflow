@@ -16,7 +16,7 @@ public interface WriterService {
 	public ArrayList<Writer> selectWriterSearch(Paging paging);
 	
 	// 작가 조회
-	public Writer selectWriter(String writerId);
+	public Writer selectWriter(int writerId);
 	
 	// 작가 등록
 	public int insertWriter(Writer writer);
@@ -25,5 +25,7 @@ public interface WriterService {
 	public int updateWriter(Writer writer);
 	
 	// 작가 삭제
-	public int deleteWriter(String writerId);
+	public int deleteWriter(int writerId);
+	
+	public int selectMaxWriterId();
 }

@@ -30,7 +30,7 @@ public class EditServiceImpl implements EditService {
 	}
 	
 	@Override
-	public Edit selectEdit(String editId) {
+	public Edit selectEdit(int editId) {
 		return editDao.selectEdit(editId);
 	}
 	
@@ -45,7 +45,12 @@ public class EditServiceImpl implements EditService {
 	}
 	
 	@Override
-	public int deleteEdit(String editId) {
+	public int deleteEdit(int editId) {
 		return editDao.deleteEdit(editId);
+	}
+	
+	@Override
+	public int selectMaxEditId() {
+		return editDao.selectMaxEditId();
 	}
 }

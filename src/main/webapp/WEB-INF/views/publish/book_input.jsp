@@ -46,19 +46,12 @@
 		const newCell4 = newRow.insertCell(3);
 		newCell4.setAttribute('class', 'td-70');
 		const newCell5 = newRow.insertCell(4);
-		newCell5.setAttribute('class', 'td-70');
-		const newCell6 = newRow.insertCell(5);
 		newCell6.setAttribute('class', 'td-70');
-		const newCell7 = newRow.insertCell(6);
+		const newCell6 = newRow.insertCell(5);
 		newCell7.setAttribute('class', 'td-70');
-		const newCell8 = newRow.insertCell(7);
+		const newCell7 = newRow.insertCell(6);
 		newCell8.setAttribute('class', 'td-70');
-		const newCell9 = newRow.insertCell(8);
-		newCell9.setAttribute('class', 'td-70');
-		const newCell10 = newRow.insertCell(9);
-		newCell10.setAttribute('class', 'td-100');
-		/* const newCell11 = newRow.insertCell(10);
-		newCell11.setAttribute('class', 'td-100'); */
+		const newCell8 = newRow.insertCell(7);
 
 		// Cell에 텍스트 추가
 		newCell1.innerHTML = '<div class="contents-check-div">'
@@ -70,10 +63,6 @@
 						+ '</button>'
 						+ '</div>';
 
-		/* newCell2.innerHTML = '<div class="contents-input-div">'
-						+ '<input type="input" name="bookId" class="contents-input" value="">'
-						+ '</div>'; */
-		
 		newCell2.innerHTML = '<div class="contents-input-div">'
 						+ '<input type="input" name="bookName" class="contents-input" value="">'
 						+ '</div>';
@@ -85,33 +74,22 @@
 		newCell4.innerHTML = '<div class="contents-input-div">'
 						+ '<input type="input" name="writerId" class="contents-input">'
 						+ '</div>';
-		
-		newCell5.innerHTML = '<div class="contents-input-div input-search">'
-						+ '<button class="input-search-btn">'
-						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
-						+ ' </button>'
-						+ '<input type="input" name="writerName" class="contents-input" value="">'
-						+ '</div>';
-						
-		newCell6.innerHTML = '<div class="contents-input-div">'
+
+		newCell5.innerHTML = '<div class="contents-input-div">'
 						+ '<input type="input" name="isbn" class="contents-input" value="">'
 						+ '</div>';
 
-		newCell7.innerHTML = '<div class="contents-input-div">'
+		newCell6.innerHTML = '<div class="contents-input-div">'
 						+ '<input type="number" name="bookPrice" class="contents-input" value="">'
 						+ '</div>';
 		
-		newCell8.innerHTML = '<div class="contents-input-div">'
+		newCell7.innerHTML = '<div class="contents-input-div">'
 						+ '<input type="input" name="engraving" class="contents-input" value="">'
 						+ '</div>';	
 						
-		newCell9.innerHTML = '<div class="contents-input-div">'
+		newCell8.innerHTML = '<div class="contents-input-div">'
 						+ '<input type="input" name="bookState" class="contents-input" value="">'
 						+ '</div>';
-						
-		newCell10.innerHTML = '<div class="contents-input-div">'
-						+ '<input type="date" name="regDate" class="contents-input" value="">'
-						+ '</div>';	
 						
 		initRowIndex();
 	}
@@ -198,16 +176,13 @@
                                 <table class="contents-table" id="bkinsert_table" border="1">
                                     <tr>
                                         <th></th>
-                                        <!-- <th>도서코드</th> -->
                                         <th>도서명</th>
                                         <th>카테고리</th>
                                         <th>작가번호</th>
-                                        <th>작가명</th>
                                         <th>국제표준도서번호</th>
                                         <th>정가</th>
                                         <th>판쇄</th>
                                         <th>도서상태</th>
-                                        <th>도서등록일자</th>
                                     </tr>
                                     <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
                                         
@@ -221,11 +196,6 @@
                                                 </button>
                                             </div>
                                         </td>
-                                        <!-- <td class="td-120">
-                                            <div class="contents-input-div">
-                                                <input type="input" name="bookId" class="contents-input" value="">
-                                            </div>
-                                        </td> -->
                                         <td class="td-250">
                                             <div class="contents-input-div">
                                                 <input type="input" name="bookName" class="contents-input" value="">
@@ -239,14 +209,6 @@
                                         <td class="td-70">
                                             <div class="contents-input-div">
                                                 <input type="input" name="writerId" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                        <td class="td-70">
-                                            <div class="contents-input-div input-search">
-                                                <button class="input-search-btn">
-                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                                                </button>
-                                                <input type="input" name="writerName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-70">
@@ -267,11 +229,6 @@
                                         <td class="td-70">
                                             <div class="contents-input-div">
                                                 <input type="input" name="bookState" class="contents-input" value="">
-                                            </div>
-                                        </td>
-                                        <td class="td-100">
-                                            <div class="contents-input-div">
-                                                <input type="date" name="regDate" class="select-date" value="">
                                             </div>
                                         </td>
                                     </tr>

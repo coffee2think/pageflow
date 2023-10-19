@@ -14,31 +14,43 @@ public class ContractServiceImpl implements ContractService {
 	@Autowired
 	private ContractDao contractDao;
 	
+	@Override
 	public int selectContractListCount() {
 		return contractDao.selectContractListCount();
 	}
 	
+	@Override
 	public ArrayList<Contract> selectContractList(Paging paging){
 		return contractDao.selectContractList(paging);
 	}
 
+	@Override
 	public ArrayList<Contract> selectContractSearch(Paging paging) {
 		return contractDao.selectContractSearch(paging);
 	}
 
-	public Contract selectContract(String contrId) {
+	@Override
+	public Contract selectContract(int contrId) {
 		return contractDao.selectContract(contrId);
 	}
 
+	@Override
 	public int insertContract(Contract contract) {
 		return contractDao.insertContract(contract);
 	}
 	
+	@Override
 	public int updateContract(Contract contract) {
 		return contractDao.updateContract(contract);
 	}
 	
-	public int deleteContract(String contrId) {
+	@Override
+	public int deleteContract(int contrId) {
 		return contractDao.deleteContract(contrId);
+	}
+	
+	@Override
+	public int selectMaxContrId() {
+		return contractDao.selectMaxContrId();
 	}
 }

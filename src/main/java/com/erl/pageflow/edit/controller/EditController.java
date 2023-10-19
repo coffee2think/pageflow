@@ -1,6 +1,9 @@
 package com.erl.pageflow.edit.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +18,7 @@ import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.contract.model.vo.Contract;
 import com.erl.pageflow.edit.model.service.EditService;
 import com.erl.pageflow.edit.model.vo.Edit;
+import com.erl.pageflow.sales.model.vo.BookOrder;
 
 @Controller
 public class EditController {
@@ -71,14 +75,36 @@ public class EditController {
 	
 	// 편집 정보 등록 요청 처리
 	@RequestMapping(value="edinsert.do", method=RequestMethod.POST)
-	public String editInsertMethod(Edit edit, Model model) {
-		logger.info("edinsert.do : " + edit);
+	public String editInsertMethod(HttpServletRequest request, Model model) {
+		String[] depIds = request.getParameterValues("depId");
+		String[] empIds = request.getParameterValues("empId");
+		String[] bookNames = request.getParameterValues("bookName");
+		String[] editStates = request.getParameterValues("editState");
 		
-		if(editService.insertEdit(edit) > 0) {
-			return "redirect:edlist.do";
-		} else {
-			model.addAttribute("message", "계약 등록 실패!");
-			return "common/error";
+		// 주문번호 생성
+		int editId = editService.selectMaxEditId() + 1;
+		
+		ArrayList<Edit> edits = new ArrayList<>();
+		for(int i = 0; i < depIds.length; i++) {
+			Edit edit = new Edit();
+			
+			edit.setEditId(editId);
+			edit.setDepId(Integer.parseInt(depIds[i]));
+			edit.setEmpId(Integer.parseInt(empIds[i]));
+			edit.setBookName(bookNames[i]);
+			edit.setEditState(editStates[i]);
+			
+			edits.add(edit);
 		}
+		
+		for(Edit edit : edits) {
+			if(editService.insertEdit(edit) == 0) {
+				model.addAttribute("message", "편집 등록 실패!");
+				return "common/error";
+			}
+		}
+		
+		return "redirect:edlist.do";
 	}
+	
 }
