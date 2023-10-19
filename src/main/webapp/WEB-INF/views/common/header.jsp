@@ -29,7 +29,7 @@
             $('#header_sep_'+(MENU_INFO.length-1)).hide();
         }else{
             console.log('empId : ' + empId);
-            $('#headerBtn_'+MENU_INFO.length).attr('href', 'aplist.do?empId='+empId);
+            $('#headerBtn_'+MENU_INFO.length).attr('href', 'aplist.do?apType=my&empId='+empId);
         }
     });
 

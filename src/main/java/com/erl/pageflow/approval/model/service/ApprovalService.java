@@ -28,5 +28,52 @@ public interface ApprovalService {
 
 	public Draft selectDraft(ApprovalKeyword approvalKeyword);
 
+	public int selectApprovalListDateCount(Search search);
+
+	public ArrayList<Approval> selectApprovalListDate(Search search);
+
+	public int selectApprovalListAllDateCount(Search search);
+
+	public ArrayList<Approval> selectApprovalListAllDate(Search search);
+
 	
+	public int selectApprSearchAllCountComplete(Search search);
+
+	public int selectApprSearchAllCountContinue(Search search);
+
+	public int selectApprSearchAllCountCompanion(Search search);
+	
+	public int selectApprSearchAllCountApprover(Search search);
+	
+	public int selectApprSearchAllCountDrafter(Search search);
+	
+	public ArrayList<Approval> selectApprSearchAllComplete(Search search);
+
+	public ArrayList<Approval> selectApprSearchAllContinue(Search search);
+
+	public ArrayList<Approval> selectApprSearchAllCompanion(Search search);
+
+	public ArrayList<Approval> selectApprSearchAllApprover(Search search);
+	
+	public ArrayList<Approval> selectApprSearchAllDrafter(Search search);
+
+	public int selectApprSearchCountComplete(Search search);
+
+	public int selectApprSearchCountContinue(Search search);
+
+	public int selectApprSearchCountCompanion(Search search);
+
+	public int selectApprSearchCountApprover(Search search);
+
+	public int selectApprSearchCountDrafter(Search search);
+
+	public ArrayList<Approval> selectApprSearchComplete(Search search);
+
+	public ArrayList<Approval> selectApprSearchContinue(Search search);
+
+	public ArrayList<Approval> selectApprSearchCompanion(Search search);
+
+	public ArrayList<Approval> selectApprSearchApprover(Search search);
+
+	public ArrayList<Approval> selectApprSearchDrafter(Search search);
 }

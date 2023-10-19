@@ -16,6 +16,10 @@ public class Approval implements Serializable {
 	private Date receiptDate;
 	private Date rejectionDate;
 	
+	private String drafterName;
+	private String approverName;
+	
+	private String title;
 	private String detail;
 	private String emergency;
 	private Date startDate;
@@ -35,6 +39,24 @@ public class Approval implements Serializable {
 		this.apprDate = apprDate;
 		this.receiptDate = receiptDate;
 		this.rejectionDate = rejectionDate;
+	}
+	
+	
+
+	public Approval(int apprId, int drafter, int approver, String draftType, int lineId, String apprState,
+			Date apprDate, Date receiptDate, Date rejectionDate, String drafterName, String approverName) {
+		super();
+		this.apprId = apprId;
+		this.drafter = drafter;
+		this.approver = approver;
+		this.draftType = draftType;
+		this.lineId = lineId;
+		this.apprState = apprState;
+		this.apprDate = apprDate;
+		this.receiptDate = receiptDate;
+		this.rejectionDate = rejectionDate;
+		this.drafterName = drafterName;
+		this.approverName = approverName;
 	}
 
 	public int getApprId() {
@@ -140,12 +162,38 @@ public class Approval implements Serializable {
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
+	
+	public String getDrafterName() {
+		return drafterName;
+	}
+
+	public void setDrafterName(String drafterName) {
+		this.drafterName = drafterName;
+	}
+
+	public String getApproverName() {
+		return approverName;
+	}
+
+	public void setApproverName(String approverName) {
+		this.approverName = approverName;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	@Override
 	public String toString() {
 		return "Approval [apprId=" + apprId + ", drafter=" + drafter + ", approver=" + approver + ", draftType="
 				+ draftType + ", lineId=" + lineId + ", apprState=" + apprState + ", apprDate=" + apprDate
-				+ ", receiptDate=" + receiptDate + ", rejectionDate=" + rejectionDate + "]";
+				+ ", receiptDate=" + receiptDate + ", rejectionDate=" + rejectionDate + ", drafterName=" + drafterName
+				+ ", approverName=" + approverName + ", title=" + title + ", detail=" + detail + ", emergency="
+				+ emergency + ", startDate=" + startDate + ", endDate=" + endDate + "]";
 	}
 	
 }
