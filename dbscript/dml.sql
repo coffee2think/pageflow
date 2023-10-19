@@ -91,7 +91,7 @@ MODIFY_DATE = sysdate
 where DEP_ID = 1 
 and BOARD_ID = 1;
 
-
+--보드
 select count(*) from board
 WHERE CREATE_DATE >= SYSDATE - INTERVAL '7' DAY AND CREATE_DATE <= SYSDATE;
 
@@ -141,7 +141,7 @@ where rnum >= 1 and rnum <= 10
 order by BOARD_ID desc;
 
 
-
+--보드
 select * 
 from (select rownum rnum, DEP_ID, BOARD_ID, EMP_ID, 
            BOARD_TITLE, BOARD_DETAIL, CREATE_DATE, 
@@ -165,4 +165,28 @@ where rnum >= 1 and rnum <= 10;
 
 
 SELECT count(*) from board
-where BOARD_TITLE like '%' || 'zx' || '%'
+where BOARD_TITLE like '%' || 'zx' || '%';
+
+--전자결재
+select * 
+from (select rownum rnum, sub.*
+      from (select * 
+            from approval
+            join draft using (DRAFT_TYPE)
+            join employee on (DRAFTER = emp_id)
+            where drafter = 1
+            order by APPR_ID desc) sub)
+where rnum >= 1 and rnum <= 10
+order by APPR_ID desc;
+
+
+select * 
+from (select rownum rnum, sub.*
+      from (select * 
+            from draft_annual
+            where APPR_ID = 1
+            and DRAFT_TYPE = 'annual'
+            order by APPR_ID desc) sub)
+where rnum >= #{ startRow } and rnum <= #{ endRow }
+order by APPR_ID desc
+

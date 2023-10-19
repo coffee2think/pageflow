@@ -145,4 +145,9 @@ public class SalesServiceImpl implements SalesService {
 		return salesDao.selectBookOrderByLocation(search);
 	}
 
+	@Override
+	public int selectMaxOrderId() {
+		return salesDao.selectMaxOrderId();
+	}
+
 }

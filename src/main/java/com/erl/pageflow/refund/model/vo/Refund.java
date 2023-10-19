@@ -18,6 +18,7 @@ public class Refund implements java.io.Serializable {
 	private String remark;
 	private String bookName;
 	private String clientName;
+	private String clientAddredd;
 	private int bookPrice;
 
 	public Refund() {
@@ -25,7 +26,8 @@ public class Refund implements java.io.Serializable {
 	}
 
 	public Refund(int refundId, int bookId, int clientId, int empId, String empName, int refundNum, Date refundDate,
-			int refundAmount, String refundState, String remark, String bookName, String clientName, int bookPrice) {
+			int refundAmount, String refundState, String remark, String bookName, String clientName,
+			String clientAddredd, int bookPrice) {
 		super();
 		this.refundId = refundId;
 		this.bookId = bookId;
@@ -39,7 +41,16 @@ public class Refund implements java.io.Serializable {
 		this.remark = remark;
 		this.bookName = bookName;
 		this.clientName = clientName;
+		this.clientAddredd = clientAddredd;
 		this.bookPrice = bookPrice;
+	}
+
+	public String getClientAddredd() {
+		return clientAddredd;
+	}
+
+	public void setClientAddredd(String clientAddredd) {
+		this.clientAddredd = clientAddredd;
 	}
 
 	public int getBookPrice() {

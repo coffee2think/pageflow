@@ -15,11 +15,59 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.ui.touch-punch.min.js"></script>
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/popup.js"></script>
 <script>
-$(function() {
+function selectBook() {	
 	$.ajax({
-		
+		url: 'popupbook.do',
+		type: 'post',
+		data: {
+			code: $('#book').find('select').val(),
+			keyword: $('#book .search-box input').val()
+		},
+		dataType: 'json',
+		success: function(result) {
+			console.log('result : ' + result);
+			
+			// object => string
+			var jsonStr = JSON.stringify(result);
+			// string => parsing : json object
+			var json = JSON.parse(jsonStr);
+			
+			// json 객체 안의 list를 하나씩 꺼내서 새로운 행으로 추가 처리
+			const table = $('#book table');
+			for(var i in json.list) {
+				const newRow = table.insertRow(i + 1);
+				
+				const newCell0 = newRow.insertCell(0);
+				const newCell1 = newRow.insertCell(1);
+				const newCell2 = newRow.insertCell(2);
+				const newCell3 = newRow.insertCell(3);
+				const newCell4 = newRow.insertCell(4);
+				
+				newCell0.innerHTML = ;
+				newCell0.innerHTML = ;
+				newCell0.innerHTML = ;
+				newCell0.innerHTML = ;
+				newCell0.innerHTML = ;
+				
+				output += "<tr><td>" + json.list[i].noticeNo
+					+ "</td><td>" + decodeURIComponent(jsonObj.list[i].noticeTitle).replace(/\+/gi, ' ')
+					+ "</td><td>" + jsonObj.list[i].noticeWriter
+					+ "</td><td>" + jsonObj.list[i].noticeDate
+					+ "</td></tr>";
+			}
+			
+			console.log(output);
+			
+			// 테이블에 기록 처리
+			$('#tblist').html(output);
+		},
+		error: function(request, status, errorData) {
+			console.log("error code : " + request.status);
+			console.log("Message : " + request.responseText);
+			console.log("Error : " + errorData);
+		}
 	});
-});
+}
 </script>
 <title></title>
 </head>
@@ -49,7 +97,7 @@ $(function() {
                     <button class="search-btn-pop">
                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                     </button>
-                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
+                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                 </div>
             </div>
 

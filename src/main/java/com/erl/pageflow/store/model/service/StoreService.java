@@ -8,30 +8,46 @@ import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.store.model.vo.Store;
 
 public interface StoreService {
-	
+
 	public int selectGetListCount();
-	
+
 	public ArrayList<Store> selectReleaseList(Paging paging);
-	
+
 	public String selectStoreBookName(int bookId);
-	
+
 	public String selectStoreClientName(int storageId);
-	
+
 	public int selectStoreBookPrice(int bookId);
-	
+
 	public ArrayList<Store> selectStoreList(Paging paging);
-	
+
+	public int selectReleaseCountByDate(Search search);
+
+	public ArrayList<Store> selectReleaseByDate(Search search);
+
+	public int deleteStore(int storeId);
+
+	public int deleteRelease(int storeId);
+
+	public int deleteInventory(int storeId);
+
 	public int selectStoreCountByDate(Search search);
-	
+
 	public ArrayList<Store> selectStoreByDate(Search search);
 	
-	public int selectReleaseCountByDate(Search search);
+	public int selectStoreCountByBookId(Search search);
 	
-	public ArrayList<Store> selectReleaseByDate(Search search);
+	public int selectStoreCountByBookName(Search search);
 	
-	public int deleteStore(int storeId);
+	public int selectStoreCountByEmpName(Search search);
 	
-	public int deleteRelease(int storeId);
+	public int selectStoreCountByClientName (Search search);
 	
-	public int deleteInventory(int storeId);
+	public ArrayList<Store> selectStoreByBookId(Search search);
+	
+	public ArrayList<Store> selectStoreByBookName(Search search);
+	
+	public ArrayList<Store> selectStoreByEmpName(Search search);
+	
+	public ArrayList<Store> selectStoreByClientName(Search search);
 }

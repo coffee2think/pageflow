@@ -60,4 +60,44 @@ public class RefundServiceImpl implements RefundService{
 	public int deleteRefund(int refundId) {
 		return refundDao.deleteRefund(refundId);
 	}
+
+	@Override
+	public int selectrefundCountByBookId(Search search) {
+		return refundDao.selectrefundCountByBookId(search);
+	}
+
+	@Override
+	public int selectrefundCountByBookName(Search search) {
+		return refundDao.selectrefundCountByBookName(search);
+	}
+
+	@Override
+	public int selectrefundCountByEmpName(Search search) {
+		return refundDao.selectrefundCountByEmpName(search);
+	}
+	
+	@Override
+	public int selectrefundCountByClientName(Search search) {
+		return refundDao.selectrefundCountByClientName(search);
+	}
+
+	@Override
+	public ArrayList<Refund> selectrefundBybookId(Search search) {
+		return refundDao.selectrefundBybookId(search);
+	}
+
+	@Override
+	public ArrayList<Refund> selectrefundBybookName(Search search) {
+		return refundDao.selectrefundBybookName(search);
+	}
+
+	@Override
+	public ArrayList<Refund> selectrefundByEmpName(Search search) {
+		return refundDao.selectrefundByEmpName(search);
+	}
+	
+	@Override
+	public ArrayList<Refund> selectrefundByClientName(Search search) {
+		return refundDao.selectrefundByClientName(search);
+	}
 }

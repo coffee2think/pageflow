@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
-import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.store.model.vo.Store;
 
 @Repository("storeDao")
@@ -74,5 +73,42 @@ public class StoreDao {
 	public int deleteInventory(int storeId) {
 		return sqlSessionTemplate.delete("storeMapper.deleteInventory", storeId);
 	}
+	
+	public int selectStoreCountByBookId(Search search) {
+		return sqlSessionTemplate.selectOne("storeMapper.selectStoreCountByBookId", search);
+	}
+	
+	public int selectStoreCountByBookName(Search search) {
+		return sqlSessionTemplate.selectOne("storeMapper.selectStoreCountByBookName", search);
+	}
+	
+	public int selectStoreCountByEmpName(Search search) {
+		return sqlSessionTemplate.selectOne("storeMapper.selectStoreCountByEmpName", search);
+	}
+	
+	public int selectStoreCountByClientName(Search search) {
+		return sqlSessionTemplate.selectOne("storeMapper.selectStoreCountByClientName", search);
+	}
+	
+	public ArrayList<Store> selectStoreByBookId(Search search) {
+		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectStoreByBookId", search);
+		return (ArrayList<Store>) list;
+	}
+	
+	public ArrayList<Store> selectStoreByBookName(Search search) {
+		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectStoreByBookName", search);
+		return (ArrayList<Store>) list;
+	}
+	
+	public ArrayList<Store> selectStoreByEmpName(Search search) {
+		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectStoreByEmpName", search);
+		return (ArrayList<Store>) list;
+	}
+	
+	public ArrayList<Store> selectStoreByClientName(Search search) {
+		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectStoreByClientName", search);
+		return (ArrayList<Store>) list;
+	}
+	
 
 }

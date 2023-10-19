@@ -9,10 +9,23 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script>
+<script type="text/javascript">
     const NOWPAGE = 6;
     const SUBPAGE = 1;
     const LNKPAGE = 1;
+
+    function setBtnEvent(){
+        $('.table-apprList').each(function(){
+            let id = $(this).attr('id');
+
+            $(this).find('.contents-input-btn').each(function(){
+                $(this).on('click', function(){
+                    //버튼 클릭!
+                })
+            })
+        })
+    }
+
 </script>
 <title></title>
 </head>
@@ -62,50 +75,9 @@
                         
                         <!--서치영역-->
                         <div class="search-container">
-                            <form class="search-form">
-                                <div class="search-box">
-                                    <button class="search-btn">
-                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                                    </button>
-                                    <input type="text" placeholder="결재자를 입력하세요." class="search-box-text" value="">
-                                </div>
-
-                                <div class="select-box">
-                                    <div class="select-pan">
-                                        <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
-                                            <option value="all">구분별</option>
-                                            <option value="yoncha">연차</option>
-                                            <option value="yongpoong">지출결의서</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="select-pan">
-                                        <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
-                                            <option value="all">진행상태별</option>
-                                            <option value="complete">완료</option>
-                                            <option value="continue">진행중</option>
-                                            <option value="refund">반품중</option>
-                                        </select>
-                                    </div>
-                                    
-                                </div>
-
-                                <div class="select-box">
-                                    <div class="select-pan-nemo">
-                                        기안날짜
-                                    </div>
-
-                                    <input type="date" class="select-date select-date-first">
-                                    <input type="date" class="select-date select-date-second">
-
-                                    <input type="button" name="week" class="select-pan-btn" value="일주일">
-                                    <input type="button" name="month" class="select-pan-btn" value="한달">
-                                </div>
-                                
-
-                            </form>
+                            <div class="search-form">
+                                <c:import url="./appr_search.jsp" />
+                            </div>
 
                             <div class="paging-box">
                                 <!-- 페이징 -->
@@ -136,53 +108,59 @@
                                         <th>결재</th>
                                         <th>수정</th>
                                     </tr>
-                                    <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                        <td class="td-50">
-                                            <input type="checkbox" name="check" value="" >
-                                        </td>
-                                        <td class="td-100">
-                                            <div class="contents-input-div">
-                                                <input type="input" name="no" class="contents-input noline" value="200" readonly>
-                                            </div>
-                                        </td>
-                                        <td class="td-120">
-                                            <div class="contents-input-div">
-                                                <input type="input" name="date" class="contents-input noline" value="2020/05/09" readonly>
-                                            </div>
-                                        </td>
-                                        <td class="td-250">
-                                            <div class="contents-input-div">
-                                                <input type="input" name="title" class="contents-input noline" value="연차 결재 부탁드립니다." readonly>
-                                            </div>
-                                        </td>
-                                        <td class="td-100">
-                                            <div class="contents-input-div">
-                                                <input type="input" name="sort" class="contents-input noline" value="연차" readonly>
-                                            </div>
-                                        </td>
-                                        <td class="td-100">
-                                            <div class="contents-input-div">
-                                                <input type="input" name="drafter" class="contents-input noline" value="전성훤" readonly>
-                                            </div>
-                                        </td>
-                                        <td class="td-100">
-                                            <div class="contents-input-div">
-                                                <input type="input" name="approver" class="contents-input noline" value="홍길동" readonly>
-                                            </div>
-                                        </td>
-                                        <td class="td-100">
-                                            <div class="contents-input-div">
-                                                <input type="input" name="progress" class="contents-input noline" value="완료" readonly>
-                                            </div>
-                                        </td>
-                                        <td class="td-100">
-                                            <button class="contents-input-link">결재</button>
-                                        </td>
-                                        <td class="td-100">
-                                            <input type="button" name="update" class="contents-input-btn noline" value="수정">
-                                        </td>
-                                    </tr>
-                                    
+
+                                    <c:if test="${ !empty apprList }">
+                                        <c:forEach items="${ apprList }" var="appr">
+                                            <tr class="table-td-depth1 table-apprList" id="apprList_${ appr.apprId }">
+                                                <td class="td-50">
+                                                    <input type="checkbox" name="check" value="" >
+                                                </td>
+                                                <td class="td-100">
+                                                    <div class="contents-input-div">
+                                                        <input type="input" name="no" class="contents-input noline" value="${ appr.apprId }" readonly>
+                                                    </div>
+                                                </td>
+                                                <td class="td-120">
+                                                    <div class="contents-input-div">
+                                                        <input type="input" name="date" class="contents-input noline" value="${ appr.apprDate }" readonly>
+                                                    </div>
+                                                </td>
+                                                <td class="td-250">
+                                                    <div class="contents-input-div">
+                                                        <input type="input" name="title" class="contents-input noline" value="${ appr.apprDate }" readonly>
+                                                    </div>
+                                                </td>
+                                                <td class="td-100">
+                                                    <div class="contents-input-div">
+                                                        <input type="input" name="sort" class="contents-input noline" value="연차" readonly>
+                                                    </div>
+                                                </td>
+                                                <td class="td-100">
+                                                    <div class="contents-input-div">
+                                                        <input type="input" name="drafter" class="contents-input noline" value="전성훤" readonly>
+                                                    </div>
+                                                </td>
+                                                <td class="td-100">
+                                                    <div class="contents-input-div">
+                                                        <input type="input" name="approver" class="contents-input noline" value="홍길동" readonly>
+                                                    </div>
+                                                </td>
+                                                <td class="td-100">
+                                                    <div class="contents-input-div">
+                                                        <input type="input" name="progress" class="contents-input noline" value="완료" readonly>
+                                                    </div>
+                                                </td>
+                                                <td class="td-100">
+                                                    <button class="contents-input-link">결재</button>
+                                                </td>
+                                                <td class="td-100">
+                                                    <input type="button" class="contents-input-btn noline" value="수정">
+		                                            <input type="button" class="contents-input-btn noline" value="완료" style="display: none;">
+		                                            <input type="button" class="contents-input-btn noline" value="취소" style="display: none;">
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </c:if>
                                 </table>
                             </div>
                         </div>

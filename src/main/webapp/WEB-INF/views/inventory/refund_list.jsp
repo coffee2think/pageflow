@@ -2,6 +2,14 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<c:set var="refundList" value="${ requestScope.refundList }" />
+<c:set var="keyword" value="${ requestScope.keyword }" />
+<c:set var="searchType" value="${ requestScope.searchType }" />
+<c:set var="firstType" value="${ requestScope.firstType }" />
+<c:set var="begin" value="${ requestScope.begin }" />
+<c:set var="end" value="${ requestScope.end }" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,6 +54,48 @@
 			
 		});
 	});
+	
+	var curinput = "";
+	$(function(){
+		// 서치 버튼 클릭
+		$('.search-button').on('click', function(){
+			searchKey();
+		})
+		// 엔터 누르고 난뒤
+		$('.search-box-text').on('keyup', function(key){
+			if(key.keyCode==13){
+				searchKey();
+			}
+		});
+		
+		var type = '<c:out value="${ searchType }" />'
+		console.log('type : ' + type);
+		
+	})
+	
+	function searchKey(){
+        var begin = '<c:out value="${ begin }" />';
+    	var end = '<c:out value="${ end }" />';
+		
+    	var url = 'refselectkeyword.do?';
+            url += '&keyword=' + $('.search-box-text').val();
+            url += '&searchType='+ $('#sel_code option:selected').val();
+            
+            location.href = url;
+	}
+	 
+	function searchByDate(dateType) {
+	    	var begin = $('#begin_' + dateType).val();
+	    	var end = $('#end_' + dateType).val();
+	    	
+	    	var url = 'refunddate.do?';
+	    	url += 'begin=' + begin;
+	    	url += '&end=' + end;
+	    	url += '&dateType=' + dateType;
+	        
+	    	location.href = url;
+	    }
+	
 </script>
 
 </head>
@@ -94,7 +144,6 @@
 
                     <!--서치영역-->
                     <div class="search-container">
-                        <form class="search-form">
                             <div class="select-search">
                                 <div class="select-box">
                                     <div class="select-pan">
@@ -102,10 +151,8 @@
                                         <select name="code" id="sel_code">
                                             <option value="bookId">도서코드</option>
                                             <option value="bookName">도서명</option>
-                                            <option value="refundNum">반품부수</option>
-                                            <option value="bookPrice">정가</option>
-                                            <option value="refundAmount">반품금액</option>
                                             <option value="empName">인수자</option>
+                                            <option value="clientName">서점명</option>
                                         </select>
                                     </div>
                                 </div>
@@ -114,54 +161,57 @@
                                     <button class="search-btn">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
+                                    <c:if test="${ empty keyword }">
+										<input type="text" placeholder="키워드를 입력하세요." class="search-box-text" > 
+									</c:if>
+										<c:if test="${ !empty keyword }">
+										<input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }"> 
+									</c:if>
                                 </div>
                             </div>
-
-                            <div class="select-box">
-                                <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
-                                        <option value="all">반품서점</option>
-                                        <option value="">교보문고</option>
-                                        <option value="">영풍문고</option>
-                                    </select>
-                                </div>
-                                
-                            </div>
-
                             <div class="select-box">
                                 <div class="select-pan-nemo">
                                     반품일자
                                 </div>
 
-                               <input type="date" class="select-date select-date-first" name="begin" value="${ begin }">
-                                <input type="date" class="select-date select-date-second" name="end"  value="${ end }">
-                                
-                                <c:set var="today_" value="<%= new java.util.Date() %>" />
-                                <fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
-								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
-								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
-								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
-								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
-     
-                                <input type="button" name="week" class="select-pan-btn" value="기간검색">
-                                
-                                <c:url var="searchWeekUrl" value="refunddate.do">
-                                	<c:param name="begin" value="${ weekago }" />
-                                	<c:param name="end" value="${ today }" />
-                                </c:url>
-                                
-                                <c:url var="searchMonthUrl" value="refunddate.do">
-                                	<c:param name="begin" value="${ monthago }" />
-                                	<c:param name="end" value="${ today }" />
-                                </c:url>
-                                
-                                <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
-                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+                              <c:choose> 
+					            <c:when test="${ !empty firstType and firstType eq 'first' }">
+					                <input type="date" class="select-date select-date-first" id="begin_startDate">
+					                <input type="date" class="select-date select-date-second" id="end_startDate">
+					            </c:when> 
+				            
+					            <c:otherwise>
+					                <input type="date" class="select-date select-date-first" id="begin_startDate" value="${ begin }">
+					                <input type="date" class="select-date select-date-second" id="end_startDate" value="${ end }">
+					            </c:otherwise> 
+							        </c:choose> 
+							        
+						        <c:set var="today_" value="<%= new java.util.Date() %>" />
+						        <fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+						
+						        <c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+						        <fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+						
+		
+						        <c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+						        <fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+						
+						        <c:url var="searchWeekUrl" value="refunddate.do">
+						            <c:param name="begin" value="${ weekago }" />
+						            <c:param name="end" value="${ today }" />
+						            <c:param name="dateType" value="startDate" />
+						        </c:url>
+						
+						        <c:url var="searchMonthUrl" value="refunddate.do">
+						            <c:param name="begin" value="${ monthago }" />
+						            <c:param name="end" value="${ today }" />
+						            <c:param name="dateType" value="startDate" />
+						        </c:url>
+						
+						        <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+						        <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+						        <input type="button" name="search" class="select-pan-btn" value="검색" onclick="searchByDate('startDate'); return false;">
                             </div>
-
-                        </form>
 
                         <div class="paging-box">
                             <!-- 페이징 -->
@@ -195,10 +245,10 @@
                                 </tr>
                                 <c:set var="totalRefundNum" value="0"/>
                                 <c:set var="totalRefundPrice" value="0"/>
-                    			<c:forEach var = "ref" items="${ requestScope.list }">
+                    			<c:forEach var = "ref" items="${ refundList }">
 	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
 	                                    <td class="td-50">
-	                                        <input type="checkbox" name="selectedItems" value="${ ref.refundId }">
+	                                         <input type="checkbox" name="selectedItems" value="${ ref.refundId }">
 	                                    </td>
 	                                    <td class="td-100">
 	                                        <div class="contents-input-div">
