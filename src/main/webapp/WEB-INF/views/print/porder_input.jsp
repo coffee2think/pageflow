@@ -21,6 +21,20 @@ function addRow(currentIndex) {
 	// 새 행(Row) 추가 (테이블 중간에)
 	const newRow = table.insertRow(currentIndex + 1);
 
+	// empId 전송용 input
+    const input_empId = document.createElement('input');
+    input_empId.setAttribute('type', 'hidden');
+    input_empId.setAttribute('name', 'empId');
+    input_empId.setAttribute('value', '${ loginMember.empId }'); // loginMember.empId 임시 코드
+    newRow.appendChild(input_empId);
+    
+ // empName 전송용 input
+    const input_empName = document.createElement('input');
+    input_empName.setAttribute('type', 'hidden');
+    input_empName.setAttribute('name', 'empName');
+    input_empName.setAttribute('value', '${ loginMember.empName }'); // loginMember.empId 임시 코드
+    newRow.appendChild(input_empName);
+	
 	// 새 행(Row)에 Cell 추가
 	const newCell1 = newRow.insertCell(0);
 	newCell1.setAttribute('class', 'td-50');
@@ -50,7 +64,8 @@ function addRow(currentIndex) {
 	newCell13.setAttribute('class', 'td-50');
 
 	// Cell에 텍스트 추가
-	newCell1.innerHTML = '<div class="contents-check-div">'
+	newCell1.innerHTML = 	
+					'<div class="contents-check-div">'
                     + '<button class="contents-input-plus" onclick="addRow(' + ( currentIndex + 1 ) + '); return false;">'
                     + '<img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">'
                     + '</button>'
@@ -63,14 +78,14 @@ function addRow(currentIndex) {
 					+ '<button class="input-search-btn">'
 					+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 					+ '</button>'
-					+ '<input type="input" name="printId" class="contents-input" value="">'
+					+ '<input type="number" name="printId" class="contents-input" value="">'
 					+ '</div>';
 					 
 	newCell3.innerHTML = '<div class="contents-input-div input-search">'
 			 		+ '<button class="input-search-btn">'
 				 	+ ' <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 			 	 	+ '</button>'
-				 	+ '<input type="input" name="clientName" class="contents-input" value="">'
+				 	+ '<input type="text" name="clientName" class="contents-input" value="">'
 			 		+ '</div>';
 	
 	newCell4.innerHTML = '<div class="contents-input-div">'
@@ -89,18 +104,18 @@ function addRow(currentIndex) {
 			        + '<button class="input-search-btn">'
 			        + '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 			   		+ '</button>'
-		    		+ '<input type="input" name="bookId" class="contents-input" value="">'
+		    		+ '<input type="number" name="bookId" class="contents-input" value="">'
 					+ '</div>';
 
 	newCell8.innerHTML = '<div class="contents-input-div input-search">'
 			        + '<button class="input-search-btn">'
 			        + '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 			    	+ '</button>'
-			    	+ '<input type="input" name="bookName" class="contents-input" value="">'
+			    	+ '<input type="text" name="bookName" class="contents-input" value="">'
 			    	+ '</div>';
 		
 	newCell9.innerHTML =  '<div class="contents-input-div">'
-			        + '<input type="number" name="unit" class="contents-input">'
+			        + '<input type="text" name="unit" class="contents-input">'
 			        + '</div>';
 		
 		
@@ -119,8 +134,8 @@ function addRow(currentIndex) {
 			        + '</div>';
 	
 		
-	newCell13.innerHTML = 	 '<div class="contents-input-div">'
-			        + '<input type="input" name="state" class="contents-input" value="">'
+	newCell13.innerHTML = '<div class="contents-input-div">'
+			        + '<input type="text" name="state" class="contents-input" value="">'
 			        + '</div>';
 		
 		
@@ -134,6 +149,25 @@ function removeRow(currentIndex) {
     	initRowIndex();
 	}
 }
+
+function initRowIndex() {
+	var table = document.getElementById('input_table');
+	var rowList = table.rows;
+	
+	for (i = 1; i < rowList.length; i++) {
+		var row = rowList[i];
+		
+		row.cells[0].innerHTML = '<div class="contents-check-div">'
+            + '<button class="contents-input-plus" onclick="addRow(' + ( i ) + '); return false;">'
+            + '<img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">'
+            + '</button>'
+            + '<button class="contents-input-minus" onclick="removeRow(' + ( i ) + '); return false;">'
+            + '<img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">'
+            + '</button>'
+        	+ '</div>';
+	} //for
+	
+} //initRowIndex
 
 </script>
 <title></title>
@@ -169,10 +203,10 @@ function removeRow(currentIndex) {
 
                 <!--form-->
                 <!-- <form class="input-form" action="/comi/partyi" method="post" enctype="multipart/form-data">-->
-                <form class="input-form" action="poinsert.do" method="post">
-                <input type="hidden" name="empName" class="select-date small" value="${ sessionScope.loginMember.empName }">
-                <input type="hidden" name="empId" class="select-date small" value="${ sessionScope.loginMember.empId }">
-                    <!--main-header-bar-->
+                <form class="input-form" action="poinsert.do" method="post">       
+                	<input type="hidden" name="empName" class="select-date small" value="${ sessionScope.loginMember.empName }">
+ 			    	<input type="hidden" name="empId" class="select-date small" value="${ sessionScope.loginMember.empId }"> 
+                 <!--main-header-bar-->
                     <div class="main-header-bar">
                         <div class="main-title-box">
                             <img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
@@ -217,12 +251,13 @@ function removeRow(currentIndex) {
                                                 </button>
                                             </div>
                                         </td>
+                        
                                         <td class="td-120">
                                             <div class="contents-input-div input-search">
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="printId" class="contents-input" value="${ printOrder.printId }">
+                                                <input type="text" name="printId" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-150">
@@ -230,7 +265,7 @@ function removeRow(currentIndex) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="clientName" class="contents-input" value="${ printOrder.clientName }">
+                                                <input type="text" name="clientName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-120">
@@ -253,7 +288,7 @@ function removeRow(currentIndex) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="bookId" class="contents-input" value="${ printOrder.bookId }">
+                                                <input type="number" name="bookId" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-200">
@@ -261,32 +296,32 @@ function removeRow(currentIndex) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="bookName" class="contents-input" value="${ printOrder.bookName }">
+                                                <input type="text" name="bookName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="input" name="unit" class="contents-input" value="${ printOrder.unit }">
+                                                <input type="text" name="unit" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="number" name="quantity" class="contents-input" value="${ printOrder.quantity }">
+                                                <input type="number" name="quantity" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div">
-                                                <input type="number" name="price" class="contents-input" value="${ printOrder.price }">
+                                                <input type="number" name="price" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div">
-                                                <input type="number" name="amount" class="contents-input" value="${ printOrder.amount }">
+                                                <input type="number" name="amount" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-50">
                                             <div class="contents-input-div">
-                                                <input type="input" name="state" class="contents-input" value="${ printOrder.state }">
+                                                <input type="text" name="state" class="contents-input" value="">
                                             </div>
                                         </td>
                                     </tr>
