@@ -174,4 +174,9 @@ public class PrintOrderController {
 		out.close();
 	}
 	
+	//발주 삭제 요청 처리용
+//	@RequestMapping('podelete.do')
+//	public String printOrderDeleteMethod() {
+//		
+//	}
 }
