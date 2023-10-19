@@ -19,7 +19,7 @@
     // 수량 변경 시 총액 계산
     $(function() {
     	$('#table_list').find('input[name=orderQuantity]').each(function() {
-    		$(this).change(function() {
+    		$(this).change(function() { 
     			var tr = $(this).parent().parent().parent();
     			var bookPrice = tr.find('input[name=bookPrice]').val();
     			var quantity = $(this).val();
@@ -27,7 +27,18 @@
     			totalPrice.val(bookPrice * quantity);
     		});
     	});
-    }); 
+    });
+    
+    function searchByDate() {
+    	var begin = $('#begin').val();
+    	var end = $('#end').val();
+    	
+    	var url = 'bolistdate.do?';
+    	url += 'begin=' + begin;
+    	url += '&end=' + end;
+    	
+    	location.href = url;
+    }
 </script>
 <title></title>
 </head>
@@ -114,8 +125,8 @@
                                     기간
                                 </div>
 
-                                <input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
-                                <input type="date" class="select-date select-date-second" name="end" value=${ end }>
+                                <input type="date" class="select-date select-date-first" name="begin" id="begin" value=${ begin }>
+                                <input type="date" class="select-date select-date-second" name="end" id="end" value=${ end }>
 								
 								<c:set var="today_" value="<%= new java.util.Date() %>" />
 								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
@@ -140,6 +151,7 @@
 								
                                 <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
                                 <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+                                <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
                             </div>
 
                         </form>

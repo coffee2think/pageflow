@@ -34,7 +34,8 @@
     
     function addRow(currentIndex) {
     	if($('#input_table').find('tr').length >= 10) {
-    		return;
+    		alert('더이상 추가할 수 없습니다.');
+            return;
     	}
     	
     	// table element 찾기
@@ -42,6 +43,13 @@
 
 		// 새 행(Row) 추가 (테이블 중간에)
 		const newRow = table.insertRow(currentIndex + 1);
+
+        // empId 전송용 input
+        const input_empId = document.createElement('input');
+        input_empId.setAttribute('type', 'hidden');
+        input_empId.setAttribute('name', 'empId');
+        input_empId.setAttribute('value', '1'); // loginMember.empId 임시 코드
+        newRow.appendChild(input_empId);
 
 		// 새 행(Row)에 Cell 추가
 		const newCell1 = newRow.insertCell(0);
@@ -89,7 +97,7 @@
 						+ '<button class="input-search-btn">'
 						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 						+ '</button>'
-						+ '<input type="input" name="clientId" class="contents-input" value="">'
+						+ '<input type="input" name="clientId" class="contents-input" value="10001">'
 						+ '<input type="input" name="clientName" class="contents-input" value="">'
 						+ '</div>';
 		newCell5.innerHTML = '<div class="contents-input-div">'
@@ -266,7 +274,7 @@
                                         </td>
                                         <td class="td-120">
                                             <div class="contents-input-div">
-                                                <input type="number" name="totalPrice" class="contents-input" value="0" readonly>
+                                                <input type="number" name="totalPrice" class="contents-input" value="" readonly>
                                             </div>
                                         </td>
                                         <td class="td-120">
