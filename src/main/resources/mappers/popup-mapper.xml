@@ -21,8 +21,29 @@
 		<result property="stock" column="CURR_INVEN" />
 	</resultMap>
 	
+	<select id="selectBookCountById" parameterType="_int" resultType="_int">
+		select count(*) from book
+		where book_id = #{ bookId }
+	</select>
 	
+	<select id="selectBookCountByName" parameterType="string" resultType="_int">
+		select count(*) from book
+		where book_name like '%' || #{ bookName } || '%'
+	</select>
 	
+	<select id="selectBookById" parameterType="_int" resultMap="resultBookWithStock">
+		select * from book
+		where book_id = #{ bookId }
+	</select>
+	
+	<select id="selectBookByName" parameterType="string" resultMap="resultBookWithStock">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from book
+			  where book_name like '%' || #{ bookName } || '%'
+			  order by book_id desc) sub)
+		where rnum between 1 and 10
+	</select>
 	
 </mapper>
 
