@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC
+"-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="approvalMapper">
+	
+	<resultMap type="Approval" id="resultApprovalJoin">
+		<result property="apprId" column="APPR_ID" />
+		<result property="drafter" column="DRAFTER" />
+		<result property="approver" column="APPROVER" />
+		<result property="draftType" column="DRAFT_TYPE" />
+		<result property="lineId" column="LINE_ID" />
+		<result property="apprState" column="APPR_STATE" />
+		<result property="apprDate" column="APPR_DATE" />
+		<result property="receiptDate" column="RECEIPT_DATE" />
+		<result property="rejectionDate" column="REJECTION_DATE" />
+	</resultMap>
+	
+	<resultMap type="Approval" id="resultApproval">
+		<result property="apprId" column="APPR_ID" />
+		<result property="drafter" column="DRAFTER" />
+		<result property="approver" column="APPROVER" />
+		<result property="draftType" column="DRAFT_TYPE" />
+		<result property="lineId" column="LINE_ID" />
+		<result property="apprState" column="APPR_STATE" />
+		<result property="apprDate" column="APPR_DATE" />
+		<result property="receiptDate" column="RECEIPT_DATE" />
+		<result property="rejectionDate" column="REJECTION_DATE" />
+	</resultMap>
+	
+	<select id="selectApprovalListCount" parameterType="_int" resultType="_int">
+		select count(*) from approval
+		where DRAFTER = #{ empId }
+	</select>
+	
+	<select id="selectApprovalList" parameterType="Search" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select * 
+		            from approval
+		            join draft using (DRAFT_TYPE)
+		            join employee on (DRAFTER = emp_id)
+		            where drafter = #{ empId }
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
+	
+	<select id="selectApprovalListAllCount" resultType="_int">
+		select count(*) from approval
+	</select>
+	
+	<select id="selectApprovalListAll" parameterType="Paging" resultMap="resultApprovalJoin">
+		
+	</select>
+	
+	<select id="selectDraft" parameterType="ApprovalKeyword" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select * 
+		            from draft_annual
+		            where APPR_ID = #{ apprId }
+		            and DRAFT_TYPE = #{ draftType }
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
+	
+	
+	<insert id="insertApproval">
+		
+	</insert>
+	
+	<update id="updateApproval">
+		
+	</update>
+	
+	<delete id="deleteApproval">
+		
+	</delete>
+</mapper>

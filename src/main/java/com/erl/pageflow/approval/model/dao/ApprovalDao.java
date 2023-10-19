@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.approval.model.vo.Approval;
+import com.erl.pageflow.approval.model.vo.Draft;
+import com.erl.pageflow.common.ApprovalKeyword;
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 
 @Repository("approvalDao")
 public class ApprovalDao {
@@ -16,13 +19,17 @@ public class ApprovalDao {
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 	
-	public int selectListCount() {
-		return sqlSessionTemplate.selectOne("approvalMapper.selectApprovalListCount");
+	public int selectApprovalListCount(int empId) {
+		return sqlSessionTemplate.selectOne("approvalMapper.selectApprovalListCount", empId);
 	}
 	
-	public ArrayList<Approval> selectApprovalList(Paging paging){
-		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprovalList", paging);
+	public ArrayList<Approval> selectApprovalList(Search search){
+		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprovalList", search);
 		return (ArrayList<Approval>)list;
+	}
+	
+	public int selectApprovalListAllCount() {
+		return sqlSessionTemplate.selectOne("approvalMapper.selectApprovalListAllCount");
 	}
 	
 	public ArrayList<Approval> selectApprovalListAll(Paging paging){
@@ -41,5 +48,11 @@ public class ApprovalDao {
 	public int deleteApproval(Approval approval) {
 		return sqlSessionTemplate.delete("approvalMapper.deleteApproval", approval);
 	}
+
+	public Draft selectDraft(ApprovalKeyword approvalKeyword) {
+		return sqlSessionTemplate.selectOne("approvalMapper.selectDraft", approvalKeyword);
+	}
+
+	
 	
 }

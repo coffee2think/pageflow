@@ -16,6 +16,11 @@ public class Approval implements Serializable {
 	private Date receiptDate;
 	private Date rejectionDate;
 	
+	private String detail;
+	private String emergency;
+	private Date startDate;
+	private Date endDate;
+	
 	public Approval() {}
 	
 	public Approval(int apprId, int drafter, int approver, String draftType, int lineId, String apprState,
@@ -102,6 +107,38 @@ public class Approval implements Serializable {
 
 	public void setRejectionDate(Date rejectionDate) {
 		this.rejectionDate = rejectionDate;
+	}
+	
+	public String getDetail() {
+		return detail;
+	}
+
+	public void setDetail(String detail) {
+		this.detail = detail;
+	}
+
+	public String getEmergency() {
+		return emergency;
+	}
+
+	public void setEmergency(String emergency) {
+		this.emergency = emergency;
+	}
+
+	public Date getStartDate() {
+		return startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate = startDate;
+	}
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
 	}
 
 	@Override
