@@ -36,6 +36,8 @@
             }
     	});
 	});
+	
+	
 		
     	
 		
@@ -145,8 +147,6 @@
                             <div class="contents-title notice-tit small">
                                 ${ notice.noticeId} 공지사항
                             </div>	
-
-
 
 
 						<!-- </div>
