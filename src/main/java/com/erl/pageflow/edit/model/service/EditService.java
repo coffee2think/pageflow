@@ -17,7 +17,7 @@ public interface EditService {
 	public ArrayList<Edit> selectEditSearch(Paging paging);
 	
 	// 편집 조회
-	public Edit selectEdit(String editId);
+	public Edit selectEdit(int editId);
 	
 	// 편집 등록
 	public int insertEdit(Edit edit);
@@ -26,5 +26,8 @@ public interface EditService {
 	public int updateEdit(Edit edit);
 	
 	// 편집 삭제
-	public int deleteEdit(String editId);
+	public int deleteEdit(int editId);
+	
+	// 편집 등록 편집번호 +1 처리
+	public int selectMaxEditId();
 }

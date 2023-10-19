@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="searchKewordType" value=""/>
+<c:if test="${ !empty searchType }">
+    <c:set var="searchKewordType" value="${ searchType }"/>
+</c:if>
+<c:set var="apType" value="${ requestScope.apType }"  scope="session" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,23 +15,19 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/appr_list.js"></script>
 <script type="text/javascript">
+    
+    const appr_url = new URL(window.location.href);
+    const urlParams = appr_url.searchParams;
+    
+    const appr_param = urlParams.get('apType');
+    console.log('appr_param : ' + appr_param);
+    const SUBPAGE = (appr_param == 'my') ? 1 : 2;
     const NOWPAGE = 6;
-    const SUBPAGE = 1;
     const LNKPAGE = 1;
 
-    function setBtnEvent(){
-        $('.table-apprList').each(function(){
-            let id = $(this).attr('id');
-
-            $(this).find('.contents-input-btn').each(function(){
-                $(this).on('click', function(){
-                    //버튼 클릭!
-                })
-            })
-        })
-    }
-
+    const searchType = '<c:out value="${ searchKewordType }" />'
 </script>
 <title></title>
 </head>
@@ -109,9 +111,9 @@
                                         <th>수정</th>
                                     </tr>
 
-                                    <c:if test="${ !empty apprList }">
-                                        <c:forEach items="${ apprList }" var="appr">
-                                            <tr class="table-td-depth1 table-apprList" id="apprList_${ appr.apprId }">
+                                    <c:if test="${ !empty approvalList }">
+                                        <c:forEach items="${ approvalList }" var="appr">
+                                            <tr class="table-td-depth1 table-apprList" id="tr_${ appr.apprId }">
                                                 <td class="td-50">
                                                     <input type="checkbox" name="check" value="" >
                                                 </td>
@@ -127,36 +129,54 @@
                                                 </td>
                                                 <td class="td-250">
                                                     <div class="contents-input-div">
-                                                        <input type="input" name="title" class="contents-input noline" value="${ appr.apprDate }" readonly>
+                                                        <c:set var="draftTitle" value="연차 결재 부탁드립니다."/>
+                                                        <c:if test="${ !empty appr.title }">
+                                                            <c:set var="draftTitle" value="연차"/>
+                                                        </c:if>
+
+                                                        <input type="input" name="title" class="contents-input noline changeable" value="${ draftTitle }" readonly>
                                                     </div>
                                                 </td>
                                                 <td class="td-100">
                                                     <div class="contents-input-div">
-                                                        <input type="input" name="sort" class="contents-input noline" value="연차" readonly>
+                                                        <c:set var="draftTypeStr" value="연차"/>
+                                                        <c:if test="${ !empty appr.draftType }">
+                                                            <c:set var="draftTypeStr" value="연차"/>
+                                                        </c:if>
+
+                                                        <input type="input" name="sort" class="contents-input noline" value="${ draftTypeStr }" readonly>
                                                     </div>
                                                 </td>
                                                 <td class="td-100">
                                                     <div class="contents-input-div">
-                                                        <input type="input" name="drafter" class="contents-input noline" value="전성훤" readonly>
+                                                        <input type="input" name="drafter" class="contents-input noline" value="${ appr.drafterName }" readonly>
                                                     </div>
                                                 </td>
                                                 <td class="td-100">
                                                     <div class="contents-input-div">
-                                                        <input type="input" name="approver" class="contents-input noline" value="홍길동" readonly>
+                                                        <input type="input" name="approver" class="contents-input noline changeable" value="${ appr.approverName }" readonly>
                                                     </div>
                                                 </td>
                                                 <td class="td-100">
                                                     <div class="contents-input-div">
-                                                        <input type="input" name="progress" class="contents-input noline" value="완료" readonly>
+                                                        <c:set var="progress" value="진행중"/>
+                                                        <c:if test="${ appr.apprState == 'complete' }">
+                                                            <c:set var="progress" value="결재완료"/>
+                                                        </c:if>
+                                                        <c:if test="${ appr.apprState == 'companion' }">
+                                                            <c:set var="progress" value="반려"/>
+                                                        </c:if>
+
+                                                        <input type="input" name="progress" class="contents-input noline" value="${ progress }" readonly>
                                                     </div>
                                                 </td>
                                                 <td class="td-100">
-                                                    <button class="contents-input-link">결재</button>
+                                                    <input type="button" class="contents-input-link search-pop-draft" value="결재"/>
                                                 </td>
                                                 <td class="td-100">
-                                                    <input type="button" class="contents-input-btn noline" value="수정">
-		                                            <input type="button" class="contents-input-btn noline" value="완료" style="display: none;">
-		                                            <input type="button" class="contents-input-btn noline" value="취소" style="display: none;">
+                                                    <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ appr.apprId }" onclick="onUpdate(${ appr.apprId }); return false;">
+		                                            <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ appr.apprId }" onclick="submitUpdate(${ appr.apprId }, 'apupdate.do?apType='+appr_param); return false;" style="display: none;">
+		                                            <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ appr.apprId }" onclick="cancelUpdate(${ appr.apprId }); return false;" style="display: none;">
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -169,16 +189,16 @@
                 </div>
                 <!--내용 end-->
                 <div class="submit-box">
-                    <input type="submit" class="contents-input-btn big noline" id="btn_delete" value="선택삭제">
+                    <input type="submit" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('apdelete.do'); return false;">
                 </div>
 
             </div>
             <!--main-container end-->
 
             <!--modal-pop-area-->
-            <div class="modal-pop-area">
+            <div class="modal-pop-area" id="approval_pop_area">
                 <!-- 팝업 들어감 -->
-                <c:import url="../common/popup.jsp" />
+                <c:import url="./appr_popup.jsp" />
             </div>
             <!--modal-pop-area end-->
 

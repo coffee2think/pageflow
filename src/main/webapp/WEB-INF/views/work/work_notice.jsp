@@ -244,7 +244,7 @@
 		//댓글 ajax 
 		let obj = setId(parent);
     	let replyId, bundleId, bundleId2, parentId, depth;
-        let empId = obj.empId;
+        let empId = Number('<c:out value="${ loginMember.empId }" />')
     	let replyDetail = changeDetail(parent.find('.reply-input'));
         console.log('replyDetail2 : ' + replyDetail);
         
@@ -284,8 +284,8 @@
 				', replyId : ' + replyId + ', replyDetail : ' + replyDetail);
 		
 		let jsonData = {
-			depId : ${ board.depId }
-			,boardId : ${ board.boardId }
+			depId : Number('<c:out value="${ board.depId }" />')
+			,boardId : Number('<c:out value="${ board.boardId }" />')
 			,empId : empId
             ,empName : parent.find('.reply-ename').text()
 			,bundleId : bundleId
@@ -359,9 +359,9 @@
     function ajaxInsertFirst(parent, box){
         let replyDetail = changeDetail(box.find('.reply-input'));
         let formData = new FormData();
-        let empId = ${ board.empId };
-        formData.append('depId', ${ board.depId });
-        formData.append('boardId', ${ board.boardId });
+        let empId = Number('<c:out value="${ board.empId }" />')
+        formData.append('depId', '<c:out value="${ board.depId }" />');
+        formData.append('boardId', '<c:out value="${ board.boardId }" />');
         formData.append('empId', empId);
         formData.append('replyDetail', replyDetail);
         formData.append('depth', -1);

@@ -34,22 +34,27 @@ public class ContractDao {
 	}
 	
 	// 계약 조회
-	public Contract selectContract(String contrId) {
-		return sqlSessionTemplate.selectOne("publishMapper.selectContract");
+	public Contract selectContract(int contrId) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectContract", contrId);
 	}
 	
 	// 계약 등록
 	public int insertContract(Contract contract) {
-		return sqlSessionTemplate.insert("publishMapper.insertContract");
+		return sqlSessionTemplate.insert("publishMapper.insertContract", contract);
 	}
 	
 	// 계약 수정
 	public int updateContract(Contract contract) {
-		return sqlSessionTemplate.update("publishMapper.updateContract");
+		return sqlSessionTemplate.update("publishMapper.updateContract", contract);
 	}
 	
 	// 계약 삭제
-	public int deleteContract(String contrId) {
-		return sqlSessionTemplate.delete("publishMapper.deleteContract");
+	public int deleteContract(int contrId) {
+		return sqlSessionTemplate.delete("publishMapper.deleteContract", contrId);
+	}
+	
+	// 계약 등록 계약번호 +1 처리
+	public int selectMaxContrId() {
+		return sqlSessionTemplate.selectOne("publishMapper.selectMaxContrId");
 	}
 }

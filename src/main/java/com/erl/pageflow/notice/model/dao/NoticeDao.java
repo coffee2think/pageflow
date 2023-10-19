@@ -3,11 +3,13 @@ package com.erl.pageflow.notice.model.dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.ibatis.javassist.compiler.ast.Keyword;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.notice.model.vo.Notice;
 
 @Repository("noticeDao")
@@ -38,5 +40,23 @@ public class NoticeDao {
 	
 	public int deleteNotice(int noticeId) {
 		return sqlSessionTemplate.delete("noticeMapper.deleteNotice", noticeId);
+	}
+	
+	public ArrayList<Notice> selectSearchTitle(Search search){
+		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectSearchTitle", search);
+		return (ArrayList<Notice>)list;
+	}
+	
+	public ArrayList<Notice> selectSearchWriter(Search search){
+		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectSearchWriter", search);
+		return (ArrayList<Notice>)list;
+	}
+	
+	public int selectSearchTitleCount(String keyword) {
+		return sqlSessionTemplate.selectOne("noticeMapper.selectSearchTitleCount", keyword);
+	}
+	
+	public int selectSearchWriterCount(String keyword) {
+		return sqlSessionTemplate.selectOne("noticeMapper.selectSearchWriterCount", keyword);
 	}
 }

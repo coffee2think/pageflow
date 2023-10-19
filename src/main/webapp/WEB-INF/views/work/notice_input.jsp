@@ -15,16 +15,21 @@
 <script type="text/javascript"
 	src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title></title>
-<script>
+<script type="text/javascript">
 	const NOWPAGE = 1;
 	const SUBPAGE = 1;
 	const LNKPAGE = 1;
-	
-	function inputSubmit(){
-    	$('#btn_insert').click(function() {
-            $('#appendTextArea').val($('.content-input').html());
+
+  $(function(){
+		$('#btn_insert').click(function() {
+            $('#appendTextArea').val($('.content-input').text());
         });
-    }
+	});
+	function inputSubmit(){
+    	$('#btn_insert').click();
+  }
+    
+   
 </script>
 </head>
 <body>
@@ -82,8 +87,8 @@
 
 							<div class="contents-title notice-tit">글쓰기</div>
 
-							<form action="noinsert.do" method="post" onsubmit="inputSubmit();"
-								enctype="multipart/form-data">
+							<form action="noinsert.do" method="post" 
+								enctype="multipart/form-data" onsubmit="inputSubmit();">
 								<input type="hidden" value="${ sessionScope.loginMember.empId }"
 									name="empId">
 								<div class="select-box">
@@ -97,7 +102,9 @@
 
 								<div class="select-box">
 									<div class="select-pan-nemo">
-										<input type="checkbox" class="select-checkbox" name="importance" value="Y"> 필독
+
+							<input type="checkbox" class="select-checkbox" name="importance" value="Y" id="importance" checked> 필독
+
 									</div>
 
 									<input type="date"
@@ -107,12 +114,12 @@
 
 								<div class="select-box">
 									<div class="select-pan font-size13">
-										<label for="classsify"></label> <select name="classsify"
-											id="classsify">
-											<option value="all">전체 공지</option>
+										<label for="classsify"></label> <select name="classify"
+											id="classify">
+											<option value="all" selected>전체 공지</option>
 											<option value="dept">부서 공지</option>
 											<option value="emp">직원 공지</option>
-											<input type="hidden" name="classify" value="all">
+											
 										</select>
 										
 									</div>
@@ -139,20 +146,38 @@
 										<input type="file" name="nfile" class="select-file">
 									</div>
 								</div>
-
-								<div class="content-input-area">
+								
+								<%-- <div class="content-input-area height-long">
+                                    <div class="content-input" contenteditable="true">
+										<c:if test="${ !empty board and !empty board.boardDetail }">
+											${ board.boardDetail }
+										</c:if>
+                                    </div>
+                                </div> --%>
+								 
+								<div class="content-input-area  height-long">
 									<div class="content-input" contenteditable="true">
-									<input type="textarea" name="noticeDetail" class="content-input">
-											
-									</div>
-								</div>
 
+									
+									
+								
+
+									</div>
+									<textarea name="noticeDetail" id="appendTextArea" ></textarea>
+								</div>
+									
+							
 								<div class="content-input-btn-box">
 									<input type="submit" class="contents-input-btn big noline" id="btn_insert" value="등록">
 								</div>
-								  <textarea name="noticearea" id="appendTextArea"></textarea> 
-							</form>
-						</div>
+
+							</form>	
+								
+								
+								
+							 
+						
+
 					</div>
 					<!--컨텐츠영역 end-->
 

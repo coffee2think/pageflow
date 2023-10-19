@@ -2,8 +2,10 @@ package com.erl.pageflow.printOrder.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -138,19 +140,71 @@ public class PrintOrderController {
 	}
 	
 	//발주 등록 요청 처리용
-	@RequestMapping(value="poinsert.do", method=RequestMethod.POST)
-	public String printOrderInsertMethod(PrintOrder printOrder, Model model, 
-			HttpServletRequest request) {
-		logger.info("poinsert.do : " + printOrder);
-		
-		if(printOrderService.poinsert(printOrder) > 0) {
+		@RequestMapping(value="poinsert.do", method=RequestMethod.POST)
+		public String printOrderInsertMethod(Model model, HttpServletRequest request) {
+			
+			String[] printIds = request.getParameterValues("printId");
+			String[] empIds = request.getParameterValues("empId");
+			String[] empNames = request.getParameterValues("empName");
+			String[] orderDates = request.getParameterValues("orderDate");
+			String[] endDates = request.getParameterValues("endDate");
+			String[] pubDates = request.getParameterValues("pubDate");
+			String[] bookIds = request.getParameterValues("bookId");
+			String[] units = request.getParameterValues("unit");
+			String[] quantities = request.getParameterValues("quantity");
+			String[] price = request.getParameterValues("price");
+			String[] amounts = request.getParameterValues("amount");
+			String[] states = request.getParameterValues("state");
+			
+			logger.info("poinsert.do ---------------------------- START");
+			logger.info("printIds : " + Arrays.toString(printIds));
+			logger.info("empIds : " + Arrays.toString(empIds));
+			logger.info("empNames : " + Arrays.toString(empNames));
+			logger.info("orderDates : " + Arrays.toString(orderDates));
+			logger.info("endDates : " + Arrays.toString(endDates));
+			logger.info("pubDates : " + Arrays.toString(pubDates));
+			logger.info("bookIds : " + Arrays.toString(bookIds));
+			logger.info("units : " + Arrays.toString(units));
+			logger.info("quantities : " + Arrays.toString(quantities));
+			logger.info("price : " + Arrays.toString(price));
+			logger.info("amounts : " + Arrays.toString(amounts));
+			logger.info("states : " + Arrays.toString(states));
+			logger.info("poinsert.do ---------------------------- END");
+			
+			int orderId = printOrderService.selectMaxPrintOrderId() + 1;
+			
+			ArrayList<PrintOrder> list = new ArrayList<>();
+			for(int i = 0; i < printIds.length; i++) {
+				PrintOrder printOrder = new PrintOrder();
+				
+				printOrder.setOrderId(orderId);
+				printOrder.setEmpName(empNames[i]);
+				printOrder.setEmpId(Integer.parseInt(empIds[i]));
+				printOrder.setPrintId(Integer.parseInt(printIds[i]));
+				printOrder.setOrderDate(Date.valueOf(orderDates[i]));
+				printOrder.setEndDate(Date.valueOf(endDates[i]));
+				printOrder.setPubDate(Date.valueOf(pubDates[i]));
+				printOrder.setBookId(Integer.parseInt(bookIds[i]));
+				printOrder.setUnit(units[i]);
+				printOrder.setQuantity(Integer.parseInt(quantities[i]));
+				printOrder.setPrice(Integer.parseInt(price[i]));
+				printOrder.setAmount(Integer.parseInt(amounts[i]));
+				printOrder.setState(states[i]);
+				
+				list.add(printOrder);
+				
+			}
+			
+			for(PrintOrder printOrder : list ) {
+				if(printOrderService.insertPrintOrder(printOrder) == 0) {
+					model.addAttribute("message", "발주 등록 실패!");
+					return "common/error.jsp";
+				}
+			}
 			
 			return "redirect:polist.do";
-		} else {
-			model.addAttribute("message", "새 공지글 등록 실패");
-			return "common/error";
+			
 		}
-	}
 	
 	//발주 수정 요청 처리용
 	@RequestMapping(value="poupdate.do", method= {RequestMethod.GET, RequestMethod.POST})
@@ -161,7 +215,7 @@ public class PrintOrderController {
 			Model model, HttpServletRequest request) throws IOException {
 		logger.info("poupdate.do : " + printOrder);
 		
-		int result = printOrderService.poupdate(printOrder);
+		int result = printOrderService.printOrderUpdate(printOrder);
 		
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
@@ -175,8 +229,31 @@ public class PrintOrderController {
 	}
 	
 	//발주 삭제 요청 처리용
-//	@RequestMapping('podelete.do')
-//	public String printOrderDeleteMethod() {
-//		
-//	}
+	@RequestMapping(value= "podelete.do", method=RequestMethod.POST)
+	@ResponseBody
+	public void deletePrintOrder(
+			@RequestParam(name="selectedPrintOrderIds") 
+			String selectedPrintOrderIds, HttpServletRequest request, 
+			Model model) {
+		
+		int count = 0;
+		String[] poArr = selectedPrintOrderIds.split(",");
+		logger.info("selectedPrintOrderIds" + selectedPrintOrderIds);
+		logger.info("poArr" + Arrays.toString(poArr));
+		
+		for(int i = 0; i < poArr.length; i++) {
+			
+			int printId = Integer.parseInt(poArr[i].toString());
+			logger.info("printId" + printId);
+			
+			if(printOrderService.deletePrintOrder(printId) > 0) {
+				count++;
+				
+			} else {
+				model.addAttribute("message", "발주 등록 삭제 실패!");
+			}
+		}
+		
+		
+	}
 }

@@ -37,5 +37,7 @@ public interface SalesService {
 	public ArrayList<BookOrder> selectBookOrderByBookStore(Search search);
 	public ArrayList<BookOrder> selectBookOrderByLocation(Search search);
 	public int selectMaxOrderId();
+	public int selectSalesCountForStats();
+	public ArrayList<Sales> selectSalesForStats(Paging paging);
 
 }

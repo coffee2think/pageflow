@@ -19,13 +19,16 @@ public class Store implements java.io.Serializable {
 	private int bookPrice;
 	private String clientName;
 	private int prevInvenId;
+	private int currInven;
+	private int clientId;
 
 	public Store() {
 		super();
 	}
 
 	public Store(int storeId, int bookId, int storageId, int empId, String empName, int storeNum, int storePrice,
-			Date storeDate, String classify, String bookName, int bookPrice, String clientName, int prevInvenId) {
+			Date storeDate, String classify, String bookName, int bookPrice, String clientName, int prevInvenId,
+			int currInven, int clientId) {
 		super();
 		this.storeId = storeId;
 		this.bookId = bookId;
@@ -40,6 +43,24 @@ public class Store implements java.io.Serializable {
 		this.bookPrice = bookPrice;
 		this.clientName = clientName;
 		this.prevInvenId = prevInvenId;
+		this.currInven = currInven;
+		this.clientId = clientId;
+	}
+
+	public int getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+
+	public int getCurrInven() {
+		return currInven;
+	}
+
+	public void setCurrInven(int currInven) {
+		this.currInven = currInven;
 	}
 
 	public int getPrevInvenId() {

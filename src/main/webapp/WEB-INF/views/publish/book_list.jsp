@@ -8,11 +8,41 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
-<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 3;
     const SUBPAGE = 3;
     const LNKPAGE = 1;
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+		$('#btn_delete').click(function(){
+			const selectedCheckbokes = $('input[name="selectedItems"]:checked');
+			const selectedBookIds = [];
+			
+			selectedCheckbokes.each(function(){
+				selectedBookIds.push($(this).val());
+			});
+			
+			if(selectedBookIds.length === 0){
+				alert('삭제할 항목을 체크해주세요.');
+			}else{
+				$.ajax({
+					type:'post',
+					url:'bkdelete.do',
+					dataType: "json",
+					data: { selectedBookIds: selectedBookIds.join(',') },
+					success: function(response){
+						alert('선택한 도서가 삭제되었습니다.');
+						location.reload();
+					},
+					error: function(){
+						alert('접근 권한이 없습니다.');
+					}
+				});
+			}
+			
+		});
+	});
 </script>
 <title>도서현황</title>
 </head>
@@ -150,9 +180,9 @@
                                 </tr>
                                 <c:if test="${ !empty bookList }">
 	                                <c:forEach items="${ bookList }" var="book">
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ book.bookId }">
 		                                    <td class="td-50">
-		                                        <input type="checkbox" name="check" value="" >
+		                                        <input type="checkbox" name="check" value="${ book.bookId }">
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">

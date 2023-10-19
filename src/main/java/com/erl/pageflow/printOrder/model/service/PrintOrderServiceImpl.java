@@ -44,12 +44,22 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	}
 	
 	@Override
-	public int poinsert(PrintOrder printOrder) {
-		return printOrderDao.poinsert(printOrder);
+	public int printOrderUpdate(PrintOrder printOrder) {
+		return printOrderDao.printOrderUpdate(printOrder);
 	}
 	
 	@Override
-	public int poupdate(PrintOrder printOrder) {
-		return printOrderDao.poupdate(printOrder);
+	public int selectMaxPrintOrderId() {
+		return printOrderDao.selectMaxPrintOrderId();
+	}
+	
+	@Override
+	public int insertPrintOrder(PrintOrder printOrder) {
+		return printOrderDao.insertPrintOrder(printOrder);
+	}
+	
+	@Override
+	public int deletePrintOrder(int orderId) {
+		return printOrderDao.deletePrintOrder(orderId);
 	}
 }

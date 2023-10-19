@@ -93,7 +93,7 @@ public class SalesController {
 	// 매출현황 페이지 이동
 	@RequestMapping("movestats.do")
 	public String moveStatistics() {
-		return "statslist.do";
+		return "redirect:statslist.do";
 	}
 	
 	
@@ -482,23 +482,20 @@ public class SalesController {
 	// 매출통계 조회 요청 처리
 	@RequestMapping("statslist.do")
 	public String salesStatisticsMethod(
-			@RequestParam("page") String page,
-			@RequestParam("limit") String limitStr,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
 			Model model) {
 		
 		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
 		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 		
 		// 1년동안 매출이 있는 도서 정보 목록을 가져옴
-//		int listCount = salesService.selectSalesCountForStats();
-		int listCount = 0;
-		
+		int listCount = salesService.selectSalesCountForStats();
 		
 		Paging paging = new Paging(listCount, currentPage, limit, "sslistdate.do");
 		paging.calculator();
 		
-//		ArrayList<Sales> list = salesService.selectSalesForStats(paging);
-		ArrayList<Sales> list = null;
+		ArrayList<Sales> list = salesService.selectSalesForStats(paging);
 		
 		if(list != null && list.size() > 0) {
 			for(Sales sales : list) {

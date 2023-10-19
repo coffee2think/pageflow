@@ -100,10 +100,15 @@ insert into draft
 values ('annual', '연차신청서');
 
 insert into approval
-values (1, 1, 3, 'annual', null, 'draft', sysdate, null, null);
-commit;
-
+values (1, 1, 3, 'annual', null, 'continue', sysdate, null, null);
 
 insert into draft_annual 
-values (1, 'annual', '연차를 신청합니다. 병원방문', '010-1234-1234', '2023-10-19', '2023-10-23');
+values (1, 'annual', '연차를 신청합니다. 병원방문', '010-1234-1234', '2023-10-19', '2023-10-20', null);
+
+
+insert into approval
+values (2, 2, 3, 'annual', null, 'companion', sysdate, null, null);
+
+insert into draft_annual 
+values (2, 'annual', '2일 연차를 신청합니다. 쉴래요 구냥', '010-9999-9999', '2023-10-20', '2023-10-22' '2일 연차를 신청합니다.');
 commit;

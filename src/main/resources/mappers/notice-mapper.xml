@@ -62,6 +62,26 @@
 		delete from notice where NOTICE_ID = #{ noticeId }
 	</delete>
 	
+	<select id="selectSearchTitleCount" parameterType="Search" resultType="_int" >
+		SELECT count(*) from notice
+		where NOTICE_TITLE like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectSearchTitle" parameterType="Search" resultMap="resultNotice">
+		<![CDATA[
+		select * 
+		from (select rownum rnum,  NOTICE_ID, EMP_ID, EMP_NAME,
+		           NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, CLASSIFY, IMPORTANCE
+                from (select * 
+		            from notice
+                    Left join employee using(EMP_ID)
+		            where NOTICE_TITLE like '%' || #{ keyword } || '%'
+		            order by NOTICE_ID desc))	
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		
+		]]>
+	</select>
+	
 	
 </mapper>
 

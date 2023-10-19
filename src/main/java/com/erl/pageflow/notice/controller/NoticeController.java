@@ -22,9 +22,12 @@ import com.erl.pageflow.board.model.vo.BoardUpload;
 import com.erl.pageflow.common.BoardKeyword;
 import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
-import com.erl.pageflow.employee.model.vo.Employee;
+import com.erl.pageflow.common.ReplyKeyword;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.notice.model.service.NoticeService;
 import com.erl.pageflow.notice.model.vo.Notice;
+import com.erl.pageflow.reply.model.vo.Reply;
+import com.erl.pageflow.reply.model.vo.ReplyUpload;
 
 @Controller
 public class NoticeController {
@@ -103,6 +106,7 @@ public class NoticeController {
 		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
 		logger.info("mfile : " + mfile);
 		logger.info("notice : " + notice);
+		logger.info("notice : " + request.getParameter("noticeDetail"));
 		// 첨부파일이 있을때
 		if (!mfile.isEmpty()) {
 
@@ -167,6 +171,7 @@ public class NoticeController {
 				@RequestParam(name="deleteFlag", required=false) String delFlag,
 				@RequestParam(name="upfile", required=false) MultipartFile mfile) {
 			logger.info("noupdate.do : " + notice);
+			
 			
 			//공지사항 첨부파일 저장 폴더 경로 지정
 			String savePath = request.getSession().getServletContext().getRealPath(
@@ -243,8 +248,126 @@ public class NoticeController {
 				return "common/error";
 			}
 		}
-	
-	
-	
+		
+		
+
+		//----------------서치-----------------
+		
+		@RequestMapping(value="nsearch.do", method= {RequestMethod.GET,RequestMethod.POST})
+		public ModelAndView noticeSearchContentMethod(
+				@RequestParam("action") String action,			
+				@RequestParam("keyword") String keyword,
+				@RequestParam(name="limit", required=false) String slimit,
+				@RequestParam(name="page", required=false) String page,
+				ModelAndView mv) {
+			logger.info("nsearh.do : " + action);
+			logger.info("nsearh.do : " + keyword);
+			//검색결과에 대한 페이징 처리
+			//출력할 페이지 지정
+			int currentPage = 1;
+			//전송온 페이지 값이 있다면 추출함
+			if(page != null) {
+				currentPage = Integer.parseInt(page);
+			}
+			
+			//한 페이지당 출력할 목록 갯수 지정
+			int limit = 10;
+			//전송 온 limit 값이 있다면
+			if(slimit != null) {
+				limit = Integer.parseInt(slimit);
+			}
+			
+			//총 페이지수 계산을 위한 검색 결과 적용된 총 목록 갯수 조회
+			int listCount = noticeService.selectSearchTitleCount(keyword);
+			
+			//뷰 페이지에 사용할 페이징 관련 값 계산 처리
+			Paging paging = new Paging(listCount, currentPage, limit, "nsearch.do");
+			paging.calculator();
+			
+			//서비스 메소드 호출하고 리턴결과 받기		
+			Search search = new Search();
+			search.setStartRow(paging.getStartRow());
+			search.setEndRow(paging.getEndRow());
+			search.setKeyword(keyword);
+			
+			ArrayList<Notice> list = noticeService.selectSearchTitle(search);
+			
+			//받은 결과에 따라 성공/실패 페이지 내보내기
+			if(list != null && list.size() > 0) {
+				mv.addObject("list", list);
+				mv.addObject("paging", paging);
+				mv.addObject("currentPage", currentPage);
+				mv.addObject("limit", limit);
+				mv.addObject("action", action);
+				mv.addObject("keyword", keyword);			
+				
+				mv.setViewName("work/notice_list");
+			}else {
+				mv.addObject("message", action + "에 대한 " 
+							+ keyword + " 검색 결과가 존재하지 않습니다.");			
+				mv.setViewName("common/error");
+			}
+			
+			return mv;
+		}
+				
+		//공지글 작성자 검색용 (페이징 처리 포함)
+		@RequestMapping(value="nwsearch.do", method= RequestMethod.POST)
+		public ModelAndView noticeSearchTitleMethod(
+				@RequestParam("action") String action,			
+				@RequestParam("keyword") String keyword,
+				@RequestParam(name="limit", required=false) String slimit,
+				@RequestParam(name="page", required=false) String page,
+				ModelAndView mv) {
+			
+			//검색결과에 대한 페이징 처리
+			//출력할 페이지 지정
+			int currentPage = 1;
+			//전송온 페이지 값이 있다면 추출함
+			if(page != null) {
+				currentPage = Integer.parseInt(page);
+			}
+			
+			//한 페이지당 출력할 목록 갯수 지정
+			int limit = 10;
+			//전송 온 limit 값이 있다면
+			if(slimit != null) {
+				limit = Integer.parseInt(slimit);
+			}
+			
+			//총 페이지수 계산을 위한 검색 결과 적용된 총 목록 갯수 조회
+			int listCount = noticeService.selectSearchWriterCount(keyword);
+			
+			//뷰 페이지에 사용할 페이징 관련 값 계산 처리
+			Paging paging = new Paging(listCount, currentPage, limit, "nwsearch.do");
+			paging.calculator();
+			
+			//서비스 메소드 호출하고 리턴결과 받기		
+			Search search = new Search();
+			search.setStartRow(paging.getStartRow());
+			search.setEndRow(paging.getEndRow());
+			search.setKeyword(keyword);
+			
+			ArrayList<Notice> list = noticeService.selectSearchWriter(search);
+			
+			//받은 결과에 따라 성공/실패 페이지 내보내기
+			if(list != null && list.size() > 0) {
+				mv.addObject("list", list);
+				mv.addObject("paging", paging);
+				mv.addObject("currentPage", currentPage);
+				mv.addObject("limit", limit);
+				mv.addObject("action", action);
+				mv.addObject("keyword", keyword);			
+				
+				mv.setViewName("notice/noticeListView");
+			}else {
+				mv.addObject("message", action + "에 대한 " 
+							+ keyword + " 검색 결과가 존재하지 않습니다.");			
+				mv.setViewName("common/error");
+			}
+			
+			return mv;
+		}
+		
 	
 }

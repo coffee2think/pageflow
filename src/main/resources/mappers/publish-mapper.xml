@@ -112,10 +112,15 @@
 	</select>
 	
 	<insert id="insertContract" parameterType="Contract">
-		insert into contract 
-		values ((select max(CONTR_ID) + 1 from contract), 
-		        #{ empId }, #{ writerId }, #{ bookName }, 
-		        #{ empName }, #{ contrDate }, null, default, #{ category })
+		<!-- insert into Contract
+		VALUES ((SELECT MAX(CONTR_ID) + 1 FROM Contract), 
+				#{empId}, #{writerId}, #{bookName}, 
+		        (SELECT emp_name FROM employee WHERE emp_id = #{empId}),
+		        #{contrDate}, DEFAULT, DEFAULT, #{category}) -->
+		insert into Contract
+		values (#{ contrId },#{ empId }, #{ writerId }, #{ bookName },
+				(select emp_name from employee where emp_id = #{ empId }),
+				#{ contrDate }, default, default, #{ category })
 	</insert>
 	
 	<update id="updateContract" parameterType="_int">
@@ -132,6 +137,9 @@
 		where contr_id = #{ contrId }
 	</select>
 		
+	<select id="selectMaxContrId" resultType="_int">
+		select nvl(max(CONTR_ID), 0) from Contract
+	</select>	
 		
 		
 	<!-- Edit 편집 -->
@@ -154,7 +162,16 @@
 		select count(*) from edit
 	</select>
 	
+	<insert id="insertEdit" parameterType="Edit">
+		insert into Edit 
+		values (#{ editId }, #{ depId }, #{ empId }, 
+			   (select emp_name from employee where emp_id = #{ empId }),
+		        #{ bookName }, #{ editState }, default, default)
+	</insert>
 	
+	<select id="selectMaxEditId" resultType="_int">
+		select nvl(max(EDIT_ID), 0) from Edit
+	</select>
 	
 	<!-- Book 도서 -->
 	<select id="selectBookList" parameterType="Paging" resultMap="resultBook">
@@ -177,11 +194,20 @@
 	
 	<insert id="insertBook" parameterType="Book">
 		insert into Book 
-		values ((select max(BOOK_ID) + 1 from book), 
-		        #{ writerId }, #{ bookName }, #{ writerName }, 
+		values (#{ bookId }, #{ writerId }, #{ bookName }, (select writer_name from writer where writer_id = #{ writerId }), 
 		        null, null, #{ bookPrice }, #{ category }, #{ isbn },
-		        #{ bookState }, #{ engraving }, null, #{ regDate })
+		        #{ bookState }, #{ engraving }, default, default)
 	</insert>
+	
+	<select id="deleteBook" parameterType="_int">
+		delete from book
+		where book_id = #{ bookId }
+	</select>
+	
+	<select id="selectMaxBookId" resultType="_int">
+		select nvl(max(BOOK_ID), 0) from Book
+	</select>	
+	
 	
 	<!-- Writer 작가 -->
 	<select id="selectWriterList" parameterType="Paging" resultMap="resultWriter">
@@ -204,8 +230,11 @@
 	
 	<insert id="insertWriter" parameterType="Writer">
 		insert into Writer 
-		values ((select max(WRITER_ID) + 1 from Writer), 
-		        #{ writerName }, #{ phone }, #{ writerBirth }, 
-		        #{ Email }, #{ address }, #{ bank }, #{ account })
+		values (#{ writerId }, #{ writerName }, #{ phone }, #{ writerBirth }, 
+		        #{ email }, #{ address }, #{ bank }, #{ account })
 	</insert>
+	
+	<select id="selectMaxWriterId" resultType="_int">
+		select nvl(max(WRITER_ID), 0) from Writer
+	</select>
 </mapper>

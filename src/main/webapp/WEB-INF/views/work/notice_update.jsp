@@ -15,7 +15,7 @@
 <script type="text/javascript"
 	src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title></title>
-<script type="text/javascript">
+<script >
 	const NOWPAGE = 1;
 	const SUBPAGE = 1;
 	const LNKPAGE = 1;
@@ -23,7 +23,8 @@
 	$(function() {
 		//공지사항  수정
 		$('.notice-update').on('click', function() {
-			$('#upnotice').submit();
+			$('#appendTextArea').val($('.content-input').text())
+			
 		});
 
 		//공지사항 삭제
@@ -32,7 +33,19 @@
 				location.href = 'bddelete.do?notice=${ notice }';
 			}
 		});
-	});
+		
+		
+     });
+	
+	
+         
+    
+	
+	/* function cancelSubmit(){
+    	$('#btn_cancel').click();      
+    }
+	 */
+	
 </script>
 </head>
 <body>
@@ -52,8 +65,8 @@
 		<main class="main-wrapper">
 
 			<form action="noupdate.do" method="post"
-				enctype="multipart/form-data" id="upnotice">
-			<input type="hidden" value="${notice.noticeId }" name="noticeId">
+				enctype="multipart/form-data" id="upnotice" onsubmit="inputSubmit();">
+				<input type="hidden" value="${notice.noticeId }" name="noticeId">
 
 				<!--main-side-->
 				<div class="main-side">
@@ -132,19 +145,15 @@
 						<!--컨텐츠영역-->
 						<div class="contents-container sort-row">
 							<div class="contents-box notice" data-num="">
-
-
-
+							
 								<!--contents-notice-->
 								<!--컨텐츠영역-->
 								<div class="contents-container sort-row">
 									<div class="contents-box notice" data-num="">
 
 										<div class="contents-title notice-tit small">${ notice.noticeId}
-											공지사항</div>
-
-
-
+											공지사항
+										</div>
 
 										<!-- </div>
 						contents-notice end
@@ -220,21 +229,26 @@
 										</c:if>
 									</div>
 
-									<textarea rows="5" cols="300" name="noticeDetail">${ notice.noticeDetail }</textarea>
+									<div class="content-input-area height-long">
+										<div class="content-input" contenteditable="true">
+											 ${notice.noticeDetail}
+										</div>
+										<textarea name="noticeDetail" id="appendTextArea"></textarea>
+									</div>
+
 									<div class="contents-notice-buttonbox">
-
-										<div class="button-box"text-align:center;>
-
-											<a class="button-a notice-update" href="#"> 수정 </a> <a
-												class="button-a notice-cancle" href="#"> 취소 </a>
+										<div class="button-box" >
+											<input type="submit" class="contents-input-btn big noline" id="btn_update" value="수정">
+											<input type="reset" class="contents-input-btn big nolines" id="btn_cancel" value="취소">
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>	
-					
+					</div>
 
+				</div>
+			</form>
 
 
 
@@ -247,10 +261,9 @@
                     <input type="button" class="contents-input-btn big noline" id="btn_write" value="글쓰기">
                 </div>
                 -->
-				</div>
-			</form>
-				<!--main-container end-->
 				
+			<!--main-container end-->
+
 		</main>
 
 	</div>

@@ -1,6 +1,9 @@
 package com.erl.pageflow.writer.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,17 +71,44 @@ public class WriterController {
 			return "common/error";
 		}
 	}
-	
+
 	// 작가 정보 등록 요청 처리
 	@RequestMapping(value="wtinsert.do", method=RequestMethod.POST)
-	public String writerInsertMethod(Writer writer, Model model) {
-		logger.info("wtinsert.do : " + writer);
+	public String wtInsertMethod(HttpServletRequest request, Model model) {
+		String[] writerNames = request.getParameterValues("writerName");
+		String[] phones = request.getParameterValues("phone");
+		String[] writerBirths = request.getParameterValues("writerBirth");
+		String[] emails = request.getParameterValues("email");
+		String[] addresss = request.getParameterValues("address");
+		String[] banks = request.getParameterValues("bank");
+		String[] accounts = request.getParameterValues("account");
 		
-		if(writerService.insertWriter(writer) > 0) {
-			return "redirect:wtlist.do";
-		} else {
-			model.addAttribute("message", "작가 등록 실패!");
-			return "common/error";
+		// 주문번호 생성
+		int writerId = writerService.selectMaxWriterId() + 1;
+		
+		ArrayList<Writer> writers = new ArrayList<>();
+		for(int i = 0; i < writerNames.length; i++) {
+			Writer writer = new Writer();
+			
+			writer.setWriterId(writerId);
+			writer.setWriterName(writerNames[i]);
+			writer.setPhone(phones[i]);
+			writer.setWriterBirth(writerBirths[i]);
+			writer.setEmail(emails[i]);
+			writer.setAddress(addresss[i]);
+			writer.setBank(banks[i]);
+			writer.setAccount(accounts[i]);
+			
+			writers.add(writer);
 		}
+		
+		for(Writer writer : writers) {
+			if(writerService.insertWriter(writer) == 0) {
+				model.addAttribute("message", "작가 등록 실패!");
+				return "common/error";
+			}
+		}
+		
+		return "redirect:wtlist.do";
 	}
 }

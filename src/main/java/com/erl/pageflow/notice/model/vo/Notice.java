@@ -2,8 +2,22 @@ package com.erl.pageflow.notice.model.vo;
 
 import java.sql.Date;
 
-public class Notice {
+public class Notice implements java.io.Serializable{
 	
+	private static final long serialVersionUID = -3516767475878436110L;
+	
+	public String getNoticeDetail() {
+		return noticeDetail;
+	}
+
+	public void setNoticeDetail(String noticeDetail) {
+		this.noticeDetail = noticeDetail;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	private int noticeId;
 	private int empId;
 	private String empName;
@@ -68,13 +82,6 @@ public class Notice {
 
 	
 
-	public String getNoticeDetail() {
-		return noticeDetail;
-	}
-
-	public void setNoticeDetail(String noticeDetail) {
-		this.noticeDetail = noticeDetail;
-	}
 
 	public Date getNoticeCreateDate() {
 		return noticeCreateDate;
