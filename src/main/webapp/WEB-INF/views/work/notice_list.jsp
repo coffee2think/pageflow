@@ -153,7 +153,7 @@
 										<span>${notice.noticeCreateDate }</span>
 										<span>${notice.importance }</span>
 										<c:if test="${ notice.importance eq 'Y' }">
-											<p>필독!</p>
+											<span>필독!</span>
 										</c:if> 
 										<span>${notice.noticeReadCount }</span>
 										<span>${notice.noticeOriginalFileName }</span> 
