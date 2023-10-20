@@ -68,6 +68,8 @@
 	        <c:url var="bdselmy" value="bdlistmy.do">
 	            <c:param name="empId" value="${ loginMember.empId }"/>
 	            <c:param name="depId" value="${ depId }"/>
+				<c:param name="begin" value="${ begin }"/>
+				<c:param name="end" value="${ end }"/>
 	        </c:url>
 	        <a class="side-icon-btn" id="sideBtn_my" href="${ bdselmy }">
 	            <span class="side-icon">

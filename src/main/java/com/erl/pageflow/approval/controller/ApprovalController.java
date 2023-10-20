@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -15,6 +16,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.erl.pageflow.approval.model.service.ApprovalService;
 import com.erl.pageflow.approval.model.vo.Approval;
@@ -56,31 +59,40 @@ public class ApprovalController {
 			@RequestParam(name="limit", required=false) String limitStr) {
 		logger.info("empIdStr : " + empIdStr);
 		int empId = (empIdStr != null) ? Integer.parseInt(empIdStr) : -1;
-		
-		//if(empId == -1) return "approval/appr_listall";
-		
 		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
 		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 		String apType = (apTypeStr != null) ? apTypeStr : "all";
+		logger.info("apType : " + apType);
 		int listCount = 0;
-		if(apType == "my") {
-			listCount = approvalService.selectApprovalListCount(empId);
-		}else {
-			listCount = approvalService.selectApprovalListAllCount();
-		}	
 		
-		logger.info("listCount : " + listCount);
+		switch (apType) {
+			case "my"://상신한 기안서 
+				listCount = approvalService.selectApprovalListCount(empId);
+				break;
+			case "ap"://결재할 기안서
+				listCount = approvalService.selectApprovalListCount_A(empId);
+				break;
+			default://모든 기안서
+				listCount = approvalService.selectApprovalListAllCount();
+		}
+		logger.info("===========listCount : " + listCount);
 		
 		Paging paging = new Paging(listCount, currentPage, limit, "aplist.do?apType="+apType+"&empId="+empId);
 		paging.calculator();
 		ArrayList<Approval> list = null;
 		
-		if(apType == "my") {
-			list = approvalService.selectApprovalList(
-					new Search(empId, 0, paging.getStartRow(), paging.getEndRow()));
-		}else {
-			list = approvalService.selectApprovalList(
-					new Search(paging.getStartRow(), paging.getEndRow()));
+		switch (apType) {
+			case "my"://상신한 기안서 
+				list = approvalService.selectApprovalList(
+						new Search(empId, 0, paging.getStartRow(), paging.getEndRow()));
+				break;
+			case "ap"://결재할 기안서
+				list = approvalService.selectApprovalList_A(
+						new Search(empId, 0, paging.getStartRow(), paging.getEndRow()));
+				break;
+			default://모든 기안서
+				list = approvalService.selectApprovalListAll(
+						new Search(paging.getStartRow(), paging.getEndRow()));
 		}
 		
 		LocalDate today = LocalDate.now();
@@ -90,7 +102,7 @@ public class ApprovalController {
 		model.addAttribute("paging", paging);
 		model.addAttribute("empId", empId);
 		model.addAttribute("apType", apType);
-		//model.addAttribute("firstType", "first");
+		model.addAttribute("firstType", "first");
 		
 		if(list != null && list.size() > 0) {
 			model.addAttribute("approvalList", list);
@@ -120,23 +132,36 @@ public class ApprovalController {
 		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 		int listCount = 0;
 		String apType = (apTypeStr != null) ? apTypeStr : "all";
-		if(apType == "my") {
-			listCount = approvalService.selectApprovalListDateCount(search);
-		}else {
-			listCount = approvalService.selectApprovalListAllDateCount(search);
+		
+		switch (apType) {
+			case "my"://상신한 기안서 
+				listCount = approvalService.selectApprovalListDateCount(search);
+				break;
+			case "ap"://결재할 기안서
+				listCount = approvalService.selectApprovalListDateCount_A(search);
+				break;
+			default://모든 기안서
+				listCount = approvalService.selectApprovalListAllDateCount(search);
 		}
 		
+		logger.info("apType : " + apType);
 		logger.info("listCount : " + listCount);
+		logger.info("aplistdate.do search : " + search);
 		Paging paging = new Paging(listCount, currentPage, limit, "aplistdate.do?apType="+apType);
 		paging.calculator();
 		search.setStartRow(paging.getStartRow());
 		search.setEndRow(paging.getEndRow());
 		ArrayList<Approval> list = null;
 		
-		if(apType == "my") {
-			list = approvalService.selectApprovalListDate(search);
-		}else {
-			list = approvalService.selectApprovalListAllDate(search);
+		switch (apType) {
+			case "my"://상신한 기안서 
+				list = approvalService.selectApprovalListDate(search);
+				break;
+			case "ap"://결재할 기안서
+				list = approvalService.selectApprovalListDate_A(search);
+				break;
+			default://모든 기안서
+				list = approvalService.selectApprovalListAllDate(search);
 		}
 		
 		logger.info("list : " + list);
@@ -149,7 +174,7 @@ public class ApprovalController {
 		model.addAttribute("begin", search.getBegin().toString());
 		model.addAttribute("end", search.getEnd().toString());
 		model.addAttribute("apType", apType);
-		//model.addAttribute("firstType", "date");
+		model.addAttribute("firstType", "date");
 		
 		if(list != null && list.size() > 0) {
 			model.addAttribute("approvalList", list);
@@ -171,28 +196,27 @@ public class ApprovalController {
 		String searchType = search.getSearchType();
 		int listCount = 0;
 		String apType = (apTypeStr != null) ? apTypeStr : "all";
-		
+		logger.info("apsearch.do search : " + search);
 		logger.info("searchType : " + searchType);
+		logger.info("apType : " + apType);
 		if(searchType != null) {
 			switch (searchType) {
+				case "all":
 				case "complete":
-					if(apType == "my") listCount = approvalService.selectApprSearchCountComplete(search);
-					else listCount = approvalService.selectApprSearchAllCountComplete(search);
-					break;
 				case "continue":
-					if(apType == "my") listCount = approvalService.selectApprSearchCountContinue(search);
-					else listCount = approvalService.selectApprSearchAllCountContinue(search);
-					break;
 				case "companion":
-					if(apType == "my") listCount = approvalService.selectApprSearchCountCompanion(search);
-					else listCount = approvalService.selectApprSearchAllCountCompanion(search);
+					if(apType.equals("my")) listCount = approvalService.selectApprSearchCountKeyword(search);
+					else if(apType.equals("ap")) listCount = approvalService.selectApprSearchCountKeyword_A(search);
+					else listCount = approvalService.selectApprSearchAllCountKeyword(search);
 					break;
 				case "approver":
-					if(apType == "my") listCount = approvalService.selectApprSearchCountApprover(search);
+					if(apType.equals("my")) listCount = approvalService.selectApprSearchCountApprover(search);
+					else if(apType.equals("ap")) listCount = approvalService.selectApprSearchCountApprover_A(search);
 					else listCount = approvalService.selectApprSearchAllCountApprover(search);
 					break;
 				case "drafter":
-					if(apType == "my") listCount = approvalService.selectApprSearchCountDrafter(search);
+					if(apType.equals("my")) listCount = approvalService.selectApprSearchCountDrafter(search);
+					else if(apType.equals("ap")) listCount = approvalService.selectApprSearchCountDrafter_A(search);
 					else listCount = approvalService.selectApprSearchAllCountDrafter(search);
 					break;
 			}
@@ -202,39 +226,12 @@ public class ApprovalController {
 		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
 		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 		logger.info("listCount : " + listCount);
+		
 		Paging paging = new Paging(listCount, currentPage, limit, 
 				"apsearch.do?apType="+apType+"&empId="+search.getEmpId() + "&searchType=" + searchType);
 		paging.calculator();
 		search.setStartRow(paging.getStartRow());
 		search.setEndRow(paging.getEndRow());
-		
-		ArrayList<Approval> list = null;
-		if(searchType != null) {
-			switch (searchType) {
-				case "complete":
-					if(apType == "my") list = approvalService.selectApprSearchComplete(search);
-					else list = approvalService.selectApprSearchAllComplete(search);
-					break;
-				case "continue":
-					if(apType == "my") list = approvalService.selectApprSearchContinue(search);
-					else list = approvalService.selectApprSearchAllContinue(search);
-					break;
-				case "companion":
-					if(apType == "my") list = approvalService.selectApprSearchCompanion(search);
-					else list = approvalService.selectApprSearchAllCompanion(search);
-					break;
-				case "approver":
-					if(apType == "my") list = approvalService.selectApprSearchApprover(search);
-					else list = approvalService.selectApprSearchAllApprover(search);
-					break;
-				case "drafter":
-					if(apType == "my") list = approvalService.selectApprSearchDrafter(search);
-					else list = approvalService.selectApprSearchAllDrafter(search);
-					break;
-			}
-		}
-		
-		logger.info("apsearch.do list : " + list);
 		
 		model.addAttribute("keyword", search.getKeyword());
 		model.addAttribute("paging", paging);
@@ -243,7 +240,35 @@ public class ApprovalController {
 		model.addAttribute("begin", search.getBegin().toString());
 		model.addAttribute("end", search.getEnd().toString());
 		model.addAttribute("apType", apType);
-		//model.addAttribute("firstType", "first");
+		model.addAttribute("firstType", "first");
+		
+		if(listCount == 0) return "approval/appr_list";
+		
+		ArrayList<Approval> list = null;
+		if(searchType != null) {
+			switch (searchType) {
+				case "all":
+				case "complete":
+				case "continue":
+				case "companion":
+					if(apType.equals("my")) list = approvalService.selectApprSearchKeyword(search);
+					else if(apType.equals("ap")) list = approvalService.selectApprSearchKeyword_A(search);
+					else list = approvalService.selectApprSearchAllKeyword(search);
+					break;
+				case "approver":
+					if(apType.equals("my")) list = approvalService.selectApprSearchApprover(search);
+					else if(apType.equals("ap")) list = approvalService.selectApprSearchApprover_A(search);
+					else list = approvalService.selectApprSearchAllApprover(search);
+					break;
+				case "drafter":
+					if(apType.equals("my")) list = approvalService.selectApprSearchDrafter(search);
+					else if(apType.equals("ap")) list = approvalService.selectApprSearchDrafter_A(search);
+					else list = approvalService.selectApprSearchAllDrafter(search);
+					break;
+			}
+		}
+		
+		logger.info("apsearch.do list : " + list);
 		
 		if(list != null && list.size() > 0) {
 			
@@ -259,5 +284,34 @@ public class ApprovalController {
 		return "approval/appr_list";
 	}
 	
+	//결재 팝업 데이터
+	@RequestMapping(value = "apapprovalpop.do", method = RequestMethod.POST)
+	@ResponseBody//문자값 응답시에는 생략해도 됨
+	public void selectApprovalPopup(
+			@RequestParam("approvalId") int approvalId,
+			HttpServletResponse response) throws IOException {
+		logger.info("approvalId : " + approvalId);
+		response.setContentType("text/html; charset=utf-8");
+		
+		Approval approval = approvalService.selectMyApproval(approvalId);
+		logger.info("approval : " + approval);
+		PrintWriter out = response.getWriter();
+		out.append("no member");
+		out.flush();
+		out.close();
+	}
 	
+	//인서트
+	@RequestMapping("apmoveinsert.do")
+	public String insertMoveApprovalMethod() {
+		return "approval/appr_input";
+	}
+	
+	@RequestMapping(value = "apinsert.do", method = RequestMethod.POST)
+	public String insertApprovalMethod(Approval approval, Model model,
+			HttpServletRequest request, 
+			@RequestParam(name = "upfile", required = false) MultipartFile mfile) {
+		
+		return "approval/appr_input";
+	}
 }

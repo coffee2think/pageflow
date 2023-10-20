@@ -131,6 +131,8 @@ public class BoardController {
 	@RequestMapping("bdlistmy.do")
 	public String selectBoardListMyMethod(Board board, Model model,
 			@RequestParam(name = "searchType", required=false) String searchType,
+			@RequestParam(name="begin", required=false) String begin,
+			@RequestParam(name="end", required=false) String end,
 			@RequestParam(name="page", required=false) String page,
 			@RequestParam(name="limit", required=false) String limitStr) {
 		
@@ -155,6 +157,8 @@ public class BoardController {
 		model.addAttribute("depId", board.getDepId());
 		model.addAttribute("depName", depName);
 		model.addAttribute("searchType", searchType);
+		model.addAttribute("begin", begin);
+		model.addAttribute("end", end);
 		model.addAttribute("firstType", "first");
 		if(list != null && list.size() > 0) {
 			
