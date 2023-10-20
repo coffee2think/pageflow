@@ -21,6 +21,10 @@ public class StoreDao {
 		return sqlSessionTemplate.selectOne("storeMapper.selectGetListCount");
 	}
 
+	public int selectGetReleaseListCount() {
+		return sqlSessionTemplate.selectOne("storeMapper.selectGetReleaseListCount");
+	}
+
 	public ArrayList<Store> selectReleaseList(Paging paging) {
 		List<Store> list = sqlSessionTemplate.selectList("storeMapper.selectReleaseList", paging);
 		return (ArrayList<Store>) list;
@@ -161,17 +165,16 @@ public class StoreDao {
 		return sqlSessionTemplate.selectOne("storeMapper.selectCurrInven");
 	}
 
-	public int updateStore(Store store) {
-		return sqlSessionTemplate.update("storeMapper.updateStore", store);
-	}
-
-	public int updateInventory(Store store) {
-		return sqlSessionTemplate.update("storeMapper.updateInventory", store);
-	}
-	
 	public int selectMaxStoreId() {
 		return sqlSessionTemplate.selectOne("storeMapper.selectMaxStoreId");
 	}
-	
+
+	public int insertRelease(Store store) {
+		return sqlSessionTemplate.insert("storeMapper.insertRelease", store);
+	}
+
+	public int updateStore(Store store) {
+		return sqlSessionTemplate.update("storeMapper.updateStore", store);
+	}
 
 }

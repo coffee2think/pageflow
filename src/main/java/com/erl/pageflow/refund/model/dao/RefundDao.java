@@ -11,6 +11,7 @@ import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.refund.model.vo.Refund;
+import com.erl.pageflow.store.model.vo.Store;
 
 @Repository("refundDao")
 public class RefundDao {
@@ -89,6 +90,26 @@ public class RefundDao {
 	public ArrayList<Refund> selectrefundByClientName(Search search) {
 		List<Refund> list = sqlSessionTemplate.selectList("refundMapper.selectrefundByClientName", search);
 		return (ArrayList<Refund>) list;
+	}
+
+	public int selectMaxRefundId() {
+		return sqlSessionTemplate.selectOne("refundMapper.selectMaxRefundId");
+	}
+
+	public int selectPreInvenId() {
+		return sqlSessionTemplate.selectOne("refundMapper.selectPreInvenId");
+	}
+
+	public int selectCurrInven() {
+		return sqlSessionTemplate.selectOne("refundMapper.selectCurrInven");
+	}
+	
+	public int insertRefund(Refund refund) {
+		return sqlSessionTemplate.insert("refundMapper.insertRefund", refund);
+	}
+
+	public int insertInventory(Refund refund) {
+		return sqlSessionTemplate.insert("refundMapper.insertInventory", refund);
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.refund.model.vo.Refund;
+import com.erl.pageflow.store.model.vo.Store;
 
 public interface RefundService {
 
@@ -41,4 +42,14 @@ public interface RefundService {
 	public ArrayList<Refund> selectrefundByEmpName(Search search);
 
 	public ArrayList<Refund> selectrefundByClientName(Search search);
+	
+	public int selectMaxRefundId();
+	
+	public int selectPreInvenId();
+
+	public int selectCurrInven();
+	
+	public int insertRefund(Refund refund);
+
+	public int insertInventory(Refund refund);
 }

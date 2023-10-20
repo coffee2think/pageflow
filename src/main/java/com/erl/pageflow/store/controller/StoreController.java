@@ -8,19 +8,22 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
-import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.store.model.service.StoreService;
 import com.erl.pageflow.store.model.vo.Store;
 
@@ -30,9 +33,6 @@ public class StoreController {
 
 	@Autowired
 	private StoreService storeService;
-
-	@Autowired
-	private StoreService inventoryService;
 
 	// 뷰-----------------------------------------------------------------------------------------------
 
@@ -52,11 +52,12 @@ public class StoreController {
 
 	// 출고현황
 	@RequestMapping("releaselist.do")
-	public String moveReleaseList(Model model) {
-		int currentPage = 1;
-		int limit = 10;
+	public String moveReleaseList(Model model, @RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String limitStr) {
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 
-		int listCount = storeService.selectGetListCount();
+		int listCount = storeService.selectGetReleaseListCount();
 		Paging paging = new Paging(listCount, currentPage, limit, "releaselist.do");
 		paging.calculator();
 
@@ -67,10 +68,11 @@ public class StoreController {
 			String cname = storeService.selectStoreClientName(sto.getStorageId());
 			int bprice = storeService.selectStoreBookPrice(sto.getBookId());
 
-			// logger.info("sto : " + sto);
+			logger.info("sto : " + sto);
 			sto.setBookName(bname);
 			sto.setClientName(cname);
 			sto.setBookPrice(bprice);
+
 		}
 
 		if (list != null && list.size() > 0) {
@@ -78,8 +80,9 @@ public class StoreController {
 			model.addAttribute("paging", paging);
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
-
+			logger.info("list : " + list);
 			return "inventory/release_list";
+
 		} else {
 			model.addAttribute("message", "출고현황 조회 실패");
 			return "common/error";
@@ -89,9 +92,10 @@ public class StoreController {
 
 	// 입고현황
 	@RequestMapping("storelist.do")
-	public String moveStoreList(Model model) {
-		int currentPage = 1;
-		int limit = 10;
+	public String moveStoreList(Model model, @RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String limitStr) {
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 
 		int listCount = storeService.selectGetListCount();
 		Paging paging = new Paging(listCount, currentPage, limit, "storelist.do");
@@ -196,71 +200,104 @@ public class StoreController {
 
 	// 입고 삭제
 	@RequestMapping(value = "storedelete.do", method = RequestMethod.POST)
-	@ResponseBody
-	public void deleteStore(@RequestParam(name = "selectedStoreIds") String selectedStoreIds,
-			HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
-
+	/* @ResponseBody */
+	public void deleteStore(HttpServletResponse response, @RequestBody String param)
+			throws ParseException, IOException {
+		JSONParser jparser = new JSONParser();
+		JSONArray jarr = (JSONArray) jparser.parse(param);
+		String[] jst = null;
+		System.out.println(jarr);
 		int count = 0;
-		String[] storeArray = selectedStoreIds.split(",");
 
-		for (int i = 0; i < storeArray.length; i++) {
-
-			int sId = Integer.parseInt(storeArray[i].toString());
-			logger.info("sId  : " + sId);
-			if (storeService.deleteInventory(sId) > 0) {
-				logger.info("deleteInventory : " + sId);
-				if (storeService.deleteStore(sId) > 0) {
-					logger.info("deleteStore : " + sId);
+		JSONObject job = (JSONObject) jarr.get(0);
+		JSONArray scbkeyArray = (JSONArray) job.get("scbkey");
+		System.out.println("job : " + job);
+		System.out.println("scbkeyArray : " + scbkeyArray);
+		for (int j = 0; j < scbkeyArray.size(); j++) {
+			String scbkey = (String) scbkeyArray.get(j);
+			int scbkeyInt = Integer.parseInt(scbkey);
+			System.out.println("scbkeyInt : " + scbkeyInt);
+			if (storeService.deleteInventory(scbkeyInt) >= 0) {
+				if (storeService.deleteStore(scbkeyInt) >= 0) {
+					System.out.println("입고 삭제 : " + scbkeyInt);
 					count++;
-				} else {
-					model.addAttribute("message", sId + "번 입고 삭제 실패");
 				}
-			} else {
-				model.addAttribute("message", sId + "번 재고 삭제 실패");
 			}
 		}
 
-		if (count >= storeArray.length) {
-			response.getWriter().append(String.valueOf(count)).flush();
+		String str = "no";
+		if (count >= scbkeyArray.size()) {
+			str = "ok";
 		}
 
+		PrintWriter out = response.getWriter();
+		out.append(str);
+		// 출력값은 버퍼에서 처리하니까 밀어내는 작업!
+		out.flush();
+
+		out.close();
+		/*
+		 * for (int i = 0; i < jarr.size(); i++) { JSONObject job = (JSONObject)
+		 * jarr.get(i); System.out.println(job); JSONArray scbkeyArray = (JSONArray)
+		 * job.get("scbkey"); System.out.println(scbkeyArray);
+		 * 
+		 * jst = new String[scbkeyArray.size()];
+		 * 
+		 * for (int j = 0; j < scbkeyArray.size(); j++) { jst[j] = (String)
+		 * scbkeyArray.get(j); System.out.println("jst" + j + " : " + jst[j]);
+		 * 
+		 * for (int j2 = 0; j2 < jst.length; j2++) { String scbkey = (String)
+		 * scbkeyArray.get(j2); int scbkeyInt = Integer.parseInt(scbkey); if
+		 * (storeService.deleteInventory(scbkeyInt) >= 0) { if
+		 * (storeService.deleteStore(scbkeyInt) >= 0) { System.out.println("입고 삭제 : " +
+		 * scbkeyInt); } }
+		 * 
+		 * }
+		 * 
+		 * }
+		 * 
+		 * }
+		 */
 	}
 
 	// 출고 삭제
 	@RequestMapping(value = "releasedelete.do", method = RequestMethod.POST)
-	@ResponseBody
-	public void deleteRelease(@RequestParam(name = "selectedStoreIds") String selectedStoreIds,
-			HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
-
+	/* @ResponseBody */
+	public void deleteRelease(HttpServletResponse response, @RequestBody String param)
+			throws ParseException, IOException {
+		JSONParser jparser = new JSONParser();
+		JSONArray jarr = (JSONArray) jparser.parse(param);
+		String[] jst = null;
+		System.out.println(jarr);
 		int count = 0;
-		String[] storeArray = selectedStoreIds.split(",");
-		// logger.info("selectedStoreIds" + selectedStoreIds);
-		// logger.info("storeArray length : " + storeArray.length);
-		for (int i = 0; i < storeArray.length; i++) {
 
-			int sId = Integer.parseInt(storeArray[i].toString());
-
-			if (storeService.deleteInventory(sId) > 0) {
-
-				// logger.info("deleteInventory " + i);
-				if (storeService.deleteRelease(sId) > 0) {
-					// logger.info("deleteStore " + i);
+		JSONObject job = (JSONObject) jarr.get(0);
+		JSONArray scbkeyArray = (JSONArray) job.get("scbkey");
+		System.out.println("job : " + job);
+		System.out.println("scbkeyArray : " + scbkeyArray);
+		for (int j = 0; j < scbkeyArray.size(); j++) {
+			String scbkey = (String) scbkeyArray.get(j);
+			int scbkeyInt = Integer.parseInt(scbkey);
+			System.out.println("scbkeyInt : " + scbkeyInt);
+			if (storeService.deleteInventory(scbkeyInt) >= 0) {
+				if (storeService.deleteRelease(scbkeyInt) >= 0) {
+					System.out.println("출고 삭제 : " + scbkeyInt);
 					count++;
-				} else {
-					model.addAttribute("message", sId + "번 입고 삭제 실패");
-					// return "common/error";
 				}
-			} else {
-				model.addAttribute("message", sId + "번 재고 삭제 실패");
-				// return "common/error";
 			}
 		}
 
-		// return "redirect:storelist.do";
-		if (count >= storeArray.length) {
-			response.getWriter().append(String.valueOf(count)).flush();
+		String str = "no";
+		if (count >= scbkeyArray.size()) {
+			str = "ok";
 		}
 
+		PrintWriter out = response.getWriter();
+		out.append(str);
+		// 출력값은 버퍼에서 처리하니까 밀어내는 작업!
+		out.flush();
+
+		out.close();
 	}
 
 	// 입고 키워드로 검색
@@ -399,6 +436,7 @@ public class StoreController {
 
 	}
 
+	// 입고등록
 	@RequestMapping(value = "stoinsert.do", method = RequestMethod.POST)
 	public String insertStore(HttpServletRequest request, Model model) {
 		String[] bookIds = request.getParameterValues("bookId");
@@ -409,13 +447,11 @@ public class StoreController {
 		String[] storePrice = request.getParameterValues("storePrice");
 		String[] storeDate = request.getParameterValues("storeDate");
 		// ----------------------------------------
-		String[] prevInvenIds = request.getParameterValues("prevInvenId");
-		String[] currInvens = request.getParameterValues("currInven");
-		
+
 		int storeId = storeService.selectMaxStoreId() + 1;
 
 		ArrayList<Store> storeList = new ArrayList<>();
-		
+
 		for (int i = 0; i < bookIds.length; i++) {
 			Store store = new Store();
 
@@ -427,10 +463,9 @@ public class StoreController {
 			store.setStoreNum(Integer.parseInt(storeNums[i]));
 			store.setStorePrice(Integer.parseInt(storePrice[i]));
 			store.setStoreDate(Date.valueOf(storeDate[i]));
-			store.setPrevInvenId(Integer.parseInt(prevInvenIds[i]));
-			store.setCurrInven(Integer.parseInt(currInvens[i]));
-			
+
 			storeList.add(store);
+
 		}
 
 		logger.info("storeList : " + storeList);
@@ -442,38 +477,91 @@ public class StoreController {
 
 				int currInven = storeService.selectCurrInven();
 				store.setCurrInven(currInven);
-				
+
 				logger.info("currInven : " + currInven);
+
+				return "redirect:storelist.do";
 			}
 		}
 		model.addAttribute("message", "입고 등록 실패!");
 		return "common/error";
 	}
 
+	// 출고 등록
+	@RequestMapping(value = "releaseinput.do", method = RequestMethod.POST)
+	public String insertRelease(HttpServletRequest request, Model model) {
+		String[] bookIds = request.getParameterValues("bookId");
+		String[] bookNames = request.getParameterValues("bookName");
+		String[] empIds = request.getParameterValues("empId");
+		String[] empNames = request.getParameterValues("empName");
+		String[] clientNames = request.getParameterValues("clientName");
+		String[] clientIds = request.getParameterValues("clientId");
+		String[] storageIds = request.getParameterValues("storageId");
+		String[] storeNums = request.getParameterValues("storeNum");
+		String[] storeDates = request.getParameterValues("storeDate");
+		String[] bookPrices = request.getParameterValues("bookPrice");
+		String[] storePrices = request.getParameterValues("storePrice");
+
+		int storeId = storeService.selectMaxStoreId() + 1;
+
+		ArrayList<Store> releaseList = new ArrayList<>();
+
+		for (int i = 0; i < bookIds.length; i++) {
+
+			Store store = new Store();
+
+			store.setStoreId(storeId);
+			store.setBookId(Integer.parseInt(bookIds[i]));
+			store.setBookName(bookNames[i]);
+			store.setEmpId(Integer.parseInt(empIds[i]));
+			store.setEmpName(empNames[i]);
+			store.setClientName(clientNames[i]);
+			store.setClientId(Integer.parseInt(clientIds[i]));
+			store.setStoreNum(Integer.parseInt(storeNums[i]));
+			store.setStoreDate(Date.valueOf(storeDates[i]));
+			store.setBookPrice(Integer.parseInt(bookPrices[i]));
+			store.setStorePrice(Integer.parseInt(storePrices[i]));
+			store.setStorageId(Integer.parseInt(storageIds[i]));
+
+			releaseList.add(store);
+		}
+
+		for (Store store : releaseList) {
+			if (storeService.insertRelease(store) > 0 && storeService.insertInventory(store) > 0) {
+				int preinvenId = storeService.selectPreInvenId();
+				store.setPrevInvenId(preinvenId);
+
+				int currInven = storeService.selectCurrInven();
+				store.setCurrInven(currInven);
+
+				return "redirect:releaselist.do";
+			}
+		}
+		model.addAttribute("message", "출고등록 실패!");
+		return "common/error";
+	}
+
+	// 입고 수정
 	@RequestMapping(value = "stoupdate.do", method = RequestMethod.POST)
-	public void storeUpdate(Store store, HttpServletResponse response) throws IOException {
-
+	public void updateStore(Store store, HttpServletResponse response) throws IOException {
 		String returnStr = null;
+		logger.info("store : " + store);
 		if (storeService.updateStore(store) > 0) {
-
-			int preinvenId = storeService.selectPreInvenId();
-			store.setPrevInvenId(preinvenId);
-
-			int currInven = storeService.selectCurrInven();
-			store.setPrevInvenId(currInven);
-
-			if (storeService.updateInventory(store) > 0) {
+			logger.info("store : " + store);
+			
+			if (storeService.insertInventory(store) > 0) {
 				returnStr = "success";
 			}
 		} else {
-			returnStr = "false";
-		}
+			logger.info("store : " + store);
+			returnStr = "fail";
 
+		}
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
 		out.append(returnStr);
 		out.flush();
 		out.close();
-	}
 
+	}
 }
