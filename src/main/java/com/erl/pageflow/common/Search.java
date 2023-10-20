@@ -17,6 +17,7 @@ public class Search implements Serializable {
 	private Date week;
 	private Date month;
 	private String searchType = null;
+	private String apType = null;
 
 	public Search() {
 	}
@@ -47,7 +48,7 @@ public class Search implements Serializable {
 		this.searchType = searchType;
 	}
 	
-	public Search(int empId, String keyword, Date begin, Date end, int startRow, int endRow, String searchType) {
+	public Search(int empId, String keyword, Date begin, Date end, int startRow, int endRow, String searchType, String apType) {
 		super();
 		this.empId = empId;
 		this.keyword = keyword;
@@ -58,6 +59,7 @@ public class Search implements Serializable {
 		this.week = week;
 		this.month = month;
 		this.searchType = searchType;
+		this.apType = apType;
 	}
 	
 	public Search(String keyword, Date begin, Date end, int startRow, int endRow) {
@@ -162,10 +164,24 @@ public class Search implements Serializable {
 		this.searchType = searchType;
 	}
 	
+	
+	
+	public String getApType() {
+		return apType;
+	}
+
+	public void setApType(String apType) {
+		this.apType = apType;
+	}
+
 	@Override
 	public String toString() {
-		return "Search [keyword=" + keyword + ", begin=" + begin + ", end=" + end + ", startRow=" + startRow
-				+ ", endRow=" + endRow + ", week=" + week + ", month=" + month + "]";
+		return "Search [empId=" + empId + ", depId=" + depId + ", keyword=" + keyword + ", begin=" + begin + ", end="
+				+ end + ", startRow=" + startRow + ", endRow=" + endRow + ", week=" + week + ", month=" + month
+				+ ", searchType=" + searchType + ", apType=" + apType + "]";
 	}
+
+	
+	
 
 }

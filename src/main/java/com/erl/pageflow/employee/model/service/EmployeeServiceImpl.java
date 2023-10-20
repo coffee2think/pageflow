@@ -1,8 +1,11 @@
 package com.erl.pageflow.employee.model.service;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.employee.model.dao.EmployeeDao;
 import com.erl.pageflow.employee.model.vo.Employee;
 
@@ -14,5 +17,17 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Override
 	public Employee selectEmployee(int empId) {
 		return employeeDao.selectEmployee(empId);
+	}
+
+	@Override
+	public ArrayList<Employee> selectEmployeeList(Paging paging) {
+		
+		return employeeDao.selectEmployeeList(paging);
+	}
+
+	@Override
+	public int selectEmployeeListCount() {
+		
+		return employeeDao.selectEmployeeListCount();
 	}
 }

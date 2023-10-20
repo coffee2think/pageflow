@@ -17,12 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.contract.model.service.ContractService;
 import com.erl.pageflow.contract.model.vo.Contract;
-import com.erl.pageflow.edit.model.vo.Edit;
-import com.erl.pageflow.sales.model.vo.BookOrder;
 
 @Controller
 public class ContractController {
@@ -60,9 +57,8 @@ public class ContractController {
 			return "common/error";
 		}
 	}
-		
-	//계약 수정 요청 처리
-	@RequestMapping(value = "ctrupdate.do", method = RequestMethod.POST)
+	// 계약 정보 수정 요청 처리
+	@RequestMapping(value="ctrupdate.do", method=RequestMethod.POST)
 	public void contractUpdateMethod(Contract contract, HttpServletResponse response) throws IOException {
 		logger.info("ctrupdate.do : " + contract);
 		

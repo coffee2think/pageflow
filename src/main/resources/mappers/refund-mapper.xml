@@ -18,6 +18,7 @@
 		<result property="bookName" column="BOOK_NAME" />
 		<result property="clientName" column="CLIENT_NAME" />
 		<result property="clientAddredd" column="CLIENT_ADDRESS" />
+		<result property="storageId" column="STORAGE_ID" />
 	</resultMap>
 	
 	
@@ -158,4 +159,68 @@
 	<delete id="deleteInventory" parameterType="_int">
 		DELETE FROM INVENTORY WHERE REFUND_ID = #{ refundId }
 	</delete>
+	
+	<select id="selectMaxRefundId" resultType="_int">
+		SELECT nvl(MAX(REFUND_ID), 0) FROM REFUND
+	</select>
+
+	<select id="selectPreInvenId" resultType="_int">
+		SELECT INVEN_ID
+		FROM(SELECT ROWNUM RUM, INVEN_ID
+		FROM INVENTORY
+		WHERE ROWNUM = 1 AND CLASSIFY = '반품'
+		ORDER BY INVEN_ID, INVEN_DATE  DESC)
+	</select>
+	
+	<select id="selectCurrInven" resultType="_int">
+		SELECT CURR_INVEN
+		FROM(SELECT ROWNUM RUM, CURR_INVEN
+            FROM INVENTORY
+            WHERE ROWNUM = 1 AND CLASSIFY = '반품'
+            ORDER BY INVEN_ID, INVEN_DATE  DESC)
+	</select>
+	
+	<insert id="insertInventory" parameterType="refund">
+	<![CDATA[
+	       INSERT INTO INVENTORY VALUES (
+		(SELECT MAX(INVEN_ID) + 1 FROM INVENTORY), #{ bookId }, #{ storageId }, NULL, #{ refundId },
+		(SELECT INVEN_ID
+		FROM(SELECT INVEN_ID, ROWNUM
+		            FROM INVENTORY 
+		            ORDER BY INVEN_DATE DESC)
+		WHERE ROWNUM = 1),
+		
+		(SELECT REFUND_NUM FROM (SELECT REFUND_NUM, ROWNUM
+		FROM REFUND
+		WHERE REFUND_ID = #{ refundId }
+        ORDER BY REFUND_DATE DESC)
+        WHERE ROWNUM = 1),
+		
+		((SELECT NVL(CURR_INVEN, 0)
+		FROM (
+		    SELECT CURR_INVEN, ROWNUM
+		    FROM INVENTORY
+		    WHERE BOOK_ID = #{ bookId }
+		    ORDER BY INVEN_DATE DESC
+		)
+		WHERE ROWNUM = 1) + 
+				(
+		        SELECT REFUND_NUM
+		        FROM(SELECT REFUND_NUM, ROWNUM
+				FROM REFUND
+				WHERE REFUND_ID = #{ refundId } AND ROWNUM =1
+		        ORDER BY REFUND_DATE DESC)
+		        )
+		        
+		        ),
+				#{ refundDate }, '반품', NULL)
+]]>
+	</insert>
+	
+	<insert id="insertRefund" parameterType="Refund">
+		INSERT INTO REFUND VALUES ( 
+		#{ refundId }, #{ bookId }, #{ clientId }, #{ empId }, #{ empName }, 
+		#{ refundNum }, #{ refundDate },#{ refundAmount },#{ refundState }, #{ remark })
+	</insert>
+	
 </mapper>

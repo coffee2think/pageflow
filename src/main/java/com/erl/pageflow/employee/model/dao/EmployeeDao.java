@@ -1,9 +1,14 @@
 package com.erl.pageflow.employee.model.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.employee.model.vo.Employee;
 
 @Repository("employeeDao")
@@ -14,4 +19,15 @@ public class EmployeeDao {
 	public Employee selectEmployee(int empId) {
 		return sqlSessionTemplate.selectOne("employeeMapper.selectEmployee", empId);
 	}
+	
+	public int selectEmployeeListCount() {
+		return sqlSessionTemplate.selectOne("employeeMapper.selectListCount");
+	}
+	
+	public ArrayList<Employee> selectEmployeeList(Paging paging) {
+		List<Employee> list = sqlSessionTemplate.selectList("employeeMapper.selectEmployeeList", paging);
+		return (ArrayList<Employee>)list;
+	}
+	
+	
 }

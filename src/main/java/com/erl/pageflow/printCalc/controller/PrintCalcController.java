@@ -40,7 +40,7 @@ public class PrintCalcController {
 		return "redirect:pclistdate.do";
 	}
 	
-	// 코드로 정산현황 검색 처리용
+	// 날짜로 정산현황 검색 처리용
 	@RequestMapping("pclistdate.do")
 	public String printCalcList(Search search,
 			@RequestParam(name="page", required=false) String page,

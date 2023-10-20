@@ -10,7 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
+import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.notice.model.vo.Notice;
+import com.erl.pageflow.sales.model.vo.Client;
 
 @Repository("noticeDao")
 public class NoticeDao {
@@ -59,4 +61,20 @@ public class NoticeDao {
 	public int selectSearchWriterCount(String keyword) {
 		return sqlSessionTemplate.selectOne("noticeMapper.selectSearchWriterCount", keyword);
 	}
+	
+	public int selectNoticeCountByDate(Search search) {
+		return sqlSessionTemplate.selectOne("noticeMapper.selectNoticeCountByDate", search);
+	}
+	
+	public ArrayList<Notice> selectNoticeByDate(Search search) {
+		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectNoticeByDate", search);
+		return (ArrayList<Notice>) list;
+	}
+
+	
+	
+	
+	
+	
+	
 }

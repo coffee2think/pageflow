@@ -22,13 +22,18 @@
         side.buttonEvent();
 
         let empId = Number('<c:out value="${ empId }" />');
-
+        let apType = Number('<c:out value="${ apType }" />');
         //로그인 안했을때 나의 결재페이지 안보이게
         
         if(empId != -1) {
             if(NOWPAGE == 6) {
                 console.log('empId : ' + empId);
-                $('#sideBtn_'+1).attr('href', 'aplist.do?apType=my&empId='+empId);
+                console.log('apType : ' + apType);
+                $('#sideBtn_1').attr('href', 'aplist.do?apType=my&empId='+empId);
+                $('#sideSubBtn_1_1').attr('href', 'aplist.do?apType=my&empId='+empId);
+                $('#sideSubBtn_1_2').attr('href', 'aplist.do?apType=ap&empId='+empId);
+
+                $('#sideBtn_2').attr('href', 'aplist.do?apType=all&empId='+empId);
             }
         }
     });

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.edit.model.dao.EditDao;
 import com.erl.pageflow.edit.model.vo.Edit;
 
@@ -52,5 +53,15 @@ public class EditServiceImpl implements EditService {
 	@Override
 	public int selectMaxEditId() {
 		return editDao.selectMaxEditId();
+	}
+	
+	@Override
+	public ArrayList<Edit> selectEditByDate(Search search) {
+		return editDao.selectEditByDate(search);
+	}
+	
+	@Override
+	public int selectEditCountByDate(Search search) {
+		return editDao.selectEditCountByDate(search);
 	}
 }

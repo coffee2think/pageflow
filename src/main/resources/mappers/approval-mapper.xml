@@ -16,7 +16,24 @@
 		<result property="rejectionDate" column="REJECTION_DATE" />
 		<result property="drafterName" column="DRAFTER_NAME" />
 		<result property="approverName" column="APPROVER_NAME" />
+	</resultMap>
+	
+	<resultMap type="Approval" id="resultApprovalJoin2">
+		<result property="apprId" column="APPR_ID" />
+		<result property="drafter" column="DRAFTER" />
+		<result property="approver" column="APPROVER" />
+		<result property="draftType" column="DRAFT_TYPE" />
+		<result property="lineId" column="LINE_ID" />
+		<result property="apprState" column="APPR_STATE" />
+		<result property="apprDate" column="APPR_DATE" />
+		<result property="receiptDate" column="RECEIPT_DATE" />
+		<result property="rejectionDate" column="REJECTION_DATE" />
+		<result property="drafterName" column="DRAFTER_NAME" />
+		<result property="approverName" column="APPROVER_NAME" />
 		
+		<result property="depName" column="DEP_NAME" />
+		<result property="jobName" column="JOB_NAME" />
+		<result property="posName" column="POS_NAME" />
 	</resultMap>
 	
 	<resultMap type="Approval" id="resultApproval">
@@ -69,28 +86,72 @@
 		select count(*) from approval
 	</select>
 	
-	<select id="selectApprovalListAll" parameterType="Paging" resultMap="resultApprovalJoin">
-		
+	<select id="selectApprovalListAll" parameterType="Search" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
 	</select>
 	
 	<select id="selectApprovalListDateCount" parameterType="Search" resultType="_int">
-		
-		
+		SELECT count(*) from approval
+		where DRAFTER = #{ empId }
+		and APPR_DATE between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
 	</select>
 	
 	<select id="selectApprovalListDate" parameterType="Search" resultMap="resultApprovalJoin">
-		
-		
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where drafter = #{ empId }
+		            and APPR_DATE between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
 	</select>
 	
 	<select id="selectApprovalListAllDateCount" parameterType="Search" resultType="_int">
-		
-		
+		SELECT count(*) from approval
+		where APPR_DATE between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
 	</select>
 	
 	<select id="selectApprovalListAllDate" parameterType="Search" resultMap="resultApprovalJoin">
-		
-		
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where APPR_DATE between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
 	</select>
 	
 	<select id="selectDraft" parameterType="ApprovalKeyword" resultMap="resultDraft">
@@ -102,94 +163,573 @@
 	
 	
 	<!-- 서치!!! --> 
-	
-	<select id="selectApprSearchAllCountComplete" parameterType="Search" resultMap="resultApprovalJoin">
-		
+	<!-- ********** -->
+	<select id="selectApprSearchAllCountComplete" parameterType="Search" resultType="_int">
+		select count(*) from approval 
+		where APPR_STATE = 'complete'
 	</select>
 	
-	<select id="selectApprSearchAllCountContinue" parameterType="Search" resultMap="resultApprovalJoin">
-		
+	<select id="selectApprSearchAllCountContinue" parameterType="Search" resultType="_int">
+		select count(*) from approval 
+		where APPR_STATE = 'continue'
 	</select>
 	
-	<select id="selectApprSearchAllCountCompanion" parameterType="Search" resultMap="resultApprovalJoin">
-		
+	<select id="selectApprSearchAllCountCompanion" parameterType="Search" resultType="_int">
+		select count(*) from approval 
+		where APPR_STATE = 'companion'
 	</select>
 	
-	<select id="selectApprSearchAllCountApprover" parameterType="Search" resultMap="resultApprovalJoin">
-		
+	<select id="selectApprSearchAllCountAll" parameterType="Search"  resultType="_int">
+		select count(*) from approval 
 	</select>
 	
-	<select id="selectApprSearchAllCountDrafter" parameterType="Search" resultMap="resultApprovalJoin">
-		
-	</select>
-	
+	<!-- ********** -->
 	<select id="selectApprSearchAllComplete" parameterType="Search" resultMap="resultApprovalJoin">
-		
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where APPR_STATE = 'complete'
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
 	</select>
 	
 	<select id="selectApprSearchAllContinue" parameterType="Search" resultMap="resultApprovalJoin">
-		
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where APPR_STATE = 'continue'
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
 	</select>
 	
 	<select id="selectApprSearchAllCompanion" parameterType="Search" resultMap="resultApprovalJoin">
-		
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where APPR_STATE = 'companion'
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
 	</select>
 	
+	<select id="selectApprSearchAllAll" parameterType="Search" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
+	
+	<!-- ********** -->
+	<select id="selectApprSearchAllCountApprover" parameterType="Search"  resultType="_int">
+		select count(*)
+		from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		      APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		      EA.emp_name AS approver_name
+		      from approval A
+		      join employee EA on (A.approver = EA.emp_id)
+		    )
+		where approver_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectApprSearchAllCountDrafter" parameterType="Search"  resultType="_int">
+		select count(*)
+		from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		      APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		      ED.emp_name AS drafter_name
+		      from approval A
+		      join employee ED on (A.DRAFTER = ED.emp_id)
+		    )
+		where drafter_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<!-- ********** -->
 	<select id="selectApprSearchAllApprover" parameterType="Search" resultMap="resultApprovalJoin">
-		
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            order by APPR_ID desc) sub
+		        where approver_name like '%' || #{ keyword } || '%')
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
 	</select>
 	
 	<select id="selectApprSearchAllDrafter" parameterType="Search" resultMap="resultApprovalJoin">
-		
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            order by APPR_ID desc) sub
+		        where drafter_name like '%' || #{ keyword } || '%')
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
+	
+	
+	<!-- ********** -->
+	<select id="selectApprSearchCountComplete" parameterType="Search" resultType="_int">
+		select count(*) from approval 
+		where drafter = #{ empId }
+		and APPR_STATE = 'complete'
+	</select>
+	
+	<select id="selectApprSearchCountContinue" parameterType="Search" resultType="_int">
+		select count(*) from approval 
+		where drafter = #{ empId }
+		and APPR_STATE = 'continue'
+	</select>
+	
+	<select id="selectApprSearchCountCompanion" parameterType="Search" resultType="_int">
+		select count(*) from approval 
+		where drafter = #{ empId }
+		and APPR_STATE = 'companion'
+	</select>
+	
+	<select id="selectApprSearchCountAll" parameterType="Search" resultType="_int">
+		select count(*) from approval 
+		where drafter = #{ empId }
 	</select>
 	
 	
 	
 	
-	
-	<select id="selectApprSearchCountComplete" parameterType="Search" resultMap="resultApprovalJoin">
-		
-	</select>
-	
-	<select id="selectApprSearchCountContinue" parameterType="Search" resultMap="resultApprovalJoin">
-		
-	</select>
-	
-	<select id="selectApprSearchCountCompanion" parameterType="Search" resultMap="resultApprovalJoin">
-		
-	</select>
-	
-	<select id="selectApprSearchCountApprover" parameterType="Search" resultMap="resultApprovalJoin">
-		
-	</select>
-	
-	<select id="selectApprSearchCountDrafter" parameterType="Search" resultMap="resultApprovalJoin">
-		
-	</select>
-	
+	<!-- ********** -->
 	<select id="selectApprSearchComplete" parameterType="Search" resultMap="resultApprovalJoin">
-		
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where drafter = #{ empId }
+		            and APPR_STATE = 'complete'
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
 	</select>
 	
 	<select id="selectApprSearchContinue" parameterType="Search" resultMap="resultApprovalJoin">
-		
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where drafter = #{ empId }
+		            and APPR_STATE = 'continue'
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
 	</select>
 	
 	<select id="selectApprSearchCompanion" parameterType="Search" resultMap="resultApprovalJoin">
-		
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where drafter = #{ empId }
+		            and APPR_STATE = 'companion'
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
 	</select>
 	
+	<select id="selectApprSearchAll" parameterType="Search" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where drafter = #{ empId }
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
+	
+	<!-- ********** -->
+	<select id="selectApprSearchCountKeyword" parameterType="Search" resultType="_int">
+		select count(*)
+		from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		      APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		      EA.emp_name AS approver_name
+		      from approval A
+		      join employee EA on (A.approver = EA.emp_id)
+		      where DRAFTER = #{ empId }
+		    )
+		where approver_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectApprSearchCountApprover" parameterType="Search" resultType="_int">
+		select count(*)
+		from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		      APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		      EA.emp_name AS approver_name
+		      from approval A
+		      join employee EA on (A.approver = EA.emp_id)
+		      where DRAFTER = #{ empId }
+		    )
+		where approver_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectApprSearchCountDrafter" parameterType="Search" resultType="_int">
+		select count(*)
+		from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		      APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		      ED.emp_name AS drafter_name
+		      from approval A
+		      join employee ED on (A.DRAFTER = ED.emp_id)
+		      where DRAFTER = #{ empId }
+		    )
+		where drafter_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<!-- ********** -->
 	<select id="selectApprSearchApprover" parameterType="Search" resultMap="resultApprovalJoin">
-		
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where drafter = #{ empId }
+		            order by APPR_ID desc) sub
+		        where approver_name like '%' || #{ keyword } || '%')
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
 	</select>
 	
 	<select id="selectApprSearchDrafter" parameterType="Search" resultMap="resultApprovalJoin">
-		
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where drafter = #{ empId }
+		            order by APPR_ID desc) sub
+		        where drafter_name like '%' || #{ keyword } || '%')
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
 	</select>
 	
 	
+	<!-- *****ap***** -->
 	
+	<select id="selectApprovalListCount_A" parameterType="_int" resultType="_int">
+		select count(*) from approval
+		where APPROVER = #{ empId }
+	</select>
+	<select id="selectApprovalList_A" parameterType="Search" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where APPROVER = #{ empId }
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
 	
+	<select id="selectApprovalListDateCount_A" parameterType="Search" resultType="_int">
+		SELECT count(*) from approval
+		where APPROVER = #{ empId }
+		and APPR_DATE between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+	</select>
+	<select id="selectApprovalListDate_A" parameterType="Search" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where APPROVER = #{ empId }
+		            and APPR_DATE between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
+	
+	<!-- *********** -->
+	<select id="selectApprSearchCountComplete_A" parameterType="Search" resultType="_int">
+		select count(*) from approval 
+		where APPROVER = #{ empId }
+		and APPR_STATE = 'complete'
+	</select>
+	
+	<select id="selectApprSearchCountContinue_A" parameterType="Search" resultType="_int">
+		select count(*) from approval 
+		where APPROVER = #{ empId }
+		and APPR_STATE = 'continue'
+	</select>
+	
+	<select id="selectApprSearchCountCompanion_A" parameterType="Search" resultType="_int">
+		select count(*) from approval 
+		where APPROVER = #{ empId }
+		and APPR_STATE = 'companion'
+	</select>
+	
+	<select id="selectApprSearchCountAll_A" parameterType="Search" resultType="_int">
+		select count(*) from approval 
+		where APPROVER = #{ empId }
+	</select>
+	
+	<select id="selectApprSearchCountApprover_A" parameterType="Search" resultType="_int">
+		select count(*)
+		from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		      APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		      EA.emp_name AS approver_name
+		      from approval A
+		      join employee EA on (A.approver = EA.emp_id)
+		      where APPROVER = #{ empId }
+		    )
+		where approver_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectApprSearchCountDrafter_A" parameterType="Search" resultType="_int">
+		select count(*)
+		from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		      APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		      ED.emp_name AS drafter_name
+		      from approval A
+		      join employee ED on (A.DRAFTER = ED.emp_id)
+		      where APPROVER = #{ empId }
+		    )
+		where drafter_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<!-- *********** -->
+	<select id="selectApprSearchComplete_A" parameterType="Search" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where APPROVER = #{ empId }
+		            and APPR_STATE = 'complete'
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
+	
+	<select id="selectApprSearchContinue_A" parameterType="Search" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where APPROVER = #{ empId }
+		            and APPR_STATE = 'continue'
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
+	
+	<select id="selectApprSearchCompanion_A" parameterType="Search" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where APPROVER = #{ empId }
+		            and APPR_STATE = 'companion'
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
+	
+	<select id="selectApprSearchAll_A" parameterType="Search" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where APPROVER = #{ empId }
+		            order by APPR_ID desc) sub)
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
+	
+	<select id="selectApprSearchApprover_A" parameterType="Search" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where APPROVER = #{ empId }
+		            order by APPR_ID desc) sub
+		        where approver_name like '%' || #{ keyword } || '%')
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
+	
+	<select id="selectApprSearchDrafter_A" parameterType="Search" resultMap="resultApprovalJoin">
+		<![CDATA[
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		            from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		            where APPROVER = #{ empId }
+		            order by APPR_ID desc) sub
+		        where drafter_name like '%' || #{ keyword } || '%')
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		order by APPR_ID desc
+		]]>
+	</select>
+	
+	<!-- *********** -->
+	<select id="selectMyApproval" parameterType="_int" resultMap="resultApprovalJoin2">
+		
+	</select>
 	
 	<insert id="insertApproval">
 		

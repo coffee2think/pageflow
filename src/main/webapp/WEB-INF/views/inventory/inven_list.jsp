@@ -69,6 +69,35 @@
 	    	location.href = url;
 	    }
 	
+	$(document).ready(function(){
+		$('#btn_delete').click(function(){
+			const selectedCheckbokes = $('input[name="selectedItems"]:checked');
+			const selectedStoreIds = [];
+			
+			selectedCheckbokes.each(function(){
+				selectedStoreIds.push($(this).val());
+			});
+			
+			if(selectedStoreIds.length === 0){
+				alert('선택된 항목이 없습니다.');
+			}else{
+				$.ajax({
+					type:'post',
+					url:'storedelete.do',
+					dataType: "json",
+					data: { selectedStoreIds: selectedStoreIds.join(',') },
+					success: function(response){
+						alert('선택한 출고내역이 삭제되었습니다.');
+						location.reload();
+					},
+					error: function(){
+						alert('삭제 실패! 관리자에게 문의 하세요');
+					}
+				});
+			}
+			
+		});
+	});
 	
 </script>
 </head>
@@ -346,7 +375,9 @@
 
 					</div>
 					<!--내용 end-->
-
+	 				<div class="submit-box">
+	                    <button class="contents-input-btn big noline" id="btn_delete">선택삭제</button> 
+	                </div>
 				</div>
 				<!--main-container end-->
 

@@ -34,8 +34,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 	
 	@Override
-	public ArrayList<Approval> selectApprovalListAll(Paging paging) {
-		return null;
+	public ArrayList<Approval> selectApprovalListAll(Search search) {
+		return approvalDao.selectApprovalListAll(search);
 	}
 	
 	@Override
@@ -77,22 +77,31 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public ArrayList<Approval> selectApprovalListAllDate(Search search) {
 		return approvalDao.selectApprovalListAllDate(search);
 	}
+
+	
+	
 	
 	@Override
-	public int selectApprSearchAllCountComplete(Search search) {
-		return approvalDao.selectApprSearchAllCountComplete(search);
+	public int selectApprSearchAllCountKeyword(Search search) {
+		return approvalDao.selectApprSearchAllCountKeyword(search);
 	}
 
 	@Override
-	public int selectApprSearchAllCountContinue(Search search) {
-		return approvalDao.selectApprSearchAllCountContinue(search);
+	public ArrayList<Approval> selectApprSearchAllKeyword(Search search) {
+		return approvalDao.selectApprSearchAllKeyword(search);
 	}
 
 	@Override
-	public int selectApprSearchAllCountCompanion(Search search) {
-		return approvalDao.selectApprSearchAllCountCompanion(search);
+	public int selectApprSearchCountKeyword(Search search) {
+		return approvalDao.selectApprSearchCountKeyword(search);
 	}
 
+	@Override
+	public ArrayList<Approval> selectApprSearchKeyword(Search search) {
+		return approvalDao.selectApprSearchKeyword(search);
+	}
+	
+	
 	@Override
 	public int selectApprSearchAllCountApprover(Search search) {
 		return approvalDao.selectApprSearchAllCountApprover(search);
@@ -102,22 +111,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public int selectApprSearchAllCountDrafter(Search search) {
 		return approvalDao.selectApprSearchAllCountDrafter(search);
 	}
-
-	@Override
-	public ArrayList<Approval> selectApprSearchAllComplete(Search search) {
-		return approvalDao.selectApprSearchAllComplete(search);
-	}
-
-	@Override
-	public ArrayList<Approval> selectApprSearchAllContinue(Search search) {
-		return approvalDao.selectApprSearchAllContinue(search);
-	}
-
-	@Override
-	public ArrayList<Approval> selectApprSearchAllCompanion(Search search) {
-		return approvalDao.selectApprSearchAllCompanion(search);
-	}
-
+	
 	@Override
 	public ArrayList<Approval> selectApprSearchAllApprover(Search search) {
 		return approvalDao.selectApprSearchAllApprover(search);
@@ -127,24 +121,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public ArrayList<Approval> selectApprSearchAllDrafter(Search search) {
 		return approvalDao.selectApprSearchAllDrafter(search);
 	}
-
 	
-	
-	@Override
-	public int selectApprSearchCountComplete(Search search) {
-		return approvalDao.selectApprSearchCountComplete(search);
-	}
-
-	@Override
-	public int selectApprSearchCountContinue(Search search) {
-		return approvalDao.selectApprSearchCountContinue(search);
-	}
-
-	@Override
-	public int selectApprSearchCountCompanion(Search search) {
-		return approvalDao.selectApprSearchCountCompanion(search);
-	}
-
 	@Override
 	public int selectApprSearchCountApprover(Search search) {
 		return approvalDao.selectApprSearchCountApprover(search);
@@ -154,22 +131,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public int selectApprSearchCountDrafter(Search search) {
 		return approvalDao.selectApprSearchCountDrafter(search);
 	}
-
-	@Override
-	public ArrayList<Approval> selectApprSearchComplete(Search search) {
-		return approvalDao.selectApprSearchComplete(search);
-	}
-
-	@Override
-	public ArrayList<Approval> selectApprSearchContinue(Search search) {
-		return approvalDao.selectApprSearchContinue(search);
-	}
-
-	@Override
-	public ArrayList<Approval> selectApprSearchCompanion(Search search) {
-		return approvalDao.selectApprSearchCompanion(search);
-	}
-
+	
 	@Override
 	public ArrayList<Approval> selectApprSearchApprover(Search search) {
 		return approvalDao.selectApprSearchApprover(search);
@@ -181,6 +143,61 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	
+	//ap
+	@Override
+	public int selectApprovalListCount_A(int empId) {
+		return approvalDao.selectApprovalListCount_A(empId);
+	}
+
+	@Override
+	public ArrayList<Approval> selectApprovalList_A(Search search) {
+		return approvalDao.selectApprovalList_A(search);
+	}
+
+	@Override
+	public int selectApprovalListDateCount_A(Search search) {
+		return approvalDao.selectApprovalListDateCount_A(search);
+	}
+
+	@Override
+	public ArrayList<Approval> selectApprovalListDate_A(Search search) {
+		return approvalDao.selectApprovalListDate_A(search);
+	}
+
+	@Override
+	public int selectApprSearchCountKeyword_A(Search search) {
+		return approvalDao.selectApprSearchCountKeyword_A(search);
+	}
+
+	@Override
+	public int selectApprSearchCountApprover_A(Search search) {
+		return approvalDao.selectApprSearchCountApprover_A(search);
+	}
+
+	@Override
+	public int selectApprSearchCountDrafter_A(Search search) {
+		return approvalDao.selectApprSearchCountDrafter_A(search);
+	}
+
+	@Override
+	public ArrayList<Approval> selectApprSearchKeyword_A(Search search) {
+		return approvalDao.selectApprSearchKeyword_A(search);
+	}
+
+	@Override
+	public ArrayList<Approval> selectApprSearchApprover_A(Search search) {
+		return approvalDao.selectApprSearchApprover_A(search);
+	}
+
+	@Override
+	public ArrayList<Approval> selectApprSearchDrafter_A(Search search) {
+		return approvalDao.selectApprSearchDrafter_A(search);
+	}
+
+	@Override
+	public Approval selectMyApproval(int approvalId) {
+		return approvalDao.selectMyApproval(approvalId);
+	}
 	
 	
 }

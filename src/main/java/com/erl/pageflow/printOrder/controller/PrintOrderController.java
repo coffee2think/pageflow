@@ -19,14 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.printOrder.model.service.PrintOrderService;
 import com.erl.pageflow.printOrder.model.vo.PrintOrder;
-import com.erl.pageflow.sales.model.vo.Client;
+import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 
 @Controller
@@ -53,7 +52,7 @@ public class PrintOrderController {
 		return "redirect:polistdate.do";
 	}
 	
-	// 코드로 주문현황 검색 처리용
+	// 날짜로 주문현황 검색 처리용
 	@RequestMapping("polistdate.do")
 	public String printOrderList(Search search,
 			@RequestParam(name="page", required=false) String page,
@@ -132,6 +131,87 @@ public class PrintOrderController {
 			return "common/error";
 		}
 	}
+	//키워드[인쇄코드,인쇄소명,도서코드,도서명]로 발주현황 검색		//도서명,서점명,지역
+	@RequestMapping(value="pokeyword.do", method= {RequestMethod.GET, RequestMethod.POST})
+	public String selectPrintOrderByKeyword(Search search,
+			@RequestParam(name="searchType") String searchType,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+		
+		logger.info("pokeyword.do : searchType" + searchType);
+		logger.info("pokeyword.do : page" + page);
+		logger.info("pokeyword.do : limit" + limitStr);
+		
+		//검색결과에 대한 페이징 처리
+		//출력할 페이지 지정
+		int currentPage = 1;
+		if(page != null) {
+			currentPage = Integer.parseInt(page);
+		}
+		
+		//한 페이지당 출력할 목록 개수 지정
+		int limit = 10;
+		//전송 온 limit 값이 있다면
+		if(limitStr != null) {
+			limit = Integer.parseInt(limitStr);
+		}	
+		int listCount = 0;
+		
+		//스위치문을 쓰는 이유 : ?
+		switch(searchType) {
+		case "printId":
+			listCount = printOrderService.selectPrintOrderCountByPrintId(search);
+			break;
+		case "printName":
+			listCount = printOrderService.selectPrintOrderCountByPrintName(search);
+			break;
+		case "bookId":
+			listCount = printOrderService.selectPrintOrderCountByBookId(search);
+			break;
+		case "bookName":
+			listCount = printOrderService.selectPrintOrderCountByBookName(search);
+			break;	
+		}
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "pokeyword.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		
+		ArrayList<PrintOrder> list = null;
+		
+		switch(searchType) {
+		case "printId":
+			list = printOrderService.selectPrintOrderByPrintId(search);
+			break;
+		case "printName":
+			list = printOrderService.selectPrintOrderByPrintName(search);
+			break;
+		case "bookId":
+			list = printOrderService.selectPrintOrderByBookId(search);
+			break;
+		case "bookName":
+			list = printOrderService.selectPrintOrderByBookName(search);
+			break;
+		}
+		
+		if(list != null && list.size() > 0) {
+			model.addAttribute("list", list);
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "print/porder_list";
+		} else {
+			model.addAttribute("message", "발주현황 조회 실패");
+			return "common/error";
+		}
+		
+	}
+	
 	
 	// 발주등록 페이지
 	@RequestMapping("poinsert.do")
@@ -211,11 +291,11 @@ public class PrintOrderController {
 	@ResponseBody
 	public void printOrderUpdateMethod(
 			HttpServletResponse response,
-			PrintOrder printOrder,
+			PrintOrder printId,
 			Model model, HttpServletRequest request) throws IOException {
-		logger.info("poupdate.do : " + printOrder);
+		logger.info("poupdate.do : " + printId);
 		
-		int result = printOrderService.printOrderUpdate(printOrder);
+		int result = printOrderService.updatePrintOrder(printId);
 		
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
@@ -253,7 +333,5 @@ public class PrintOrderController {
 				model.addAttribute("message", "발주 등록 삭제 실패!");
 			}
 		}
-		
-		
 	}
 }

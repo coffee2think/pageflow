@@ -22,20 +22,20 @@
 
 	$(function() {
 		//공지사항  수정
-		$('.notice-update').on('click', function() {
-			$('#appendTextArea').val($('.content-input').text())
+		$('#btn_update').on('click', function() {
+			$('#appendTextArea').val($('.content-input').text());
+			$('#upnotice').submit();
 			
 		});
 
-		//공지사항 삭제
-		$('.notice-cancle').on('click', function() {
-			if (confirm('취소 하시겠습니까?')) {
-				location.href = 'bddelete.do?notice=${ notice }';
-			}
-		});
+		
 		
 		
      });
+	
+	function inputSubmit(){
+    	$('#btn_update').click();
+	}
 	
 	
          
@@ -101,46 +101,10 @@
 					<!--내용-->
 					<div class="main-contents-box normal">
 
-						<!--서치영역-->
-						<div class="search-container noline">
-							<form class="search-form">
+					</div>
 
-								<div class="select-search">
-									<div class="select-box">
-										<div class="select-pan">
-											<label for="sel_code"></label> <select name="code"
-												id="sel_code">
-												<option value="">내용</option>
-												<option value="">작성자</option>
-												<option value="">댓글</option>
-											</select>
-										</div>
-									</div>
-
-
-								</div>
-
-								<div class="select-box">
-									<div class="select-pan-nemo">작성날짜</div>
-
-									<input type="date" class="select-date select-date-first">
-									<input type="date" class="select-date select-date-second">
-									<input type="button" name="week" class="select-pan-btn"
-										value="일주일"> <input type="button" name="month"
-										class="select-pan-btn" value="한달">
-								</div>
-
-							</form>
-
-							<button class="search-visible-btn" id="search_visible_btn">
-								<img class="search-close"
-									src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
-								<img class="search-open"
-									src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
-							</button>
-
-						</div>
-						<!--서치영역 end-->
+								
+						
 
 						<!--컨텐츠영역-->
 						<div class="contents-container sort-row">
@@ -239,7 +203,9 @@
 									<div class="contents-notice-buttonbox">
 										<div class="button-box" >
 											<input type="submit" class="contents-input-btn big noline" id="btn_update" value="수정">
-											<input type="reset" class="contents-input-btn big nolines" id="btn_cancel" value="취소">
+											<input type="reset" class="contents-input-btn big nolines" id="btn_cancel" value="취소"
+											onclick="javascript:history.go(-1); return false;"> &nbsp;>
+											
 										</div>
 									</div>
 								</div>

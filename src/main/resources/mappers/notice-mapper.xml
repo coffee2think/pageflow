@@ -82,6 +82,43 @@
 		]]>
 	</select>
 	
+		<select id="selectSearchWriterCount" parameterType="Search" resultType="_int" >
+			SELECT count(*) from notice 
+							join employee using(EMP_ID)
+			where emp_name like '%' || #{ keyword } || '%'
+		</select>
+	
+	<select id="selectSearchWriter" parameterType="Search" resultMap="resultNotice">
+		<![CDATA[
+		select * 
+		from (select rownum rnum,  NOTICE_ID, EMP_ID, EMP_NAME,
+		           NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, CLASSIFY, IMPORTANCE
+                from (select * 
+		            from notice
+                    Left join employee using(EMP_ID)
+		            where emp_name like '%' || #{ keyword } || '%'
+		            order by NOTICE_ID desc))	
+		where rnum >= #{ startRow } and rnum <= #{ endRow }
+		
+		]]>
+	</select>
+	
+	<select id="selectNoticeCountByDate" parameterType="Search" resultType="_int">
+		select count(*) from notice
+		where create_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+	</select>
+	
+	<select id="selectNoticeByDate" parameterType="Search" resultMap="resultNotice">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from notice
+					join employee using (emp_id)
+					where create_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+					order by create_date desc, notice_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	
 	
 </mapper>
 

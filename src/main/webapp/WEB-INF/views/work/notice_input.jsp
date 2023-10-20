@@ -138,23 +138,29 @@
 
 								<div class="select-box">
 									<div class="select-pan-nemo">파일첨부</div>
-
-
-
-
-									<div class="select-pan">
-										<input type="file" name="nfile" class="select-file">
-									</div>
+										<c:url var="ndown" value="bddown.do">
+                                                <c:param name="ofile" value="${ notice.noticeoriginFileName }" />
+                                                <c:param name="rfile" value="${ notice.renameFileName }" />
+                                        </c:url>
+                                            <div class="contents-notice-down-box show">
+                                                <a class="contents-notice-down" href="${ ndown }">
+                                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
+                                                    <span class="origin-file-name">${ notice.noticeOriginalFileName }</span>
+                                                    <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
+                                                </a>
+                                            </div>
+                                 <div class="select-pan margin-left20px">
+                                                <input type="file" name="nofile" class="select-file">
+                                 </div>
+                                        
+                                       
+                                          <!--   <div class="select-pan">
+                                                <input type="file" name="nfile" class="select-file">
+                                            </div>
+                                         -->
 								</div>
 								
-								<%-- <div class="content-input-area height-long">
-                                    <div class="content-input" contenteditable="true">
-										<c:if test="${ !empty board and !empty board.boardDetail }">
-											${ board.boardDetail }
-										</c:if>
-                                    </div>
-                                </div> --%>
-								 
+								
 								<div class="content-input-area  height-long">
 									<div class="content-input" contenteditable="true">
 
