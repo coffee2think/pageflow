@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.erl.pageflow.book.model.dao.BookDao;
 import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 
 @Service("bookService")
 public class BookServiceImpl implements BookService {
@@ -52,5 +53,15 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public int selectMaxBookId() {
 		return bookDao.selectMaxBookId();
+	}
+
+	@Override
+	public ArrayList<Book> selectBookByDate(Search search) {
+		return bookDao.selectBookByDate(search);
+	}
+
+	@Override
+	public int selectBookCountByDate(Search search) {
+		return bookDao.selectBookCountByDate(search);
 	}
 }

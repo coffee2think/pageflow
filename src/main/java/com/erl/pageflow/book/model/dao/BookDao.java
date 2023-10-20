@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
+import com.erl.pageflow.inventory.model.vo.Inventory;
 
 @Repository("bookDao")
 public class BookDao {
@@ -57,4 +59,16 @@ public class BookDao {
 	public int selectMaxBookId() {
 		return sqlSessionTemplate.selectOne("publishMapper.selectMaxBookId");
 	}
+	
+	// 도서 날짜 검색
+	public ArrayList<Book> selectBookByDate(Search search) {
+		List<Book> list = sqlSessionTemplate.selectList("publishMapper.selectBookByDate", search);
+		return (ArrayList<Book>) list;
+	}
+	
+	// 도서 날짜 검색 카운트
+	public int selectBookCountByDate(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectBookCountByDate", search);
+	}
 }
+

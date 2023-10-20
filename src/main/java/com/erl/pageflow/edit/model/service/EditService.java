@@ -34,8 +34,14 @@ public interface EditService {
 	public int selectMaxEditId();
 	
 	// 편집 날짜로 검색
-	public ArrayList<Edit> selectEditByDate(Search search);
+	public ArrayList<Edit> selectEditBySDate(Search search);
 	
 	// 편집 날짜 카운트
-	public int selectEditCountByDate(Search search);
+	public int selectEditCountBySDate(Search search);
+	
+	// 편집 날짜로 검색
+	public ArrayList<Edit> selectEditByEDate(Search search);
+	
+	// 편집 날짜 카운트
+	public int selectEditCountByEDate(Search search);
 }
