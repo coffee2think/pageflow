@@ -110,5 +110,9 @@ insert into approval
 values (2, 2, 3, 'annual', null, 'companion', sysdate, null, null);
 
 insert into draft_annual 
-values (2, 'annual', '2일 연차를 신청합니다. 쉴래요 구냥', '010-9999-9999', '2023-10-20', '2023-10-22' '2일 연차를 신청합니다.');
+values (2, 'annual', '2일 연차를 신청합니다. 쉴래요 구냥', '010-9999-9999', '2023-10-20', '2023-10-22' '2일 연차를 신청합니다.', 'annual');
+
+insert into approvalline 
+values (1, 1, '결재라인 1', 2, '김태히', '직원', 3, '장덩근', '팀장', default, null, null, default, null, null);
+
 commit;

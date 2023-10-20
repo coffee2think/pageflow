@@ -13,9 +13,10 @@ public class Draft implements Serializable{
 	private Date startDate;
 	private Date endDate;
 	private String title;
+	private String detailType;
 	
 	public Draft(int apprId, String draftType, String detail, String emergency, 
-			Date startDate, Date endDate, String title) {
+			Date startDate, Date endDate, String title, String detailType) {
 		super();
 		this.apprId = apprId;
 		this.draftType = draftType;
@@ -24,6 +25,7 @@ public class Draft implements Serializable{
 		this.startDate = startDate;
 		this.endDate = endDate;
 		this.title = title;
+		this.detailType = detailType;
 	}
 
 	public int getApprId() {
@@ -81,12 +83,20 @@ public class Draft implements Serializable{
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public String getDetailType() {
+		return detailType;
+	}
+
+	public void setDetailType(String detailType) {
+		this.detailType = detailType;
+	}
 
 	@Override
 	public String toString() {
 		return "Draft [apprId=" + apprId + ", draftType=" + draftType + ", detail=" + detail + ", emergency="
-				+ emergency + ", startDate=" + startDate + ", endDate=" + endDate + ", title=" + title + "]";
+				+ emergency + ", startDate=" + startDate + ", endDate=" + endDate + ", title=" + title + ", detailType="
+				+ detailType + "]";
 	}
 
-	
 }

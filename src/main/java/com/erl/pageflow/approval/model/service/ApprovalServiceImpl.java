@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.erl.pageflow.approval.model.dao.ApprovalDao;
 import com.erl.pageflow.approval.model.vo.Approval;
 import com.erl.pageflow.approval.model.vo.Draft;
+import com.erl.pageflow.approvalline.model.vo.ApprovalLine;
 import com.erl.pageflow.common.ApprovalKeyword;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
@@ -198,6 +199,6 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public Approval selectMyApproval(int approvalId) {
 		return approvalDao.selectMyApproval(approvalId);
 	}
-	
+
 	
 }
