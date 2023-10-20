@@ -1,5 +1,5 @@
-$(function() {
 
+$(function() {
     setBtnEvent();
 }); 
 
@@ -16,12 +16,31 @@ function setBtnEvent(){
 
         $(this).find('.search-pop-draft').each(function(){
             $(this).on('click', function(){
-                //버튼 클릭!
-                $('#approval_pop_area').show();
-                $('#approval_pop_box').show();
+                console.log('appr : ' +  $(this).attr('data-id') )
+                getApprovalData($(this).attr('data-id'))
             })
         })
     })
+}
+
+function getApprovalData(id){
+    //ajax로 update 요청 보내기
+    $.ajax({
+        url: 'apapprovalpop.do',
+        type: "post",
+        data: {
+            approvalId : id
+        },
+        success: function(data){
+            console.log('data : ' + data);
+            //팝업창 뜨기
+            $('#approval_pop_area').show();
+            $('#approval_pop_box').show();
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+        }
+    });
 }
 
 var temp = {};

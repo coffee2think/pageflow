@@ -19,6 +19,10 @@ public class Approval implements Serializable {
 	private String drafterName;
 	private String approverName;
 	
+	private String depName;
+	private String jobName;
+	private String posName;
+	
 	private String title;
 	private String detail;
 	private String emergency;
@@ -43,6 +47,26 @@ public class Approval implements Serializable {
 	
 	
 
+	public Approval(int apprId, int drafter, int approver, String draftType, int lineId, String apprState,
+			Date apprDate, Date receiptDate, Date rejectionDate, String drafterName, String approverName,
+			String depName, String jobName, String posName) {
+		super();
+		this.apprId = apprId;
+		this.drafter = drafter;
+		this.approver = approver;
+		this.draftType = draftType;
+		this.lineId = lineId;
+		this.apprState = apprState;
+		this.apprDate = apprDate;
+		this.receiptDate = receiptDate;
+		this.rejectionDate = rejectionDate;
+		this.drafterName = drafterName;
+		this.approverName = approverName;
+		this.depName = depName;
+		this.jobName = jobName;
+		this.posName = posName;
+	}
+	
 	public Approval(int apprId, int drafter, int approver, String draftType, int lineId, String apprState,
 			Date apprDate, Date receiptDate, Date rejectionDate, String drafterName, String approverName) {
 		super();
@@ -185,6 +209,32 @@ public class Approval implements Serializable {
 
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	
+	
+	
+	public String getDepName() {
+		return depName;
+	}
+
+	public void setDepName(String depName) {
+		this.depName = depName;
+	}
+
+	public String getJobName() {
+		return jobName;
+	}
+
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
+	}
+
+	public String getPosName() {
+		return posName;
+	}
+
+	public void setPosName(String posName) {
+		this.posName = posName;
 	}
 
 	@Override

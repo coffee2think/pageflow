@@ -44,8 +44,8 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	}
 	
 	@Override
-	public int printOrderUpdate(PrintOrder printOrder) {
-		return printOrderDao.printOrderUpdate(printOrder);
+	public int updatePrintOrder(PrintOrder printId) {
+		return printOrderDao.updatePrintOrder(printId);
 	}
 	
 	@Override
@@ -62,4 +62,47 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	public int deletePrintOrder(int orderId) {
 		return printOrderDao.deletePrintOrder(orderId);
 	}
+	
+	@Override
+	public int selectPrintOrderCountByPrintId(Search search) {
+		return printOrderDao.selectPrintOrderCountByPrintId(search);
+	}
+	
+	@Override
+	public int selectPrintOrderCountByPrintName(Search search) {
+		return printOrderDao.selectPrintOrderCountByPrintName(search);
+	}
+	
+	@Override
+	public int selectPrintOrderCountByBookId(Search search) {
+		return printOrderDao.selectPrintOrderCountByBookId(search);
+	}
+	
+	@Override
+	public int selectPrintOrderCountByBookName(Search search) {
+		return printOrderDao.selectPrintOrderCountByBookName(search);
+	}
+	
+	@Override
+	public ArrayList<PrintOrder> selectPrintOrderByPrintId(Search search){
+		return printOrderDao.selectPrintOrderByPrintId(search);
+	}
+	
+	@Override
+	public ArrayList<PrintOrder> selectPrintOrderByPrintName(Search search){
+		return printOrderDao.selectPrintOrderByPrintName(search);
+	}
+	@Override
+	public ArrayList<PrintOrder> selectPrintOrderByBookId(Search search){
+		return printOrderDao.selectPrintOrderByBookId(search);
+	}
+	@Override
+	public ArrayList<PrintOrder> selectPrintOrderByBookName(Search search){
+		return printOrderDao.selectPrintOrderByBookName(search);
+	}
 }
+
+
+
+
+

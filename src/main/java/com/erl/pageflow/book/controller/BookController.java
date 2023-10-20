@@ -1,6 +1,7 @@
 package com.erl.pageflow.book.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -135,34 +136,23 @@ public class BookController {
 		return "redirect:bklist.do";
 	}
 	
-//	@RequestMapping(value = "storedelete.do", method = RequestMethod.POST)
-//	@ResponseBody
-//	public void deleteStore(@RequestParam(name = "selectedStoreIds") String selectedStoreIds,
-//			HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
-//
-//		int count = 0;
-//		String[] storeArray = selectedStoreIds.split(",");
-//
-//		for (int i = 0; i < storeArray.length; i++) {
-//
-//			int sId = Integer.parseInt(storeArray[i].toString());
-//			logger.info("sId  : "+ sId);
-//			if (storeService.deleteInventory(sId) > 0) {
-//				logger.info("deleteInventory : "+ sId);
-//				if (storeService.deleteStore(sId) > 0) {
-//					logger.info("deleteStore : "+ sId);
-//					count++;
-//				} else {
-//					model.addAttribute("message", sId + "번 입고 삭제 실패");
-//				}
-//			} else {
-//				model.addAttribute("message", sId + "번 재고 삭제 실패");
-//			}
-//		}
-//
-//		if (count >= storeArray.length) {
-//			response.getWriter().append(String.valueOf(count)).flush();
-//		}
-//
-//	}
+	// 도서 정보 수정 요청 처리
+	@RequestMapping(value="bkupdate.do", method=RequestMethod.POST)
+	public void bookUpdateMethod(Book book, HttpServletResponse response) throws IOException {
+		logger.info("bkupdate.do : " + book);
+		
+		String returnStr = null;
+		if(bookService.updateBook(book) > 0) {
+			returnStr = "success";
+		} else {
+			returnStr = "fail";
+		}
+		
+		// response를 이용해서 클라이언트와 출력스트림을 열어서 값 보냄
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.append(returnStr);
+		out.flush();
+		out.close();
+	}
 }

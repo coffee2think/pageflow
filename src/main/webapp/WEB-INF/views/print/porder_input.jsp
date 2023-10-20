@@ -14,6 +14,35 @@ const NOWPAGE = 2;
 const SUBPAGE = 2;
 const LNKPAGE = 2;
 
+let client_type = 'printoffice'; 
+
+document.addEventListener("DOMContentLoaded", function(){
+	$('.input-search-btn').on('click', function() {
+		var input = $(this).parent().children('input');
+		var type = input.attr('name');
+		if(type.includes('book')) {
+			type = 'book';
+		}
+		
+		if(type.includes('client') || type.includes('print')) {
+			type = client_type;
+		}
+		
+		console.log('type : ' + type);
+		var tr = $(this).parent().parent().parent();
+		var trValue = tr.val();
+		console.log('tr : ' + tr);
+		console.log(tr);
+		console.log('trValue : ' + trValue);
+		popup.showPopup(type);
+		
+		
+		
+		curinput = $(this).parent('.input-search').find('input[type=input]');
+		return false;
+	});
+});
+
 function addRow(currentIndex) {
 	// table element 찾기
 	const table = document.getElementById('input_table');

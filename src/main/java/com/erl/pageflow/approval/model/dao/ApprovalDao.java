@@ -32,8 +32,8 @@ public class ApprovalDao {
 		return sqlSessionTemplate.selectOne("approvalMapper.selectApprovalListAllCount");
 	}
 	
-	public ArrayList<Approval> selectApprovalListAll(Paging paging){
-		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprovalListAll", paging);
+	public ArrayList<Approval> selectApprovalListAll(Search search){
+		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprovalListAll", search);
 		return (ArrayList<Approval>)list;
 	}
 	
@@ -49,6 +49,7 @@ public class ApprovalDao {
 		return sqlSessionTemplate.delete("approvalMapper.deleteApproval", approval);
 	}
 
+	
 	public Draft selectDraft(ApprovalKeyword approvalKeyword) {
 		return sqlSessionTemplate.selectOne("approvalMapper.selectDraft", approvalKeyword);
 	}
@@ -62,8 +63,10 @@ public class ApprovalDao {
 		return (ArrayList<Approval>)list;
 	}
 	
+	
+	
 	public int selectApprovalListAllDateCount(Search search) {
-		return sqlSessionTemplate.insert("approvalMapper.selectApprovalListAllDateCount", search);
+		return sqlSessionTemplate.selectOne("approvalMapper.selectApprovalListAllDateCount", search);
 	}
 
 	public ArrayList<Approval> selectApprovalListAllDate(Search search) {
@@ -74,18 +77,109 @@ public class ApprovalDao {
 	
 	
 	
-	public int selectApprSearchAllCountComplete(Search search) {
-		return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchAllCountComplete", search);
+	public int selectApprSearchAllCountKeyword(Search search) {
+		switch(search.getSearchType()) {
+		case "complete":
+			return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchAllCountComplete", search);
+		case "continue":
+			return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchAllCountContinue", search);
+		case "companion":
+			return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchAllCountCompanion", search);
+		default:
+			return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchAllCountAll", search);
+	}
 	}
 
-	public int selectApprSearchAllCountContinue(Search search) {
-		return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchAllCountContinue", search);
+	public ArrayList<Approval> selectApprSearchAllKeyword(Search search) {
+		List<Approval> list = null;
+		
+		switch(search.getSearchType()) {
+			case "complete":
+				list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchAllComplete", search);
+				break;
+			case "continue":
+				list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchAllContinue", search);
+				break;
+			case "companion":
+				list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchAllCompanion", search);
+				break;
+			default:
+				list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchAllAll", search);
+		}
+		
+		return (ArrayList<Approval>)list;
 	}
 
-	public int selectApprSearchAllCountCompanion(Search search) {
-		return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchAllCountCompanion", search);
+	
+	public int selectApprSearchCountKeyword_A(Search search) {
+		switch(search.getSearchType()) {
+			case "complete":
+				return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountComplete_A", search);
+			case "continue":
+				return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountContinue_A", search);
+			case "companion":
+				return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountCompanion_A", search);
+			default:
+				return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountAll_A", search);
+		}
 	}
 
+	public ArrayList<Approval> selectApprSearchKeyword_A(Search search) {
+		List<Approval> list = null;
+		
+		switch(search.getSearchType()) {
+			case "complete":
+				list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchComplete_A", search);
+				break;
+			case "continue":
+				list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchContinue_A", search);
+				break;
+			case "companion":
+				list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchCompanion_A", search);
+				break;
+			default:
+				list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchAll_A", search);
+		}
+		
+		return (ArrayList<Approval>)list;
+	}
+	
+	public int selectApprSearchCountKeyword(Search search) {
+		switch(search.getSearchType()) {
+			case "complete":
+				return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountComplete", search);
+			case "continue":
+				return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountContinue", search);
+			case "companion":
+				return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountCompanion", search);
+			default:
+				return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountAll", search);
+		}
+	}
+
+	public ArrayList<Approval> selectApprSearchKeyword(Search search) {
+		List<Approval> list = null;
+		
+		switch(search.getSearchType()) {
+			case "complete":
+				list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchComplete", search);
+				break;
+			case "continue":
+				list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchContinue", search);
+				break;
+			case "companion":
+				list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchCompanion", search);
+				break;
+			default:
+				list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchAll", search);
+		}
+		
+		return (ArrayList<Approval>)list;
+	}
+	
+	
+	
+	
 	public int selectApprSearchAllCountApprover(Search search) {
 		return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchAllCountApprover", search);
 	}
@@ -93,22 +187,7 @@ public class ApprovalDao {
 	public int selectApprSearchAllCountDrafter(Search search) {
 		return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchAllCountDrafter", search);
 	}
-
-	public ArrayList<Approval> selectApprSearchAllComplete(Search search) {
-		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchAllComplete", search);
-		return (ArrayList<Approval>)list;
-	}
-
-	public ArrayList<Approval> selectApprSearchAllContinue(Search search) {
-		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchAllContinue", search);
-		return (ArrayList<Approval>)list;
-	}
-
-	public ArrayList<Approval> selectApprSearchAllCompanion(Search search) {
-		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchAllCompanion", search);
-		return (ArrayList<Approval>)list;
-	}
-
+	
 	public ArrayList<Approval> selectApprSearchAllApprover(Search search) {
 		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchAllApprover", search);
 		return (ArrayList<Approval>)list;
@@ -118,19 +197,10 @@ public class ApprovalDao {
 		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchAllDrafter", search);
 		return (ArrayList<Approval>)list;
 	}
-
-	public int selectApprSearchCountComplete(Search search) {
-		return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountComplete", search);
-	}
-
-	public int selectApprSearchCountContinue(Search search) {
-		return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountContinue", search);
-	}
-
-	public int selectApprSearchCountCompanion(Search search) {
-		return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountCompanion", search);
-	}
-
+	
+	
+	
+	
 	public int selectApprSearchCountApprover(Search search) {
 		return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountApprover", search);
 	}
@@ -138,22 +208,7 @@ public class ApprovalDao {
 	public int selectApprSearchCountDrafter(Search search) {
 		return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountDrafter", search);
 	}
-
-	public ArrayList<Approval> selectApprSearchComplete(Search search) {
-		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchComplete", search);
-		return (ArrayList<Approval>)list;
-	}
-
-	public ArrayList<Approval> selectApprSearchContinue(Search search) {
-		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchContinue", search);
-		return (ArrayList<Approval>)list;
-	}
-
-	public ArrayList<Approval> selectApprSearchCompanion(Search search) {
-		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchCompanion", search);
-		return (ArrayList<Approval>)list;
-	}
-
+	
 	public ArrayList<Approval> selectApprSearchApprover(Search search) {
 		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchApprover", search);
 		return (ArrayList<Approval>)list;
@@ -164,4 +219,44 @@ public class ApprovalDao {
 		return (ArrayList<Approval>)list;
 	}
 	
+	//ap
+	public int selectApprovalListCount_A(int empId) {
+		return sqlSessionTemplate.selectOne("approvalMapper.selectApprovalListCount_A", empId);
+	}
+
+	public ArrayList<Approval> selectApprovalList_A(Search search) {
+		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprovalList_A", search);
+		return (ArrayList<Approval>)list;
+	}
+
+	public int selectApprovalListDateCount_A(Search search) {
+		return sqlSessionTemplate.selectOne("approvalMapper.selectApprovalListDateCount_A", search);
+	}
+
+	public ArrayList<Approval> selectApprovalListDate_A(Search search) {
+		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprovalListDate_A", search);
+		return (ArrayList<Approval>)list;
+	}
+	
+	public int selectApprSearchCountApprover_A(Search search) {
+		return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountApprover_A", search);
+	}
+
+	public int selectApprSearchCountDrafter_A(Search search) {
+		return sqlSessionTemplate.selectOne("approvalMapper.selectApprSearchCountDrafter_A", search);
+	}
+
+	public ArrayList<Approval> selectApprSearchApprover_A(Search search) {
+		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchApprover_A", search);
+		return (ArrayList<Approval>)list;
+	}
+
+	public ArrayList<Approval> selectApprSearchDrafter_A(Search search) {
+		List<Approval> list = sqlSessionTemplate.selectList("approvalMapper.selectApprSearchDrafter_A", search);
+		return (ArrayList<Approval>)list;
+	}
+
+	public Approval selectMyApproval(int approvalId) {
+		return sqlSessionTemplate.selectOne("approvalMapper.selectMyApproval", approvalId);
+	}
 }

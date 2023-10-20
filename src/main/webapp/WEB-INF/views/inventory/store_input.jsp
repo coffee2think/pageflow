@@ -89,6 +89,8 @@ function addRow() {
 function minusRow(rowId) {
     $("#" + rowId).remove();
 }
+
+
 </script>
 
 </head>

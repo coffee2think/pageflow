@@ -17,17 +17,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.erl.pageflow.board.model.vo.Board;
-import com.erl.pageflow.board.model.vo.BoardUpload;
-import com.erl.pageflow.common.BoardKeyword;
 import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
-import com.erl.pageflow.common.ReplyKeyword;
 import com.erl.pageflow.common.Search;
+
 import com.erl.pageflow.notice.model.service.NoticeService;
 import com.erl.pageflow.notice.model.vo.Notice;
-import com.erl.pageflow.reply.model.vo.Reply;
-import com.erl.pageflow.reply.model.vo.ReplyUpload;
 
 @Controller
 public class NoticeController {
@@ -101,12 +96,12 @@ public class NoticeController {
 
 	@RequestMapping(value = "noinsert.do", method = RequestMethod.POST)
 	public String noticeInsertMethod(Notice notice, Model model, HttpServletRequest request,
-			@RequestParam(name = "nfile", required = false) MultipartFile mfile) {
+			@RequestParam(name = "nofile", required = false) MultipartFile mfile) {
 
 		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
 		logger.info("mfile : " + mfile);
-		logger.info("notice : " + notice);
-		logger.info("notice : " + request.getParameter("noticeDetail"));
+		
+		
 		// 첨부파일이 있을때
 		if (!mfile.isEmpty()) {
 
@@ -277,8 +272,19 @@ public class NoticeController {
 				limit = Integer.parseInt(slimit);
 			}
 			
+			int listCount = 0;
+			
+			switch(action) {
+			case "title":
+				 listCount = noticeService.selectSearchTitleCount(keyword);
+				break;
+			case "writer":
+				listCount = noticeService.selectSearchWriterCount(keyword);
+				break;
+			
+			}
+			
 			//총 페이지수 계산을 위한 검색 결과 적용된 총 목록 갯수 조회
-			int listCount = noticeService.selectSearchTitleCount(keyword);
 			
 			//뷰 페이지에 사용할 페이징 관련 값 계산 처리
 			Paging paging = new Paging(listCount, currentPage, limit, "nsearch.do");
@@ -290,10 +296,21 @@ public class NoticeController {
 			search.setEndRow(paging.getEndRow());
 			search.setKeyword(keyword);
 			
-			ArrayList<Notice> list = noticeService.selectSearchTitle(search);
+			ArrayList<Notice> list = null;
+			switch(action) {
+			case "title":
+				list = noticeService.selectSearchTitle(search);
+				break;
+				
+			case "writer":
+				list = noticeService.selectSearchWriter(search);
+				break;
+			
+			}
 			
 			//받은 결과에 따라 성공/실패 페이지 내보내기
 			if(list != null && list.size() > 0) {
+				
 				mv.addObject("list", list);
 				mv.addObject("paging", paging);
 				mv.addObject("currentPage", currentPage);
@@ -310,64 +327,47 @@ public class NoticeController {
 			
 			return mv;
 		}
-				
-		//공지글 작성자 검색용 (페이징 처리 포함)
-		@RequestMapping(value="nwsearch.do", method= RequestMethod.POST)
-		public ModelAndView noticeSearchTitleMethod(
-				@RequestParam("action") String action,			
-				@RequestParam("keyword") String keyword,
-				@RequestParam(name="limit", required=false) String slimit,
-				@RequestParam(name="page", required=false) String page,
-				ModelAndView mv) {
+		
+		@RequestMapping("ndate.do" )
+		public String selectNoticeByDate(Search search, @RequestParam(name = "page", required = false) String page,
+				@RequestParam(name = "limit", required = false) String limitStr, Model model) {
+			int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+			int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+
+			int listCount = noticeService.selectNoticeCountByDate(search);
 			
-			//검색결과에 대한 페이징 처리
-			//출력할 페이지 지정
-			int currentPage = 1;
-			//전송온 페이지 값이 있다면 추출함
-			if(page != null) {
-				currentPage = Integer.parseInt(page);
-			}
+			logger.info("ndate.do : " + listCount);
 			
-			//한 페이지당 출력할 목록 갯수 지정
-			int limit = 10;
-			//전송 온 limit 값이 있다면
-			if(slimit != null) {
-				limit = Integer.parseInt(slimit);
-			}
-			
-			//총 페이지수 계산을 위한 검색 결과 적용된 총 목록 갯수 조회
-			int listCount = noticeService.selectSearchWriterCount(keyword);
-			
-			//뷰 페이지에 사용할 페이징 관련 값 계산 처리
-			Paging paging = new Paging(listCount, currentPage, limit, "nwsearch.do");
+
+			Paging paging = new Paging(listCount, currentPage, limit, "ndate.do");
+
 			paging.calculator();
-			
-			//서비스 메소드 호출하고 리턴결과 받기		
-			Search search = new Search();
 			search.setStartRow(paging.getStartRow());
 			search.setEndRow(paging.getEndRow());
-			search.setKeyword(keyword);
 			
-			ArrayList<Notice> list = noticeService.selectSearchWriter(search);
+			ArrayList<Notice> list = noticeService.selectNoticeByDate(search);
 			
-			//받은 결과에 따라 성공/실패 페이지 내보내기
-			if(list != null && list.size() > 0) {
-				mv.addObject("list", list);
-				mv.addObject("paging", paging);
-				mv.addObject("currentPage", currentPage);
-				mv.addObject("limit", limit);
-				mv.addObject("action", action);
-				mv.addObject("keyword", keyword);			
+			
+			if (list != null && list.size() > 0) {
+				logger.info("ndate.do : " + list);
+				model.addAttribute("list", list);
+				model.addAttribute("begin", search.getBegin().toString());
+				model.addAttribute("end", search.getEnd().toString());
+				model.addAttribute("paging", paging);
+				model.addAttribute("currentPage", currentPage);
+				model.addAttribute("limit", limit);
 				
-				mv.setViewName("notice/noticeListView");
-			}else {
-				mv.addObject("message", action + "에 대한 " 
-							+ keyword + " 검색 결과가 존재하지 않습니다.");			
-				mv.setViewName("common/error");
+				return "work/notice_list";
+			} else {
+				model.addAttribute("message", "날짜 검색 실패");
+				return "common/error";
 			}
-			
-			return mv;
+
 		}
+		
+		
+		
+		
 		
 	
 }

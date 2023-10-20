@@ -173,7 +173,7 @@ where BOARD_TITLE like '%' || 'zx' || '%';
 
 
 
-
+--기안자 조인
 select * 
 from (select rownum rnum, sub.*
       from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
@@ -200,6 +200,7 @@ from (select rownum rnum, sub.*
 where rnum >= 1 and rnum <= 10
 order by APPR_ID desc;
 
+--사람 조인
 select * 
 from (select rownum rnum, sub.*
       from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
@@ -210,7 +211,129 @@ from (select rownum rnum, sub.*
             join draft using (DRAFT_TYPE)
             join employee ED on (A.DRAFTER = ED.emp_id)
             join employee EA on (A.approver = EA.emp_id)
-            where drafter = 1
+            where APPR_STATE = 'continue'
             order by APPR_ID desc) sub)
 where rnum >= 1 and rnum <= 10
 order by APPR_ID desc;
+
+
+-- 기안자 카운트
+select count(*)
+from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+      APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+      EA.emp_name AS approver_name
+      from approval A
+      join employee EA on (A.approver = EA.emp_id)
+    )
+where approver_name like '%' || '장' || '%';
+
+select count(*)
+from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+      APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+      ED.emp_name AS drafter_name
+      from approval A
+      join employee ED on (A.DRAFTER = ED.emp_id)
+    )
+where drafter_name like '%' || '태' || '%';
+
+
+-- 키워드 카운터
+select count(*) from approval 
+where APPR_STATE = 'continue';
+
+
+--기안자 날짜
+select * 
+from (select rownum rnum, sub.*
+      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+            ED.emp_name AS drafter_name,
+            EA.emp_name AS approver_name
+            from approval A
+            join draft using (DRAFT_TYPE)
+            join employee ED on (A.DRAFTER = ED.emp_id)
+            join employee EA on (A.approver = EA.emp_id)
+            where drafter = 1
+            and APPR_DATE between '2023-10-01' and (to_date('2023-10-19') + 1 - 1/86400)
+            order by APPR_ID desc) sub)
+where rnum >= 1 and rnum <= 10
+order by APPR_ID desc;
+
+select count(*)
+		from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		      APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		      ED.emp_name AS drafter_name
+		      from approval A
+		      join employee ED on (A.DRAFTER = ED.emp_id)
+		      where DRAFTER = 1
+		    )
+		where drafter_name like '%' || '장' || '%';
+        
+select count(*)
+		from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		      APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		      EA.emp_name AS approver_name
+		      from approval A
+		      join employee EA on (A.approver = EA.emp_id)
+		      where DRAFTER = 1
+		    )
+		where approver_name like '%' || '장' || '%';
+        
+
+
+
+
+select * 
+		from 
+ (select rownum rnum, sub.*
+		     
+ from 
+ (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		            ED.emp_name AS drafter_name,
+		            EA.emp_name AS approver_name
+		           
+ from approval A
+		            join draft using (DRAFT_TYPE)
+		            join employee ED on (A.DRAFTER = ED.emp_id)
+		            join employee EA on (A.approver = EA.emp_id)
+		           
+ where drafter = 1
+		           
+ and APPR_STATE = 'continue'
+		            order by APPR_ID desc) sub)
+		where rnum >= 1
+ and rnum <= 1
+		order by APPR_ID desc;
+        
+SELECT count(*) from approval
+		where APPR_DATE between '2023-09-20' and (to_date('2023-10-19') + 1 - 1/86400);
+        
+        
+select count(*)
+from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+      APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+      ED.emp_name AS drafter_name
+      from approval A
+      join employee ED on (A.DRAFTER = ED.emp_id)
+    )
+where drafter_name like '%' || '홍' || '%';
+        
+        
+        
+select * 
+from (select rownum rnum, sub.*
+      from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+            ED.EMP_ID, ED.JOB_ID, ED.POS_ID, ED.DEP_ID,
+            ED.emp_name AS drafter_name,
+            EA.emp_name AS approver_name
+            from approval A
+            join draft using (DRAFT_TYPE)
+            join employee ED on (A.DRAFTER = ED.emp_id)
+            join employee EA on (A.approver = EA.emp_id)
+            where APPR_ID = 1
+            order by APPR_ID desc) sub)
+join department using(dep_id)
+join job using(job_id)
+join position using(pos_id);

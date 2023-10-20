@@ -2115,4 +2115,4 @@ ALTER TABLE draft_annual
 ADD (title VARCHAR2(500) NULL );
 
 alter TABLE book
-MODIFY PUB_DATE date sysdate;
+MODIFY PUB_DATE date default sysdate;

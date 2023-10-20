@@ -157,5 +157,80 @@
 		delete from print_order where order_id = #{ orderId }
 	</delete>
 	
+	<update id="printOrderUpdate" parameterType="PrintOrder">
+		update print_order
+		set order_date = #{ orderDate }, end_date = #{ endDate }, pub_date = #{ pubDate },
+   			quantity = #{ quantity }, price = #{ price }, amount = #{ amount }
+		where print_id = #{ printId }
+	</update>
+	
+	<select id ="selectPrintOrderCountByPrintId" parameterType="Search" resultType="_int">
+		select count(*) from print_order
+		join client using (print_id)
+		where client_id like '%' || ${ keyword } || '%'     
+	</select>
+	
+	<select id="selectPrintOrderCountByPrintName" parameterType="Search" resultType="_int">
+		select count(*) from print_order
+		join client using (print_id)
+		where client_name like '%' || ${ keyword } || '%'
+	</select>
+	
+	<select id="selectPrintOrderCountByBookId" parameterType="Search" resultType="_int">
+		select count(*) from print_order
+		join book using (book_id)
+		where book_id like '%' || ${ keyword } || '%'
+	</select>
+	
+	<select id="selectPrintOrderCountByBookName" parameterType="Search" resultType="_int">
+		select count(*) from print_order
+		join book using (book_id)
+		where book_name like '%' || ${ keyword } || '%'
+	</select>
+	
+	<select id="selectPrintOrderByPrintId" parameterType="Search" resultMap="resultPrintOrder">
+		select *
+		from (select rowrum rnum, sub.*
+			  from (select * from print_order
+			  		join client using(print_id)
+			  		join book using(book_id)
+			  		where client_id like '%' || ${ keyword } || '%'
+			  		order by order_date desc, order_id desc, print_id desc ) sub)
+		where reum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectPrintOrderByPrintName" parameterType="Search" resultMap="resultPrintOrder">
+		select *
+		from (select rowrum rnum, sub.*
+			  from (select * from print_order
+			  		join client using (print_id) 
+			  		join book using(book_id)
+			  		where client_name like '%' || ${ keyword } || '%'
+			  		order by order_date desc, order_id desc, print_id desc ) sub)
+  		where reum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectPrintOrderByBookId" parameterType="Search" resultMap="resultPrintOrder">
+		select *
+		from (select rowrum rnum, sub.*
+			  from (select * from print_order
+			  		join client using (print_id) 
+			  		join book using(book_id)
+			  		where book_id like '%' || ${ keyword } || '%'
+			  		order by order_date desc, order_id desc, print_id desc ) sub)
+  		where reum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectPrintOrderByBookName" parameterType="Search" resultMap="resultPrintOrder">
+		select *
+		from (select rowrum rnum, sub.*
+			  from (select * from print_order
+			  		join client using (print_id) 
+			  		join book using(book_id)
+			  		where book_name like '%' || ${ keyword } || '%'
+			  		order by order_date desc, order_id desc, print_id desc ) sub)
+  		where reum between #{ startRow } and #{ endRow }
+	</select>
+	
 </mapper>
 

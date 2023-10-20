@@ -11,6 +11,8 @@ public interface StoreService {
 
 	public int selectGetListCount();
 
+	public int selectGetReleaseListCount();
+
 	public ArrayList<Store> selectReleaseList(Paging paging);
 
 	public String selectStoreBookName(int bookId);
@@ -75,10 +77,11 @@ public interface StoreService {
 
 	public int selectCurrInven();
 
+	public int selectMaxStoreId();
+	
+	public int insertRelease(Store store);
+	
 	public int updateStore(Store store);
 
-	public int updateInventory(Store store);
-
-	public int selectMaxStoreId();
 
 }

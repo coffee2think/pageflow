@@ -1,16 +1,23 @@
 package com.erl.pageflow.refund.controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -111,43 +118,46 @@ public class RefundController {
 
 	// 반품 삭제
 	@RequestMapping(value = "redelect.do", method = RequestMethod.POST)
-	@ResponseBody
-	public void deleteRefund(@RequestParam(name = "selectedRefundIds") String selectedRefundIds,
-			HttpServletRequest request, HttpServletResponse response, Model model) throws IOException {
-
+	/* @ResponseBody */
+	public void deleteRefund(HttpServletResponse response, @RequestBody String param)
+			throws ParseException, IOException {
+		JSONParser jparser = new JSONParser();
+		JSONArray jarr = (JSONArray) jparser.parse(param);
+		String[] jst = null;
+		System.out.println(jarr);
 		int count = 0;
-		String[] refundArray = selectedRefundIds.split(",");
-		// logger.info("selectedStoreIds" + selectedStoreIds);
-		// logger.info("storeArray length : " + storeArray.length);
-		for (int i = 0; i < refundArray.length; i++) {
 
-			int sId = Integer.parseInt(refundArray[i].toString());
-
-			if (refundService.deleteInventory(sId) > 0) {
-
-				// logger.info("deleteInventory " + i);
-				if (refundService.deleteRefund(sId) > 0) {
-					// logger.info("deleteStore " + i);
+		JSONObject job = (JSONObject) jarr.get(0);
+		JSONArray scbkeyArray = (JSONArray) job.get("scbkey");
+		System.out.println("job : " + job);
+		System.out.println("scbkeyArray : " + scbkeyArray);
+		for (int j = 0; j < scbkeyArray.size(); j++) {
+			String scbkey = (String) scbkeyArray.get(j);
+			int scbkeyInt = Integer.parseInt(scbkey);
+			System.out.println("scbkeyInt : " + scbkeyInt);
+			if (refundService.deleteInventory(scbkeyInt) >= 0) {
+				if (refundService.deleteRefund(scbkeyInt) >= 0) {
+					System.out.println("출고 삭제 : " + scbkeyInt);
 					count++;
-				} else {
-					model.addAttribute("message", sId + "번 반품 삭제 실패");
-					// return "common/error";
 				}
-			} else {
-				model.addAttribute("message", sId + "번 재고 삭제 실패");
-				// return "common/error";
 			}
 		}
 
-		// return "redirect:storelist.do";
-		if (count >= refundArray.length) {
-			response.getWriter().append(String.valueOf(count)).flush();
+		String str = "no";
+		if (count >= scbkeyArray.size()) {
+			str = "ok";
 		}
 
+		PrintWriter out = response.getWriter();
+		out.append(str);
+		// 출력값은 버퍼에서 처리하니까 밀어내는 작업!
+		out.flush();
+
+		out.close();
 	}
-	
+
 	// 반품 키워드 검색
-	
+
 	@RequestMapping(value = "refselectkeyword.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String selectInvenSearchKeyword(Search search, @RequestParam(name = "searchType") String searchType,
 			@RequestParam(name = "page", required = false) String page,
@@ -196,8 +206,8 @@ public class RefundController {
 			break;
 		case "clientName":
 			list = refundService.selectrefundByClientName(search);
-			break;	
-	
+			break;
+
 		}
 		if (list != null && list.size() > 0) {
 
@@ -214,6 +224,67 @@ public class RefundController {
 			return "common/error";
 		}
 
+	}
+
+	// 반품등록
+	@RequestMapping(value = "refundinput.do", method = RequestMethod.POST)
+	public String insertRefund(HttpServletRequest request, Model model) {
+		String[] bookIds = request.getParameterValues("bookId");
+		String[] bookNames = request.getParameterValues("bookName");
+		String[] empIds = request.getParameterValues("empId");
+		String[] empNames = request.getParameterValues("empName");
+		String[] clientNames = request.getParameterValues("clientName");
+		String[] clientIds = request.getParameterValues("clientId");
+		String[] storageIds = request.getParameterValues("storageId");
+		String[] refundStates = request.getParameterValues("refundState");
+		String[] refundDates = request.getParameterValues("refundDate");
+		String[] refundNums = request.getParameterValues("refundNum");
+		String[] refundAmounts = request.getParameterValues("refundAmount");
+		String[] bookPrices = request.getParameterValues("bookPrice");
+		String[] remarks = request.getParameterValues("remark");
+
+		int refundId = refundService.selectMaxRefundId() + 1;
+
+		ArrayList<Refund> refundList = new ArrayList<>();
+
+		for (int i = 0; i < bookIds.length; i++) {
+			Refund refund = new Refund();
+			
+			refund.setRefundId(refundId);
+			refund.setBookName(bookNames[i]);
+			refund.setBookId(Integer.parseInt(bookIds[i]));
+			refund.setStorageId(Integer.parseInt(storageIds[i]));
+			refund.setClientId(Integer.parseInt(clientIds[i]));
+			refund.setClientName(clientNames[i]);
+			refund.setRefundState(refundStates[i]);
+			refund.setRefundDate(Date.valueOf(refundDates[i]));
+			refund.setRefundNum(Integer.parseInt(refundNums[i]));
+			refund.setRefundAmount(Integer.parseInt(refundAmounts[i]));
+			refund.setBookPrice(Integer.parseInt(bookPrices[i]));
+			refund.setRemark(remarks[i]);
+			refund.setEmpId(Integer.parseInt(empIds[i]));
+			refund.setEmpName(empNames[i]);
+			logger.info("refundId : " + refundId);
+			refundList.add(refund);
+			
+		}
+		logger.info("refundList : " + refundList);
+		for (Refund refund : refundList) {
+			if (refundService.insertRefund(refund) > 0 && refundService.insertInventory(refund) > 0) {
+				logger.info("refund : " + refund);
+				
+				int preinvenId = refundService.selectPreInvenId();
+				refund.setPrevInvenId(preinvenId);
+
+				int currInven = refundService.selectCurrInven();
+				refund.setCurrInven(currInven);
+
+				return "redirect:refundlist.do";
+			}
+
+		}
+		model.addAttribute("message", "반품등록 실패!");
+		return "common/error";
 	}
 
 }

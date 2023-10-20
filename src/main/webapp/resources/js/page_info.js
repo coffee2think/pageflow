@@ -177,6 +177,8 @@ var MENU_INFO = [
                 stitle : '내결재관리'
                 ,slink : 'aplist.do?apType=my'
                 ,sbranch : [
+                    {mtitle : '상신한 기안서', mlink : 'aplist.do?apType=my'},
+                    {mtitle : '결재할 기안서', mlink : 'aplist.do?apType=ap'}
                 ]
             },
             {
@@ -187,7 +189,7 @@ var MENU_INFO = [
             },
             {
                 stitle : '기안서작성'
-                ,slink : 'apinsert.do'
+                ,slink : 'apmoveinsert.do'
                 ,sbranch : [
                 ]
             },

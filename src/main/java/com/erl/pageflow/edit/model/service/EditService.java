@@ -3,7 +3,9 @@ package com.erl.pageflow.edit.model.service;
 import java.util.ArrayList;
 
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.edit.model.vo.Edit;
+import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.writer.model.vo.Writer;
 
 public interface EditService {
@@ -30,4 +32,10 @@ public interface EditService {
 	
 	// 편집 등록 편집번호 +1 처리
 	public int selectMaxEditId();
+	
+	// 편집 날짜로 검색
+	public ArrayList<Edit> selectEditByDate(Search search);
+	
+	// 편집 날짜 카운트
+	public int selectEditCountByDate(Search search);
 }

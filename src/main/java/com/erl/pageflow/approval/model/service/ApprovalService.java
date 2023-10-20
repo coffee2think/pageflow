@@ -18,7 +18,7 @@ public interface ApprovalService {
 	
 	public int selectApprovalListAllCount();
 	
-	public ArrayList<Approval> selectApprovalListAll(Paging paging);
+	public ArrayList<Approval> selectApprovalListAll(Search search);
 	
 	public int insertApproval(Approval approval);
 	
@@ -37,43 +37,51 @@ public interface ApprovalService {
 	public ArrayList<Approval> selectApprovalListAllDate(Search search);
 
 	
-	public int selectApprSearchAllCountComplete(Search search);
+	public int selectApprSearchAllCountKeyword(Search search);
 
-	public int selectApprSearchAllCountContinue(Search search);
+	public ArrayList<Approval> selectApprSearchAllKeyword(Search search);
 
-	public int selectApprSearchAllCountCompanion(Search search);
-	
-	public int selectApprSearchAllCountApprover(Search search);
-	
-	public int selectApprSearchAllCountDrafter(Search search);
-	
-	public ArrayList<Approval> selectApprSearchAllComplete(Search search);
+	public int selectApprSearchCountKeyword(Search search);
 
-	public ArrayList<Approval> selectApprSearchAllContinue(Search search);
-
-	public ArrayList<Approval> selectApprSearchAllCompanion(Search search);
-
-	public ArrayList<Approval> selectApprSearchAllApprover(Search search);
-	
-	public ArrayList<Approval> selectApprSearchAllDrafter(Search search);
-
-	public int selectApprSearchCountComplete(Search search);
-
-	public int selectApprSearchCountContinue(Search search);
-
-	public int selectApprSearchCountCompanion(Search search);
+	public ArrayList<Approval> selectApprSearchKeyword(Search search);
 
 	public int selectApprSearchCountApprover(Search search);
 
+	public int selectApprSearchAllCountApprover(Search search);
+
 	public int selectApprSearchCountDrafter(Search search);
 
-	public ArrayList<Approval> selectApprSearchComplete(Search search);
-
-	public ArrayList<Approval> selectApprSearchContinue(Search search);
-
-	public ArrayList<Approval> selectApprSearchCompanion(Search search);
+	public int selectApprSearchAllCountDrafter(Search search);
 
 	public ArrayList<Approval> selectApprSearchApprover(Search search);
 
+	public ArrayList<Approval> selectApprSearchAllApprover(Search search);
+	
 	public ArrayList<Approval> selectApprSearchDrafter(Search search);
+	
+	public ArrayList<Approval> selectApprSearchAllDrafter(Search search);
+	
+	//ap
+	public int selectApprovalListCount_A(int empId);
+
+	public ArrayList<Approval> selectApprovalList_A(Search search);
+
+	public int selectApprovalListDateCount_A(Search search);
+
+	public ArrayList<Approval> selectApprovalListDate_A(Search search);
+
+	public int selectApprSearchCountKeyword_A(Search search);
+
+	public int selectApprSearchCountApprover_A(Search search);
+
+	public int selectApprSearchCountDrafter_A(Search search);
+
+	public ArrayList<Approval> selectApprSearchKeyword_A(Search search);
+
+	public ArrayList<Approval> selectApprSearchApprover_A(Search search);
+
+	public ArrayList<Approval> selectApprSearchDrafter_A(Search search);
+
+	public Approval selectMyApproval(int approvalId);
+
 }
