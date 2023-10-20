@@ -144,7 +144,7 @@
 								첨부파일 : ${notice.noticeOriginalFileName }
 							</div>
 																	
-							<c:url var="bdown" value="bddown.do">
+							<c:url var="ndown" value="nfdown.do">
 								<c:param name="ofile" value="${ notice.noticeOriginalFileName }" />
 								<c:param name="rfile" value="${ notice.noticeRenameFileName }" />
 							</c:url>
