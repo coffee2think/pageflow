@@ -31,10 +31,13 @@
 	
 	<select id="selectReleaseList" parameterType="Paging" resultMap="resultStore">
 		<![CDATA[
-			SELECT STORE_ID, BOOK_ID, STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, STORE_PRICE, STORE_DATE, CLASSIFY
-			FROM(SELECT ROWNUM, STORE_ID, BOOK_ID, STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, STORE_PRICE, STORE_DATE, CLASSIFY
-				FROM STORE
-				WHERE CLASSIFY = '출고' AND ROWNUM BETWEEN #{ startRow } AND #{ endRow })
+			SELECT *
+			FROM (SELECT ROWNUM RNUM, STORE_ID, BOOK_ID, STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, STORE_PRICE, STORE_DATE, CLASSIFY
+				 FROM (SELECT * 
+                       FROM STORE
+                       WHERE CLASSIFY = '출고'
+                       ORDER BY STORE_DATE DESC))
+			WHERE (RNUM BETWEEN #{ startRow } AND #{ endRow })
 		]]>	
 	</select>
 	
@@ -58,11 +61,14 @@
 
 	<select id="selectStoreList" parameterType="Paging" resultMap ="resultStore">
 		<![CDATA[
-			SELECT *
-			FROM (SELECT ROWNUM RNUM, STORE_ID, BOOK_ID, STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, STORE_PRICE, STORE_DATE, CLASSIFY
-			            FROM (SELECT * FROM STORE
-			                        ORDER BY STORE_DATE DESC))
-			WHERE CLASSIFY = '입고'AND (RNUM BETWEEN #{ startRow } AND #{ endRow })
+		SELECT *
+		FROM (SELECT ROWNUM RNUM, STORE_ID, BOOK_ID, STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, STORE_PRICE, STORE_DATE, CLASSIFY
+			 FROM (SELECT * 
+                        FROM STORE
+                        WHERE CLASSIFY = '입고'
+                        ORDER BY STORE_DATE DESC))
+		WHERE (RNUM BETWEEN #{ startRow } AND #{ endRow })
+
 		]]>	
 	</select>
 	
@@ -347,15 +353,10 @@ WHERE ROWNUM = 1) +
 	
 	<update id="updateStore">
 		UPDATE STORE
-		SET STORE_NUM = #{storeNum }, STORE_PRICE = #{ storePrice }
-		WHERE STORE_ID = 9 AND CLASSIFY = '입고'
-	</update>
-	
-	
-	<update id="updateInventory">
-		UPDATE STORE
 		SET STORE_NUM = #{ storeNum }, STORE_PRICE = #{ storePrice }
 		WHERE STORE_ID = #{ storeId } AND CLASSIFY = '입고'
 	</update>
+	
+
 	
 </mapper>

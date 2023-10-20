@@ -52,7 +52,8 @@ public class StoreController {
 
 	// 출고현황
 	@RequestMapping("releaselist.do")
-	public String moveReleaseList(Model model, @RequestParam(name = "page", required = false) String page,
+	public String moveReleaseList(Model model,
+			@RequestParam(name = "page", required = false) String page,
 			@RequestParam(name = "limit", required = false) String limitStr) {
 		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
 		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
@@ -545,11 +546,14 @@ public class StoreController {
 	@RequestMapping(value = "stoupdate.do", method = RequestMethod.POST)
 	public void updateStore(Store store, HttpServletResponse response) throws IOException {
 		String returnStr = null;
-		logger.info("store : " + store);
+		logger.info("storeNum : " + store.getStoreNum());
+		
 		if (storeService.updateStore(store) > 0) {
-			logger.info("store : " + store);
+			logger.info("updateStore : " + store);
 			
 			if (storeService.insertInventory(store) > 0) {
+				
+				logger.info("insertInventory : " + store);
 				returnStr = "success";
 			}
 		} else {
