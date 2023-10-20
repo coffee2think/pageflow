@@ -30,4 +30,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 		
 		return employeeDao.selectEmployeeListCount();
 	}
+
+	@Override
+	public int insertEmployee(Employee employee) {
+		
+		return employeeDao.insertEmployee(employee);
+	}
 }

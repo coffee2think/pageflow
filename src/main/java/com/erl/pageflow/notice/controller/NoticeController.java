@@ -93,7 +93,8 @@ public class NoticeController {
 			return "common/error";
 		}
 	}
-
+	
+	// 공지 글 등록 (첨부파일 첨부)
 	@RequestMapping(value = "noinsert.do", method = RequestMethod.POST)
 	public String noticeInsertMethod(Notice notice, Model model, HttpServletRequest request,
 			@RequestParam(name = "nofile", required = false) MultipartFile mfile) {
@@ -126,7 +127,8 @@ public class NoticeController {
 					return "common/error";
 				}
 			}
-
+			notice.setNoticeOriginalFileName(fileName);
+			notice.setNoticeRenameFileName(renameFileName);
 		}
 
 		if (noticeService.insertNotice(notice) > 0) {
@@ -138,6 +140,34 @@ public class NoticeController {
 		}
 
 	}
+	
+		//첨부파일 다운로드 요청 처리용
+	
+		@RequestMapping("nfdown.do")
+		public ModelAndView fileDownMethod(
+				ModelAndView mv, HttpServletRequest request, 
+				@RequestParam("ofile") String originalFileName,
+				@RequestParam("rfile") String renameFileName) {
+			//파일 다운 메소드는 리턴 타입이 ModelAndView 로 정해져 있음
+			
+			logger.info(renameFileName);
+			
+			//공지사항 첨부파일 저장 폴더 경로 지정
+			String savePath = request.getSession().getServletContext().getRealPath(
+					"resources/notice_upfiles");
+			
+			//저장 폴더에서 읽을 파일에 대한 파일 객체 생성함
+			File renameFile = new File(savePath + "\\" + renameFileName);
+			//파일 다운시 브라우저 내보낼 원래 파일이름에 대한 파일 객체 생성함
+			File originFile = new File(originalFileName);
+			
+			//파일 다운로드용 뷰로 전달할 정보 저장 처리
+			mv.setViewName("filedown");   //등록된 파일다운로드용 뷰클래스의 id명
+			mv.addObject("renameFileName", renameFileName);
+			mv.addObject("originalFilName", originFile);
+			
+			return mv;
+		}
 
 	// 공지글 상세보기 요청 처리용
 	@RequestMapping("nolist.do")
@@ -200,7 +230,7 @@ public class NoticeController {
 					try {	
 						//저장 폴더에 파일명 바꾸기 처리
 						mfile.transferTo(new File(savePath + "\\" + renameFileName));
-					
+				logger.info("첨부파일명 확인 : " + savePath + ", " + renameFileName);
 					}catch(Exception e) {
 						model.addAttribute("message", "첨부파일 저장 실패!");
 						return "common/error";
@@ -210,6 +240,8 @@ public class NoticeController {
 				notice.setNoticeOriginalFileName(fileName);
 				notice.setNoticeRenameFileName(renameFileName);
 			} //첨부파일 있을 때	
+			
+			
 			
 			if(noticeService.updateNotice(notice) > 0) {
 				//공지글 수정 성공시 목록 보기 페이지로 이동

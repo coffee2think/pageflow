@@ -41,5 +41,14 @@
 		select count(*) from employee
 	</select>
 	
+	<insert id="insertEmployee" parameterType="Employee">
+		insert into employee
+		values ((select max(empId) + 1 from notice), 
+				#{empName}, #{phone}, #{empBirth}, 
+				#{email}, #{address}, #{enrollDate} , #{jobId},  
+				#{posId},#{depId},#{loginOk},#{adminYN})
+				
+	</insert>
+	
 
 </mapper>

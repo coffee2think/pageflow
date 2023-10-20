@@ -29,5 +29,9 @@ public class EmployeeDao {
 		return (ArrayList<Employee>)list;
 	}
 	
+	public int insertEmployee(Employee employee) {
+		return sqlSessionTemplate.insert("employeeMapper.insertEmployee");
+	}
+	
 	
 }

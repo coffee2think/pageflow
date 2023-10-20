@@ -66,7 +66,7 @@
 				<div class="side-container">
 					<div class="side-title"></div>
 					<div class="side-icon-box">
-						  <a href="nemoveinsert.do?empId=${ empId }" class="side-write-btn">글쓰기</a>		
+						<a href="nemoveinsert.do?empId=${ empId }" class="side-write-btn">글쓰기</a>
 					</div>
 
 					<!-- 리스트 들어감 -->
@@ -93,7 +93,7 @@
 				<div class="main-contents-box">
 
 					<!--서치영역-->
-					
+
 					<div class="search-container noline">
 						<form class="search-form">
 
@@ -118,7 +118,7 @@
 										class="search-box-text" value="" id="nkeyword">
 								</div>
 							</div>
-							
+
 							<%-- <div class="select-box">
 						   <div class="select-pan-nemo">날짜 </div>
 						        <c:choose> 
@@ -160,80 +160,84 @@
 						        <input type="button" name="search" class="select-pan-btn" value="검색" onclick="searchByDate('startDate'); return false;">
 						 </div>
 							 --%>
-							
-						<div class="paging-box">
-							<!-- 페이징 -->
-							<c:import url="../common/paging.jsp" />
-						</div>
 
-						<button class="search-visible-btn" id="search_visible_btn">
-							<img class="search-close"
-								src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
-							<img class="search-open"
-								src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
-						</button>
- 
-					</div> 
+							<div class="paging-box">
+								<!-- 페이징 -->
+								<c:import url="../common/paging.jsp" />
+							</div>
+
+							<button class="search-visible-btn" id="search_visible_btn">
+								<img class="search-close"
+									src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
+								<img class="search-open"
+									src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
+							</button>
+					</div>
 					<!--서치영역 end-->
 
 					<!--컨텐츠영역-->
-					
+
 					<%-- 조회된 공지사항 목록 출력 --%>
-									
+
 
 					<div class="contents-container sort-row">
 						<div class="contents-box notice">
 
 							<div class="contents-title notice-tit">공지사항</div>
 							<c:forEach items="${ requestScope.list }" var="notice">
-							<c:url var="listUrl" value="nolist.do">
+								<c:url var="listUrl" value="nolist.do">
 									<c:param name="noticeId" value="${ notice.noticeId }" />
-                            		<c:param name="empId" value="${ notice.empId }" />
-                            		<c:param name="noticeTitle" value="${ notice.noticeTitle }" />
-                            		<c:param name="EmpName" value="${ notice.empName }" />
-                    		</c:url>
-							<diV>
-								<a class="contents-notice" href="${ listUrl}">
-									<div class="contents-notice-title">
-										<span class="alarm">${notice.noticeTitle }</span>
-									</div>
+									<c:param name="empId" value="${ notice.empId }" />
+									<c:param name="noticeTitle" value="${ notice.noticeTitle }" />
+									<c:param name="EmpName" value="${ notice.empName }" />
+									<c:param name="noticeOriginalFileName"
+										value="${ notice.noticeOriginalFileName }" />
+								</c:url>
+								<diV>
+									<a class="contents-notice" href="${ listUrl}">
+										<div class="contents-notice-title">
+											<span class="alarm">${notice.noticeTitle }</span>
+										</div>
 
-									<div class="contents-notice-line">
-										<span>${notice.noticeId }</span>
-										<span>|</span> 
-										<span>${notice.empName}</span>
-										<span>|</span>
-										<span>${notice.noticeCreateDate }</span>
-										<span>|</span>
-										<span>${notice.noticeReadCount }</span>
-									</div>
-								</a>
+										<div class="contents-notice-line">
+											<span>${notice.noticeId }</span> <span>|</span> <span>${notice.empName}</span>
+											<span>|</span> <span>${notice.noticeCreateDate }</span> <span>|</span>
+											<span>${notice.noticeReadCount }</span>
+											<c:if test="${!empty notice.noticeOriginalFileName}">
+												<span>첨부파일 : ★ </span>
+											</c:if>
+											<c:if test="${empty notice.noticeOriginalFileName}">
+												<span>첨부파일 :  </span>
+											</c:if>
+
+										</div>
+									</a>
 							</c:forEach>
-								
-									</div>
-							</div>
+
 						</div>
-					<!--컨텐츠영역 end-->
-					
-					
-
+					</div>
 				</div>
-				<!--내용 end-->
-				
+				<!--컨텐츠영역 end-->
 
-				<!--
+
+
+			</div>
+			<!--내용 end-->
+
+
+			<!--
                 <div class="submit-box">
                     <input type="button" class="contents-input-btn big noline" id="btn_write" value="글쓰기">
                 </div>
                 -->
-			</div>
-			<!--main-container end-->
+	</div>
+	<!--main-container end-->
 
-			
 
-			<br>
 
-		</main>
+	<br>
+
+	</main>
 
 	</div>
 </body>
