@@ -15,14 +15,13 @@
 <title>Insert title here</title>
 <script type="text/javascript">
     var popup;
-    document.addEventListener("DOMContentLoaded", function(){
+
+    $(function(){
         popup = new Popup();
         popup.init();
-    });
-
-    function Popup(){
-        
-    }
+    })
+    
+    function Popup(){}
 
     Popup.prototype = {
         init : function() {
@@ -66,6 +65,109 @@
             
         }
     }
+
+    function setApprovalPopup(jdata){
+
+        console.log('jdata.dep_name : ' + jdata.dep_name);
+
+        $('.modal-title').text(jdata.drafter_name + '님의 ' + changeDraftType(jdata.draft_type) + '신청서입니다.');
+        $('.modal-number').text(jdata.appr_id);
+
+        $('.approval-depName').each(function(){
+            $(this).text(jdata.dep_name);
+        })
+        $('.approval-empName').each(function(){
+            $(this).text(jdata.drafter_name);
+        })
+
+        $('.approval-job').text(jdata.job_name);
+        $('.approval-detail').text(jdata.detail);
+        $('.approval-duration').text(jdata.start_date + ' ~ ' + jdata.end_date);
+        $('.approval-emergency').text(jdata.emergency);
+        $('.approval-date').text(jdata.appr_date);
+
+        let t1 = 'o', t2 = '', t3 = '', t4 = '', t5 = '';
+        if(jdata.detailType == 'annual') t1 = 'o';
+
+        let el = `
+        <td>종류</td>
+        <td>연차(`+t1+`)</td>
+        <td>월차(`+t2+`)</td>
+        <td>보건(`+t3+`)</td>
+        <td>특별(`+t4+`)</td>
+        <td>공가(`+t5+`)</td>
+        `
+        $('.approval-type').append(el);
+
+        makeApprovalLine(jdata);//라인생성
+    }
+
+    function changeDraftType(draftType){
+        let draftStr = '';
+        switch (draftType) {
+            case 'amount':
+                draftStr = '지출결의서'
+                break;
+            default:
+                draftStr = '연차'
+                break;
+        }
+
+        return draftStr;
+    }
+
+    function makeApprovalLine(jdata){
+
+        let el = ``;
+        let empData = [];
+        for(let i=0; i<4; i++) {
+            if(jdata['emp_name'+(i+1)] != null && jdata['emp_name'+(i+1)] != undefined) {
+                empData.push({
+                    emp_name : jdata['emp_name'+(i+1)]
+                    ,pos_name : jdata['pos_name'+(i+1)]
+                    ,date : jdata['stamp_date'+(i+1)]
+                });
+            }
+        }
+
+        //결재 도장 첫번째 tr
+        el += `
+        <tr>
+            <td rowspan="3" class="td-50">결재</td>`
+
+        console.log('jdata.emp_name4 : ' + jdata.emp_name4)
+        for(let i=0; i<empData.length; i++) {
+            if(i == 0){
+                el += `<td class="td-100">기안자</td>`;
+            }else{
+                el += `<td class="td-100">`+empData[i]+`</td>`;
+            }
+        }
+        el += `
+        </tr>`
+
+        let stamp = '결재';
+        el += `
+        <tr>`
+        //결재 도장 두번째 tr
+        for(let i=0; i<empData.length; i++) {
+            el += `<td class="ht-60">`+stamp+`</td>`;
+        }
+        el += `
+        </tr>`
+
+        el += `
+        <tr>`
+        //결재 도장 세번째 tr
+        for(let i=0; i<empData.length; i++) {
+            el += `<td class="font-10">`+empData[i].date+`</td>`;
+        }
+        el += `
+        </tr>`
+        
+        $('#aprovalLine_table').append(el);
+    }
+
 </script>
 </head>
 <body>
@@ -81,28 +183,16 @@
         <div class="modal-pop">
 
             <div class="modal-title">
-                홍길동님의 연차신청서입니다.
+                
             </div>
             <div class="modal-number">
-                890-12
+                
             </div>
 
             <div class="modal-aproval">
-                <table class="contents-table modal-table">
+                <table class="contents-table modal-table" id="aprovalLine_table">
                     <thead>
-                        <tr>
-                            <td rowspan="3" class="td-50">결재</td>
-                            <td class="td-100">기안자</td>
-                            <td class="td-100">팀장</td>
-                        </tr>
-                        <tr>
-                            <td class="ht-60"></td>
-                            <td class="ht-60"></td>
-                        </tr>
-                        <tr>
-                            <td class="font-10">2003/08/28</td>
-                            <td class="font-10"></td>
-                        </tr>
+                        
                     </thead>
                 </table>
             </div>
@@ -113,35 +203,30 @@
                     <tbody>
                         <tr>
                             <td>소속</td>
-                            <td colspan="5"></td>
+                            <td colspan="5" class="approval-td emphtext approval-depName"></td>
                         </tr>
                         <tr>
                             <td>성명</td>
-                            <td colspan="5"></td>
+                            <td colspan="5" class="approval-td emphtext approval-empName"></td>
                         </tr>
                         <tr>
                             <td>직위</td>
-                            <td colspan="5"></td>
+                            <td colspan="5" class="approval-td emphtext approval-job"></td>
                         </tr>
-                        <tr>
-                            <td>종류</td>
-                            <td>연차()</td>
-                            <td>월차()</td>
-                            <td>보건()</td>
-                            <td>특별()</td>
-                            <td>공가()</td>
+                        <tr class="approval-type">
+                            
                         </tr>
                         <tr>
                             <td>사유</td>
-                            <td colspan="5"></td>
+                            <td colspan="5" class="approval-td emphtext approval-detail"></td>
                         </tr>
                         <tr>
                             <td>기간</td>
-                            <td colspan="5"></td>
+                            <td colspan="5" class="approval-td emphtext approval-duration"></td>
                         </tr>
                         <tr>
                             <td>비상연락망</td>
-                            <td colspan="5"></td>
+                            <td colspan="5" class="approval-td emphtext approval-emergency"></td>
                         </tr>
                         <tr class="height-200">
                             <td colspan="6">
@@ -149,16 +234,18 @@
                                     <div>
                                         위와 같이 휴가를 신청하오니 승인하여 주시기 바랍니다.
                                     </div>
-                                    <div>
+                                    <div class="approval-date">
                                         20 년
                                         월
                                         일
                                     </div>
                                     <div>
-                                        <b>소속 : </b> 
+                                        <b>소속 : </b>
+                                        <span class="emphtext approval-depName"></span>
                                     </div>
                                     <div>
                                         <b>성명 : </b>
+                                        <span class="emphtext approval-empName"></span>
                                     </div>
                                 </div>
                             </td>

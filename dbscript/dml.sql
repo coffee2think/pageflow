@@ -325,15 +325,31 @@ select *
 from (select rownum rnum, sub.*
       from (select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
             APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
-            ED.EMP_ID, ED.JOB_ID, ED.POS_ID, ED.DEP_ID,
+            ED.EMP_ID AS EMP_ID, ED.JOB_ID AS JOB_ID, ED.POS_ID AS POS_ID,
+            ED.DEP_ID AS DEP_ID,
             ED.emp_name AS drafter_name,
             EA.emp_name AS approver_name
             from approval A
             join draft using (DRAFT_TYPE)
             join employee ED on (A.DRAFTER = ED.emp_id)
             join employee EA on (A.approver = EA.emp_id)
-            where APPR_ID = 1
-            order by APPR_ID desc) sub)
-join department using(dep_id)
-join job using(job_id)
-join position using(pos_id);
+            where APPR_ID = 1) sub
+        )
+left join department using(dep_id)
+left join job using(JOB_ID)
+left join position using(pos_id);
+
+select * from approvalline
+		where line_id = 1;
+        
+select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
+        APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+        ED.EMP_ID AS EMP_ID, ED.JOB_ID AS JOB_ID, ED.POS_ID AS POS_ID,
+        ED.DEP_ID AS DEP_ID,
+        ED.emp_name AS drafter_name,
+        EA.emp_name AS approver_name
+from approval A
+join draft using (DRAFT_TYPE)
+join employee ED on (A.DRAFTER = ED.emp_id)
+join employee EA on (A.approver = EA.emp_id)
+where APPR_ID = 1

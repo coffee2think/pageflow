@@ -131,3 +131,12 @@
 .modal-pop .contents-table td {
     text-align: center;
 }
+
+.modal-pop .contents-table td.approval-td {
+    text-align: left;
+    padding: 0px 10px;
+}
+
+.emphtext {
+    font-weight: bold;
+}

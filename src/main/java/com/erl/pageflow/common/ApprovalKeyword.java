@@ -10,6 +10,11 @@ public class ApprovalKeyword implements Serializable{
 	private int startRow;
 	private int endRow;
 	
+	public ApprovalKeyword(int apprId, String draftType) {
+		super();
+		this.apprId = apprId;
+		this.draftType = draftType;
+	}
 	
 	public ApprovalKeyword(int apprId, String draftType, int startRow, int endRow) {
 		super();

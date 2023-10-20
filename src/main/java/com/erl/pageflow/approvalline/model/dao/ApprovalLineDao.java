@@ -17,20 +17,24 @@ public class ApprovalLineDao {
 	private SqlSessionTemplate sqlSessionTemplate;
 	
 	public ArrayList<ApprovalLine> selectApprovalLineList(Paging paging){
-		List<ApprovalLine> list = sqlSessionTemplate.selectList("approvalMapper.selectApprovalLineList", paging);
+		List<ApprovalLine> list = sqlSessionTemplate.selectList("approvalLineMapper.selectApprovalLineList", paging);
 		return (ArrayList<ApprovalLine>)list;
 	}
 	
 	public int insertApprovalLine(ApprovalLine approvalLine) {
-		return sqlSessionTemplate.insert("approvalMapper.insertApprovalLine", approvalLine);
+		return sqlSessionTemplate.insert("approvalLineMapper.insertApprovalLine", approvalLine);
 	}
 	
 	public int updateApprovalLine(ApprovalLine approvalLine) {
-		return sqlSessionTemplate.update("approvalMapper.updateApprovalLine", approvalLine);
+		return sqlSessionTemplate.update("approvalLineMapper.updateApprovalLine", approvalLine);
 	}
 	
 	public int deleteApprovalLine(ApprovalLine approvalLine) {
-		return sqlSessionTemplate.delete("approvalMapper.deleteApprovalLine", approvalLine);
+		return sqlSessionTemplate.delete("approvalLineMapper.deleteApprovalLine", approvalLine);
+	}
+
+	public ApprovalLine selectMyApprovalLine(int lineId) {
+		return sqlSessionTemplate.selectOne("approvalLineMapper.selectMyApprovalLine", lineId);
 	}
 	
 	

@@ -34,6 +34,11 @@ public class ApprovalLineServiceImpl implements ApprovalLineService{
 	public int deleteApprovalLine(ApprovalLine approvalLine) {
 		return 0;
 	}
+
+	@Override
+	public ApprovalLine selectMyApprovalLine(int lineId) {
+		return approvalLineDao.selectMyApprovalLine(lineId);
+	}
 	
 	
 }
