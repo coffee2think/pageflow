@@ -6,6 +6,8 @@
     <c:set var="searchKewordType" value="${ searchType }"/>
 </c:if>
 <c:set var="apType" value="${ requestScope.apType }"  scope="session" />
+<c:set var="empId" value="${ requestScope.empId }"  scope="session" />
+<c:set var="approvalList" value="${ requestScope.approvalList }"  scope="session" />
 
 <!DOCTYPE html>
 <html>
@@ -23,10 +25,11 @@
     
     const appr_param = urlParams.get('apType');
     console.log('appr_param : ' + appr_param);
-    const SUBPAGE = (appr_param == 'my') ? 1 : 2;
+    
     const NOWPAGE = 6;
-    const LNKPAGE = 1;
-
+    const SUBPAGE = (appr_param == 'all') ? 2 : 1;
+    const LNKPAGE = (appr_param == 'my') ? 1 : 2;
+    console.log('SUBPAGE : ' + SUBPAGE + ' LNKPAGE :  ' + LNKPAGE);
     const searchType = '<c:out value="${ searchKewordType }" />'
 </script>
 <title></title>
@@ -171,12 +174,15 @@
                                                     </div>
                                                 </td>
                                                 <td class="td-100">
-                                                    <input type="button" class="contents-input-link search-pop-draft" value="결재"/>
+                                                    <input type="button" class="contents-input-link search-pop-draft" data-id="${ appr.apprId }" value="결재"/>
                                                 </td>
+                                                
                                                 <td class="td-100">
-                                                    <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ appr.apprId }" onclick="onUpdate(${ appr.apprId }); return false;">
-		                                            <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ appr.apprId }" onclick="submitUpdate(${ appr.apprId }, 'apupdate.do?apType='+appr_param); return false;" style="display: none;">
-		                                            <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ appr.apprId }" onclick="cancelUpdate(${ appr.apprId }); return false;" style="display: none;">
+                                                    <c:if test="${ empId == appr.drafter }">
+                                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ appr.apprId }" onclick="onUpdate(${ appr.apprId }); return false;">
+                                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ appr.apprId }" onclick="submitUpdate(${ appr.apprId }, 'apupdate.do?apType='+appr_param); return false;" style="display: none;">
+                                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ appr.apprId }" onclick="cancelUpdate(${ appr.apprId }); return false;" style="display: none;">
+                                                    </c:if>
                                                 </td>
                                             </tr>
                                         </c:forEach>
