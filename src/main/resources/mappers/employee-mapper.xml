@@ -26,7 +26,20 @@
 	</resultMap>
 
 	<select id="selectEmployee" parameterType="_int" resultMap="resultEmployee">
-		select * from employee where emp_id = #{ eid } and login_ok = 'Y'
+		select * from employee where emp_id = #{ empId } 
 	</select>
+	
+	<select id="selectEmployeeList" parameterType="Paging" resultMap="resultEmployee">
+		select *
+		from (select rownum rnum, EMP_ID, EMP_PWD, EMP_PWD_UPDATE, EMP_NAME, PHONE, 
+			  EMP_BIRTH, EMAIL, ADDRESS, SALARY , PROFILE, ENROLL_DATE ,MODIFY_DATE  , LEAVE_DATE, JOB_ID, POS_ID, LOGIN_OK, ADMIN_YN
+		from (select * from employee where ADMIN_YN = 'N'))
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectListCount" resultType="_int">
+		select count(*) from employee
+	</select>
+	
 
 </mapper>

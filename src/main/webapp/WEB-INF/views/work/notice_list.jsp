@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%-- <c:set var="list" value="${ requestScope.list }" />
+<c:set var="begin" value="${ requestScope.begin }" />
+<c:set var="end" value="${ requestScope.end }" /> --%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -24,10 +28,20 @@
 		url = "nsearch.do?action=" + $("#sel_code").val() + "&keyword=" + $("#nkeyword").val();
 		location.href = url;
 		console.log(url);
-		
-
-				
+			
 	}
+	
+	/* // 날짜 검색 버튼 클릭시
+ 	function searchByDate() {
+    	var begin = $('#begin').val();
+    	var end = $('#end').val();
+    	
+    	var url = 'ndate.do?';
+    	url += 'begin=' + begin;
+    	url += '&end=' + end;
+    	
+    	location.href = url;
+    } */
 	
 </script>
 </head>
@@ -80,7 +94,6 @@
 
 					<!--서치영역-->
 					
-					
 					<div class="search-container noline">
 						<form class="search-form">
 
@@ -105,20 +118,49 @@
 										class="search-box-text" value="" id="nkeyword">
 								</div>
 							</div>
-
-							<div class="select-box">
-								<div class="select-pan-nemo">작성날짜</div>
-
-								<input type="date" class="select-date select-date-first">
-								<input type="date" class="select-date select-date-second">
-
-								<input type="button" name="week" class="select-pan-btn"
-									value="일주일"> <input type="button" name="month"
-									class="select-pan-btn" value="한달">
-							</div>
-
-						</form>
-
+							
+							<%-- <div class="select-box">
+						   <div class="select-pan-nemo">날짜 </div>
+						        <c:choose> 
+						            <c:when test="${ !empty firstType and firstType eq 'first' }">
+						                <input type="date" class="select-date select-date-first" id="begin_startDate">
+						                <input type="date" class="select-date select-date-second" id="end_startDate">
+						            </c:when> 
+						            
+						            <c:otherwise>
+						                <input type="date" class="select-date select-date-first" id="begin_startDate" value="${ begin }">
+						                <input type="date" class="select-date select-date-second" id="end_startDate" value="${ end }">
+						            </c:otherwise> 
+						        </c:choose> 
+						        
+						        <c:set var="today_" value="<%= new java.util.Date() %>" />
+						        <fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+						
+						        <c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+						        <fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+						
+		
+						        <c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+						        <fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+						
+						        <c:url var="searchWeekUrl" value="ndate.do">
+						            <c:param name="begin" value="${ weekago }" />
+						            <c:param name="end" value="${ today }" />
+						            <c:param name="dateType" value="startDate" />
+						        </c:url>
+						
+						        <c:url var="searchMonthUrl" value="ndate.do">
+						            <c:param name="begin" value="${ monthago }" />
+						            <c:param name="end" value="${ today }" />
+						            <c:param name="dateType" value="startDate" />
+						        </c:url>
+						
+						        <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+						        <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+						        <input type="button" name="search" class="select-pan-btn" value="검색" onclick="searchByDate('startDate'); return false;">
+						 </div>
+							 --%>
+							
 						<div class="paging-box">
 							<!-- 페이징 -->
 							<c:import url="../common/paging.jsp" />
@@ -130,8 +172,8 @@
 							<img class="search-open"
 								src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
 						</button>
-
-					</div>
+ 
+					</div> 
 					<!--서치영역 end-->
 
 					<!--컨텐츠영역-->
@@ -150,9 +192,8 @@
                             		<c:param name="noticeTitle" value="${ notice.noticeTitle }" />
                             		<c:param name="EmpName" value="${ notice.empName }" />
                     		</c:url>
-							
-								<a class="contents-notice"
-									href="${ listUrl}">
+							<diV>
+								<a class="contents-notice" href="${ listUrl}">
 									<div class="contents-notice-title">
 										<span class="alarm">${notice.noticeTitle }</span>
 									</div>
@@ -164,35 +205,21 @@
 										<span>|</span>
 										<span>${notice.noticeCreateDate }</span>
 										<span>|</span>
-										<span>${notice.importance }</span>
-										<c:if test="${ notice.importance eq 'Y' }">
-											<span>필독!</span>
-										</c:if> 
-										<span>|</span>
 										<span>${notice.noticeReadCount }</span>
-										<span>|</span>
-										<span>${notice.noticeOriginalFileName }</span> 
-										<c:if test="${ !empty notice.noticeOriginalFileName  }">
-											<p>◎</p>
-										</c:if>
-										<span>|</span> 
-										
-										<span>${notice.noticeRenameFileName }</span>
-										 <span>|</span>
 									</div>
+								</a>
 							</c:forEach>
-							</a>
-
-
-
-
-
+								
+									</div>
+							</div>
 						</div>
-					</div>
 					<!--컨텐츠영역 end-->
+					
+					
 
 				</div>
 				<!--내용 end-->
+				
 
 				<!--
                 <div class="submit-box">

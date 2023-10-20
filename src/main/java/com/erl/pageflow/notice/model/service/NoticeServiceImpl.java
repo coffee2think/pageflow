@@ -79,6 +79,23 @@ public class NoticeServiceImpl implements NoticeService{
 		
 		return noticeDao.selectSearchWriter(search);
 	}
+
+	@Override
+	public int selectNoticeCountByDate(Search search) {
+		
+		return noticeDao.selectNoticeCountByDate(search);
+	}
+
+	@Override
+	public ArrayList<Notice> selectNoticeByDate(Search search) {
+		
+		return noticeDao.selectNoticeByDate(search);
+	}
+
+	
+
+	
+	
 	
 
 	

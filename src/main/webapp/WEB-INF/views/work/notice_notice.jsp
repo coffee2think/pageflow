@@ -38,6 +38,7 @@
 	});
 	
 	
+	
 		
     	
 		
@@ -90,54 +91,10 @@
 				<!--main-header-bar end-->
 
 				<!--내용-->
-				<div class="main-contents-box normal">
-
-					<!--서치영역-->
-					<div class="search-container noline">
-						<form class="search-form">
-
-							<div class="select-search">
-								<div class="select-box">
-									<div class="select-pan">
-										<label for="sel_code"></label> <select name="code"
-											id="sel_code">
-											<option value="">내용</option>
-											<option value="">작성자</option>
-											<option value="">댓글</option>
-										</select>
-									</div>
-								</div>
-
-								
-							</div>
-
-							<div class="select-box">
-								<div class="select-pan-nemo">작성날짜</div>
-
-								<input type="date" class="select-date select-date-first">
-								<input type="date" class="select-date select-date-second">
-								<input type="button" name="week" class="select-pan-btn"
-									value="일주일"> <input type="button" name="month"
-									class="select-pan-btn" value="한달">
-							</div>
-
-						</form>
-
-						<button class="search-visible-btn" id="search_visible_btn">
-							<img class="search-close"
-								src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
-							<img class="search-open"
-								src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
-						</button>
-
-					</div>
-					<!--서치영역 end-->
 
 					<!--컨텐츠영역-->
 					<div class="contents-container sort-row">
 						<div class="contents-box notice" data-num="">
-
-
 
 							<!--contents-notice-->
 						<!--컨텐츠영역-->
@@ -145,7 +102,8 @@
                         <div class="contents-box notice" data-num="">
 
                             <div class="contents-title notice-tit small">
-                                ${ notice.noticeId} 공지사항
+                                ${ notice.noticeId} 번 공지사항
+                                
                             </div>	
 
 
@@ -169,83 +127,56 @@
 
 					<!--컨텐츠
 
-                            
-
                  <!--contents-notice-->
 					<div class="contents-notice notice">
 							
 						<div class="notice-title-box">
-							<div class="contents-notice-title big">${ notice.noticeTitle }
+							<div class="contents-notice-title big">
+							<h3> 제목 : ${ notice.noticeTitle }</h3>
 						</div>
-							<div class="contents-notice-line">
-								<div class="notice-profile">
-									<img
-										src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
-									<span>
-										<div class="notice-profile-one">
-											
-										</div>
-										<div>
-											<span>${ notice.empName }</span>
-											<span>${ notice.noticeCreateDate }</span> <span>|</span> 
-											<span class="bluetext">${notice.noticeReadCount }</span>
-
-										</div>
-									</span>
-								</div>
+							
+								
+							<div> 
+								
+								작성자 : ${ notice.empName }
+								작성 날짜 : ${ notice.noticeCreateDate }
+								조회 수 : ${notice.noticeReadCount }
+								첨부파일 : ${notice.noticeOriginalFileName }
 							</div>
+																	
 							<c:url var="bdown" value="bddown.do">
 								<c:param name="ofile" value="${ notice.noticeOriginalFileName }" />
 								<c:param name="rfile" value="${ notice.noticeRenameFileName }" />
 							</c:url>
-
 							<c:if test="${ !empty notice.noticeOriginalFileName }">
-
 								<div class="contents-notice-down-box show">
 									<a class="contents-notice-down" href="${ bdown }"> <img
 										src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
 										<span class="origin-file-name">${ notice.noticeOriginalFileName }</span>
-										<img class="down-img"
-										src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
+										<img class="down-img"src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
 									</a>
 								</div>
 							</c:if>
-
-							<c:if test="${ empty notice.noticeOriginalFileName }">
-
-								<div class="contents-notice-down-box">
-									<a class="contents-notice-down" href="${ bdown }"> <img
-										src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
-										<span class="origin-file-name">${ notice.noticeOriginalFileName }</span>
-
-									</a>
-								</div>
-							</c:if>
+							
 						</div>
-
-						<div class="notice-contents-box">${ notice.noticeDetail }</div>
-						<div class="contents-notice-buttonbox">
 						
-						<div class="button-box" text-align:center;>
+						<div class="notice-contents-box">
+						
+							${ notice.noticeDetail }
+						
+						</div>
+                
+						<div class="button-box" >
 					
 						<a class="button-a notice-update" href="#"> 수정 </a>
 					   	<a class="button-a notice-delete" href="#"> 삭제 </a>
 					   	
 					   	</div>
-						
 					   
+     
+              
 							
-
-
-								<!--내용 end-->
-
-								<!--
-                <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_write" value="글쓰기">
-                </div>
-                -->
 							
-							<!--main-container end-->
 		</main>
 
 	</div>
