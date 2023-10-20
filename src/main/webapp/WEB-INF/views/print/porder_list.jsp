@@ -1,29 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport"
-	content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
-<link rel="stylesheet" type="text/css"
-	href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
-<script type="text/javascript"
-	src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
 <script type="text/javascript">
     const NOWPAGE = 2;
     const SUBPAGE = 1;
     const LNKPAGE = 1;
-    
+
+ // 수정 버튼 클릭 시 수정 가능 상태로 변경
 $(function(){
+	
 	
 	
 	$('${ printOrder.printId }').click(function(){
 		
-		var inputs = $('.changeable input');
-		
+		var inputs = $('changeable input');
 		
 		inputs.each(function(){
 			$(this).attr('readonly', false);
@@ -51,7 +51,7 @@ $(function(){
 	
 $('#cancel').click(function(){
 		
-		var inputs = document.getElementsByClassName('contents-input-div changeable');
+		var inputs = document.getElementsById('changeable');
 		
 		for(var i = 0; i< inputs.length; i++){
 			inputs[i].readonly = true;
@@ -63,16 +63,16 @@ $('#cancel').click(function(){
 <script type="text/javascript">
 	$(document).ready(function(){
 		$('#btn_delete').click(function(){
-			const selectedCheckbox = $('input[name="check"]:checked');
+			const selectedCheckbox = $('input[name="selectcheckbox"]:checked');
 			const selectedPrintOrderIds = [];
 			
 			selectedCheckbox.each(function(){
 				var p_id = $(this).parent().parent().attr('id');
-				selectedPrintOrderIds.push(p_id.split('_').pop());
-				
-				
+				selectedPrintOrderIds.push(p_id.split('_').pop());	
 			});
+			
 			console.log(selectedPrintOrderIds);
+			
 			if(selectedPrintOrderIds.length === 0){
 				alert('선택된 항목이 없습니다.');
 			} else{
@@ -92,6 +92,19 @@ $('#cancel').click(function(){
 			}
 		});
 	});
+	
+	//날짜 검색 버튼
+	function searchByDate() {
+    	var begin = $('#begin').val();
+    	var end = $('#end').val();
+    	
+    	var url = 'polistdate.do?';
+    	url += 'begin=' + begin;
+    	url += '&end=' + end;
+    	
+    	location.href = url;
+    }
+
 </script>
 
 </head>
@@ -127,11 +140,11 @@ $('#cancel').click(function(){
 				<!--main-header-bar-->
 				<div class="main-header-bar">
 					<div class="main-title-box">
-						<img
-							src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
+						<img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
 						<span class="main-title"></span>
 					</div>
-					<button class="header-left-btn"></button>
+					<button class="header-left-btn">
+					</button>
 				</div>
 				<!--main-header-bar end-->
 
@@ -144,30 +157,26 @@ $('#cancel').click(function(){
 							<div class="select-search">
 								<div class="select-box">
 									<div class="select-pan">
-										<label for="sel_code"></label> <select name="code"
-											id="sel_code">
-											<option value="">인쇄소코드</option>
+										<label for="sel_code"></label> 
+										<select name="searchType" id="sel_code">
+											<option value="">거래처코드</option>
 											<option value="">인쇄소명</option>
 											<option value="">도서코드</option>
 											<option value="">도서명</option>
-											<option value="">수량</option>
-											<option value="">단가</option>
-											<option value="">합계</option>
 										</select>
 									</div>
 								</div>
 
 								<div class="search-box">
-									<button class="search-btn">
-										<img class="search-image"
-											src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+									<button class="search-btn" onclick="search('pokeyword.do'); return false; ">
+										<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
 									</button>
-									<input type="text" placeholder="키워드를 입력하세요."
-										class="search-box-text" value="">
+									<input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
+									
 								</div>
 							</div>
 
-							<div class="select-box">
+							<!-- <div class="select-box">
 								<div class="select-pan">
 									<label for="sel_code"></label> <select name="code" id="sel_code">
 										<option value="all">인쇄소별</option>
@@ -183,26 +192,24 @@ $('#cancel').click(function(){
 										<option value="">미지급</option>
 									</select>
 								</div>
-							</div>
+							</div> -->
 
 							<div class="select-box">
 								<div class="select-pan-nemo">발주일</div>
 
-								<input type="date" class="select-date select-date-first"
-									name="begin" value=${ begin }> <input type="date"
-									class="select-date select-date-second" name="end"
-									value=${ end }>
+								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }> <input type="date"
+									class="select-date select-date-second" name="end" value=${ end }>
 
 								<c:set var="today_" value="<%=new java.util.Date()%>" />
-								<fmt:formatDate var="today" value="${ today_ }"
+								<fmt:formatDate var="today" value="${ today_ }" 
 									pattern="yyyy-MM-dd" />
-								<c:set var="weekago_"
+								<c:set var="weekago_" 
 									value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 6)%>" />
-								<fmt:formatDate var="weekago" value="${ weekago_ }"
+								<fmt:formatDate var="weekago" value="${ weekago_ }" 
 									pattern="yyyy-MM-dd" />
-								<c:set var="monthago_"
+								<c:set var="monthago_" 
 									value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 30)%>" />
-								<fmt:formatDate var="monthago" value="${ monthago_ }"
+								<fmt:formatDate var="monthago" value="${ monthago_ }" 
 									pattern="yyyy-MM-dd" />
 
 								<c:url var="searchWeekUrl" value="polistdate.do">
@@ -215,21 +222,16 @@ $('#cancel').click(function(){
 									<c:param name="end" value="${ today }" />
 								</c:url>
 
-								<input type="button" name="week" class="select-pan-btn"
-									value="일주일"
-									onclick="javascript: location.href='${ searchWeekUrl }'">
-								<input type="button" name="month" class="select-pan-btn"
-									value="한달"
-									onclick="javascript: location.href='${ searchMonthUrl }'">
+								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+								<input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+								 <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
 							</div>
 
 							<div class="select-box">
 								<div class="select-pan-nemo">마감일</div>
 
-								<input type="date" class="select-date select-date-first"
-									name="begin" value=${ begin }> <input type="date"
-									class="select-date select-date-second" name="end"
-									value=${ end }>
+								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }> <input type="date"
+									class="select-date select-date-second" name="end" value=${ end }>
 
 								<c:set var="today_" value="<%=new java.util.Date()%>" />
 								<fmt:formatDate var="today" value="${ today_ }"
@@ -253,18 +255,16 @@ $('#cancel').click(function(){
 									<c:param name="end" value="${ today }" />
 								</c:url>
 
-								<input type="button" name="week" class="select-pan-btn"
-									value="일주일"> <input type="button" name="month"
-									class="select-pan-btn" value="한달">
+								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+								<input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+								 <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
 							</div>
 
 							<div class="select-box">
 								<div class="select-pan-nemo">출간일</div>
 
-								<input type="date" class="select-date select-date-first"
-									name="begin" value=${ begin }> <input type="date"
-									class="select-date select-date-second" name="end"
-									value=${ end }>
+								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }> <input type="date"
+									class="select-date select-date-second" name="end" value=${ end }>
 
 								<c:set var="today_" value="<%=new java.util.Date()%>" />
 								<fmt:formatDate var="today" value="${ today_ }"
@@ -288,9 +288,10 @@ $('#cancel').click(function(){
 									<c:param name="end" value="${ today }" />
 								</c:url>
 
-								<input type="button" name="week" class="select-pan-btn"
-									value="일주일"> <input type="button" name="month"
-									class="select-pan-btn" value="한달">
+								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+								<input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+								 <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
+									
 							</div>
 
 						</form>
@@ -301,10 +302,8 @@ $('#cancel').click(function(){
 						</div>
 
 						<button class="search-visible-btn" id="search_visible_btn">
-							<img class="search-close"
-								src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
-							<img class="search-open"
-								src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
+							<img class="search-close" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
+							<img class="search-open" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
 						</button>
 
 					</div>
@@ -332,79 +331,68 @@ $('#cancel').click(function(){
 								</tr>
 								<c:if test="${ !empty list }">
 									<c:forEach items="${ list }" var="printOrder">
-										<tr id="printtr_${ printOrder.orderId }" data-parent="1" data-num="1" data-depth="1"
-											class="table-td-depth1">
-											<td class="td-50"><input type="checkbox" name="check" value=""></td>
+										<tr id="printtr_${ printOrder.orderId }" data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+											<td class="td-50">
+												<input type="checkbox" name="selectcheckbox" value="">
+											</td>
 											<td class="td-100">
 												<div class="contents-input-div">
-													<input type="input" name=printId
-														class="contents-input noline" value="${ printOrder.printId }" readonly>
+													<input type="number" name="printId" class="contents-input noline" value="${ printOrder.printId }" readonly>
 												</div>
 											</td>
 											<td class="td-120">
 												<div class="contents-input-div">
-													<input type="input" name="clientName" 
-													class="contents-input noline" value="${ printOrder.clientName }" readonly>
+													<input type="text" name="clientName"  class="contents-input noline" value="${ printOrder.clientName }" readonly>
 												</div>
 											</td>
 											<td class="td-100">
-												<div class="contents-input-div changeable">
-													<input type="input" name="orderDate" 
-													class="contents-input noline" value="${ printOrder.orderDate }" readonly>
+												<div class="contents-input-div" id="changeable">
+													<input type="date" name="orderDate" class="contents-input noline" value="${ printOrder.orderDate }" readonly>
 												</div>
 											</td>
 											<td class="td-100">
-												<div class="contents-input-div changeable">
-													<input type="input" name="endDate" 
-													class="contents-input noline" value="${ printOrder.endDate }" readonly>
+												<div class="contents-input-div" id="changeable">
+													<input type="date" name="endDate" class="contents-input noline" value="${ printOrder.endDate }" readonly>
 												</div>
 											</td>
 											<td class="td-100">
-												<div class="contents-input-div changeable">
-													<input type="input" name="pubDate"
-														class="contents-input noline" value="${ printOrder.pubDate }" readonly>
+												<div class="contents-input-div" id="changeable">
+													<input type="date" name="pubDate" class="contents-input noline" value="${ printOrder.pubDate }" readonly>
 												</div>
 											</td>
 											<td class="td-70">
 												<div class="contents-input-div">
-													<input type="input" name="bookId"
-														class="contents-input noline" value="${ printOrder.bookId }" readonly>
+													<input type="number" name="bookId" class="contents-input noline" value="${ printOrder.bookId }" readonly>
 												</div>
 											</td>
 											<td class="td-250">
 												<div class="contents-input-div">
-													<input type="input" name="bookName"
-														class="contents-input noline" value="${ printOrder.bookName }" readonly>
+													<input type="text" name="bookName" class="contents-input noline" value="${ printOrder.bookName }" readonly>
 												</div>
 											</td>
 											<td class="td-50">
 												<div class="contents-input-div">
-													<input type="input" name="unit" class="contents-input noline" value="${ printOrder.unit }"
-														readonly>
+													<input type="text" name="unit" class="contents-input noline" value="${ printOrder.unit }" readonly>
 												</div>
 											</td>
 											<td class="td-70">
-												<div class="contents-input-div changeable">
-													<input type="input" name="quantity"
-														class="contents-input noline" value="${ printOrder.quantity }" readonly>
+												<div class="contents-input-div" id="changeable">
+													<input type="number" name="quantity" class="contents-input noline" value="${ printOrder.quantity }" readonly>
 												</div>
 											</td>
 											<td class="td-100">
-												<div class="contents-input-div changeable">
-													<input type="input" name="price"
-														class="contents-input noline" value="${ printOrder.price }" readonly>
+												<div class="contents-input-div" id="changeable">
+													<input type="number" name="price" class="contents-input noline" value="${ printOrder.price }" readonly>
 												</div>
 											</td>
 											<td class="td-120">
-												<div class="contents-input-div changeable">
-													<input type="input" name="amount"
-														class="contents-input noline" value="${ printOrder.amount }" readonly>
+												<div class="contents-input-div" id="changeable">
+													<input type="number" name="amount" class="contents-input noline" value="${ printOrder.amount }" readonly>
 												</div>
 											</td>
 											<td class="td-50">
-												<div class="contents-input-div changeable">
-													<input type="input" name="state"
-														class="contents-input noline" value="${ printOrder.state }" readonly>
+												<div class="contents-input-div" id="changeable">
+													<input type="text" name="state" class="contents-input noline" value="${ printOrder.state }" readonly>
 												</div>
 											</td>
 											<td class="td-70">
@@ -420,7 +408,7 @@ $('#cancel').click(function(){
 										</tr>
 									</c:forEach>
 								</c:if>
-							</table>
+							</table>0
 						</div>
 					</div>
 					<!--컨텐츠영역 end-->
