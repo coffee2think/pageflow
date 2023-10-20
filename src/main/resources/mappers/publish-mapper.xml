@@ -178,6 +178,41 @@
 		where edit_id = #{ editId }
 	</select>
 	
+	<select id="selectEditCountBySDate" parameterType="Search" resultType="_int">
+		select count(*) from edit
+		where start_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+	</select>
+	
+	<select id="selectEditBySDate" parameterType="Search" resultMap="resultEdit">
+		select e.*, d.dep_name
+		from (select rownum rnum, edit_id, dep_id, emp_id, emp_name, book_name, 
+		           edit_state, start_date, end_date
+		      from (select * from edit
+		        	where start_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400))
+			 ) e
+		left join department d on e.dep_id = d.dep_id
+		where rnum between #{ startRow } AND #{ endRow }
+		order by edit_id desc, start_date desc
+	</select>
+	
+	<select id="selectEditCountByEDate" parameterType="Search" resultType="_int">
+		select count(*) from edit
+		where end_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+	</select>
+	
+	<select id="selectEditByEDate" parameterType="Search" resultMap="resultEdit">
+		select e.*, d.dep_name
+		from (select rownum rnum, edit_id, dep_id, emp_id, emp_name, book_name, 
+		           edit_state, start_date, end_date
+		      from (select * from edit
+		        	where end_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400))
+			 ) e
+		left join department d on e.dep_id = d.dep_id
+		where rnum between #{ startRow } AND #{ endRow }
+		order by edit_id desc, end_date desc
+	</select>
+	
+	
 	<!-- Book 도서 -->
 	<select id="selectBookList" parameterType="Paging" resultMap="resultBook">
 		select *
@@ -218,6 +253,24 @@
 		set book_state = #{ bookState }, engraving = #{ engraving }, pub_date = #{ pubDate }
 		where book_id = #{ bookId }
 	</update>
+	
+	<select id="selectBookCountByDate" parameterType="Search" resultType="_int">
+		select count(*) from book
+		where reg_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+	</select>
+	
+	<select id="selectBookByDate" parameterType="Search" resultMap="resultBook">
+		<![CDATA[
+		select *
+		from (select rownum rnum, book_id, writer_id, book_name, writer_name, book_price_s, book_price_R,
+					 book_price, category, isbn, book_state, engraving, pub_date, reg_date
+		      from (select *
+                    from book
+                    where reg_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)))
+		where rnum between #{ startRow } AND #{ endRow }
+		order by reg_date desc
+		]]>
+	</select>
 	
 	
 	<!-- Writer 작가 -->

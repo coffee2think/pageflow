@@ -56,12 +56,22 @@ public class EditServiceImpl implements EditService {
 	}
 	
 	@Override
-	public ArrayList<Edit> selectEditByDate(Search search) {
-		return editDao.selectEditByDate(search);
+	public ArrayList<Edit> selectEditBySDate(Search search) {
+		return editDao.selectEditBySDate(search);
 	}
 	
 	@Override
-	public int selectEditCountByDate(Search search) {
-		return editDao.selectEditCountByDate(search);
+	public int selectEditCountBySDate(Search search) {
+		return editDao.selectEditCountBySDate(search);
+	}
+	
+	@Override
+	public ArrayList<Edit> selectEditByEDate(Search search) {
+		return editDao.selectEditByEDate(search);
+	}
+	
+	@Override
+	public int selectEditCountByEDate(Search search) {
+		return editDao.selectEditCountByEDate(search);
 	}
 }

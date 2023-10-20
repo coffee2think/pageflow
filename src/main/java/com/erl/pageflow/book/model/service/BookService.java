@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 
 public interface BookService {
 	// 도서 리스트 개수 조회
@@ -29,5 +30,10 @@ public interface BookService {
 	
 	// 도서 등록 도서번호 +1 처리
 	public int selectMaxBookId();
+
+	// 도서 날짜 검색
+	public ArrayList<Book> selectBookByDate(Search search);
 	
+	// 도서 날짜 검색 카운트
+	public int selectBookCountByDate(Search search);
 }

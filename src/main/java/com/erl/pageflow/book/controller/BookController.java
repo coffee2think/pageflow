@@ -23,7 +23,9 @@ import com.erl.pageflow.board.model.vo.Board;
 import com.erl.pageflow.book.model.service.BookService;
 import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.contract.model.vo.Contract;
+import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.sales.model.vo.BookOrder;
 
 @Controller
@@ -154,5 +156,43 @@ public class BookController {
 		out.append(returnStr);
 		out.flush();
 		out.close();
+	}
+	
+	// 도서 날짜 조회
+	@RequestMapping("bklistdate.do")
+	public String selectBookByDate(Search search,
+			@RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String limitStr, 
+			Model model) {
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+
+		int listCount = bookService.selectBookCountByDate(search);
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "bklistdate.do");
+		
+		paging.calculator();
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+
+		ArrayList<Book> list = bookService.selectBookByDate(search);
+		logger.info("search : " + search);
+		
+		if (list != null && list.size() > 0) {
+
+			model.addAttribute("bookList", list);
+			model.addAttribute("begin", search.getBegin().toString());
+			model.addAttribute("end", search.getEnd().toString());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+
+			return "publish/book_list";
+		} else {
+			model.addAttribute("message", "날짜 검색 실패");
+			return "common/error";
+		}
+
 	}
 }

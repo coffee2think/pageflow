@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.contract.model.vo.Contract;
@@ -146,41 +147,79 @@ public class EditController {
 		return "redirect:edlist.do";
 	}
 	
-	// 날짜로 주문현황 검색
-	@RequestMapping("edlistdate.do")
-	public String editListByDate(Search search,
-			@RequestParam(name="page", required=false) String page,
-			@RequestParam(name="limit", required=false) String limitStr,
+	// 편집 시작날짜 조회
+	@RequestMapping("edlistSdate.do")
+	public String selectEditBySDate(Search search,
+			@RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String limitStr, 
 			Model model) {
-		
-		logger.info("edlistdate.do : page=" + page + ", limitStr=" + limitStr);
 		
 		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
 		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+
+		int listCount = editService.selectEditCountBySDate(search);
 		
-		int listCount = editService.selectEditCountByDate(search);
+		Paging paging = new Paging(listCount, currentPage, limit, "edlistSdate.do");
 		
-		Paging paging = new Paging(listCount, currentPage, limit, "bolistdate.do");
 		paging.calculator();
-		
 		search.setStartRow(paging.getStartRow());
 		search.setEndRow(paging.getEndRow());
+
+		ArrayList<Edit> list = editService.selectEditBySDate(search);
+		logger.info("search : " + search);
 		
-		ArrayList<Edit> list = editService.selectEditByDate(search);
-		
-		if(list != null && list.size() > 0) {
-	
-			model.addAttribute("list", list);
+		if (list != null && list.size() > 0) {
+
+			model.addAttribute("editList", list);
 			model.addAttribute("begin", search.getBegin().toString());
 			model.addAttribute("end", search.getEnd().toString());
 			model.addAttribute("paging", paging);
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
-			
+
 			return "publish/edit_list";
 		} else {
-			model.addAttribute("message", "주문현황 조회 실패");
+			model.addAttribute("message", "날짜 검색 실패");
 			return "common/error";
 		}
+
+	}
+	
+	// 편집 마감날짜 조회
+	@RequestMapping("edlistEdate.do")
+	public String selectEditByEDate(Search search,
+			@RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String limitStr, 
+			Model model) {
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+
+		int listCount = editService.selectEditCountByEDate(search);
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "edlistEdate.do");
+		
+		paging.calculator();
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+
+		ArrayList<Edit> list = editService.selectEditByEDate(search);
+		logger.info("search : " + search);
+		
+		if (list != null && list.size() > 0) {
+
+			model.addAttribute("editList", list);
+			model.addAttribute("begin", search.getBegin().toString());
+			model.addAttribute("end", search.getEnd().toString());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+
+			return "publish/edit_list";
+		} else {
+			model.addAttribute("message", "날짜 검색 실패");
+			return "common/error";
+		}
+
 	}
 }
