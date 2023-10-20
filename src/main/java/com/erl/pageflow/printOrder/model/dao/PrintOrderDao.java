@@ -46,8 +46,8 @@ public class PrintOrderDao {
 	}
 	
 	//발주 수정
-	public int printOrderUpdate(PrintOrder printOrder) {
-		return sqlSessionTemplate.insert("printMapper.printOrderUpdate", printOrder);
+	public int updatePrintOrder(PrintOrder printId) {
+		return sqlSessionTemplate.insert("printMapper.updatePrintOrder", printId);
 	}
 	
 	//
@@ -62,6 +62,47 @@ public class PrintOrderDao {
 	
 	//발주 삭제
 	public int deletePrintOrder(int orderId) {
-		return sqlSessionTemplate.delete("printMapper.deletePrintOrder", orderId);
+		return sqlSessionTemplate.selectOne("printMapper.deletePrintOrder", orderId);
+	}
+	
+	public int selectPrintOrderCountByPrintId(Search search) {
+		return sqlSessionTemplate.selectOne("printMapper.selectPrintOrderCountByPrintId", search);
+	}
+	
+	public int selectPrintOrderCountByPrintName(Search search) {
+		return sqlSessionTemplate.selectOne("printMapper.selectPrintOrderCountByPrintName", search);
+	}
+	
+	public int selectPrintOrderCountByBookId(Search search) {
+		return sqlSessionTemplate.selectOne("printMapper.selectPrintOrderCountByBookId", search);
+	}
+	
+	public int selectPrintOrderCountByBookName(Search search) {
+		return sqlSessionTemplate.selectOne("printMapper.selectPrintOrderCountByBookName", search);
+	}
+	
+	public ArrayList<PrintOrder> selectPrintOrderByPrintId(Search search){
+		List<PrintOrder> list = sqlSessionTemplate.selectList("printMapper.selectPrintOrderByPrintId", search);
+		return (ArrayList<PrintOrder>) list;
+	}
+	
+	public ArrayList<PrintOrder> selectPrintOrderByPrintName(Search search){
+		List<PrintOrder> list = sqlSessionTemplate.selectList("printMapper.selectPrintOrderByPrintName", search);
+		return (ArrayList<PrintOrder>) list;
+	}
+	
+	public ArrayList<PrintOrder> selectPrintOrderByBookId(Search search){
+		List<PrintOrder> list = sqlSessionTemplate.selectList("printMapper.selectPrintOrderByBookId", search);
+		return (ArrayList<PrintOrder>) list;
+	}
+	
+	public ArrayList<PrintOrder> selectPrintOrderByBookName(Search search){
+		List<PrintOrder> list = sqlSessionTemplate.selectList("printMapper.selectPrintOrderByBookName", search);
+		return (ArrayList<PrintOrder>) list;
 	}
 }
+
+
+
+
+

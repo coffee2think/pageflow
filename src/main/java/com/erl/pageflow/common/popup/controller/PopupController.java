@@ -111,13 +111,13 @@ public class PopupController {
 		switch(searchType) {
 		case "clientId":
 			int clientId = Integer.parseInt(keyword);
-//			listCount = popupService.selectPrintOfficeCountById(clientId);
-//			list = popupService.selectPrintOfficeById(clientId);
+			listCount = popupService.selectPrintOfficeCountById(clientId);
+			list = popupService.selectPrintOfficeById(clientId);
 			break;
 		case "clientName":
 			String clientName = keyword;
-//			listCount = popupService.selectPrintOfficeCountByName(clientName);
-//			list = popupService.selectPrintOfficeByName(clientName);
+			listCount = popupService.selectPrintOfficeCountByName(clientName);
+			list = popupService.selectPrintOfficeByName(clientName);
 			break;
 		}
 		

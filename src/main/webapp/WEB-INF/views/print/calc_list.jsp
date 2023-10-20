@@ -71,9 +71,7 @@
                                             <option value="">인쇄소명</option>
                                             <option value="">도서코드</option>
                                             <option value="">도서명</option>
-                                            <option value="">수량</option>
-                                            <option value="">단가</option>
-                                            <option value="">합계</option>
+                                           
                                         </select>
                                     </div>
                                 </div>
@@ -86,13 +84,12 @@
                                 </div>
                             </div>
 
-                            <div class="select-box">
+                            <!-- <div class="select-box">
                                 <div class="select-pan">
                                     <label for="sel_code"></label>
                                     <select name="code" id="sel_code">
                                         <option value="all">인쇄소별</option>
-                                        <option value="">거성인쇄</option>
-                                        <option value="">JK인쇄</option>
+                                       
                                     </select>
                                 </div>
                                 
@@ -104,7 +101,7 @@
                                         <option value="">미결</option>
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <div class="select-box">
                                 <div class="select-pan-nemo">

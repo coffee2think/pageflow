@@ -6,6 +6,7 @@ import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.printOrder.model.vo.PrintOrder;
+import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 
 public interface PrintOrderService {
@@ -19,11 +20,27 @@ public interface PrintOrderService {
 	
 	public ArrayList<PrintOrder> selectPrintOrderList(Paging paging);
 	
-	public int printOrderUpdate(PrintOrder printOrder);
+	public int updatePrintOrder(PrintOrder printId);
 	
 	public int selectMaxPrintOrderId();
 	
 	public int insertPrintOrder(PrintOrder printOrder);
 	
 	public int deletePrintOrder(int orderId);
+	
+	public int selectPrintOrderCountByPrintId(Search search);
+	
+	public int selectPrintOrderCountByPrintName(Search search);
+	
+	public int selectPrintOrderCountByBookId(Search search);
+	
+	public int selectPrintOrderCountByBookName(Search search);
+	
+	public ArrayList<PrintOrder> selectPrintOrderByPrintId(Search search);
+	
+	public ArrayList<PrintOrder> selectPrintOrderByPrintName(Search search);
+	
+	public ArrayList<PrintOrder> selectPrintOrderByBookId(Search search);
+	
+	public ArrayList<PrintOrder> selectPrintOrderByBookName(Search search);
 }
