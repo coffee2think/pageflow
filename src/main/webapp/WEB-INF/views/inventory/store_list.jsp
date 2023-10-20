@@ -17,10 +17,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport"
 	content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
-<link rel="stylesheet" type="text/css"
-	href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
-<script type="text/javascript"
-	src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/inventory_update.js"></script>
+	
 <script>
     const NOWPAGE = 4;
     const SUBPAGE = 2;
@@ -101,68 +101,7 @@
 	        
 	    	location.href = url;
 	    }
-	
-	// 수정 버튼 눌렸을 때
-	function onUpdate(id){
-		const currentRow = $('#completeBtn_' + id).closest('tr');
-	    const len = currentRow.find('input[type="text"]').length; // 입력 요소의 개수 가져오기
 
-	    currentRow.find('input[type="number"]').prop('readonly', false);
-		
-		$('#updateBtn_' + id).hide();
-	    $('#completeBtn_' + id).show();
-	    $('#cancelBtn_' + id).show();
-	}
-	
-	// 수정 진행 중...
-	function submitUpdate(id, url) {
-		  var currentRow = $('#completeBtn_' + id).closest('tr'); // 수정
-		  var len = currentRow.find('input[type="number"]').length;
-		  var json = {};
-	
-		  currentRow.find('input').each(function (index) { // 수정
-	
-		    if (index == 0 || index >= len - 1) { // 수정
-		      return;
-		    }
-	
-		    if (!isNaN($(this).val().replace(/,/g, ''))) { // 수정
-		      $(this).prop('readonly', true); // readonly 속성 제거
-		    }
-	
-		    json[$(this).attr('name')] = $(this).val();
-		  });
-		
-		
-		$.ajax({
-			url: url, // 각각의 번호가 다름
-			type: "post",
-			data: json,
-			success: function(data){
-				console.log("success : " + data);
-				if(data == "success"){
-					alert(id + "번 정보 수정 성공");
-				}else{
-					alert(id + "번 정보 수정 실패")
-				}
-				
-				completeEdit(id);
-			},
-			 error: function(jqXHR, textStatus, errorThrown){
-	              console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
-	      }
-		});
-	}
-	
-		
-	// 수정 취소
-	function cancelUpdate(id) {
-		  const currentRow = $('#completeBtn_' + id).closest('tr');
-		  currentRow.find('input[type="text"]').prop('readonly', true);
-		  $('#updateBtn_' + id).show();
-		  $('#completeBtn_' + id).hide();
-		  $('#cancelBtn_' + id).hide();
-		}
 </script>
 
 </head>
@@ -310,60 +249,67 @@
 									<th>입고금액</th>
 									<th>수정</th>
 								</tr>
+							
 								<c:set var="totalStoreNum" value="0" />
 								<c:set var="totalStorePrice" value="0" />
-								<c:forEach var="sto" items="${ storeList }">
-									<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-										<td class="td-50"><input type="checkbox" class="selectedItems" name="selectedItems" value="${ sto.storeId }"></td>
-										<td class="td-100">
-											<div class="contents-input-div">
-												<input type="input" name="bookId" class="contents-input noline" value="${ sto.bookId }" readonly>
-											</div>
-										</td>
-										<td class="td-250">
-											<div class="contents-input-div">
-												<input type="input" name="bookName" class="contents-input noline" value="${ sto.bookName }" readonly>
-											</div>
-										</td>
-										<td class="td-100">
-											<div class="contents-input-div">
-												<input type="input" name="clientName" class="contents-input noline" value="${ sto.clientName }" readonly>
-											</div>
-										</td>
-										<td class="td-70">
-											<div class="contents-input-div">
-												<input type="input" name="empName" class="contents-input noline" value="${ sto.empName }" readonly>
-											</div>
-										</td>
-										<td class="td-120">
-											<div class="contents-input-div">
-												<input type="input" name="storeDate" class="contents-input noline" value="${ sto.storeDate }" readonly>
-											</div>
-										</td>
-										<td class="td-70">
-											<div class="contents-input-div">
-												<input type="input" name="bookPrice" class="contents-input noline" value="${ sto.bookPrice }" readonly>
-											</div>
-										</td>
-										<td class="td-70">
-											<div class="contents-input-div">
-												<input type="number" name="storeNum" class="contents-input noline" value="${ sto.storeNum }" readonly>
-											</div>
-										</td>
-										<td class="td-100">
-											<div class="contents-input-div">
-												<input type="text" name=storePrice class="contents-input noline" value="${ sto.storePrice }" readonly>
-											</div>
-										</td>
-										<td class="td-70">
-											<input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ sto.storeId }" onclick="onUpdate(${ sto.storeId }); return false;">
-											<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ sto.storeId }" onclick="submitUpdate(${ sto.storeId }, 'stoupdate.do'); return false;" style="display: none;"> 
-											<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ sto.storeId }" onclick="cancelUpdate(${ sto.storeId }); return false;" style="display: none;">
-										</td>
-									</tr>
-									<c:set var="totalStoreNum" value="${ totalStoreNum + sto.storeNum }" />
-									<c:set var="totalStorePrice" value="${ totalStorePrice + sto.storePrice }" />
-								</c:forEach>
+								<c:if test="${ !empty storeList }">
+									<c:forEach var="sto" items="${ storeList }">
+										<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ sto.storeId }">
+											<td class="td-50">
+												<input type="checkbox" class="selectedItems" name="selectedItems" value="${ sto.storeId }">
+											</td>
+											<td class="td-100">
+												<div class="contents-input-div">
+													<input type="input" name="bookId" class="contents-input noline" value="${ sto.bookId }" readonly>
+													<input type="hidden" name="storeId" value="${ sto.storeId }">
+												</div>
+											</td>
+											<td class="td-250">
+												<div class="contents-input-div">
+													<input type="input" name="bookName" class="contents-input noline" value="${ sto.bookName }" readonly>
+												</div>
+											</td>
+											<td class="td-100">
+												<div class="contents-input-div">
+													<input type="input" name="clientName" class="contents-input noline" value="${ sto.clientName }" readonly>
+												</div>
+											</td>
+											<td class="td-70">
+												<div class="contents-input-div">
+													<input type="input" name="empName" class="contents-input noline" value="${ sto.empName }" readonly>
+												</div>
+											</td>
+											<td class="td-120">
+												<div class="contents-input-div">
+													<input type="input" name="storeDate" class="contents-input noline" value="${ sto.storeDate }" readonly>
+												</div>
+											</td>
+											<td class="td-70">
+												<div class="contents-input-div">
+													<input type="input" name="bookPrice" class="contents-input noline" value="${ sto.bookPrice }" readonly>
+												</div>
+											</td>
+											<td class="td-70">
+												<div class="contents-input-div">
+													<input type="input" name="storeNum" class="contents-input noline changeable" value="${ sto.storeNum }" readonly>
+												</div>
+											</td>
+											<td class="td-100">
+												<div class="contents-input-div">
+													<input type="input" name="sp" class="contents-input noline" value="${ sto.storePrice }" readonly>
+													<input type="hidden" name="storePrice" value="${ sto.storeNum * sto.bookPrice }">
+												</div>
+											</td>
+											<td class="td-70">
+												<input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ sto.storeId }" onclick="onUpdate(${ sto.storeId }); return false;">
+												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ sto.storeId }" onclick="submitUpdate(${ sto.storeId }, 'stoupdate.do'); return false;" style="display: none;"> 
+												<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ sto.storeId }" onclick="cancelUpdate(${ sto.storeId }); return false;" style="display: none;">
+											</td>
+										</tr>
+										<c:set var="totalStoreNum" value="${ totalStoreNum + sto.storeNum }" />
+										<c:set var="totalStorePrice" value="${ totalStorePrice + sto.storePrice }" />
+									</c:forEach>
+								</c:if>
 								<!--합계-->
 								<tr data-parent="1" data-num="1" data-depth="1"
 									class="table-td-depth1 sum">
@@ -374,8 +320,8 @@
 									<td></td>
 									<td></td>
 									<td>합계</td>
-									<td>${ totalStoreNum }</td>
-									<td>${ totalStorePrice }</td>
+									<td id="td_totalStoreNum">${ totalStoreNum }</td>
+									<td id="td_totalStorePrice">${ totalStorePrice }</td>
 									<td></td>
 								</tr>
 								<!--합계end-->
