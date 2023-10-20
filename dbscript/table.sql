@@ -35,7 +35,7 @@ DROP TABLE approval
 	CASCADE CONSTRAINTS;
 
 /* 전자결재 라인 */
-DROP TABLE aprovalline 
+DROP TABLE approvalline 
 	CASCADE CONSTRAINTS;
 
 /* 기안서 내용(연차) */
@@ -470,37 +470,75 @@ ALTER TABLE approval
 		VALIDATE;
 
 /* 전자결재 라인 */
-CREATE TABLE aprovalline (
+CREATE TABLE approvalline (
 	line_id NUMBER NOT NULL, /* 결재라인 번호 */
-	emp_id5 NUMBER NOT NULL, /* 직원 번호(기안자) */
+	emp_id NUMBER NOT NULL, /* 직원 번호(기안자) */
 	line_name VARCHAR2(30), /* 결재라인 이름 */
-	emp_id NUMBER, /* 직원 번호(결재자 1) */
-	emp_id2 NUMBER, /* 직원 번호(결재자 2) */
-	emp_id3 NUMBER, /* 직원 번호(결재자 3) */
-	emp_id4 NUMBER /* 직원 번호(결재자 4) */
+	emp_id1 NUMBER DEFAULT 0, /* 직원 번호(결재자 1) */
+    emp_name1 VARCHAR2(30 BYTE), /* 직원 번호(결재자 1) */
+    pos_name1 VARCHAR2(30 BYTE), /* 직원 번호(결재자 1) */
+    stamp_date1 date, /* 직원 번호(결재자 1) */
+	emp_id2 NUMBER DEFAULT 0, /* 직원 번호(결재자 2) */
+    emp_name2 VARCHAR2(30 BYTE), /* 직원 번호(결재자 2) */
+    pos_name2 VARCHAR2(30 BYTE), /* 직원 번호(결재자 2) */
+    stamp_date2 date, /* 직원 번호(결재자 2) */
+	emp_id3 NUMBER DEFAULT 0, /* 직원 번호(결재자 3) */
+    emp_name3 VARCHAR2(30 BYTE), /* 직원 번호(결재자 3) */
+    pos_name3 VARCHAR2(30 BYTE), /* 직원 번호(결재자 3) */
+    stamp_date3 date, /* 직원 번호(결재자 3) */
+	emp_id4 NUMBER DEFAULT 0, /* 직원 번호(결재자 4) */
+    emp_name4 VARCHAR2(30 BYTE), /* 직원 번호(결재자 4) */
+    pos_name4 VARCHAR2(30 BYTE), /* 직원 번호(결재자 4) */
+    stamp_date4 date /* 직원 번호(결재자 4) */
 );
 
-COMMENT ON TABLE aprovalline IS '전자결재 라인';
+COMMENT ON TABLE approvalline IS '전자결재 라인';
 
-COMMENT ON COLUMN aprovalline.line_id IS '결재라인 번호';
+COMMENT ON COLUMN approvalline.line_id IS '결재라인 번호';
 
-COMMENT ON COLUMN aprovalline.emp_id5 IS '직원 번호(기안자)';
+COMMENT ON COLUMN approvalline.emp_id IS '직원 번호(기안자)';
 
-COMMENT ON COLUMN aprovalline.line_name IS '결재라인 이름';
+COMMENT ON COLUMN approvalline.line_name IS '결재라인 이름';
 
-COMMENT ON COLUMN aprovalline.emp_id IS '직원 번호(결재자 1)';
+COMMENT ON COLUMN approvalline.emp_id1 IS '직원 번호(결재자 1)';
+COMMENT ON COLUMN approvalline.emp_name1 IS '직원 번호(결재자 1) 이름';
+COMMENT ON COLUMN approvalline.pos_name1 IS '직원 번호(결재자 1) 직책';
+COMMENT ON COLUMN approvalline.stamp_date1 IS '직원 번호(결재자 1) 날짜';
 
-COMMENT ON COLUMN aprovalline.emp_id2 IS '직원 번호(결재자 2)';
+COMMENT ON COLUMN approvalline.emp_id2 IS '직원 번호(결재자 2)';
+COMMENT ON COLUMN approvalline.emp_name2 IS '직원 번호(결재자 2) 이름';
+COMMENT ON COLUMN approvalline.pos_name2 IS '직원 번호(결재자 2) 직책';
+COMMENT ON COLUMN approvalline.stamp_date2 IS '직원 번호(결재자 2) 날짜';
 
-COMMENT ON COLUMN aprovalline.emp_id3 IS '직원 번호(결재자 3)';
+COMMENT ON COLUMN approvalline.emp_id3 IS '직원 번호(결재자 3)';
+COMMENT ON COLUMN approvalline.emp_name3 IS '직원 번호(결재자 3) 이름';
+COMMENT ON COLUMN approvalline.pos_name3 IS '직원 번호(결재자 3) 직책';
+COMMENT ON COLUMN approvalline.stamp_date3 IS '직원 번호(결재자 3) 날짜';
 
-COMMENT ON COLUMN aprovalline.emp_id4 IS '직원 번호(결재자 4)';
+COMMENT ON COLUMN approvalline.emp_id4 IS '직원 번호(결재자 4)';
+COMMENT ON COLUMN approvalline.emp_name4 IS '직원 번호(결재자 4) 이름';
+COMMENT ON COLUMN approvalline.pos_name4 IS '직원 번호(결재자 4) 직책';
+COMMENT ON COLUMN approvalline.stamp_date4 IS '직원 번호(결재자 4) 날짜';
 
-ALTER TABLE aprovalline
+ALTER TABLE approvalline
 	ADD
-		CONSTRAINT PK_aprovalline
+		CONSTRAINT PK_approvalline
 		PRIMARY KEY (
 			line_id
+		)
+		NOT DEFERRABLE
+		INITIALLY IMMEDIATE
+		ENABLE
+		VALIDATE;
+        
+ALTER TABLE approvalline
+	ADD
+		CONSTRAINT FK_employee_TO_approvalline
+		FOREIGN KEY (
+			emp_id
+		)
+		REFERENCES employee (
+			emp_id
 		)
 		NOT DEFERRABLE
 		INITIALLY IMMEDIATE
@@ -1507,11 +1545,11 @@ ALTER TABLE approval
 
 ALTER TABLE approval
 	ADD
-		CONSTRAINT FK_aprovalline_TO_approval
+		CONSTRAINT FK_approvalline_TO_approval
 		FOREIGN KEY (
 			line_id
 		)
-		REFERENCES aprovalline (
+		REFERENCES approvalline (
 			line_id
 		)
 		NOT DEFERRABLE
@@ -1519,75 +1557,8 @@ ALTER TABLE approval
 		ENABLE
 		VALIDATE;
 
-ALTER TABLE aprovalline
-	ADD
-		CONSTRAINT FK_employee_TO_aprovalline
-		FOREIGN KEY (
-			emp_id
-		)
-		REFERENCES employee (
-			emp_id
-		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
 
-ALTER TABLE aprovalline
-	ADD
-		CONSTRAINT FK_employee_TO_aprovalline2
-		FOREIGN KEY (
-			emp_id2
-		)
-		REFERENCES employee (
-			emp_id
-		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
-
-ALTER TABLE aprovalline
-	ADD
-		CONSTRAINT FK_employee_TO_aprovalline3
-		FOREIGN KEY (
-			emp_id3
-		)
-		REFERENCES employee (
-			emp_id
-		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
-
-ALTER TABLE aprovalline
-	ADD
-		CONSTRAINT FK_employee_TO_aprovalline4
-		FOREIGN KEY (
-			emp_id4
-		)
-		REFERENCES employee (
-			emp_id
-		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
-
-ALTER TABLE aprovalline
-	ADD
-		CONSTRAINT FK_employee_TO_aprovalline5
-		FOREIGN KEY (
-			emp_id5
-		)
-		REFERENCES employee (
-			emp_id
-		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
+        
 
 ALTER TABLE draft_annual
 	ADD
@@ -2116,3 +2087,16 @@ ADD (title VARCHAR2(500) NULL );
 
 alter TABLE book
 MODIFY PUB_DATE date default sysdate;
+
+
+alter TABLE edit
+MODIFY END_DATE date default null;
+
+alter TABLE JOB
+RENAME COLUMN JOP_ID TO JOB_ID;
+
+
+
+
+alter table draft_annual 
+ADD (detail_type VARCHAR2(30) default 'annual');

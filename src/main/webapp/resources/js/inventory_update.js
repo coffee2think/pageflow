@@ -1,56 +1,3 @@
-
-$(function() {
-    setBtnEvent();
-}); 
-
-function setBtnEvent(){
-
-    $('#sel_code').children('option').each(function() {
-        if($(this).val() == searchType) {
-            $(this).attr('selected', true);
-        }
-    });
-
-    $('.table-apprList').each(function(){
-        let id = $(this).attr('id');
-
-        $(this).find('.search-pop-draft').each(function(){
-            $(this).on('click', function(){
-                console.log('appr : ' +  $(this).attr('data-id') )
-                getApprovalData($(this).attr('data-id'))
-            })
-        })
-    })
-}
-
-function getApprovalData(id){
-    //ajax로 update 요청 보내기
-    $.ajax({
-        url: 'apapprovalpop.do',
-        type: 'post',
-        dataType : 'json',
-        data: {
-            approvalId : id
-        },
-        success: function(data){
-            //var jsonStr = JSON.stringify(data);
-			//var json = JSON.parse(jsonStr);
-            console.log('data : ' + data);
-            console.log('data.appr_id : ' + data.appr_id);
-            //lineData : {"emp_name4":null,"appr_date":2023-10-18,"draft_type":"annual","emp_name2":"장덩근","emp_name3":null,"approver_name":3,"dep_name":"개발팀","title":null,"line_id":1,"rejection_date":null,"appr_id":1,"job_name":"부장","pos_name":null,"drafter_name":1,"receipt_date":null,"line_name":"결재라인 1","detail":"연차를 신청합니다. 병원방문","emp_name1":"김태히","start_date":2023-10-19}
-            setApprovalPopup(data);
-
-
-            //팝업창 뜨기
-            $('#approval_pop_area').show();
-            $('#approval_pop_box').show();
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-            console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
-        }
-    });
-}
-
 var temp = {};
 
 // 수정 버튼 클릭 시 수정 가능 상태로 변경
@@ -77,12 +24,9 @@ function onUpdate(id) {
         
         // input 태그 정보 temp에 보관
         var input = $(this).find('input')[0];
-        console.log('input : ' + input);
         temp[input.name + '_' + id] = input.value;
-
     });
 }
-
 
 // 수정상태 이전 스타일로 되돌리기
 function offUpdate(id) {
@@ -116,7 +60,6 @@ function cancelUpdate(id) {
         
         // temp에서 정보 꺼내서 대입
         var input = $(this).find('input')[0];
-        
         input.value = temp[input.name + '_' + id];
         delete temp[input.name + '_' + id]; // temp에서 정보 삭제
     });
@@ -167,34 +110,4 @@ function submitUpdate(id, url) {
             console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
         }
     });
-}
-
-// 선택된 행의 정보 삭제 요청(post 전송)
-function deleteCheckedRow(url) {
-    // form 태그에 담아서 post 전송
-    const form = document.createElement('form'); // form 태그 생성
-    form.setAttribute('method', 'post'); // 전송 방식 결정 (get or post)
-    form.setAttribute('action', url); // 전송할 url 지정
-    
-    var checked = $('#table_list').find('input[type="checkbox"]:checked');
-    if(checked.length == 0) {
-        alert('삭제할 행을 체크해주세요.');
-        return false;
-    }
-    checked.each(function() {
-        const id = $(this).val();
-        
-        // input 태그 생성하여 데이터 담기
-        const data = document.createElement('input');
-        data.setAttribute('type', 'hidden');
-        data.setAttribute('name', 'IDs'); // 데이터의 name
-        data.setAttribute('value', id); // 데이터의 value
-        
-        // form 태그에 input 태그 넣기 
-        form.appendChild(data);
-    });
-    
-    // body에 form 태그 추가하고 submit 전송
-    document.body.appendChild(form);
-    form.submit();
 }

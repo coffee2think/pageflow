@@ -2,12 +2,15 @@ package com.erl.pageflow.approval.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +25,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.erl.pageflow.approval.model.service.ApprovalService;
 import com.erl.pageflow.approval.model.vo.Approval;
 import com.erl.pageflow.approval.model.vo.Draft;
+import com.erl.pageflow.approvalline.model.service.ApprovalLineService;
+import com.erl.pageflow.approvalline.model.vo.ApprovalLine;
 import com.erl.pageflow.board.model.vo.Board;
+import com.erl.pageflow.book.model.vo.BookWithStock;
 import com.erl.pageflow.common.ApprovalKeyword;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.ReplyKeyword;
@@ -36,18 +42,20 @@ public class ApprovalController {
 	@Autowired
 	private ApprovalService approvalService;
 	
+	@Autowired
+	private ApprovalLineService approvalLineService;
+	
 	//**************나의 전자결재****************
 	//기안서 검색
-	public void setDraft(Approval appr, Paging paging) {
+	public void setDraft(Approval appr) {
 		Draft draft = approvalService.selectDraft(
-		new ApprovalKeyword(appr.getApprId(), appr.getDraftType(), 
-		paging.getStartRow(), paging.getEndRow()));
-
+		new ApprovalKeyword(appr.getApprId(), appr.getDraftType()));
+		
 		appr.setDetail(draft.getDetail());
 		appr.setEmergency(draft.getEmergency());
 		appr.setStartDate(draft.getStartDate());
 		appr.setEndDate(draft.getEndDate());
-		
+		appr.setDetailType(draft.getDetailType());
 	}
 	
 	//나의 전자결재 리스트 조회
@@ -108,7 +116,7 @@ public class ApprovalController {
 			model.addAttribute("approvalList", list);
 			
 			for(Approval a : list) {
-				setDraft(a, paging);
+				setDraft(a);
 			}
 			logger.info("list : " + list);
 			//return "approval/appr_list";
@@ -166,7 +174,7 @@ public class ApprovalController {
 		
 		logger.info("list : " + list);
 		for(Approval a : list) {
-			setDraft(a, paging);
+			setDraft(a);
 		}
 		model.addAttribute("empId", search.getEmpId());
 		model.addAttribute("paging", paging);
@@ -273,7 +281,7 @@ public class ApprovalController {
 		if(list != null && list.size() > 0) {
 			
 			for(Approval a : list) {
-				setDraft(a, paging);
+				setDraft(a);
 			}
 			model.addAttribute("approvalList", list);
 		}else {
@@ -284,21 +292,65 @@ public class ApprovalController {
 		return "approval/appr_list";
 	}
 	
-	//결재 팝업 데이터
+	
 	@RequestMapping(value = "apapprovalpop.do", method = RequestMethod.POST)
 	@ResponseBody//문자값 응답시에는 생략해도 됨
-	public void selectApprovalPopup(
+	public String selectApprovalPopup(
 			@RequestParam("approvalId") int approvalId,
 			HttpServletResponse response) throws IOException {
 		logger.info("approvalId : " + approvalId);
-		response.setContentType("text/html; charset=utf-8");
+		response.setContentType("application/json; charset=utf-8");
 		
 		Approval approval = approvalService.selectMyApproval(approvalId);
+		setDraft(approval);
 		logger.info("approval : " + approval);
-		PrintWriter out = response.getWriter();
-		out.append("no member");
-		out.flush();
-		out.close();
+		ApprovalLine approvalLine = approvalLineService.selectMyApprovalLine(approval.getLineId());
+		logger.info("approvalLine : " + approvalLine);
+		
+		JSONObject jobj = new JSONObject();
+		
+		jobj.put("appr_id", approval.getApprId());
+		jobj.put("emergency", approval.getEmergency());
+		jobj.put("dep_name", approval.getDepName());
+		jobj.put("job_name", approval.getJobName());
+		jobj.put("pos_name", approval.getPosName());
+		jobj.put("draft_type", approval.getDraftType());
+		jobj.put("drafter_name", approval.getDrafterName());
+		jobj.put("approver_name", approval.getApprover());
+		jobj.put("start_date", (approval.getStartDate() == null) ? "" : approval.getStartDate().toString());
+		jobj.put("end_date", (approval.getEndDate() == null) ? "" : approval.getEndDate().toString());
+		jobj.put("detail", approval.getDetail());
+		jobj.put("title", approval.getTitle());
+		jobj.put("appr_date", (approval.getApprDate() == null) ? "" : approval.getApprDate().toString());
+		jobj.put("receipt_date", (approval.getReceiptDate() == null) ? "" : approval.getReceiptDate().toString());
+		jobj.put("rejection_date", (approval.getRejectionDate() == null) ? "" : approval.getRejectionDate().toString());
+		jobj.put("line_id", approvalLine.getLineId());
+		jobj.put("line_name", approvalLine.getLineName());
+		
+		
+		
+		jobj.put("emp_id1", approvalLine.getEmpId1());
+		jobj.put("emp_id2", approvalLine.getEmpId2());
+		jobj.put("emp_id3", approvalLine.getEmpId3());
+		jobj.put("emp_id4", approvalLine.getEmpId4());
+		
+		jobj.put("pos_name1", approvalLine.getPosName1());
+		jobj.put("pos_name2", approvalLine.getPosName2());
+		jobj.put("pos_name3", approvalLine.getPosName3());
+		jobj.put("pos_name4", approvalLine.getPosName4());
+		
+		//jobj.put("stamp_date1", approvalLine.getStampDate1());
+		//jobj.put("stamp_date2", approvalLine.getStampDate2());
+		//jobj.put("stamp_date3", approvalLine.getStampDate3());
+		//jobj.put("stamp_date4", approvalLine.getStampDate4());
+		
+		jobj.put("emp_name1", approvalLine.getEmpName1());
+		jobj.put("emp_name2", approvalLine.getEmpName2());
+		jobj.put("emp_name3", approvalLine.getEmpName3());
+		jobj.put("emp_name4", approvalLine.getEmpName4());
+		
+		return jobj.toJSONString();
+		
 	}
 	
 	//인서트

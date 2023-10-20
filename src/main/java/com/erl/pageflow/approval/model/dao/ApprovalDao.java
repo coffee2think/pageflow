@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.approval.model.vo.Approval;
 import com.erl.pageflow.approval.model.vo.Draft;
+import com.erl.pageflow.approvalline.model.vo.ApprovalLine;
 import com.erl.pageflow.common.ApprovalKeyword;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
@@ -259,4 +260,5 @@ public class ApprovalDao {
 	public Approval selectMyApproval(int approvalId) {
 		return sqlSessionTemplate.selectOne("approvalMapper.selectMyApproval", approvalId);
 	}
+
 }

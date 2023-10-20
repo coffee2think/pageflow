@@ -17,7 +17,15 @@
     const NOWPAGE = 1;
     const SUBPAGE = 1;
     const LNKPAGE = 1;
+    
+    function resiterPage() {
+    	if(confirm('직원등록 페이지로 이동하시겠습니까?')) {
+        window.location.href = 'enrollemp.do'; 
+    	}
+    }
+    
 </script>
+
 <style>
 /* 기본 버튼 스타일 */
 .my-button {
@@ -38,7 +46,7 @@
 	color: white;
 }
 
-.popup {
+/* .popup {
             display: none;
             position: fixed;
             z-index: 1;
@@ -57,49 +65,12 @@
             border: 1px solid #888;
             width: 80%;
             text-align: center;
-        }
+        } */
+        
+        
 </style>
 
- <script>
-        // 팝업 열기
-        function openPopup() {
-            var popup = document.getElementById("employeePopup");
-            popup.style.display = "block";
-        }
-
-        // 팝업 닫기
-        function closePopup() {
-            var popup = document.getElementById("employeePopup");
-            popup.style.display = "none";
-        }
-        
-        
-        function sendData() {
-            var name = document.getElementById("name").value;
-            var position = document.getElementById("position").value;
-
-            // XMLHttpRequest 객체 생성
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "mnlist.do", true);
-            xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-            // POST 요청에 보낼 데이터 설정
-            var params = "name=" + name + "&position=" + position;
-
-            // 요청 전송
-            xhr.send(params);
-
-            // 요청이 완료되면 페이지 이동
-            xhr.onload = function() {
-                if (xhr.status == 200) {
-                    // 서버에서 처리 후 페이지 이동 또는 추가 동작을 여기에서 수행할 수 있습니다.
-                    window.location.href = "successPage.jsp";
-                } else {
-                    // 에러 처리 코드를 여기에 추가할 수 있습니다.
-                }
-            };
-        }
- </script>
+ 
 
 	<title>직원 등록 모달 창</title>
     
@@ -154,6 +125,9 @@
 
 				<!--내용-->
 				<div class="main-contents-box">
+				
+				<h1 align="center">전체 직원 관리 페이지</h1>
+				<h2 align="center">현재 직원 수 : ${requestScope.list.size() } 명</h2>
 
 					<div class="contents-container sort-row">
 						<div class="contents-box">
@@ -169,8 +143,7 @@
 									<th>직급번호</th>
 									<th>직책번호</th>
 									<th>부서번호</th>
-									<th>로그인 가능여부</th>
-									<th>관리자 여부</th>
+								
 								</tr>
 								<c:if test="${ !empty list }">
 									<c:forEach items="${ list }" var="emp">
@@ -227,19 +200,9 @@
 														readonly>
 												</div>
 											</td>
-											<td class="td-100">
-												<div class="contents-input-div">
-													<input type="input" name="loginOk"
-														class="contents-input noline" value="${ emp.loginOk }"
-														readonly>
-												</div>
+											
 											</td>
-											<td class="td-100">
-												<div class="contents-input-div">
-													<input type="input" name="adminYN"
-														class="contents-input noline" value="${ emp.adminYN }"
-														readonly>
-												</div>
+											
 											</td>
 
 										</tr>
@@ -253,25 +216,11 @@
 					
 					
 					 <!-- 직원 등록 버튼 -->
-   		 <button onclick="openPopup()" class="my-button" id="openModalBtn">직원 등록</button>
-
-    <!-- 직원 등록 팝업 창 -->
-    <div id="employeePopup" class="popup">
-        <div class="popup-content">
-            <h2>직원 등록 양식</h2>
-            <!-- 직원 정보 입력 양식 -->
-            <form action="mnlist.do" method="post">
-                이름: <input type="text" name="name" required><br><br>
-                직급: <input type="text" name="position" required><br><br>
-                <!-- 추가 필드들을 필요에 따라 여기에 추가할 수 있습니다 -->
-                <input type="submit" value="등록">
-            </form>
-            <!-- 팝업 닫기 버튼 -->
-            <button onclick="closePopup()">닫기</button>
-        </div>
-    </div>
-
-	
+   		 
+		
+   
+	<button onclick="resiterPage()" class="my-button" id="openModalBtn">직원 등록</button>
+>
 					
 					
 					

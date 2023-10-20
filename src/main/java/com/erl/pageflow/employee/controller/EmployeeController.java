@@ -98,6 +98,21 @@ public class EmployeeController {
 		
 		return mv;
 	}
+	
+	// 직원 등록 
+		@RequestMapping(value = "enrollemp.do", method = RequestMethod.POST)
+		public String memberInsertMethod(Employee employee, Model model) {
+			logger.info("enrollemp.do" + employee);
+
+			
+			if (employeeService.insertEmployee(employee) > 0) {
+				return "redirect:mnlist.do";
+			} else {
+				model.addAttribute("message", "직원 등록 실패!");
+				return "common/error";
+			}
+		}
+
 		
 		
 }

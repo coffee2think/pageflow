@@ -15,6 +15,7 @@ public class Approval implements Serializable {
 	private Date apprDate;
 	private Date receiptDate;
 	private Date rejectionDate;
+	private String detailType;
 	
 	private String drafterName;
 	private String approverName;
@@ -235,6 +236,14 @@ public class Approval implements Serializable {
 
 	public void setPosName(String posName) {
 		this.posName = posName;
+	}
+	
+	public String getDetailType() {
+		return detailType;
+	}
+
+	public void setDetailType(String detailType) {
+		this.detailType = detailType;
 	}
 
 	@Override

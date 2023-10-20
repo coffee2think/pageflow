@@ -68,7 +68,7 @@
 	<select id="selectPrintOfficeById" parameterType="_int" resultMap="resultPrintOffice">
 		select *
 		from (select rownum rnum, sub.*
-			  from (select count(*) from client
+			  from (select * from client
 					where category = '인쇄소' and client_id = #{ clientId }) sub)
 		where rnum between 1 and 10
 	</select>
@@ -81,7 +81,7 @@
 	<select id="selectPrintOfficeByName" parameterType="string" resultMap="resultPrintOffice">
 		select *
 		from (select rownum rnum, sub.*
-			  from (select count(*) from client
+			  from (select * from client
 					where category = '인쇄소' and client_name like '%' || #{ clientName } || '%') sub)
 		where rnum between 1 and 10
 	</select>

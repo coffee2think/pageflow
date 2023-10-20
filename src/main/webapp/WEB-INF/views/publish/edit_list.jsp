@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,14 +17,29 @@
     const SUBPAGE = 2;
     const LNKPAGE = 1;
     
-    function searchByDate() {
-    	var begin = $('#begin').val();
-    	var end = $('#end').val();
+    // 시작날짜 검색
+    function searchBySDate(dateType) {
+    	var begin = $('#begin_' + dateType).val();
+    	var end = $('#end_' + dateType).val();
     	
-    	var url = 'edlistdate.do?';
+    	var url = 'edlistSdate.do?';
     	url += 'begin=' + begin;
     	url += '&end=' + end;
+    	url += '&dateType=' + dateType;
+        
+    	location.href = url;
+    }
+    
+    // 마감날짜 검색
+    function searchByEDate(dateType) {
+    	var begin = $('#begin_' + dateType).val();
+    	var end = $('#end_' + dateType).val();
     	
+    	var url = 'edlistEdate.do?';
+    	url += 'begin=' + begin;
+    	url += '&end=' + end;
+    	url += '&dateType=' + dateType;
+        
     	location.href = url;
     }
 </script>
@@ -112,33 +128,43 @@
                                     시작일자
                                 </div>
                                 
-								<input type="date" class="select-date select-date-first" name="begin" id="begin" value=${ begin }>
-                                <input type="date" class="select-date select-date-second" name="end" id="end" value=${ end }>
-								
-								<c:set var="today_" value="<%= new java.util.Date() %>" />
-								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
-								
-								<!-- LocalDate 객체를 통해 일주일 전 날짜를 구한 후 Date 객체로 변환 -->
-								<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
-								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
-								
-								<!-- LocalDate 객체를 통해 한달 전 날짜를 구한 후 Date 객체로 변환 -->
-								<c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
-								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
-								
-								<c:url var="searchWeekUrl" value="bolistdate.do">
-									<c:param name="begin" value="${ weekago }" />
-									<c:param name="end" value="${ today }" />
-								</c:url>
-								
-								<c:url var="searchMonthUrl" value="bolistdate.do">
-									<c:param name="begin" value="${ monthago }" />
-									<c:param name="end" value="${ today }" />
-								</c:url>
-								
-								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
-                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
-                                <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
+								<c:choose> 
+						            <c:when test="${ !empty firstType and firstType eq 'first' }">
+						                <input type="date" class="select-date select-date-first" id="begin_startDate">
+						                <input type="date" class="select-date select-date-second" id="end_startDate">
+						            </c:when> 
+						            
+						            <c:otherwise>
+						                <input type="date" class="select-date select-date-first" id="begin_startDate" value="${ begin }">
+						                <input type="date" class="select-date select-date-second" id="end_startDate" value="${ end }">
+						            </c:otherwise> 
+						        </c:choose> 
+						        
+						        <c:set var="today_" value="<%= new java.util.Date() %>" />
+						        <fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+						
+						        <c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+						        <fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+		
+						        <c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+						        <fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+						
+						        <c:url var="searchWeekUrl" value="edlistSdate.do">
+						            <c:param name="begin" value="${ weekago }" />
+						            <c:param name="end" value="${ today }" />
+						            <c:param name="dateType" value="startDate" />
+						        </c:url>
+						
+						        <c:url var="searchMonthUrl" value="edlistSdate.do">
+						            <c:param name="begin" value="${ monthago }" />
+						            <c:param name="end" value="${ today }" />
+						            <c:param name="dateType" value="startDate" />
+						        </c:url>
+						
+						        <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+						        <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+						        <input type="button" name="search" class="select-pan-btn" value="검색" onclick="searchBySDate('startDate'); return false;">
+						        
 								
                             </div>
 
@@ -147,33 +173,42 @@
                                     마감일자
                                 </div>
 
-                                <input type="date" class="select-date select-date-first" name="begin" id="begin" value=${ begin }>
-                                <input type="date" class="select-date select-date-second" name="end" id="end" value=${ end }>
-								
-								<c:set var="today_" value="<%= new java.util.Date() %>" />
-								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
-								
-								<!-- LocalDate 객체를 통해 일주일 전 날짜를 구한 후 Date 객체로 변환 -->
-								<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
-								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
-								
-								<!-- LocalDate 객체를 통해 한달 전 날짜를 구한 후 Date 객체로 변환 -->
-								<c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
-								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
-								
-								<c:url var="searchWeekUrl" value="bolistdate.do">
-									<c:param name="begin" value="${ weekago }" />
-									<c:param name="end" value="${ today }" />
-								</c:url>
-								
-								<c:url var="searchMonthUrl" value="bolistdate.do">
-									<c:param name="begin" value="${ monthago }" />
-									<c:param name="end" value="${ today }" />
-								</c:url>
-								
-								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
-                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
-                                <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
+                                <c:choose> 
+						            <c:when test="${ !empty firstType and firstType eq 'first' }">
+						                <input type="date" class="select-date select-date-first" id="begin_startDate">
+						                <input type="date" class="select-date select-date-second" id="end_startDate">
+						            </c:when> 
+						            
+						            <c:otherwise>
+						                <input type="date" class="select-date select-date-first" id="begin_startDate" value="${ begin }">
+						                <input type="date" class="select-date select-date-second" id="end_startDate" value="${ end }">
+						            </c:otherwise> 
+						        </c:choose> 
+						        
+						        <c:set var="today_" value="<%= new java.util.Date() %>" />
+						        <fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+						
+						        <c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+						        <fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+		
+						        <c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+						        <fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+						
+						        <c:url var="searchWeekUrl" value="edlistEdate.do">
+						            <c:param name="begin" value="${ weekago }" />
+						            <c:param name="end" value="${ today }" />
+						            <c:param name="dateType" value="startDate" />
+						        </c:url>
+						
+						        <c:url var="searchMonthUrl" value="edlistEdate.do">
+						            <c:param name="begin" value="${ monthago }" />
+						            <c:param name="end" value="${ today }" />
+						            <c:param name="dateType" value="startDate" />
+						        </c:url>
+						
+						        <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+						        <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+						        <input type="button" name="search" class="select-pan-btn" value="검색" onclick="searchByEDate('startDate'); return false;">
                             </div>
 
                         </form>

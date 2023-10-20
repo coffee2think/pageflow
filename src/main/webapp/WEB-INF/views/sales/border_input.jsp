@@ -22,22 +22,22 @@
     document.addEventListener("DOMContentLoaded", function(){
     	$('.input-search-btn').on('click', function() {
     		var input = $(this).parent().children('input');
-    		var type = input.attr('name');
-    		if(type.includes('book')) {
-    			type = 'book';
+    		var popup_type = input.attr('name');
+    		if(popup_type.includes('book')) {
+    			popup_type = 'book';
     		}
     		
-    		if(type.includes('client')) {
-    			type = client_type;
+    		if(popup_type.includes('client')) {
+    			popup_type = client_type;
     		}
     		
-    		console.log('type : ' + type);
+    		console.log('popup_type : ' + popup_type);
     		var tr = $(this).parent().parent().parent();
     		var trValue = tr.val();
     		console.log('tr : ' + tr);
     		console.log(tr);
     		console.log('trValue : ' + trValue);
-    		popup.showPopup(type);
+    		popup.showPopup(popup_type);
     		
     		
     		
@@ -240,9 +240,9 @@
                 <!-- <form class="input-form" action="/comi/partyi" method="post" enctype="multipart/form-data">-->
                 <form class="input-form" action="boinsert.do" method="post">
                 	<%-- <input type="hidden" name="empId" value="${ loginMember.empId }"> --%>
-                	<input type="hidden" name="empId" value="1"> <!-- 하드코딩 -->
+                	<input type="hidden" name="empId" value="${ loginMember.empId }">
                 	<%-- <input type="hidden" name="empName" value="${ loginMember.empName }"> --%>
-                	<input type="hidden" name="empName" value="홍길동"> <!-- 하드코딩 -->
+                	<input type="hidden" name="empName" value="${ loginMember.empName }">
                 	
                     <!--main-header-bar-->
                     <div class="main-header-bar">
@@ -304,8 +304,7 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <!-- <input type="hidden" name="clientId" value=""> -->
-                                                <input type="hidden" name="clientId" value="10001"> <!-- 하드코딩(팝업창에서 정보를 가져와야함) -->
+                                                <input type="hidden" name="clientId" value="">
                                                 <input type="input" name="clientName" class="contents-input" value="">
                                             </div>
                                         </td>

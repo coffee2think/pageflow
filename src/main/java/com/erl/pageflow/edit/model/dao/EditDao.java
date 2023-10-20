@@ -53,7 +53,7 @@ public class EditDao {
 	
 	// 편집 삭제
 	public int deleteEdit(int editId) {
-		return sqlSession.delete("publishMapper.deleteEdit", editId);
+		return sqlSessionTemplate.delete("publishMapper.deleteEdit", editId);
 	}
 	
 	// 편집 등록 편집번호 +1 처리
@@ -61,14 +61,25 @@ public class EditDao {
 		return sqlSessionTemplate.selectOne("publishMapper.selectMaxEditId");
 	}
 	
-	// 편집 날짜 검색
-	public ArrayList<Edit> selectEditByDate(Search search) {
-		List<Edit> list = sqlSession.selectList("salesMapper.selectEditByDate", search);
+	// 편집 시작날짜 검색
+	public ArrayList<Edit> selectEditBySDate(Search search) {
+		List<Edit> list = sqlSessionTemplate.selectList("publishMapper.selectEditBySDate", search);
 		return (ArrayList<Edit>) list;
 	}
 	
-	// 편집 날짜 검색 개수
-	public int selectEditCountByDate(Search search) {
-		return sqlSession.selectOne("publishMapper.selectEditCountByDate", search);
+	// 편집 시작날짜 검색 개수
+	public int selectEditCountBySDate(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectEditCountBySDate", search);
+	}
+	
+	// 편집 마감날짜 검색
+	public ArrayList<Edit> selectEditByEDate(Search search) {
+		List<Edit> list = sqlSessionTemplate.selectList("publishMapper.selectEditByEDate", search);
+		return (ArrayList<Edit>) list;
+	}
+	
+	// 편집 마감날짜 검색 개수
+	public int selectEditCountByEDate(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectEditCountByEDate", search);
 	}
 }

@@ -138,9 +138,9 @@
 
 								<div class="select-box">
 									<div class="select-pan-nemo">파일첨부</div>
-										<c:url var="ndown" value="bddown.do">
-                                                <c:param name="ofile" value="${ notice.noticeoriginFileName }" />
-                                                <c:param name="rfile" value="${ notice.renameFileName }" />
+										<c:url var="ndown" value="bfdown.do">
+                                                <c:param name="ofile" value="${ notice.noticeOriginalFileName }" />
+                                                <c:param name="rfile" value="${ notice.noticeRenameFileName }" />
                                         </c:url>
                                             <div class="contents-notice-down-box show">
                                                 <a class="contents-notice-down" href="${ ndown }">
@@ -150,7 +150,7 @@
                                                 </a>
                                             </div>
                                  <div class="select-pan margin-left20px">
-                                                <input type="file" name="nofile" class="select-file">
+                                                <input type="file" name="ofile" class="select-file">
                                  </div>
                                         
                                        
@@ -163,10 +163,6 @@
 								
 								<div class="content-input-area  height-long">
 									<div class="content-input" contenteditable="true">
-
-									
-									
-								
 
 									</div>
 									<textarea name="noticeDetail" id="appendTextArea" ></textarea>
