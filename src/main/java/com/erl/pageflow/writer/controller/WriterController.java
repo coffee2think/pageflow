@@ -1,9 +1,12 @@
 package com.erl.pageflow.writer.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.edit.model.vo.Edit;
 import com.erl.pageflow.writer.model.service.WriterService;
 import com.erl.pageflow.writer.model.vo.Writer;
 
@@ -110,5 +114,24 @@ public class WriterController {
 		}
 		
 		return "redirect:wtlist.do";
+	}
+	
+	// 작가 정보 수정 요청 처리
+	@RequestMapping(value="wtupdate.do", method=RequestMethod.POST)
+	public void writerUpdateMethod(Writer writer, HttpServletResponse response) throws IOException {
+		logger.info("wtupdate.do : " + writer);
+		
+		String returnStr = null;
+		if(writerService.updateWriter(writer) > 0) {
+			returnStr = "success";
+		} else {
+			returnStr = "fail";
+		}
+		
+		// response를 이용해서 클라이언트와 출력스트림을 열어서 값 보냄
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.append(returnStr);
+		out.flush(); 
 	}
 }
