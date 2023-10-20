@@ -10,22 +10,25 @@ import java.util.Arrays;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.printOrder.model.service.PrintOrderService;
 import com.erl.pageflow.printOrder.model.vo.PrintOrder;
-import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 
 @Controller
@@ -287,22 +290,25 @@ public class PrintOrderController {
 		}
 	
 	//발주 수정 요청 처리용
-	@RequestMapping(value="poupdate.do", method= {RequestMethod.GET, RequestMethod.POST})
-	@ResponseBody
-	public void printOrderUpdateMethod(
-			HttpServletResponse response,
-			PrintOrder printId,
-			Model model, HttpServletRequest request) throws IOException {
-		logger.info("poupdate.do : " + printId);
+	@RequestMapping(value="poupdate.do", method= RequestMethod.POST)
+	public void printOrderUpdateMethod(HttpServletResponse response, PrintOrder printOrder) throws IOException {
+		logger.info("poupdate.do : " + printOrder);
 		
-		int result = printOrderService.updatePrintOrder(printId);
+		int result = printOrderService.updatePrintOrder(printOrder);
+		
+		String returnStr = null;
+		if(printOrderService.updatePrintOrder(printOrder) > 0) {
+			returnStr = "success";
+		} else {
+			returnStr = "fail";
+		}
 		
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
 		
-		if(result == 1) {
-			out.append("ok");
-		}
+		
+		out.append(returnStr);
+		
 		
 		out.flush();
 		out.close();
@@ -310,28 +316,41 @@ public class PrintOrderController {
 	
 	//발주 삭제 요청 처리용
 	@RequestMapping(value= "podelete.do", method=RequestMethod.POST)
-	@ResponseBody
-	public void deletePrintOrder(
-			@RequestParam(name="selectedPrintOrderIds") 
-			String selectedPrintOrderIds, HttpServletRequest request, 
-			Model model) {
+	public void deletePrintOrder(HttpServletResponse response, @RequestBody String parma)
+			throws ParseException, IOException {
+		JSONParser jparser = new JSONParser();
+		JSONArray jarr = (JSONArray) jparser.parse(parma);
+		String[] jst = null;
+		System.out.println(jarr);
 		
 		int count = 0;
-		String[] poArr = selectedPrintOrderIds.split(",");
-		logger.info("selectedPrintOrderIds" + selectedPrintOrderIds);
-		logger.info("poArr" + Arrays.toString(poArr));
 		
-		for(int i = 0; i < poArr.length; i++) {
-			
-			int printId = Integer.parseInt(poArr[i].toString());
-			logger.info("printId" + printId);
-			
-			if(printOrderService.deletePrintOrder(printId) > 0) {
+		JSONObject job = (JSONObject) jarr.get(0);
+		JSONArray scbkeyArray = (JSONArray) job.get("scbkey");
+		System.out.println("job : " + job);
+		System.out.println("scbkeyArray : " + scbkeyArray);
+		
+		for (int j = 0; j < scbkeyArray.size(); j++) {
+			String scbkey = (String) scbkeyArray.get(j);
+			int scbkeyInt = Integer.parseInt(scbkey);
+			System.out.println("scbkeyInt : " + scbkeyInt);
+			if(printOrderService.deletePrintOrder(scbkeyInt) >= 0) {
+				System.out.println("발주 삭제 : " + scbkeyInt);
 				count++;
-				
-			} else {
-				model.addAttribute("message", "발주 등록 삭제 실패!");
 			}
 		}
+		
+		String str = "no";
+		if (count >= scbkeyArray.size()) {
+			str = "ok";
+		}
+		
+		PrintWriter out = response.getWriter();
+		out.append(str);
+		// 출력값은 버퍼에서 처리하니까 밀어내는 작업!
+		out.flush();
+
+		out.close();
 	}
+	
 }

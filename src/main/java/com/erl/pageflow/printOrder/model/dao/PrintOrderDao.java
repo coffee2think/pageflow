@@ -47,7 +47,7 @@ public class PrintOrderDao {
 	
 	//발주 수정
 	public int updatePrintOrder(PrintOrder printId) {
-		return sqlSessionTemplate.insert("printMapper.updatePrintOrder", printId);
+		return sqlSessionTemplate.update("printMapper.updatePrintOrder", printId);
 	}
 	
 	//
@@ -62,7 +62,7 @@ public class PrintOrderDao {
 	
 	//발주 삭제
 	public int deletePrintOrder(int orderId) {
-		return sqlSessionTemplate.selectOne("printMapper.deletePrintOrder", orderId);
+		return sqlSessionTemplate.delete("printMapper.deletePrintOrder", orderId);
 	}
 	
 	public int selectPrintOrderCountByPrintId(Search search) {

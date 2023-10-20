@@ -7,7 +7,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
+<meta name="viewport"
+	content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
@@ -16,81 +17,54 @@
     const SUBPAGE = 1;
     const LNKPAGE = 1;
 
- // 수정 버튼 클릭 시 수정 가능 상태로 변경
-$(function(){
-	
-	
-	
-	$('${ printOrder.printId }').click(function(){
-		
-		var inputs = $('changeable input');
-		
-		inputs.each(function(){
-			$(this).attr('readonly', false);
-		});
-		
-		console.log("=========================확인============================");
-		
-		//ajax 사용
-		$.ajax({
-			url: "poupdate.do",
-			type: "post",
-			data: { 
-				orderDate: $('#orderDate').val(), endDate: $('#endDate').val(),
-				pubDate: $('#pubDate').val(), quantity: $('#quantity').val(), 
-				price: $('#price').val(), amount: $('#amount').val(), state: $('#state').val()
-				},
-			
-			success: function(data){
-				if(data == "ok"){
-					alert("수정되었습니다.");
-				}
-			}	
-		});		//ajax 의 닫기태그
-	});			//click 의 닫기태그
-	
-$('#cancel').click(function(){
-		
-		var inputs = document.getElementsById('changeable');
-		
-		for(var i = 0; i< inputs.length; i++){
-			inputs[i].readonly = true;
-			}
-	});	
-})				//document.ready 의 닫기 태그    
+ // 수량 변경 시 총액 계산
+    $(function() {
+    	$('#table_list').find('input[name=quantity]').each(function() {
+    		$(this).change(function() { 
+    			var tr = $(this).parent().parent().parent();
+    			var bookPrice = tr.find('input[name=bookPrice]').val();
+    			var quantity = $(this).val();
+    			var totalPrice = tr.find('input[name=amount]');
+    			amount.val(bookPrice * quantity);
+    		});
+    	});
+    });
+    
+    
+
 </script>
 <title></title>
 <script type="text/javascript">
+	//발주 삭제	
 	$(document).ready(function(){
 		$('#btn_delete').click(function(){
-			const selectedCheckbox = $('input[name="selectcheckbox"]:checked');
-			const selectedPrintOrderIds = [];
+			var jarr = new Array();
+			var scb = $('.selectcheckbox:checked');
+			var scbValues = scb.map(function(){
+				return $(this).val();
+			}).get();
 			
-			selectedCheckbox.each(function(){
-				var p_id = $(this).parent().parent().attr('id');
-				selectedPrintOrderIds.push(p_id.split('_').pop());	
-			});
+			var job = { scbkey : scbValues };
+			jarr.push(job);
 			
-			console.log(selectedPrintOrderIds);
-			
-			if(selectedPrintOrderIds.length === 0){
+			console.log("jarr : " + JSON.stringify(jarr));
+			if(scbValues.length === 0){
 				alert('선택된 항목이 없습니다.');
 			} else{
 				$.ajax({
 					url: 'podelete.do',
 					type: 'post',
-					dataType: 'json',
-					data: { selectedPrintOrderIds: selectedPrintOrderIds.join(',') },
-					success: function(response){
-						alert('선택한 인쇄소가 없습니다.');
-						location.reload();
+					data: JSON.stringify(jarr),
+					contentType: 'application/json; charset=utf-8',
+					success: function(){
+						alert('선택된 발주내역이 삭제되었습니다.');
 					},
-					error: function(){
-						alert('삭제 실패! 관리자에게 문의 하세요');
-					}
+					error: function() {
+	                    alert('삭제 실패! 관리자에게 문의하세요.');
+	                }
 				});
 			}
-		});
+		});	
 	});
 	
 	//날짜 검색 버튼
@@ -168,11 +142,10 @@ $('#cancel').click(function(){
 								</div>
 
 								<div class="search-box">
+									<input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
 									<button class="search-btn" onclick="search('pokeyword.do'); return false; ">
 										<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
 									</button>
-									<input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
-									
 								</div>
 							</div>
 
@@ -197,8 +170,8 @@ $('#cancel').click(function(){
 							<div class="select-box">
 								<div class="select-pan-nemo">발주일</div>
 
-								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }> <input type="date"
-									class="select-date select-date-second" name="end" value=${ end }>
+								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
+								<input type="date" class="select-date select-date-second" name="end" value=${ end }>
 
 								<c:set var="today_" value="<%=new java.util.Date()%>" />
 								<fmt:formatDate var="today" value="${ today_ }" 
@@ -230,8 +203,8 @@ $('#cancel').click(function(){
 							<div class="select-box">
 								<div class="select-pan-nemo">마감일</div>
 
-								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }> <input type="date"
-									class="select-date select-date-second" name="end" value=${ end }>
+								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
+								<input type="date" class="select-date select-date-second" name="end" value=${ end }>
 
 								<c:set var="today_" value="<%=new java.util.Date()%>" />
 								<fmt:formatDate var="today" value="${ today_ }"
@@ -263,8 +236,8 @@ $('#cancel').click(function(){
 							<div class="select-box">
 								<div class="select-pan-nemo">출간일</div>
 
-								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }> <input type="date"
-									class="select-date select-date-second" name="end" value=${ end }>
+								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
+								<input type="date" class="select-date select-date-second" name="end" value=${ end }>
 
 								<c:set var="today_" value="<%=new java.util.Date()%>" />
 								<fmt:formatDate var="today" value="${ today_ }"
@@ -331,13 +304,13 @@ $('#cancel').click(function(){
 								</tr>
 								<c:if test="${ !empty list }">
 									<c:forEach items="${ list }" var="printOrder">
-										<tr id="printtr_${ printOrder.orderId }" data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+										<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ printOrder.printId }">
 											<td class="td-50">
-												<input type="checkbox" name="selectcheckbox" value="">
+												<input type="checkbox" class="selectcheckbox" name="selectcheckbox" value="${ printOrder.orderId }">
 											</td>
 											<td class="td-100">
 												<div class="contents-input-div">
-													<input type="number" name="printId" class="contents-input noline" value="${ printOrder.printId }" readonly>
+													<input type="text" name="printId" class="contents-input noline" value="${ printOrder.printId }" readonly>
 												</div>
 											</td>
 											<td class="td-120">
@@ -346,23 +319,23 @@ $('#cancel').click(function(){
 												</div>
 											</td>
 											<td class="td-100">
-												<div class="contents-input-div" id="changeable">
-													<input type="date" name="orderDate" class="contents-input noline" value="${ printOrder.orderDate }" readonly>
+												<div class="contents-input-div">
+													<input type="text" name="orderDate" class="contents-input noline changeable" value="${ printOrder.orderDate }" readonly>
 												</div>
 											</td>
 											<td class="td-100">
-												<div class="contents-input-div" id="changeable">
-													<input type="date" name="endDate" class="contents-input noline" value="${ printOrder.endDate }" readonly>
+												<div class="contents-input-div">
+													<input type="text" name="endDate" class="contents-input noline changeable" value="${ printOrder.endDate }" readonly>
 												</div>
 											</td>
 											<td class="td-100">
-												<div class="contents-input-div" id="changeable">
-													<input type="date" name="pubDate" class="contents-input noline" value="${ printOrder.pubDate }" readonly>
+												<div class="contents-input-div">
+													<input type="text" name="pubDate" class="contents-input noline changeable" value="${ printOrder.pubDate }" readonly>
 												</div>
 											</td>
 											<td class="td-70">
 												<div class="contents-input-div">
-													<input type="number" name="bookId" class="contents-input noline" value="${ printOrder.bookId }" readonly>
+													<input type="text" name="bookId" class="contents-input noline" value="${ printOrder.bookId }" readonly>
 												</div>
 											</td>
 											<td class="td-250">
@@ -376,39 +349,34 @@ $('#cancel').click(function(){
 												</div>
 											</td>
 											<td class="td-70">
-												<div class="contents-input-div" id="changeable">
-													<input type="number" name="quantity" class="contents-input noline" value="${ printOrder.quantity }" readonly>
+												<div class="contents-input-div">
+													<input type="text" name="quantity" class="contents-input noline changeable" value="${ printOrder.quantity }" readonly>
 												</div>
 											</td>
 											<td class="td-100">
-												<div class="contents-input-div" id="changeable">
-													<input type="number" name="price" class="contents-input noline" value="${ printOrder.price }" readonly>
+												<div class="contents-input-div">
+													<input type="text" name="price" class="contents-input noline changeable" value="${ printOrder.price }" readonly>
 												</div>
 											</td>
 											<td class="td-120">
-												<div class="contents-input-div" id="changeable">
-													<input type="number" name="amount" class="contents-input noline" value="${ printOrder.amount }" readonly>
+												<div class="contents-input-div">
+													<input type="text" name="amount" class="contents-input noline" value="${ printOrder.amount }" readonly>
 												</div>
 											</td>
 											<td class="td-50">
-												<div class="contents-input-div" id="changeable">
-													<input type="text" name="state" class="contents-input noline" value="${ printOrder.state }" readonly>
+												<div class="contents-input-div">
+													<input type="text" name="state" class="contents-input noline changeable" value="${ printOrder.state }" readonly>
 												</div>
 											</td>
 											<td class="td-70">
-												<input id="updateBtn_${ printOrder.printId }" type="button" name="update" class="contents-input-btn noline" 
-												value="수정" onclick="onUpdate(${ printOrder.printId }); return false;">
-												
-												<input id="completeBtn_${ printOrder.printId }" type="button" name="update" class="contents-input-btn noline" 
-												value="완료" onclick="submitUpdate(${ printOrder.printId }, 'poupdate.do'); return false;" style="display: none;">
-												
-												<input id="cancelBtn_${ printOrder.printId }" type="button" name="update" class="contents-input-btn noline" 
-												value="취소" onclick="cancelUpdate(${ printOrder.printId }); return false;" style="display: none;">
+												<input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ printOrder.printId }" onclick="onUpdate(${ printOrder.printId }); return false;">
+												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ printOrder.printId }" onclick="submitUpdate(${ printOrder.printId }, 'poupdate.do'); return false;" style="display: none;">
+												<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ printOrder.printId }" onclick="cancelUpdate(${ printOrder.printId }); return false;" style="display: none;">
 											</td>
 										</tr>
 									</c:forEach>
 								</c:if>
-							</table>0
+							</table>
 						</div>
 					</div>
 					<!--컨텐츠영역 end-->
