@@ -26,7 +26,7 @@
 <title></title>
 
 <script type="text/javascript">
-	$(document).ready(function(){
+/* 	$(document).ready(function(){
 		$('#btn_delete').click(function(){
 			const selectedCheckbokes = $('input[name="selectedItems"]:checked');
 			const selectedStoreIds = [];
@@ -54,7 +54,39 @@
 			}
 			
 		});
-	});
+	}); */
+	
+	$(document).ready(function(){
+		 $('#btn_delete').click(function() {
+				var jarr = new Array();
+		        var scb = $('.selectedItems:checked');
+		        var scbValues = scb.map(function() {
+		            return $(this).val();
+		        }).get();
+
+		        var job = { scbkey : scbValues };
+		        jarr.push(job);
+		        
+		        console.log("jarr : " + JSON.stringify(jarr));
+		        if (scbValues.length === 0) {
+		            alert('선택된 항목이 없습니다.');
+		        } else {
+		            $.ajax({
+		                url: 'releasedelete.do',
+		                type: 'post',
+		                data: JSON.stringify(jarr), // 데이터를 JSON 문자열로 변환
+		                contentType: 'application/json; charset=utf-8', // 컨텐츠 타입 설정
+		                success: function() {
+		                    alert('선택한 입고내역이 삭제되었습니다.');
+		                    location.reload();
+		                },
+		                error: function() {
+		                    alert('삭제 실패! 관리자에게 문의하세요.');
+		                }
+		            });
+		        }
+		    });
+		});
 	
 	var curinput = "";
 	$(function(){
@@ -245,7 +277,7 @@
                                 <c:forEach var="rel" items="${ relList }">
 	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
 	                                    <td class="td-50">
-	                                       <input type="checkbox" name="selectedItems" value="${ rel.storeId }">
+	                                       <input type="checkbox" class="selectedItems" name="selectedItems" value="${ rel.storeId }">
 	                                    </td>
 	                                    <td class="td-100">
 	                                        <div class="contents-input-div">
@@ -274,7 +306,7 @@
 	                                    </td>
 	                                    <td class="td-70">
 	                                        <div class="contents-input-div">
-	                                            <input type="input" name="storePrice" class="contents-input noline" value="${ rel.bookPrice }">
+	                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ rel.bookPrice }">
 	                                        </div>
 	                                    </td>
 	                                    <td class="td-70">
@@ -284,7 +316,7 @@
 	                                    </td>
 	                                    <td class="td-100">
 	                                        <div class="contents-input-div">
-	                                            <input type="input" name="amount" class="contents-input noline" value="${ rel.storePrice }">
+	                                            <input type="input" name="storePrice" class="contents-input noline" value="${ rel.storePrice }">
 	                                        </div>
 	                                    </td>
 	                                    <td class="td-70">
@@ -316,25 +348,19 @@
 
                 </div>
                 <!--내용 end-->
-
-                
+   
                 <div class="submit-box">
                     <button class="contents-input-btn big noline" id="btn_delete">선택삭제</button> 
-                </div>
-                
+                </div>    
             </div>
             <!--main-container end-->
-
-
             <!--modal-pop-area-->
             <div class="modal-pop-area">
                 <!-- 팝업 들어감 -->
                 <c:import url="/WEB-INF/views/common/popup.jsp" />
             </div>
             <!--modal-pop-area end-->
-
         </main>
-        
     </div>
 </body>
 </html>

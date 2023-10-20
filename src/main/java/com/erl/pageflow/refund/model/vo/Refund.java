@@ -20,6 +20,9 @@ public class Refund implements java.io.Serializable {
 	private String clientName;
 	private String clientAddredd;
 	private int bookPrice;
+	private int prevInvenId;
+	private int currInven;
+	private int storageId;
 
 	public Refund() {
 		super();
@@ -27,7 +30,7 @@ public class Refund implements java.io.Serializable {
 
 	public Refund(int refundId, int bookId, int clientId, int empId, String empName, int refundNum, Date refundDate,
 			int refundAmount, String refundState, String remark, String bookName, String clientName,
-			String clientAddredd, int bookPrice) {
+			String clientAddredd, int bookPrice, int prevInvenId, int currInven, int storageId) {
 		super();
 		this.refundId = refundId;
 		this.bookId = bookId;
@@ -43,6 +46,33 @@ public class Refund implements java.io.Serializable {
 		this.clientName = clientName;
 		this.clientAddredd = clientAddredd;
 		this.bookPrice = bookPrice;
+		this.prevInvenId = prevInvenId;
+		this.currInven = currInven;
+		this.storageId = storageId;
+	}
+
+	public int getStorageId() {
+		return storageId;
+	}
+
+	public void setStorageId(int storageId) {
+		this.storageId = storageId;
+	}
+
+	public int getPrevInvenId() {
+		return prevInvenId;
+	}
+
+	public void setPrevInvenId(int prevInvenId) {
+		this.prevInvenId = prevInvenId;
+	}
+
+	public int getCurrInven() {
+		return currInven;
+	}
+
+	public void setCurrInven(int currInven) {
+		this.currInven = currInven;
 	}
 
 	public String getClientAddredd() {
@@ -123,14 +153,6 @@ public class Refund implements java.io.Serializable {
 
 	public void setRefundAmount(int refundAmount) {
 		this.refundAmount = refundAmount;
-	}
-
-	public String getrefundState() {
-		return refundState;
-	}
-
-	public void setrefundState(String refundState) {
-		this.refundState = refundState;
 	}
 
 	public String getRemark() {

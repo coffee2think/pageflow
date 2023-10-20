@@ -21,6 +21,11 @@ public class StoreServiceImpl implements StoreService {
 	public int selectGetListCount() {
 		return storeDao.selectGetListCount();
 	}
+	
+	@Override
+	public int selectGetReleaseListCount() {
+		return storeDao.selectGetReleaseListCount();
+	}
 
 	@Override
 	public ArrayList<Store> selectReleaseList(Paging paging) {
@@ -183,18 +188,18 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
-	public int updateStore(Store store) {
-		return storeDao.updateStore(store);
+	public int selectMaxStoreId() {
+		return storeDao.selectMaxStoreId();
 	}
 
 	@Override
-	public int updateInventory(Store store) {
-		return storeDao.updateInventory(store);
+	public int insertRelease(Store store) {
+		return storeDao.insertRelease(store);
 	}
 	
 	@Override
-	public int selectMaxStoreId() {
-		return storeDao.selectMaxStoreId();
+	public int updateStore(Store store) {
+		return storeDao.updateStore(store);
 	}
 
 }

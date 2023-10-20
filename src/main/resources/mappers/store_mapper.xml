@@ -22,16 +22,19 @@
 	</resultMap>
 	
 	<select id="selectGetListCount" resultType="_int">
-		select count(*) from store
+		select count(*) from store where CLASSIFY = '입고'
+	</select>
+	
+	<select id="selectGetReleaseListCount" resultType="_int">
+		select count(*) from store where CLASSIFY = '출고'
 	</select>
 	
 	<select id="selectReleaseList" parameterType="Paging" resultMap="resultStore">
 		<![CDATA[
-			SELECT *
-			FROM (SELECT ROWNUM RNUM, STORE_ID, BOOK_ID, STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, STORE_PRICE, STORE_DATE, CLASSIFY
-			            FROM (SELECT * FROM STORE
-			                        ORDER BY STORE_DATE DESC))
-			WHERE CLASSIFY = '출고'AND (RNUM BETWEEN #{ startRow } AND #{ endRow })
+			SELECT STORE_ID, BOOK_ID, STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, STORE_PRICE, STORE_DATE, CLASSIFY
+			FROM(SELECT ROWNUM, STORE_ID, BOOK_ID, STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, STORE_PRICE, STORE_DATE, CLASSIFY
+				FROM STORE
+				WHERE CLASSIFY = '출고' AND ROWNUM BETWEEN #{ startRow } AND #{ endRow })
 		]]>	
 	</select>
 	
@@ -271,9 +274,9 @@
 	<select id="selectCurrInven" resultType="_int">
 		SELECT CURR_INVEN
 		FROM(SELECT ROWNUM RUM, CURR_INVEN
-		FROM INVENTORY
-		WHERE ROWNUM = 1 AND CLASSIFY = '입고'
-		ORDER BY INVEN_ID, INVEN_DATE  DESC)
+            FROM INVENTORY
+            WHERE ROWNUM = 1 AND CLASSIFY = '입고'
+            ORDER BY INVEN_ID, INVEN_DATE  DESC)
 	</select>
 
 	<delete id="deleteStore" parameterType="_int">
@@ -294,31 +297,65 @@
 		#{ storeNum }, #{ storePrice },#{ storeDate }, '입고')
 	</insert>
 	
-	
-	<insert id="insertInventory" parameterType="Store">
-		INSERT INTO INVENTORY VALUES 
-		((SELECT MAX(INVEN_ID) + 1 FROM INVENTORY), #{ bookId }, #{ storageId }, #{ storeId }, NULL, 
-		#{ prevInvenId },  #{ storeNum }, 
-		#{ currInven }, #{ storeDate },'입고', NULL)
+		
+	<insert id="insertRelease" parameterType="Store">
+		INSERT INTO STORE VALUES( 
+		#{ storeId }, #{ bookId }, #{ storageId }, #{ empId }, #{ empName }, 
+		#{ storeNum }, #{ storePrice },#{ storeDate }, '출고')
 	</insert>
 	
-	<update id="updateStore" parameterType="Store">
-		UPDATE STORE
-		SET STORE_ID = #{ storeId }, BOOK_ID = #{ bookId }, STORAGE_ID = #{ storageId }, EMP_ID = #{ empId }, 
-		EMP_NAME = #{ empName }, STORE_NUM = #{ storeNum }, STORE_PRICE = #{ storePrice }, STORE_DATE = #{ storeDate }, CLASSIFY = #{ classify }
+	<insert id="insertInventory" parameterType="Store">
+	<![CDATA[
+	        INSERT INTO INVENTORY VALUES (
+		(SELECT MAX(INVEN_ID) + 1 FROM INVENTORY), #{ bookId }, #{ storageId }, #{ storeId }, NULL,
+		(SELECT INVEN_ID
+		FROM(SELECT INVEN_ID, ROWNUM
+		            FROM INVENTORY 
+		            ORDER BY INVEN_DATE DESC)
+		WHERE ROWNUM = 1),
+		
+		(SELECT STORE_NUM FROM (SELECT STORE_NUM, ROWNUM
+		FROM STORE
 		WHERE STORE_ID = #{ storeId }
-	</update>
-	
-	<update id="updateInventory" parameterType="Store">
-		UPDATE INVENTORY
-		SET BOOK_ID = #{ bookId }, STORAGE_ID = #{ storageId }, STORE_ID = #{ storeId }, 
-		PREV_INVEN_ID = #{ prevInvenId }, CURR_INVEN = #{ currInven },
-	    INVEN_DATE = #{ storeDate }
-		WHERE STORE_ID = #{ storeId }
-	</update>
-	
+        ORDER BY STORE_DATE DESC)
+        WHERE ROWNUM = 1),
+		
+		((SELECT NVL(CURR_INVEN, 0)
+FROM (
+    SELECT CURR_INVEN, ROWNUM
+    FROM INVENTORY
+    WHERE BOOK_ID = #{ bookId }
+    ORDER BY INVEN_DATE DESC
+)
+WHERE ROWNUM = 1) + 
+		(
+        SELECT STORE_NUM
+        FROM(SELECT STORE_NUM, ROWNUM
+		FROM STORE
+		WHERE STORE_ID = #{ storeId } AND ROWNUM =1
+        ORDER BY STORE_DATE DESC)
+        )
+        
+        ),
+		#{ storeDate }, '입고', NULL)
+]]>
+	</insert>
+
 	<select id="selectMaxStoreId" resultType="_int">
 		SELECT nvl(MAX(STORE_ID), 0) FROM STORE
 	</select>
+	
+	<update id="updateStore">
+		UPDATE STORE
+		SET STORE_NUM = #{storeNum }, STORE_PRICE = #{ storePrice }
+		WHERE STORE_ID = 9 AND CLASSIFY = '입고'
+	</update>
+	
+	
+	<update id="updateInventory">
+		UPDATE STORE
+		SET STORE_NUM = #{ storeNum }, STORE_PRICE = #{ storePrice }
+		WHERE STORE_ID = #{ storeId } AND CLASSIFY = '입고'
+	</update>
 	
 </mapper>
