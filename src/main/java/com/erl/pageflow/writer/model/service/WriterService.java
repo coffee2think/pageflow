@@ -27,5 +27,6 @@ public interface WriterService {
 	// 작가 삭제
 	public int deleteWriter(int writerId);
 	
+	// 작가 등록 작가번호 +1 처리
 	public int selectMaxWriterId();
 }

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +10,7 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
 <script>
     const NOWPAGE = 3;
     const SUBPAGE = 4;
@@ -127,9 +129,9 @@
                                 </tr>
                                 <c:if test="${ !empty writerList }">
 	                                <c:forEach items="${ writerList }" var="writer">
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ writer.writerId }">
 		                                    <td class="td-50">
-		                                        <input type="checkbox" name="check" value="" >
+		                                        <input type="checkbox" name="check" value="${ writer.writerId }" >
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
@@ -143,36 +145,38 @@
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="phone" class="contents-input noline" value="${ writer.phone }" readonly>
+		                                            <input type="input" name="phone" class="contents-input noline changeable" value="${ writer.phone }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="writerBirth" class="contents-input noline" value="${ writer.writerBirth }" readonly>
+		                                            <input type="input" name="writerBirth" class="contents-input noline changeable" value="${ writer.writerBirth }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="email" class="contents-input noline" value="${ writer.email }" readonly>
+		                                            <input type="input" name="email" class="contents-input noline changeable" value="${ writer.email }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="address" class="contents-input noline" value="${ writer.address }" readonly>
+		                                            <input type="input" name="address" class="contents-input noline changeable" value="${ writer.address }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bank" class="contents-input noline" value="${ writer.bank }" readonly>
+		                                            <input type="input" name="bank" class="contents-input noline changeable" value="${ writer.bank }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="acount" class="contents-input noline" value="${ writer.account }" readonly>
+		                                            <input type="input" name="account" class="contents-input noline changeable" value="${ writer.account }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ writer.writerId }" onclick="onUpdate(${ writer.writerId }); return false;">
+		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ writer.writerId }" onclick="submitUpdate(${ writer.writerId }, 'wtupdate.do'); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ writer.writerId }" onclick="cancelUpdate(${ writer.writerId }); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
 									</c:forEach>

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,10 +10,22 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
 <script>
     const NOWPAGE = 3;
     const SUBPAGE = 2;
     const LNKPAGE = 1;
+    
+    function searchByDate() {
+    	var begin = $('#begin').val();
+    	var end = $('#end').val();
+    	
+    	var url = 'edlistdate.do?';
+    	url += 'begin=' + begin;
+    	url += '&end=' + end;
+    	
+    	location.href = url;
+    }
 </script>
 <title>편집현황</title>
 </head>
@@ -73,7 +86,7 @@
                                         </select>
                                     </div>
                                 </div>
-
+								
                                 <div class="search-box">
                                     <button class="search-btn">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
@@ -98,12 +111,35 @@
                                 <div class="select-pan-nemo">
                                     시작일자
                                 </div>
-
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
-
-                                <input type="button" name="week" class="select-pan-btn" value="일주일">
-                                <input type="button" name="month" class="select-pan-btn" value="한달">
+                                
+								<input type="date" class="select-date select-date-first" name="begin" id="begin" value=${ begin }>
+                                <input type="date" class="select-date select-date-second" name="end" id="end" value=${ end }>
+								
+								<c:set var="today_" value="<%= new java.util.Date() %>" />
+								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+								
+								<!-- LocalDate 객체를 통해 일주일 전 날짜를 구한 후 Date 객체로 변환 -->
+								<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+								
+								<!-- LocalDate 객체를 통해 한달 전 날짜를 구한 후 Date 객체로 변환 -->
+								<c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+								
+								<c:url var="searchWeekUrl" value="bolistdate.do">
+									<c:param name="begin" value="${ weekago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+								
+								<c:url var="searchMonthUrl" value="bolistdate.do">
+									<c:param name="begin" value="${ monthago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+								
+								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+                                <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
+								
                             </div>
 
                             <div class="select-box">
@@ -111,11 +147,33 @@
                                     마감일자
                                 </div>
 
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
-
-                                <input type="button" name="week" class="select-pan-btn" value="일주일">
-                                <input type="button" name="month" class="select-pan-btn" value="한달">
+                                <input type="date" class="select-date select-date-first" name="begin" id="begin" value=${ begin }>
+                                <input type="date" class="select-date select-date-second" name="end" id="end" value=${ end }>
+								
+								<c:set var="today_" value="<%= new java.util.Date() %>" />
+								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
+								
+								<!-- LocalDate 객체를 통해 일주일 전 날짜를 구한 후 Date 객체로 변환 -->
+								<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
+								
+								<!-- LocalDate 객체를 통해 한달 전 날짜를 구한 후 Date 객체로 변환 -->
+								<c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
+								
+								<c:url var="searchWeekUrl" value="bolistdate.do">
+									<c:param name="begin" value="${ weekago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+								
+								<c:url var="searchMonthUrl" value="bolistdate.do">
+									<c:param name="begin" value="${ monthago }" />
+									<c:param name="end" value="${ today }" />
+								</c:url>
+								
+								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
+                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+                                <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
                             </div>
 
                         </form>
@@ -151,15 +209,16 @@
                                 </tr>
                                 <c:if test="${ !empty editList }">
 	                                <c:forEach items="${ editList }" var="edit">
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ edit.editId }">
 		                                     <td class="td-50">
-		                                        <input type="checkbox" name="check" value="" >
+		                                        <input type="checkbox" name="check" value="${ edit.editId }">
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
 		                                            <input type="input" name="editId" class="contents-input noline" value="${ edit.editId }" readonly>
 		                                        </div>
 		                                    </td>
+		                                    <input type="hidden" name="depId" value="${ edit.depId }">
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
 		                                            <input type="input" name="bookName" class="contents-input noline" value="${ edit.bookName }" readonly>
@@ -167,12 +226,12 @@
 		                                    </td>
 		                                    <td class="td-250">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="empId" class="contents-input noline" value="${ edit.empId }" readonly>
+		                                            <input type="input" name="empId" class="contents-input noline changeable" value="${ edit.empId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="empName" class="contents-input noline" value="${ edit.empName }" readonly>
+		                                            <input type="input" name="empName" class="contents-input noline changeable" value="${ edit.empName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
@@ -182,21 +241,23 @@
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="editState" class="contents-input noline" value="${ edit.editState }" readonly>
+		                                            <input type="input" name="editState" class="contents-input noline changeable" value="${ edit.editState }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="startDate" class="contents-input noline" value="${ edit.startDate }" readonly>
+		                                            <input type="date" name="startDate" class="contents-input noline changeable" value="${ edit.startDate }" readonly>
 		                                        </div>
 		                                    </td>
-		                                    <td class="td-70">
+		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="endDate" class="contents-input noline" value="${ edit.endDate }" readonly>
+		                                            <input type="date" name="endDate" class="contents-input noline changeable" value="${ edit.endDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
+		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ edit.editId }" onclick="onUpdate(${ edit.editId }); return false;">
+		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ edit.editId }" onclick="submitUpdate(${ edit.editId }, 'edupdate.do'); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ edit.editId }" onclick="cancelUpdate(${ edit.editId }); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
 									</c:forEach>
@@ -211,7 +272,7 @@
 
                 
                 <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제">
+                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('eddelete.do'); return false;">
                 </div>
                 
             </div>

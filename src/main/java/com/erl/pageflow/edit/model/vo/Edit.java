@@ -12,8 +12,8 @@ public class Edit implements Serializable {
 	private String empName;
 	private String bookName;
 	private String editState;
-	private Date startDate;
-	private Date endDate;
+	private java.sql.Date startDate;
+	private java.sql.Date endDate;
 	private String depName;
 	
 	public Edit() {

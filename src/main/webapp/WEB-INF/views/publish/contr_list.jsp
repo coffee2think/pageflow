@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,6 +10,7 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
 <script>
     const NOWPAGE = 3;
     const SUBPAGE = 1;
@@ -141,9 +143,9 @@
                                 </tr>
                                 <c:if test="${ !empty contractList }">
 	                                <c:forEach items="${ contractList }" var="contract">
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ contract.contrId }">
 		                                    <td class="td-50">
-		                                        <input type="checkbox" name="check" value="" >
+		                                        <input type="checkbox" name="check" value="${ contract.contrId }" >
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
@@ -162,36 +164,38 @@
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="writerName" class="contents-input noline" value="${ contract.writerName }" readonly>
+		                                            <input type="input" name="writerName" class="contents-input noline" value="${ contract.writerName }">
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="empId" class="contents-input noline" value="${ contract.empId }" readonly>
+		                                            <input type="input" name="empId" class="contents-input noline changeable" value="${ contract.empId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name=empName class="contents-input noline" value="${ contract.empName }" readonly>
+		                                            <input type="input" name=empName class="contents-input noline changeable" value="${ contract.empName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="contrState" class="contents-input noline" value="${ contract.contrState }" readonly>
+		                                            <input type="input" name="contrState" class="contents-input noline changeable" value="${ contract.contrState }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="contrDate" class="contents-input noline" value="${ contract.contrDate }" readonly>
+		                                            <input type="date" name="contrDate" class="contents-input noline changeable" value="${ contract.contrDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="contrDoc" class="contents-input noline" value="${ contract.contrDoc }" readonly>
+		                                            <input type="input" name="contrDoc" class="contents-input noline changeable" value="${ contract.contrDoc }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정" onclick="updateContract(${contract.contrId});">
+		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ contract.contrId }" onclick="onUpdate(${ contract.contrId }); return false;">
+		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ contract.contrId }" onclick="submitUpdate(${ contract.contrId }, 'ctrupdate.do'); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ contract.contrId }" onclick="cancelUpdate(${ contract.contrId }); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
     								</c:forEach>
