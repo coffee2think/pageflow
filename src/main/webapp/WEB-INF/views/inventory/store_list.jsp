@@ -111,7 +111,7 @@
 				var storePrice = bookPrice * storeNum;
 				/* tr.find('input[name=storePrice]').addClass,('.changeable'); */
 				tr.find('input[name=storePrice]').val(storePrice);
-				
+
 				console.log("storePrice : " + storePrice);
 				console.log("bookPrice : " + bookPrice);
 				console.log("storeNum : " + storeNum);

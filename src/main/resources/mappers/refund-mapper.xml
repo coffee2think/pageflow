@@ -18,7 +18,6 @@
 		<result property="bookName" column="BOOK_NAME" />
 		<result property="clientName" column="CLIENT_NAME" />
 		<result property="clientAddredd" column="CLIENT_ADDRESS" />
-		<result property="storageId" column="STORAGE_ID" />
 	</resultMap>
 	
 	
@@ -45,7 +44,7 @@
 	<select id="selectRefundClientName" parameterType="_int"  resultType="string">
 		SELECT CLIENT_NAME
 		FROM CLIENT
-		WHERE CLIENT_ID = #{ storageId }
+		WHERE CLIENT_ID = #{ clientId }
 	</select>
 	
 	<select id="selectRefundBookPrice" parameterType="_int"  resultType="_int">
@@ -183,7 +182,7 @@
 	<insert id="insertInventory" parameterType="refund">
 	<![CDATA[
 	       INSERT INTO INVENTORY VALUES (
-		(SELECT MAX(INVEN_ID) + 1 FROM INVENTORY), #{ bookId }, #{ storageId }, NULL, #{ refundId },
+		(SELECT MAX(INVEN_ID) + 1 FROM INVENTORY), #{ bookId }, #{ clientId }, NULL, #{ refundId },
 		(SELECT INVEN_ID
 		FROM(SELECT INVEN_ID, ROWNUM
 		            FROM INVENTORY 
