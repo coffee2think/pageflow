@@ -75,7 +75,7 @@
 		});
 		
 		var type = '<c:out value="${ searchType }" />'
-		console.log('type : ' + type);
+		// console.log('type : ' + type);
 		
 	})
 	
@@ -102,8 +102,25 @@
 	    	location.href = url;
 	    }
 
+	$(function(){
+		$('#table_list').find('input[name=storeNum]').each(function(){
+			$(this).change(function(){
+				var tr = $(this).parent().parent().parent();
+				var bookPrice = tr.find('input[name=bookPrice]').val();
+				var storeNum = tr.find('input[name=storeNum]').val();
+				var storePrice = bookPrice * storeNum;
+				/* tr.find('input[name=storePrice]').addClass,('.changeable'); */
+				tr.find('input[name=storePrice]').val(storePrice);
+				
+				console.log("storePrice : " + storePrice);
+				console.log("bookPrice : " + bookPrice);
+				console.log("storeNum : " + storeNum);
+				
+			});
+		});
+	});
+	
 </script>
-
 </head>
 <body>
 	<div id="container">
@@ -189,7 +206,7 @@
 									<input type="date" class="select-date select-date-second" id="end_startDate" value="${ end }">
 								</c:otherwise>
 							</c:choose>
-
+	
 							<c:set var="today_" value="<%=new java.util.Date()%>" />
 							<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
 
@@ -236,7 +253,7 @@
 					<!--컨텐츠영역-->
 					<div class="contents-container sort-row">
 						<div class="contents-box">
-							<table class="contents-table">
+							<table class="contents-table" id="table_list">
 								<tr>
 									<th>체크</th>
 									<th>도서코드</th>
@@ -296,8 +313,7 @@
 											</td>
 											<td class="td-100">
 												<div class="contents-input-div">
-													<input type="input" name="sp" class="contents-input noline" value="${ sto.storePrice }" readonly>
-													<input type="hidden" name="storePrice" value="${ sto.storeNum * sto.bookPrice }">
+													<input type="input" name="storePrice" class="contents-input noline changeable" value="${ sto.storePrice }" readonly>
 												</div>
 											</td>
 											<td class="td-70">

@@ -66,6 +66,7 @@ function cancelUpdate(id) {
 }
 
 function submitUpdate(id, url) {
+	console.log("id : " + id + "url : " + url);
     var currentRow = $('#completeBtn_' + id).parent().parent();
     var json = {};
     
@@ -88,8 +89,9 @@ function submitUpdate(id, url) {
 		}
         
         json[$(this).attr('name')] = $(this).val();
+  		 
     });
-    
+    console.log("json : " + JSON.stringify(json));
     // ajax로 update 요청 보내기
     $.ajax({
         url: url,

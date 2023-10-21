@@ -547,7 +547,7 @@ public class StoreController {
 	public void updateStore(Store store, HttpServletResponse response) throws IOException {
 		String returnStr = null;
 		logger.info("storeNum : " + store.getStoreNum());
-		
+		logger.info("storePrice :" + store.getStorePrice());
 		if (storeService.updateStore(store) > 0) {
 			logger.info("updateStore : " + store);
 			
