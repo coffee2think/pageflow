@@ -20,4 +20,5 @@ public interface PrintCalcService {
 	
 	public ArrayList<PrintCalc> selectPrintCalcList(Paging paging);
 	
+	public int updatePrintCalc(PrintCalc printCalc);
 }

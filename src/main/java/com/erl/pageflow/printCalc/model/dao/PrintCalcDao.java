@@ -40,4 +40,8 @@ public class PrintCalcDao {
 		List<PrintCalc> list = sqlSessionTemplate.selectList("printMapper.selectPrintCalcList",paging);
 		return (ArrayList<PrintCalc>) list;
 	}
+	
+	public int updatePrintCalc(PrintCalc printCalc) {
+		return sqlSessionTemplate.update("printMapper.updatePrintCalc", printCalc);
+	}
 }
