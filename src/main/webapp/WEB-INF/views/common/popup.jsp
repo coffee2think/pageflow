@@ -43,8 +43,12 @@ function initPopupBtn() {
 		console.log('popup_type : ' + popup_type);
 		
 		var tr = $(this).parent().parent().parent();
-		var rowIndex = tr.attr('value');
-		rowIndex_popup = rowIndex - 1;
+		var table = tr.parent();
+		table.find('tr').each(function(index) {
+			$(this).val(index - 1);
+		});
+		rowIndex_popup = tr.val();
+		console.log('rowIndex_popup : ' + rowIndex_popup);
 		
 		popup.showPopup(popup_type);
 		
