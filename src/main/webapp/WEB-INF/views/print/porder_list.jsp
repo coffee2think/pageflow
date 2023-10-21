@@ -30,7 +30,20 @@
     	});
     });
     
-    
+ 
+</script>
+<script type="text/javascript">
+
+	//검색 키워드
+	var searchKeyword = "";
+	// 서치 버튼 클릭
+	$(function(){
+		$('.search-btn').on('click', function(){
+			searchKey();
+		})
+	//After Enter Key
+	$('.search-box-text').
+	});
 
 </script>
 <title></title>

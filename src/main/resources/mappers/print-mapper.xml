@@ -145,8 +145,7 @@
 		insert into print_order
 		values ((select max(ORDER_ID) + 1 from print_order), #{bookId}, 
 		#{printId}, #{empId}, #{empName}, #{classify}, #{unit}, #{quantity}, 
-		#{price}, #{amount}, #{state}, sysdate, #{endDate}, #{pubDate})
-		
+		#{price}, #{amount}, #{state}, sysdate, #{endDate}, #{pubDate})	
 	</insert>
 	
 	<select id="selectMaxPrintOrderId" resultType="_int">
