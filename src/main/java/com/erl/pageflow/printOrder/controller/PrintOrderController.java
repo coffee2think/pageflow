@@ -316,7 +316,7 @@ public class PrintOrderController {
 	
 	//발주 삭제 요청 처리용
 	@RequestMapping(value= "podelete.do", method=RequestMethod.POST)
-	public void deletePrintOrder(HttpServletResponse response, @RequestBody String parma)
+	public String deletePrintOrder(HttpServletResponse response, @RequestBody String parma)
 			throws ParseException, IOException {
 		JSONParser jparser = new JSONParser();
 		JSONArray jarr = (JSONArray) jparser.parse(parma);
@@ -337,7 +337,7 @@ public class PrintOrderController {
 			if(printOrderService.deletePrintOrder(scbkeyInt) >= 0) {
 				System.out.println("발주 삭제 : " + scbkeyInt);
 				count++;
-			}
+			
 		}
 		
 		String str = "no";
@@ -353,4 +353,6 @@ public class PrintOrderController {
 		out.close();
 	}
 	
+	return "redirect:polist.do";
+	}
 }

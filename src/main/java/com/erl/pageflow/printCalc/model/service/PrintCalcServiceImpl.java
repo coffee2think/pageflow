@@ -37,7 +37,13 @@ public class PrintCalcServiceImpl implements PrintCalcService{
 		return printCalcDao.selectBook(bookId);
 	}
 	
+	@Override
 	public ArrayList<PrintCalc> selectPrintCalcList(Paging paging){
 		return printCalcDao.selectPrintCalcList(paging);
+	}
+	
+	@Override
+	public int updatePrintCalc(PrintCalc printCalc) {
+		return printCalcDao.updatePrintCalc(printCalc);
 	}
 }

@@ -14,7 +14,8 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.ui.touch-punch.min.js"></script>
 <title>Insert title here</title>
 <script type="text/javascript">
-    var popup;
+    let popup;
+    const myEmpId = '<c:out value="${ loginMember.empId }" />';
 
     $(function(){
         popup = new Popup();
@@ -71,7 +72,7 @@
         console.log('jdata.dep_name : ' + jdata.dep_name);
 
         $('.modal-title').text(jdata.drafter_name + '님의 ' + changeDraftType(jdata.draft_type) + '신청서입니다.');
-        $('.modal-number').text(jdata.appr_id);
+        $('.modal-number').text('기안서 번호 : ' + jdata.appr_id);
 
         $('.approval-depName').each(function(){
             $(this).text(jdata.dep_name);
@@ -123,7 +124,8 @@
         for(let i=0; i<4; i++) {
             if(jdata['emp_name'+(i+1)] != null && jdata['emp_name'+(i+1)] != undefined) {
                 empData.push({
-                    emp_name : jdata['emp_name'+(i+1)]
+                    emp_id : jdata['emp_id'+(i+1)]
+                    ,emp_name : jdata['emp_name'+(i+1)]
                     ,pos_name : jdata['pos_name'+(i+1)]
                     ,date : jdata['stamp_date'+(i+1)]
                 });
@@ -140,7 +142,7 @@
             if(i == 0){
                 el += `<td class="td-100">기안자</td>`;
             }else{
-                el += `<td class="td-100">`+empData[i]+`</td>`;
+                el += `<td class="td-100">`+empData[i].pos_name+`</td>`;
             }
         }
         el += `
@@ -156,16 +158,32 @@
         el += `
         </tr>`
 
+        let buttonvis = false;
+
         el += `
         <tr>`
         //결재 도장 세번째 tr
         for(let i=0; i<empData.length; i++) {
             el += `<td class="font-10">`+empData[i].date+`</td>`;
+            console.log('empData[i].emp_id : ' + empData[i].emp_id + '  myEmpId : ' + myEmpId);
+            if(empData[i].emp_id == myEmpId) buttonvis = true;
         }
         el += `
         </tr>`
         
         $('#aprovalLine_table').append(el);
+
+        $('.modal-table').css({'width' : empData.length*100 + 'px'});
+
+        
+        if(buttonvis) {
+            el = `
+            <input type="button" class="contents-input-btn big noline" id="btn_aproval" value="결재">&nbsp;&nbsp; 
+            <input type="button" class="contents-input-btn big noline" id="btn_companion" value="반려">
+            `
+            $('.modal-aproval-btnbox').append(el);
+        }
+        
     }
 
 </script>
@@ -255,9 +273,8 @@
                 </table>
             </div>
 
-            <div class="modal-aproval flex-center">
-                <input type="button" class="contents-input-btn big noline" id="btn_aproval" value="결재">&nbsp;&nbsp; 
-                <input type="button" class="contents-input-btn big noline" id="btn_companion" value="반려">
+            <div class="modal-aproval flex-center modal-aproval-btnbox">
+                
             </div>
 
         </div>

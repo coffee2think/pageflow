@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,6 +20,35 @@
 let index_global, json_global;
 let rowIndex_popup;
 
+document.addEventListener("DOMContentLoaded", function(){
+	initPopupBtn();
+});
+
+function initPopupBtn() {
+	$('.input-search-btn').on('click', function() {
+		var input = $(this).parent().children('input').eq(0);
+		var popup_type = input.attr('name');
+		if(popup_type.includes('book')) {
+			popup_type = 'book';
+		}
+		
+		if(popup_type.includes('client')) {
+			popup_type = client_type;
+		}
+		
+		if(popup_type.includes('emp')) {
+			popup_type = 'employee';
+		}
+		
+		console.log('popup_type : ' + popup_type);
+		
+		popup.showPopup(popup_type);
+		
+		curinput = $(this).parent('.input-search').find('input[type=input]');
+		return false;
+	});
+}
+
 function register() {
 	popup_inputData = {
 			'book': ['bookId', 'bookName', 'bookPrice'],
@@ -31,8 +61,8 @@ function register() {
 	$('.modal-pop-close').parent().parent('.modal-pop-box').hide();
 	$('.modal-pop-close').parent().parent().parent('.modal-pop-area').hide();
 	
-	list = json_global.list[index_global];
-	inputData = popup_inputData[popup_type];
+	const list = json_global.list[index_global];
+	const inputData = popup_inputData[popup_type];
 	for(i = 0; i < inputData.length; i++) {
 		$('input[name=' + inputData[i] + ']').eq(rowIndex_popup).val(decodeURIComponent(list[inputData[i]]).replace(/\+/gi, ' '));
 		console.log($('input[name=' + inputData[i] + ']').eq(rowIndex_popup));
@@ -65,13 +95,23 @@ function selectIndex(index) {
 	index_global = index;
 }
 
-function selectList() {	
+function search() {	
 	var url = {
 			'book': 'popupBook.do',
 			'printoffice': 'popupPrintOffice.do',
 			'bookstore': 'popupBookStore.do',
 			'storage': 'popupStorage.do',
-			'book_order': 'popupBookOrder.do'
+			'book_order': 'popupBookOrder.do',
+			'employee': 'popupEmployee.do'
+	};
+	
+	var table_column = {
+			'book': ['', '', 'bookId', 'bookName', 'stock'],
+			'printoffice': ['', '', 'clientId', 'clientName', 'clientContact'],
+			'bookstore': ['', '', 'clientId', 'clientName', 'clientContact'],
+			'storage': ['', '', 'clientId', 'clientName', 'clientContact'],
+			'book_order': ['', '', 'orderId', 'bookName', 'orderQuantity'],
+			'employee': ['', '', 'empId', 'empName', 'depName']
 	};
 	
 	$.ajax({
@@ -79,7 +119,7 @@ function selectList() {
 		type: 'post',
 		data: {
 			searchType: $('.modal-pop-box').find('select').val(),
-			keyword: $('.modal-pop-box .search-box input').val()
+			keyword: $('.modal-pop-box .search-box input[type=search]').val(),
 		},
 		dataType: 'json',
 		success: function(result) {
@@ -102,74 +142,23 @@ function selectList() {
 			
 			// 행 생성
 			for(var i in json.list) {
-				const table = document.getElementById('popup_table');
-				const newRow = table.insertRow(parseInt(i) + 1);
+				const table = $('#popup_table');
+				const tbody = table.find('tbody');
 				
-				const newCell1 = newRow.insertCell(0); // 체크버튼
-				const newCell2 = newRow.insertCell(1); // No
-				const newCell3 = newRow.insertCell(2); // 도서코드
-				const newCell4 = newRow.insertCell(3); // 도서명
-				const newCell5 = newRow.insertCell(4); // 재고현황
+				tbody.append('<tr onclick=""  class="cursor-pointer">');
+				const tr = tbody.find('tr:last');
 				
-				newCell1.innerHTML = '<td><input type="radio" name="radio" onchange="selectIndex(' + i + ')" id="tr_' + i + '"></td>';
-				newCell2.innerHTML = '<td>' + (parseInt(i) + 1) + '</td>';
-				newCell3.innerHTML = '<td>' + json.list[i].bookId + '</td>';
-				newCell4.innerHTML = '<td>' + decodeURIComponent(json.list[i].bookName).replace(/\+/gi, ' ') + '</td>';
-				newCell5.innerHTML = '<td>' + json.list[i].stock + '</td></tr>';
+				tr.append('<td><input type="radio" name="radio" onchange="selectIndex(' + i + ');"></td>');
+				tr.append('<td>' + (parseInt(i) + 1) + '</td>');
+				
+				const list = json.list[i];
+				const columnNames = table_column[popup_type];
+				tr.append('<td>' + decodeURIComponent(list[columnNames[2]]).replace(/\+/gi, ' ') + '</td>');
+				tr.append('<td>' + decodeURIComponent(list[columnNames[3]]).replace(/\+/gi, ' ') + '</td>');
+				tr.append('<td>' + decodeURIComponent(list[columnNames[4]]).replace(/\+/gi, ' ') + '</td>');
 			}
-		},
-		error: function(request, status, errorData) {
-			console.log("error code : " + request.status);
-			console.log("Message : " + request.responseText);
-			console.log("Error : " + errorData);
-		}
-	});
-}
-
-function selectPrintOffice() {	
-	$.ajax({
-		url: 'popupPrintOffice.do',
-		type: 'post',
-		data: {
-			searchType: $('#printoffice').find('select').val(),
-			keyword: $('#printoffice .search-box input').val()
-		},
-		dataType: 'json',
-		success: function(result) {
-			// object => string
-			var jsonStr = JSON.stringify(result);
-			// string => parsing : json object
-			var json = JSON.parse(jsonStr);
-			json_global = json;
 			
-			console.log(json);
-			
-			// json 객체 안의 list를 하나씩 꺼내서 새로운 행으로 추가 처리
-			// 기존 행 정보 삭제
-			const trList = $('#table_list_printoffice').find('tr');
-			trList.each(function(index) {
-				if(index > 0) {
-					trList[index].remove();
-				}
-			});
-			
-			// 행 생성
-			for(var i in json.list) {
-				const table = document.getElementById('table_list_printoffice');
-				const newRow = table.insertRow(parseInt(i) + 1);
-				
-				const newCell1 = newRow.insertCell(0); // 체크버튼
-				const newCell2 = newRow.insertCell(1); // No
-				const newCell3 = newRow.insertCell(2); // 거래처코드
-				const newCell4 = newRow.insertCell(3); // 인쇄소명
-				const newCell5 = newRow.insertCell(4); // 주소
-				
-				newCell1.innerHTML = '<td><input type="radio" name="radio" onchange="saveInfo(' + i + ')" id="tr_' + i + '"></td>';
-				newCell2.innerHTML = '<td>' + (parseInt(i) + 1) + '</td>';
-				newCell3.innerHTML = '<td>' + json.list[i].clientId + '</td>';
-				newCell4.innerHTML = '<td>' + decodeURIComponent(json.list[i].clientName).replace(/\+/gi, ' ') + '</td>';
-				newCell5.innerHTML = '<td>' + decodeURIComponent(json.list[i].clientAddress).replace(/\+/gi, ' ') + '</td></tr>';
-			}
+			// 페이징 초기화
 		},
 		error: function(request, status, errorData) {
 			console.log("error code : " + request.status);
@@ -182,7 +171,7 @@ function selectPrintOffice() {
 </script>
 <title></title>
 </head>
-<body>
+<body style="overflow-X: hidden;">
 	<!-- modal-pop-box -->
     <div class="modal-pop-box small pop-box-1">
         <div class="modal-pop-title">
@@ -205,10 +194,10 @@ function selectPrintOffice() {
                     </div>
                 </div>
                 <div class="search-box">
-                    <button class="search-btn-pop" onclick="selectList();">
+                    <button class="search-btn-pop" onclick="search();">
                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                     </button>
-                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="">
+                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="" onkeyup="if(event.keyCode == 13){ search(); }">
                 </div>
             </div>
 
@@ -242,74 +231,5 @@ function selectPrintOffice() {
 
     </div>
     <!-- modal-pop-box end -->
-    
-    <%-- <!-- modal-pop-box -->
-    <div class="modal-pop-box small pop-box-1" id="printoffice">
-        <div class="modal-pop-title">
-            인쇄소검색
-            <button class="modal-pop-close">
-                <img src="${ pageContext.servletContext.contextPath }/resources/images/close.png">
-            </button>
-        </div>
-        
-        <!--modal-pop-->
-        <div class="modal-pop">
-            <div class="modal-pop-search">
-                <div class="select-box">
-                    <div class="select-pan">
-                        <label for="sel_code"></label>
-                        <select name="code" id="sel_code_printoffice">
-                            <option value="clientName">인쇄소명</option>
-                            <option value="clientId">거래처코드</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="search-box">
-                    <button class="search-btn-pop" onclick="selectList("+ type +");">
-                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                    </button>
-                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="">
-                </div>
-            </div>
-
-            <div class="modal-pan-center">
-                <table class="contents-table" id="table_list_printoffice">
-                    <thead>
-                        <th></th>
-                        <th>
-                            No.
-                        </th>
-                        <th>
-                            거래처코드
-                        </th>
-                        <th>
-                            인쇄소명
-                        </th>
-                        <th>
-                            주소
-                        </th>
-                    </thead>
-                    <tbody>
-                        <tr onclick=""  class="cursor-pointer">
-                            <td><input type="checkbox" name="check" value=""></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                    
-                </table>
-            </div>
-
-            <div class="modal-pan-bottom flex-center">
-                <input type="button" class="contents-input-btn big noline" id="btn_register" value="등록" onclick="registerPrintOffice();">
-            </div>
-        </div>
-        <!--modal-pop end-->
-
-    </div>
-    <!-- modal-pop-box end --> --%>
-    
 </body>
 </html>

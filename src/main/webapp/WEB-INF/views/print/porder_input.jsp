@@ -50,6 +50,13 @@ function addRow(currentIndex) {
 	// 새 행(Row) 추가 (테이블 중간에)
 	const newRow = table.insertRow(currentIndex + 1);
 
+	// orderId 전송용 input
+	const input_orderId = document.createElement('input');
+	input_orderId.setAttribute('type', 'hidden');
+	input_orderId.setAttribute('name', 'orderId');
+	input_orderId.setAttribute('value', ''); 
+    newRow.appendChild(input_orderId);
+    
 	// empId 전송용 input
     const input_empId = document.createElement('input');
     input_empId.setAttribute('type', 'hidden');

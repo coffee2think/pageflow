@@ -747,3 +747,7 @@ body {
     background: none;
     border: none;
 }
+
+.detail-radio {
+    vertical-align: top;
+}

@@ -1,7 +1,11 @@
 package com.erl.pageflow.printCalc.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.erl.pageflow.book.model.vo.Book;
@@ -16,7 +21,6 @@ import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.printCalc.model.service.PrintCalcService;
 import com.erl.pageflow.printCalc.model.vo.PrintCalc;
-import com.erl.pageflow.printOrder.model.vo.PrintOrder;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 
 @Controller
@@ -118,6 +122,29 @@ public class PrintCalcController {
 			return "common/error";
 		}
 	}
+	
+	//정산 수정 요청
+	@RequestMapping(value="pcupdate.do", method=RequestMethod.POST)
+	public void printCalcUpdateMethod(HttpServletResponse response, PrintCalc printCalc) throws IOException {
+		logger.info("pcupdate.do : " + printCalc);
+		
+		int resutl = printCalcService.updatePrintCalc(printCalc);
+		
+		String returnStr = null;
+		if(printCalcService.updatePrintCalc(printCalc) > 0) {
+			returnStr = "success";
+		} else {
+			returnStr = "fail";
+		}
+		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		
+		out.append(returnStr);
+		out.flush();
+		out.close();
+	}
+	
 }
 
 

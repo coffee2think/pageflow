@@ -195,7 +195,7 @@ var MENU_INFO = [
             },
             {
                 stitle : '결재라인'
-                ,slink : 'allist.do'
+                ,slink : 'allinelist.do'
                 ,sbranch : [
                 ]
             }

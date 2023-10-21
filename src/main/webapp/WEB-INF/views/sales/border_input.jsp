@@ -19,33 +19,6 @@
     let curinput;
     let client_type = 'bookstore'; 
 
-    document.addEventListener("DOMContentLoaded", function(){
-    	$('.input-search-btn').on('click', function() {
-    		var input = $(this).parent().children('input');
-    		var popup_type = input.attr('name');
-    		if(popup_type.includes('book')) {
-    			popup_type = 'book';
-    		}
-    		
-    		if(popup_type.includes('client')) {
-    			popup_type = client_type;
-    		}
-    		
-    		console.log('popup_type : ' + popup_type);
-    		var tr = $(this).parent().parent().parent();
-    		var trValue = tr.val();
-    		console.log('tr : ' + tr);
-    		console.log(tr);
-    		console.log('trValue : ' + trValue);
-    		popup.showPopup(popup_type);
-    		
-    		
-    		
-    		curinput = $(this).parent('.input-search').find('input[type=input]');
-    		return false;
-    	});
-    });
-    
     function addRow(currentIndex) {
     	if($('#input_table').find('tr').length >= 10) {
     		alert('더이상 추가할 수 없습니다.');
@@ -145,8 +118,8 @@
     	var trList = $('#input_table').find('tr');
     	if(trList.length > 2) {
 	    	trList.eq(currentIndex).remove();
-	    	initRowIndex();
     	}
+    	initRowIndex();
     }
     
     // 행 추가 삭제를 위한 함수 인덱스 초기화
@@ -169,22 +142,8 @@
 					</div>`;
 		} //for
 		
-		$('.input-search-btn').each(function(index) {
-			$(this).click(function(){
-				var input = $(this).parent().children('input');
-				var type = input.attr('name');
-	    		if(type.includes('book')) {
-	    			type = 'book';
-	    		}
-	    		console.log('type : ' + type);
-	    		var tr = $(this).parent().parent().parent();
-	    		var rowIndex = tr.attr('value');
-	    		rowIndex_popup = rowIndex - 1;
-	    		popup.showPopup(type);
-	    		curinput = $(this).parent('.input-search').find('input[type=input]');
-	    		return false;
-			});
-    	});
+		// 팝업창 버튼 초기화 (함수 출처 : popup.jsp)
+		initPopupBtn();
 		
 	} //initRowIndex
 	 

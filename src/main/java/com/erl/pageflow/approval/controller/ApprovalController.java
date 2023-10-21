@@ -339,10 +339,10 @@ public class ApprovalController {
 		jobj.put("pos_name3", approvalLine.getPosName3());
 		jobj.put("pos_name4", approvalLine.getPosName4());
 		
-		//jobj.put("stamp_date1", approvalLine.getStampDate1());
-		//jobj.put("stamp_date2", approvalLine.getStampDate2());
-		//jobj.put("stamp_date3", approvalLine.getStampDate3());
-		//jobj.put("stamp_date4", approvalLine.getStampDate4());
+		jobj.put("stamp_date1", (approvalLine.getStampDate1() == null) ? "" : approvalLine.getStampDate1().toString());
+		jobj.put("stamp_date2", (approvalLine.getStampDate2() == null) ? "" : approvalLine.getStampDate2().toString());
+		jobj.put("stamp_date3", (approvalLine.getStampDate3() == null) ? "" : approvalLine.getStampDate3().toString());
+		jobj.put("stamp_date4", (approvalLine.getStampDate4() == null) ? "" : approvalLine.getStampDate4().toString());
 		
 		jobj.put("emp_name1", approvalLine.getEmpName1());
 		jobj.put("emp_name2", approvalLine.getEmpName2());
