@@ -19,5 +19,8 @@ public class ApprovalLineController {
 	private ApprovalServiceImpl approvalService;
 	
 	//**************뷰페이지 이동****************
-	
+	@RequestMapping("allinelist.do")
+	public String moveSelectApprovalLineMethod() {
+		return "approval/appr_line";
+	}
 }
