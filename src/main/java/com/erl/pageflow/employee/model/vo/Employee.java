@@ -17,7 +17,7 @@ public class Employee implements java.io.Serializable {
 	private int salary;
 	private String profile;
 	private Date enrollDate;
-	private Date mdifyDate;
+	private Date modifyDate;
 	private Date leaveDate;
 	private Date lastDate;
 	private int jobId;
@@ -31,7 +31,7 @@ public class Employee implements java.io.Serializable {
 	}
 
 	public Employee(int empId, String empPwd, String empName, Date empPwdUpdate, String phone, String empBirth,
-			String email, String address, int salary, String profile, Date enrollDate, Date mdifyDate, Date leaveDate,
+			String email, String address, int salary, String profile, Date enrollDate, Date modifyDate, Date leaveDate,
 			Date lastDate, int jobId, int posId, int depId, String loginOk, String adminYN) {
 		super();
 		this.empId = empId;
@@ -45,7 +45,7 @@ public class Employee implements java.io.Serializable {
 		this.salary = salary;
 		this.profile = profile;
 		this.enrollDate = enrollDate;
-		this.mdifyDate = mdifyDate;
+		this.modifyDate = modifyDate;
 		this.leaveDate = leaveDate;
 		this.lastDate = lastDate;
 		this.jobId = jobId;
@@ -143,12 +143,12 @@ public class Employee implements java.io.Serializable {
 		this.enrollDate = enrollDate;
 	}
 
-	public Date getMdifyDate() {
-		return mdifyDate;
+	public Date getModifyDate() {
+		return modifyDate;
 	}
 
-	public void setMdifyDate(Date mdifyDate) {
-		this.mdifyDate = mdifyDate;
+	public void setModifyDate(Date modifyDate) {
+		this.modifyDate = modifyDate;
 	}
 
 	public Date getLeaveDate() {
@@ -216,7 +216,7 @@ public class Employee implements java.io.Serializable {
 		return "Employee [empId=" + empId + ", empPwd=" + empPwd + ", empName=" + empName + ", empPwdUpdate="
 				+ empPwdUpdate + ", phone=" + phone + ", empBirth=" + empBirth + ", email=" + email + ", address="
 				+ address + ", salary=" + salary + ", profile=" + profile + ", enrollDate=" + enrollDate
-				+ ", mdifyDate=" + mdifyDate + ", leaveDate=" + leaveDate + ", lastDate=" + lastDate + ", jobId="
+				+ ", modifyDate=" + modifyDate + ", leaveDate=" + leaveDate + ", lastDate=" + lastDate + ", jobId="
 				+ jobId + ", posId=" + posId + ", depId=" + depId + ", loginOk=" + loginOk + ", adminYN=" + adminYN
 				+ "]";
 	}

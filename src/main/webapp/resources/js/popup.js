@@ -77,6 +77,34 @@ Popup.prototype = {
 	}
 	,
 	initTable: function() {
+		// popup_type에 따른 값 지정
+		popup_title = {
+			'book': '도서검색',
+			'printoffice': '인쇄소검색',
+			'bookstore': '서점검색',
+			'storage': '창고검색',
+			'book_order': '주문검색',
+			'employee': '직원검색'
+		};
+		
+		popup_thead = {
+			'book': ['', 'No.', '도서코드', '도서명', '재고현황'],
+			'printoffice': ['', 'No.', '거래처코드', '인쇄소명', '연락처'],
+			'bookstore': ['', 'No.', '거래처코드', '서점명', '연락처'],
+			'storage': ['', 'No.', '거래처코드', '창고명', '연락처'],
+			'book_order': ['', 'No.', '주문번호', '도서명', '주문수량'],
+			'employee': ['', 'No.', '직원번호', '직원명', '담당부서']
+		};
+		
+		popup_selectbox = {
+			'book': {'bookName': '도서명', 'bookId': '도서코드'},
+			'printoffice': {'clientName': '인쇄소명', 'clientId': '거래처코드'},
+			'bookstore': {'clientName': '서점명', 'clientId': '거래처코드'},
+			'storage': {'clientName': '창고명', 'clientId': '거래처코드'},
+			'book_order': {'bookName': '도서명', 'orderId': '주문번호'},
+			'employee': {'empName': '직원명', 'depName': '부서'}
+		};
+		
 		// 검색바 초기화
 		$('#sel_code').children('option').each(function(){
 			$(this).attr('selected', false);
@@ -94,14 +122,6 @@ Popup.prototype = {
 		});
 		
 		// 제목행 초기화
-		popup_thead = {
-			'book': ['', 'No.', '도서코드', '도서명', '재고현황'],
-			'printoffice': ['', 'No.', '거래처코드', '인쇄소명', '연락처'],
-			'bookstore': ['', 'No.', '거래처코드', '서점명', '연락처'],
-			'storage': ['', 'No.', '거래처코드', '창고명', '연락처'],
-			'book_order': ['', 'No.', '주문번호', '도서명', '주문수량']
-		};
-		
 		const thead = table.children('thead');
 		thead.find('th').each(function(index) {
 			$(this).text(popup_thead[popup_type][index]);
@@ -117,14 +137,15 @@ Popup.prototype = {
 		tr.append('<td></td>');
 		
 		// 팝업창 제목 초기화
-    	popup_title = {
-			'book': '도서검색',
-			'printoffice': '인쇄소검색',
-			'bookstore': '서점검색',
-			'storage': '창고검색',
-			'book_order': '주문검색'
-		};
 		$('.modal-pop-title > span').text(popup_title[popup_type]);
+		
+		// select 박스 초기화
+		var selectbox = popup_selectbox[popup_type];
+		var keys = Object.keys(selectbox);
+		$('#sel_code').empty();
+		for(i = 0; i < keys.length; i++) {
+			$('#sel_code').append('<option value="' + keys[i] + '">' + selectbox[keys[i]] + '</option>');
+		}
 	}
     ,
     append:function(data){
