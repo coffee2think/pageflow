@@ -48,9 +48,9 @@ public class InventoryController {
 
 		for (Inventory inv : list) {
 			String bname = inventoryService.selectInventoryBookName(inv.getBookId());
-			String cname = inventoryService.selectInventoryClientName(inv.getStorageId());
+			String cname = inventoryService.selectInventoryClientName(inv.getClientId());
 			inv.setBookName(bname);
-			inv.setStorageName(cname);
+			inv.setClientName(cname);
 		}
 
 		if (list != null && list.size() > 0) {
@@ -127,7 +127,7 @@ public class InventoryController {
 		case "bookName":
 			listCount = inventoryService.selectInventoryCountBybookName(search);
 			break;
-		case "storageName":
+		case "clientName":
 			listCount = inventoryService.selectInventoryCountBystorageName(search);
 			break;
 		case "store":
@@ -157,7 +157,7 @@ public class InventoryController {
 		case "bookName":
 			list = inventoryService.selectInventoryBybookName(search);
 			break;
-		case "storageName":
+		case "clientName":
 			list = inventoryService.selectInventoryBystorageName(search);
 			break;
 		case "store":

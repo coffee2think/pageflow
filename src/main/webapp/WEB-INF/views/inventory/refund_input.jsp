@@ -9,10 +9,14 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+
 <script>
     const NOWPAGE = 4;
     const SUBPAGE = 4;
     const LNKPAGE = 2;
+    let client_type = 'bookstore';
+    
+    
 </script>
 <title></title>
 <script type="text/javascript">
@@ -20,77 +24,80 @@ function addRow() {
 	const uniqueId = "row" + (new Date()).getTime();
 	
 	$("#row").append(
-	"<tr id='" + uniqueId + "'>"
- 	+"<td class='td-50'><div class='contents-check-div'>"
- 	+ "<button class='contents-input-plus' onclick='addRow(); return false'>"
- 	+ "<img src='${ pageContext.servletContext.contextPath }/resources/images/plus.png'>"
- 	+ "</button>"
- 	+ "<button class='contents-input-minus' onclick='minusRow(\"" + uniqueId + "\");'>"
- 	+ "<img src='${ pageContext.servletContext.contextPath }/resources/images/minus.png'></button></div></td>" 
- 	+ "<td class='td-100'>"
-	+ "<div class='contents-input-div input-search'>"
-	+ "<button class='input-search-btn'>"
-	+ "<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
-	+ "</button>"
-	+ "<input type='input' name='refundId' class='contents-input' value=''>"
-    + "</div>"
-	+ "</td>"
-    + "<td class='td-200'>"
- 	+ "<div class='contents-input-div input-search'>"
-    + "<button class='input-search-btn'>"
-    + "<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
-    + "</button>"
-    + "<input type='input' name='bookId' class='contents-input' value=''>"
-    + "</div>"
-    + "</td>"
-    + "<td class='td-100'>"
-    + "<div class='contents-input-div input-search'>"
-    + "<button class='input-search-btn'>"
-    + "<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
-    + "</button>"
-    + "<input type='input' name='clientId' class='contents-input' value=''>"
-    + "</div>"
-    + "</td>"
-    + "<td class='td-70'>"
-    + "<div class='contents-input-div'>"
-    + "<input type='input' name='empId' class='contents-input'>"
-    + "</div>"
-    + "</td>"
-    + "<td class='td-100'>"
-    + "<div class='contents-input-div'>"
-    + "<input type='date' name='empName' class='select-date small'>"
-    + "</div>"
-    + "</td>"
-    + "<td class='td-70'>"
-    + "<div class='contents-input-div'>"
-    + "<input type='number' name='refundName' class='contents-input'>"
-    + "</div>"
-    + "</td>"
-    + "<td class='td-70'>"
-    + "<div class='contents-input-div'>"
-    + "<input type='number' name='refundDate' class='contents-input'>"
-    + "</div>"
-    + "</td>"
-    + "<td class='td-100'>"
-    + "<div class='contents-input-div'>"
-    + "<input type='number' name='refundAmount' class='contents-input'>"
-    + "</div>"
-    + "</td>"
-    + "<td class='td-120'>"
-    + "<div class='contents-input-div'>"
-    + "<input type='number' name='refunfState' class='contents-input'>"
-    + "</div>"
-    + "</td>"
-    + "<td class='td-120'>"
-    + "<div class='contents-input-div'>"
-    + "<input type='number' name='remark' class='contents-input'>"
-    + "</div>"
-    + "</td>"
- 	+ "</tr>");
+			`<tr id="`+ uniqueId +`" data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+             
+             <td class="td-50">
+                 <div class="contents-check-div">
+                     <button class="contents-input-plus" onclick="addRow(); return false">
+                         <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
+                     </button>
+                     <button class="contents-input-minus" onclick="minusRow(`+ uniqueId +`); return false">
+                         <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
+                     </button>
+                 </div>
+             </td>
+             <td class="td-100">
+                 <div class="contents-input-div input-search">
+                     <button class="input-search-btn">
+                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+                     </button>
+                     <input type="input" name="bookId" class="contents-input" value="">
+                 </div>
+             </td>
+             <td class="td-200">
+                 <div class="contents-input-div input-search">
+                     <button class="input-search-btn">
+                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+                     </button>
+                     <input type="input" name="bookName" class="contents-input" value="">
+                 </div>
+             </td>
+             <td class="td-100">
+                 <div class="contents-input-div input-search">
+                     <button class="input-search-btn">
+                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+                     </button>
+                     <input type="input" name="clientName" class="contents-input" value="">
+                 </div>
+             </td>
+             <td class="td-70">
+                 <div class="contents-input-div">
+                     <input type="input" name="refundState" class="contents-input">
+                 </div>
+             </td>
+             <td class="td-100">
+                 <div class="contents-input-div">
+                     <input type="date" name="refundDate" class="select-date small">
+                 </div>
+             </td>
+             <td class="td-70">
+                 <div class="contents-input-div">
+                     <input type="number" name="refundNum" class="contents-input">
+                 </div>
+             </td>
+             <td class="td-70">
+                 <div class="contents-input-div">
+                     <input type="number" name="refundAmount" class="contents-input">
+                 </div>
+             </td>
+             <td class="td-100">
+                 <div class="contents-input-div">
+                     <input type="number" name="bookPrice" class="contents-input">
+                 </div>
+             </td>
+             <td class="td-120">
+                 <div class="contents-input-div">
+                     <input type="input" name="remark" class="contents-input">
+                 </div>
+             </td>
+         </tr>`
+	);
 
+	initPopupBtn();
 }
 function minusRow(rowId) {
     $("#" + rowId).remove();
+    initPopupBtn();
 }
 </script>
 </head>

@@ -155,7 +155,7 @@
 										<select name="code" id="sel_code">
 											<option value="bookId">도서코드</option>
 											<option value="bookName">도서명</option>
-											<option value="storageName">창고명</option>
+											<option value="clientName">창고명</option>
 										</select>
 									</div>
 								</div>
@@ -277,7 +277,7 @@
 											</td>
 											<td class="td-70">
 												<div class="contents-input-div">
-													<input type="input" name="clientName" class="contents-input noline" value="${ inv.storageName }">
+													<input type="input" name="clientName" class="contents-input noline" value="${ inv.clientName }">
 												</div>
 											</td>
 											<td class="td-105">

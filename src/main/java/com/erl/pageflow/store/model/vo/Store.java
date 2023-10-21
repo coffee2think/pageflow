@@ -8,7 +8,6 @@ public class Store implements java.io.Serializable {
 
 	private int storeId;
 	private int bookId;
-	private int storageId;
 	private int empId;
 	private String empName;
 	private int storeNum;
@@ -26,13 +25,12 @@ public class Store implements java.io.Serializable {
 		super();
 	}
 
-	public Store(int storeId, int bookId, int storageId, int empId, String empName, int storeNum, int storePrice,
-			Date storeDate, String classify, String bookName, int bookPrice, String clientName, int prevInvenId,
-			int currInven, int clientId) {
+	public Store(int storeId, int bookId, int empId, String empName, int storeNum, int storePrice, Date storeDate,
+			String classify, String bookName, int bookPrice, String clientName, int prevInvenId, int currInven,
+			int clientId) {
 		super();
 		this.storeId = storeId;
 		this.bookId = bookId;
-		this.storageId = storageId;
 		this.empId = empId;
 		this.empName = empName;
 		this.storeNum = storeNum;
@@ -45,58 +43,6 @@ public class Store implements java.io.Serializable {
 		this.prevInvenId = prevInvenId;
 		this.currInven = currInven;
 		this.clientId = clientId;
-	}
-
-	public int getClientId() {
-		return clientId;
-	}
-
-	public void setClientId(int clientId) {
-		this.clientId = clientId;
-	}
-
-	public int getCurrInven() {
-		return currInven;
-	}
-
-	public void setCurrInven(int currInven) {
-		this.currInven = currInven;
-	}
-
-	public int getPrevInvenId() {
-		return prevInvenId;
-	}
-
-	public void setPrevInvenId(int prevInvenId) {
-		this.prevInvenId = prevInvenId;
-	}
-
-	public String getClientName() {
-		return clientName;
-	}
-
-	public void setClientName(String clientName) {
-		this.clientName = clientName;
-	}
-
-	public String getBookName() {
-		return bookName;
-	}
-
-	public void setBookName(String bookName) {
-		this.bookName = bookName;
-	}
-
-	public int getBookPrice() {
-		return bookPrice;
-	}
-
-	public void setBookPrice(int bookPrice) {
-		this.bookPrice = bookPrice;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 
 	public int getStoreId() {
@@ -113,14 +59,6 @@ public class Store implements java.io.Serializable {
 
 	public void setBookId(int bookId) {
 		this.bookId = bookId;
-	}
-
-	public int getStorageId() {
-		return storageId;
-	}
-
-	public void setStorageId(int storageId) {
-		this.storageId = storageId;
 	}
 
 	public int getEmpId() {
@@ -171,12 +109,64 @@ public class Store implements java.io.Serializable {
 		this.classify = classify;
 	}
 
+	public String getBookName() {
+		return bookName;
+	}
+
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+
+	public int getBookPrice() {
+		return bookPrice;
+	}
+
+	public void setBookPrice(int bookPrice) {
+		this.bookPrice = bookPrice;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
+	public int getPrevInvenId() {
+		return prevInvenId;
+	}
+
+	public void setPrevInvenId(int prevInvenId) {
+		this.prevInvenId = prevInvenId;
+	}
+
+	public int getCurrInven() {
+		return currInven;
+	}
+
+	public void setCurrInven(int currInven) {
+		this.currInven = currInven;
+	}
+
+	public int getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Override
 	public String toString() {
-		return "Store [storeId=" + storeId + ", bookId=" + bookId + ", storageId=" + storageId + ", empId=" + empId
-				+ ", empName=" + empName + ", storeNum=" + storeNum + ", storePrice=" + storePrice + ", storeDate="
-				+ storeDate + ", classify=" + classify + ", bookName=" + bookName + ", bookPrice=" + bookPrice
-				+ ", clientName=" + clientName + ", prevInvenId=" + prevInvenId + "]";
+		return "Store [storeId=" + storeId + ", bookId=" + bookId + ", empId=" + empId + ", empName=" + empName
+				+ ", storeNum=" + storeNum + ", storePrice=" + storePrice + ", storeDate=" + storeDate + ", classify="
+				+ classify + ", bookName=" + bookName + ", bookPrice=" + bookPrice + ", clientName=" + clientName
+				+ ", prevInvenId=" + prevInvenId + ", currInven=" + currInven + ", clientId=" + clientId + "]";
 	}
 
 }

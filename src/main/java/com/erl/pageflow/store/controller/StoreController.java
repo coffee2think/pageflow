@@ -52,8 +52,7 @@ public class StoreController {
 
 	// 출고현황
 	@RequestMapping("releaselist.do")
-	public String moveReleaseList(Model model,
-			@RequestParam(name = "page", required = false) String page,
+	public String moveReleaseList(Model model, @RequestParam(name = "page", required = false) String page,
 			@RequestParam(name = "limit", required = false) String limitStr) {
 		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
 		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
@@ -66,7 +65,7 @@ public class StoreController {
 
 		for (Store sto : list) {
 			String bname = storeService.selectStoreBookName(sto.getBookId());
-			String cname = storeService.selectStoreClientName(sto.getStorageId());
+			String cname = storeService.selectStoreClientName(sto.getClientId());
 			int bprice = storeService.selectStoreBookPrice(sto.getBookId());
 
 			logger.info("sto : " + sto);
@@ -106,7 +105,7 @@ public class StoreController {
 
 		for (Store sto : list) {
 			String bname = storeService.selectStoreBookName(sto.getBookId());
-			String cname = storeService.selectStoreClientName(sto.getStorageId());
+			String cname = storeService.selectStoreClientName(sto.getClientId());
 			int bprice = storeService.selectStoreBookPrice(sto.getBookId());
 
 			// logger.info("sto : " + sto);
@@ -218,8 +217,8 @@ public class StoreController {
 			String scbkey = (String) scbkeyArray.get(j);
 			int scbkeyInt = Integer.parseInt(scbkey);
 			System.out.println("scbkeyInt : " + scbkeyInt);
-			if (storeService.deleteInventory(scbkeyInt) >= 0) {
-				if (storeService.deleteStore(scbkeyInt) >= 0) {
+			if (storeService.deleteInventory(scbkeyInt) > 0) {
+				if (storeService.deleteStore(scbkeyInt) > 0) {
 					System.out.println("입고 삭제 : " + scbkeyInt);
 					count++;
 				}
@@ -441,7 +440,7 @@ public class StoreController {
 	@RequestMapping(value = "stoinsert.do", method = RequestMethod.POST)
 	public String insertStore(HttpServletRequest request, Model model) {
 		String[] bookIds = request.getParameterValues("bookId");
-		String[] storageIds = request.getParameterValues("storageId");
+		String[] clientIds = request.getParameterValues("clientId");
 		String[] empIds = request.getParameterValues("empId");
 		String[] empNames = request.getParameterValues("empName");
 		String[] storeNums = request.getParameterValues("storeNum");
@@ -458,7 +457,7 @@ public class StoreController {
 
 			store.setStoreId(storeId);
 			store.setBookId(Integer.parseInt(bookIds[i]));
-			store.setStorageId(Integer.parseInt(storageIds[i]));
+			store.setClientId(Integer.parseInt(clientIds[i]));
 			store.setEmpId(Integer.parseInt(empIds[i]));
 			store.setEmpName(empNames[i]);
 			store.setStoreNum(Integer.parseInt(storeNums[i]));
@@ -497,7 +496,6 @@ public class StoreController {
 		String[] empNames = request.getParameterValues("empName");
 		String[] clientNames = request.getParameterValues("clientName");
 		String[] clientIds = request.getParameterValues("clientId");
-		String[] storageIds = request.getParameterValues("storageId");
 		String[] storeNums = request.getParameterValues("storeNum");
 		String[] storeDates = request.getParameterValues("storeDate");
 		String[] bookPrices = request.getParameterValues("bookPrice");
@@ -522,7 +520,6 @@ public class StoreController {
 			store.setStoreDate(Date.valueOf(storeDates[i]));
 			store.setBookPrice(Integer.parseInt(bookPrices[i]));
 			store.setStorePrice(Integer.parseInt(storePrices[i]));
-			store.setStorageId(Integer.parseInt(storageIds[i]));
 
 			releaseList.add(store);
 		}
@@ -546,18 +543,21 @@ public class StoreController {
 	@RequestMapping(value = "stoupdate.do", method = RequestMethod.POST)
 	public void updateStore(Store store, HttpServletResponse response) throws IOException {
 		String returnStr = null;
+
 		logger.info("storeNum : " + store.getStoreNum());
 		logger.info("storePrice :" + store.getStorePrice());
+		logger.info("store : " + store);
+
 		if (storeService.updateStore(store) > 0) {
 			logger.info("updateStore : " + store);
-			
+
 			if (storeService.insertInventory(store) > 0) {
-				
+
 				logger.info("insertInventory : " + store);
 				returnStr = "success";
 			}
 		} else {
-			logger.info("store : " + store);
+
 			returnStr = "fail";
 
 		}
