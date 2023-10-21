@@ -142,7 +142,7 @@
 					</div>`;
 		} //for
 		
-		// 팝업창 버튼 초기화 (출처 : popup.jsp)
+		// 팝업창 버튼 초기화 (함수 출처 : popup.jsp)
 		initPopupBtn();
 		
 	} //initRowIndex

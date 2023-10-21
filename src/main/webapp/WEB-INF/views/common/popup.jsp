@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -118,7 +119,7 @@ function search() {
 		type: 'post',
 		data: {
 			searchType: $('.modal-pop-box').find('select').val(),
-			keyword: $('.modal-pop-box .search-box input').val()
+			keyword: $('.modal-pop-box .search-box input[type=search]').val(),
 		},
 		dataType: 'json',
 		success: function(result) {
@@ -156,6 +157,8 @@ function search() {
 				tr.append('<td>' + decodeURIComponent(list[columnNames[3]]).replace(/\+/gi, ' ') + '</td>');
 				tr.append('<td>' + decodeURIComponent(list[columnNames[4]]).replace(/\+/gi, ' ') + '</td>');
 			}
+			
+			// 페이징 초기화
 		},
 		error: function(request, status, errorData) {
 			console.log("error code : " + request.status);
@@ -168,7 +171,7 @@ function search() {
 </script>
 <title></title>
 </head>
-<body>
+<body style="overflow-X: hidden;">
 	<!-- modal-pop-box -->
     <div class="modal-pop-box small pop-box-1">
         <div class="modal-pop-title">

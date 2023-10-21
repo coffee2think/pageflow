@@ -99,21 +99,15 @@
 	</select>
 	
 	<select id="selectBookById" parameterType="Search" resultMap="resultBookWithStock">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from book
-					where book_id = to_number( #{ keyword } )
-					order by book_id asc) sub)
-		where rnum between #{ startRow } and #{ endRow }
+		select * from book
+		where book_id = to_number( #{ keyword } )
+		order by book_id asc
 	</select>
 	
 	<select id="selectBookByName" parameterType="Search" resultMap="resultBookWithStock">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from book
-					where book_name like '%' || #{ keyword } || '%'
-					order by book_id asc) sub)
-		where rnum between #{ startRow } and #{ endRow }
+		select * from book
+		where book_name like '%' || #{ keyword } || '%'
+		order by book_id asc
 	</select>
 	
 	<select id="selectPrintOfficeCountById" parameterType="_int" resultType="_int">
@@ -122,11 +116,8 @@
 	</select>
 	
 	<select id="selectPrintOfficeById" parameterType="Search" resultMap="resultPrintOffice">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from client
-					where category = '인쇄소' and client_id = to_number(#{ keyword })) sub)
-		where rnum between #{ startRow } and #{ endRow }
+		select * from client
+		where category = '인쇄소' and client_id = to_number(#{ keyword })
 	</select>
 	
 	<select id="selectPrintOfficeCountByName" parameterType="string" resultType="_int">
@@ -135,11 +126,8 @@
 	</select>
 	
 	<select id="selectPrintOfficeByName" parameterType="Search" resultMap="resultPrintOffice">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from client
-					where category = '인쇄소' and client_name like '%' || #{ keyword } || '%') sub)
-		where rnum between #{ startRow } and #{ endRow }
+		select * from client
+		where category = '인쇄소' and client_name like '%' || #{ keyword } || '%'
 	</select>
 	
 	<select id="selectBookStoreCountById" parameterType="_int" resultType="_int">
@@ -153,19 +141,13 @@
 	</select>
 	
 	<select id="selectBookStoreById" parameterType="Search" resultMap="resultBookStore">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from client
-					where category = '서점' and client_id = to_number(#{ keyword })) sub)
-		where rnum between #{ startRow } and #{ endRow }
+		select * from client
+		where category = '서점' and client_id = to_number(#{ keyword })
 	</select>
 	
 	<select id="selectBookStoreByName" parameterType="Search" resultMap="resultBookStore">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from client
-					where category = '서점' and client_name like '%' || #{ keyword } || '%') sub)
-		where rnum between #{ startRow } and #{ endRow }
+		select * from client
+		where category = '서점' and client_name like '%' || #{ keyword } || '%'
 	</select>
 	
 	<select id="selectStorageCountById" parameterType="_int" resultType="_int">
@@ -179,19 +161,13 @@
 	</select>
 	
 	<select id="selectStorageById" parameterType="Search" resultMap="resultStorage">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from client
-					where category = '창고' and client_id = to_number(#{ keyword })) sub)
-		where rnum between #{ startRow } and #{ endRow }
+		select * from client
+		where category = '창고' and client_id = to_number(#{ keyword })
 	</select>
 	
 	<select id="selectStorageByName" parameterType="Search" resultMap="resultStorage">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from client
-					where category = '창고' and client_name like '%' || #{ keyword } || '%') sub)
-		where rnum between #{ startRow } and #{ endRow }
+		select * from client
+		where category = '창고' and client_name like '%' || #{ keyword } || '%'
 	</select>
 	
 	<select id="selectEmployeeCountByEmpName" parameterType="string" resultType="_int">
@@ -207,20 +183,14 @@
 	</select>
 	
 	<select id="selectEmployeeByEmpName" parameterType="Search" resultMap="resultEmployee">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from employee
-					where emp_name like '%' || #{ keyword } || '%') sub)
-		where rnum between #{ startRow } and #{ endRow }
+		select * from employee
+		where emp_name like '%' || #{ keyword } || '%'
 	</select>
 	
 	<select id="selectEmployeeByDepName" parameterType="Search" resultMap="resultEmployee">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from employee
-			  		left join department using (dep_id)
-					where dep_name like '%' || #{ keyword } || '%') sub)
-		where rnum between #{ startRow } and #{ endRow }
+		select * from employee
+  		left join department using (dep_id)
+		where dep_name like '%' || #{ keyword } || '%'
 	</select>
 	
 </mapper>
