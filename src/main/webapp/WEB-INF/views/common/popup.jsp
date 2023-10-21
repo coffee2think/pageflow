@@ -42,6 +42,10 @@ function initPopupBtn() {
 		
 		console.log('popup_type : ' + popup_type);
 		
+		var tr = $(this).parent().parent().parent();
+		var rowIndex = tr.attr('value');
+		rowIndex_popup = rowIndex - 1;
+		
 		popup.showPopup(popup_type);
 		
 		curinput = $(this).parent('.input-search').find('input[type=input]');
@@ -78,16 +82,6 @@ function register() {
 	index_global = null;
 	json_global = null;
 	rowIndex_popup = null;
-}
-
-function registerPrintOffice() {
-	$('.modal-pop-close').parent().parent('.modal-pop-box').hide();
-	$('.modal-pop-close').parent().parent().parent('.modal-pop-area').hide();
-	
-	$('input[name=printId]').eq(rowIndex_popup).val(json_global.list[index_global].clientId);
-	$('input[name=clientName]').eq(rowIndex_popup).val(decodeURIComponent(json_global.list[index_global].clientName).replace(/\+/gi, ' '));
-	
-	console.log(json_global.list[index_global]);
 }
 
 function selectIndex(index) {
