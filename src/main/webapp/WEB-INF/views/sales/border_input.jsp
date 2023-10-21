@@ -17,7 +17,7 @@
     const LNKPAGE = 2;
     
     let curinput;
-    let client_type = 'bookstore'; 
+    let client_type = 'bookstore';
 
     function addRow(currentIndex) {
     	if($('#input_table').find('tr').length >= 10) {
