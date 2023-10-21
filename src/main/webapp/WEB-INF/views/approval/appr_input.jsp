@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="nowdays_" value="<%= java.util.Date.from(java.time.LocalDate.now().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+<fmt:formatDate var="nowdays" value="${ nowdays_ }" pattern="yyyy년 MM월 dd일" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -70,8 +74,7 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="yoncha">연차신청서</option>
-                                            <option value="jichul">지출결의서</option>
+                                            <option value="yoncha" selected>연차신청서</option>
                                         </select>
                                     </div>
 
@@ -155,11 +158,11 @@
                                         </tr>
                                         <tr>
                                             <td>종류</td>
-                                            <td>연차()</td>
-                                            <td>월차()</td>
-                                            <td>보건()</td>
-                                            <td>특별()</td>
-                                            <td>공가()</td>
+                                            <td>연차( <input type="radio" name="detail_type" value="" id="detailType_day" class="detail-radio"> )</td>
+                                            <td>월차( <input type="radio" name="detail_type" value="" id="detailType_month" class="detail-radio"> )</td>
+                                            <td>보건( <input type="radio" name="detail_type" value="" id="detailType_health" class="detail-radio"> )</td>
+                                            <td>특별( <input type="radio" name="detail_type" value="" id="detailType_special" class="detail-radio"> )</td>
+                                            <td>공가( <input type="radio" name="detail_type" value="" id="detailType_oficial" class="detail-radio"> )</td>
                                         </tr>
                                         <tr>
                                             <td>사유</td>
@@ -167,7 +170,9 @@
                                         </tr>
                                         <tr>
                                             <td>기간</td>
-                                            <td colspan="5"></td>
+                                            <td colspan="5">
+                                                <input type="text" name="" value="">
+                                            </td>
                                         </tr>
                                         <tr>
                                             <td>비상연락망</td>
@@ -179,10 +184,9 @@
                                                     <div>
                                                         위와 같이 휴가를 신청하오니 승인하여 주시기 바랍니다.
                                                     </div>
+                                                    
                                                     <div>
-                                                        20 년
-                                                        월
-                                                        일
+                                                        ${ nowdays }
                                                     </div>
                                                     <div>
                                                         <b>소속 : </b> 

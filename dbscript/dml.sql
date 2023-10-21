@@ -348,8 +348,24 @@ select APPR_ID, DRAFTER, APPROVER, DRAFT_TYPE, LINE_ID,
         ED.DEP_ID AS DEP_ID,
         ED.emp_name AS drafter_name,
         EA.emp_name AS approver_name
-from approval A
-join draft using (DRAFT_TYPE)
+from approvalline A
+join e using (DRAFT_TYPE)
 join employee ED on (A.DRAFTER = ED.emp_id)
 join employee EA on (A.approver = EA.emp_id)
-where APPR_ID = 1
+where APPR_ID = 1;
+
+
+
+select * 
+from (select rownum rnum, sub.*
+      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
+            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+            ED.emp_name AS drafter_name
+            from approval A
+            join draft using (DRAFT_TYPE)
+            join employee ED on (A.DRAFTER = ED.emp_id)
+            join employee EA on (A.approver = EA.emp_id)
+            where APPR_STATE = 'companion'
+            order by APPR_ID desc) sub)
+where rnum >= #{ startRow } and rnum <= #{ endRow }
+order by APPR_ID desc

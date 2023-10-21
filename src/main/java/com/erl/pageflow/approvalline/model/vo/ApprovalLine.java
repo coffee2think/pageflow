@@ -1,6 +1,7 @@
 package com.erl.pageflow.approvalline.model.vo;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 public class ApprovalLine implements Serializable{
 	
@@ -11,18 +12,25 @@ public class ApprovalLine implements Serializable{
 	private int empId1;
 	private String empName1;
 	private String posName1;
+	private Date stampDate1;
+	
 	private int empId2;
 	private String empName2;
 	private String posName2;
+	private Date stampDate2;
+	
 	private int empId3;
 	private String empName3;
 	private String posName3;
+	private Date stampDate3;
+	
 	private int empId4;
 	private String empName4;
 	private String posName4;
+	private Date stampDate4;
 	public ApprovalLine(int lineId, int empId, String lineName, int empId1, String empName1, String posName1,
-			int empId2, String empName2, String posName2, int empId3, String empName3, String posName3, int empId4,
-			String empName4, String posName4) {
+			Date stampDate1, int empId2, String empName2, String posName2, Date stampDate2, int empId3, String empName3,
+			String posName3, Date stampDate3, int empId4, String empName4, String posName4, Date stampDate4) {
 		super();
 		this.lineId = lineId;
 		this.empId = empId;
@@ -30,15 +38,19 @@ public class ApprovalLine implements Serializable{
 		this.empId1 = empId1;
 		this.empName1 = empName1;
 		this.posName1 = posName1;
+		this.stampDate1 = stampDate1;
 		this.empId2 = empId2;
 		this.empName2 = empName2;
 		this.posName2 = posName2;
+		this.stampDate2 = stampDate2;
 		this.empId3 = empId3;
 		this.empName3 = empName3;
 		this.posName3 = posName3;
+		this.stampDate3 = stampDate3;
 		this.empId4 = empId4;
 		this.empName4 = empName4;
 		this.posName4 = posName4;
+		this.stampDate4 = stampDate4;
 	}
 	public int getLineId() {
 		return lineId;
@@ -76,6 +88,12 @@ public class ApprovalLine implements Serializable{
 	public void setPosName1(String posName1) {
 		this.posName1 = posName1;
 	}
+	public Date getStampDate1() {
+		return stampDate1;
+	}
+	public void setStampDate1(Date stampDate1) {
+		this.stampDate1 = stampDate1;
+	}
 	public int getEmpId2() {
 		return empId2;
 	}
@@ -93,6 +111,12 @@ public class ApprovalLine implements Serializable{
 	}
 	public void setPosName2(String posName2) {
 		this.posName2 = posName2;
+	}
+	public Date getStampDate2() {
+		return stampDate2;
+	}
+	public void setStampDate2(Date stampDate2) {
+		this.stampDate2 = stampDate2;
 	}
 	public int getEmpId3() {
 		return empId3;
@@ -112,6 +136,12 @@ public class ApprovalLine implements Serializable{
 	public void setPosName3(String posName3) {
 		this.posName3 = posName3;
 	}
+	public Date getStampDate3() {
+		return stampDate3;
+	}
+	public void setStampDate3(Date stampDate3) {
+		this.stampDate3 = stampDate3;
+	}
 	public int getEmpId4() {
 		return empId4;
 	}
@@ -130,14 +160,21 @@ public class ApprovalLine implements Serializable{
 	public void setPosName4(String posName4) {
 		this.posName4 = posName4;
 	}
+	public Date getStampDate4() {
+		return stampDate4;
+	}
+	public void setStampDate4(Date stampDate4) {
+		this.stampDate4 = stampDate4;
+	}
+	
 	@Override
 	public String toString() {
 		return "ApprovalLine [lineId=" + lineId + ", empId=" + empId + ", lineName=" + lineName + ", empId1=" + empId1
-				+ ", empName1=" + empName1 + ", posName1=" + posName1 + ", empId2=" + empId2 + ", empName2=" + empName2
-				+ ", posName2=" + posName2 + ", empId3=" + empId3 + ", empName3=" + empName3 + ", posName3=" + posName3
-				+ ", empId4=" + empId4 + ", empName4=" + empName4 + ", posName4=" + posName4 + "]";
+				+ ", empName1=" + empName1 + ", posName1=" + posName1 + ", stampDate1=" + stampDate1 + ", empId2="
+				+ empId2 + ", empName2=" + empName2 + ", posName2=" + posName2 + ", stampDate2=" + stampDate2
+				+ ", empId3=" + empId3 + ", empName3=" + empName3 + ", posName3=" + posName3 + ", stampDate3="
+				+ stampDate3 + ", empId4=" + empId4 + ", empName4=" + empName4 + ", posName4=" + posName4
+				+ ", stampDate4=" + stampDate4 + "]";
 	}
-	
-	
 	
 }

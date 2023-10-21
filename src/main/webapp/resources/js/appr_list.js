@@ -47,6 +47,7 @@ function getApprovalData(id){
         },
         error: function(jqXHR, textStatus, errorThrown){
             console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+            alert('결재 검색이 되지 않습니다.');
         }
     });
 }
@@ -55,6 +56,14 @@ var temp = {};
 
 // 수정 버튼 클릭 시 수정 가능 상태로 변경
 function onUpdate(id) {
+
+    if(confirm('수정 화면으로 이동하시겠습니까?')) {
+        location.href = 
+        'apmoveupdate.do?boardId=${ board.boardId }&depId=${ board.depId }&empId=${ board.empId }&boardTitle=${ board.boardTitle }&boardDetail=${ board.boardDetail }&originFile=${ board.originFile }&renameFile=${ board.renameFile }';
+    }
+
+    return;
+
     // 행 버튼 보이기/숨기기 상태 변경
     $('#completeBtn_' + id).show();
     $('#cancelBtn_' + id).show();
