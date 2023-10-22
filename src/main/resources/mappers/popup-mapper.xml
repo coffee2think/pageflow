@@ -88,6 +88,21 @@
 		<result property="adminYN" column="ADMIN_YN" />
 	</resultMap>
 	
+	<resultMap type="BookOrder" id="resultBookOrder">
+		<result property="orderId" column="order_ID" />
+		<result property="bookId" column="BOOK_ID" />
+		<result property="clientId" column="CLIENT_ID" />
+		<result property="empId" column="EMP_ID" />
+		<result property="empName" column="EMP_NAME" />
+		<result property="orderQuantity" column="ORDER_QUANTITY" />
+		<result property="orderDate" column="ORDER_DATE" />
+		<result property="modifyDate" column="MODIFY_DATE" />
+		<result property="state" column="STATE" />
+		<result property="bookName" column="BOOK_NAME" />
+		<result property="bookPrice" column="BOOK_PRICE" />
+		<result property="bookStoreName" column="CLIENT_NAME" />
+	</resultMap>
+	
 	<select id="selectBookCountById" parameterType="_int" resultType="_int">
 		select count(*) from book
 		where book_id = #{ bookId }
@@ -191,6 +206,40 @@
 		select * from employee
   		left join department using (dep_id)
 		where dep_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectBookOrderCountByClientName" parameterType="string" resultType="_int">
+		select count(*) from book_order
+		left join client using (client_id)
+		where client_name like '%' || #{ clientName } || '%'
+			  and state not in ('주문취소', '반품')
+	</select>
+	
+	<select id="selectBookOrderCountByDate" parameterType="Search" resultType="_int">
+		select count(*) from book_order
+		where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+			  and state not in ('주문취소', '반품')
+		order by order_id desc
+	</select>
+	
+	<select id="selectBookOrderByClientName" parameterType="Search" resultMap="resultBookOrder">
+		select * from book_order
+		left join client using (client_id)
+		left join book using (book_id)
+		where client_name like '%' || #{ keyword } || '%'
+			  and state not in ('주문취소', '반품')
+			  and ((order_id, book_id) not in (select order_id, book_id from sales))
+		order by order_id desc
+	</select>
+	
+	<select id="selectBookOrderByDate" parameterType="Search" resultMap="resultBookOrder">
+		select * from book_order
+		left join client using (client_id)
+		left join book using (book_id)
+		where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+			  and state not in ('주문취소', '반품')
+			  and ((order_id, book_id) not in (select order_id, book_id from sales))
+		order by order_id desc
 	</select>
 	
 </mapper>

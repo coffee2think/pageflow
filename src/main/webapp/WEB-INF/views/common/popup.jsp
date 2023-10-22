@@ -21,6 +21,7 @@ let index_global, json_global;
 let rowIndex_popup;
 
 document.addEventListener("DOMContentLoaded", function(){
+	checkOption();
 	initPopupBtn();
 });
 
@@ -38,6 +39,10 @@ function initPopupBtn() {
 		
 		if(popup_type.includes('emp')) {
 			popup_type = 'employee';
+		}
+		
+		if(popup_type.includes('order')) {
+			popup_type = 'book_order';
 		}
 		
 		console.log('popup_type : ' + popup_type);
@@ -93,32 +98,40 @@ function selectIndex(index) {
 	index_global = index;
 }
 
-function search() {	
+function searchPopup() {	
 	var url = {
 			'book': 'popupBook.do',
 			'printoffice': 'popupPrintOffice.do',
 			'bookstore': 'popupBookStore.do',
 			'storage': 'popupStorage.do',
-			'book_order': 'popupBookOrder.do',
-			'employee': 'popupEmployee.do'
+			'employee': 'popupEmployee.do',
+			'book_order': 'popupBookOrder.do'
 	};
 	
 	var table_column = {
-			'book': ['', '', 'bookId', 'bookName', 'stock'],
-			'printoffice': ['', '', 'clientId', 'clientName', 'clientContact'],
-			'bookstore': ['', '', 'clientId', 'clientName', 'clientContact'],
-			'storage': ['', '', 'clientId', 'clientName', 'clientContact'],
-			'book_order': ['', '', 'orderId', 'bookName', 'orderQuantity'],
-			'employee': ['', '', 'empId', 'empName', 'depName']
+			'book': ['', 'bookId', 'bookName', 'bookPrice', 'stock'],
+			'printoffice': ['', 'clientId', 'clientName', 'manager', 'managerContact'],
+			'bookstore': ['', 'clientId', 'clientName', 'manager', 'managerContact'],
+			'storage': ['', 'clientId', 'clientName', 'manager', 'managerContact'],
+			'employee': ['', 'empId', 'depName', 'empName', 'jobName'],
+			'book_order': ['', 'orderId', 'clientName', 'bookName', 'orderQuantity']
 	};
+	
+	// 전송할 데이터 담기
+	var sendData = {};
+	var option = $('#sel_code').val();
+	sendData['searchType'] = $('.modal-pop-box').find('select').val();
+	if(option.toLowerCase().includes('date')) { // 날짜 검색일 경우
+		sendData['begin'] = $('.modal-pop-box .search-box input#begin').val();
+		sendData['end'] = $('.modal-pop-box .search-box input#end').val();
+	} else { // 날짜 검색 이외에 키워드 검색일 경우
+		sendData['keyword'] = $('.modal-pop-box .search-box input[type=search]').val();
+	}
 	
 	$.ajax({
 		url: url[popup_type],
 		type: 'post',
-		data: {
-			searchType: $('.modal-pop-box').find('select').val(),
-			keyword: $('.modal-pop-box .search-box input[type=search]').val(),
-		},
+		data: sendData,
 		dataType: 'json',
 		success: function(result) {
 			// object => string
@@ -147,10 +160,10 @@ function search() {
 				const tr = tbody.find('tr:last');
 				
 				tr.append('<td><input type="radio" name="radio" onchange="selectIndex(' + i + ');"></td>');
-				tr.append('<td>' + (parseInt(i) + 1) + '</td>');
 				
 				const list = json.list[i];
 				const columnNames = table_column[popup_type];
+				tr.append('<td>' + decodeURIComponent(list[columnNames[1]]).replace(/\+/gi, ' ') + '</td>');
 				tr.append('<td>' + decodeURIComponent(list[columnNames[2]]).replace(/\+/gi, ' ') + '</td>');
 				tr.append('<td>' + decodeURIComponent(list[columnNames[3]]).replace(/\+/gi, ' ') + '</td>');
 				tr.append('<td>' + decodeURIComponent(list[columnNames[4]]).replace(/\+/gi, ' ') + '</td>');
@@ -164,6 +177,29 @@ function search() {
 			console.log("Error : " + errorData);
 		}
 	});
+}
+
+function checkOption() {
+	var option = $('#sel_code').val();
+	
+	if(option.toLowerCase().includes('date')) {
+		$('.modal-pop-search .search-box input[type=search]').hide();
+		$('.modal-pop-search .search-box input[type=date]').show();
+		$('span.wave').show();
+	} else {
+		$('.modal-pop-search .search-box input[type=search]').show();
+		$('.modal-pop-search .search-box input[type=date]').hide();
+		$('span.wave').hide();
+	}
+}
+
+function searchByDate() {
+	var begin = $('.modal-pop-box .search-box input#begin').val();
+	var end = $('.modal-pop-box .search-box input#end').val();
+	
+	if(begin != '' && end != '') {
+		searchPopup();
+	}
 }
 
 </script>
@@ -185,17 +221,20 @@ function search() {
                 <div class="select-box">
                     <div class="select-pan">
                         <label for="sel_code"></label>
-                        <select name="code" id="sel_code">
+                        <select name="code" id="sel_code" onchange="checkOption();">
                             <option value="bookName">도서명</option>
                             <option value="bookId">도서코드</option>
                         </select>
                     </div>
                 </div>
                 <div class="search-box">
-                    <button class="search-btn-pop" onclick="search();">
+                    <button class="search-btn-pop" onclick="searchPopup();">
                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                     </button>
-                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="" onkeyup="if(event.keyCode == 13){ search(); }">
+                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="" onkeyup="if(event.keyCode == 13){ searchPopup(); }">
+                    <input type="date" class="select-date select-date-first" name="begin" id="begin" onchange="searchByDate();">
+                    <span class="wave">~&nbsp;</span>
+					<input type="date" class="select-date select-date-second" name="end" id="end" onchange="searchByDate();">
                 </div>
             </div>
 

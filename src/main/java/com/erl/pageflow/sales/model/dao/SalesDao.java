@@ -14,6 +14,7 @@ import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.Client;
 import com.erl.pageflow.sales.model.vo.Sales;
+import com.erl.pageflow.sales.model.vo.SalesStatistics;
 
 @Repository("salesDao")
 public class SalesDao {
@@ -89,8 +90,8 @@ public class SalesDao {
 		return sqlSession.update("salesMapper.updateBookOrder", bookOrder);
 	}
 	
-	public int deleteBookOrder(int orderId) {
-		return sqlSession.delete("salesMapper.deleteBookOrder", orderId);
+	public int deleteBookOrder(BookOrder bookOrder) {
+		return sqlSession.delete("salesMapper.deleteBookOrder", bookOrder);
 	}
 
 	public int insertClient(Client client) {
@@ -136,13 +137,17 @@ public class SalesDao {
 		return sqlSession.selectOne("salesMapper.selectMaxOrderId");
 	}
 
-	public int selectSalesCountForStats() {
-		return sqlSession.selectOne("salesMapper.selectSalesCountForStats");
+	public ArrayList<SalesStatistics> selectSalesForStats(int year) {
+		List<SalesStatistics> list = sqlSession.selectList("salesMapper.selectSalesForStats", year);
+		return (ArrayList<SalesStatistics>) list;
 	}
 
-	public ArrayList<Sales> selectSalesForStats(Paging paging) {
-		List<Sales> list = sqlSession.selectList("salesMapper.selectSalesForStats", paging);
-		return (ArrayList<Sales>) list;
+	public int insertSales(Sales sales) {
+		return sqlSession.insert("salesMapper.insertSales", sales);
+	}
+
+	public int deleteSales(int salesId) {
+		return sqlSession.delete("salesMapper.deleteSales", salesId);
 	}
 
 }

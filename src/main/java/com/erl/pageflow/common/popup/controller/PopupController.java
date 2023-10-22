@@ -22,6 +22,7 @@ import com.erl.pageflow.common.Search;
 import com.erl.pageflow.common.popup.model.service.PopupService;
 import com.erl.pageflow.employee.model.vo.Employee;
 import com.erl.pageflow.sales.controller.SalesController;
+import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 import com.erl.pageflow.sales.model.vo.Storage;
@@ -395,11 +396,11 @@ public class PopupController {
 		// 페이징 처리를 위한 개수 조회
 		int listCount = 0;
 		switch(search.getSearchType()) {
-		case "empName":
-			listCount = popupService.selectEmployeeCountByEmpName(search.getKeyword());
+		case "clientName":
+			listCount = popupService.selectBookOrderCountByClientName(search.getKeyword());
 			break;
-		case "depName":
-			listCount = popupService.selectEmployeeCountByDepName(search.getKeyword());
+		case "orderDate":
+			listCount = popupService.selectBookOrderCountByDate(search);
 			break;
 		}
 		
@@ -411,13 +412,13 @@ public class PopupController {
 		search.setEndRow(paging.getEndRow());
 		
 		// 서비스로 목록 요청
-		ArrayList<Employee> list = null;
+		ArrayList<BookOrder> list = null;
 		switch(search.getSearchType()) {
-		case "empName":
-			list = popupService.selectEmployeeByEmpName(search);
+		case "clientName":
+			list = popupService.selectBookOrderByClientName(search);
 			break;
-		case "depName":
-			list = popupService.selectEmployeeByDepName(search);
+		case "orderDate":
+			list = popupService.selectBookOrderByDate(search);
 			break;
 		}
 		
@@ -430,13 +431,16 @@ public class PopupController {
 		JSONObject sendJson = new JSONObject();
 		JSONArray jarr = new JSONArray();
 		
-		for(Employee employee : list) {
+		for(BookOrder bookOrder : list) {
 			JSONObject job = new JSONObject();
 			
-			job.put("empId", employee.getEmpId());
-			job.put("empName", URLEncoder.encode(employee.getEmpName(), "utf-8"));
-			job.put("phone", employee.getPhone());
-			job.put("email", employee.getEmail());
+			job.put("orderId", bookOrder.getOrderId());
+			job.put("clientName", URLEncoder.encode(bookOrder.getBookStoreName(), "utf-8"));
+			job.put("bookId", bookOrder.getBookId());
+			job.put("bookName", URLEncoder.encode(bookOrder.getBookName(), "utf-8"));
+			job.put("bookPrice", bookOrder.getBookPrice());
+			job.put("orderDate", bookOrder.getOrderDate().toString());
+			job.put("orderQuantity", bookOrder.getOrderQuantity());
 			
 			jarr.add(job);
 		}
