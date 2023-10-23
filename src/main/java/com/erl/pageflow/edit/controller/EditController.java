@@ -132,20 +132,20 @@ public class EditController {
 		out.close();
 	}
 	
-	// 거래처 정보 삭제 요청 처리
-	@RequestMapping(value="eddelete.do", method=RequestMethod.POST)
-	public String editDeleteMethod(@RequestParam("IDs") int[] editIDs, Model model) {
-		logger.info("eddelete.do : " + editIDs);
-		
-		for(int editId : editIDs) {
-			if(editService.deleteEdit(editId) == 0) {
-				model.addAttribute("message", editId + "번 편집 정보 삭제 실패!");
-				return "common/error";
-			}
-		}
-		
-		return "redirect:edlist.do";
-	}
+//	// 편집 정보 삭제 요청 처리
+//	@RequestMapping(value="eddelete.do", method=RequestMethod.POST)
+//	public String editDeleteMethod(@RequestParam("IDs") String[] IDs, Model model) {
+//		logger.info("eddelete.do : " + IDs);
+//		
+//		for(String editId : IDs) {
+//			if(editService.deleteEdit(editId) == 0) {
+//				model.addAttribute("message", editId + "번 편집 정보 삭제 실패!");
+//				return "common/error";
+//			}
+//		}
+//		
+//		return "redirect:edlist.do";
+//	}
 	
 	// 편집 시작날짜 조회
 	@RequestMapping("edlistSdate.do")

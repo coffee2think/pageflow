@@ -1,5 +1,6 @@
 package com.erl.pageflow.employee.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,8 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.employee.model.service.EmployeeService;
 import com.erl.pageflow.employee.model.vo.Employee;
@@ -41,10 +44,18 @@ public class EmployeeController {
 		return "member/emp_input";
 	}
 	
+	
 	@RequestMapping("idck.do")
 	public String idck() {
 		return "member/emp_input";
 	}
+	
+	@RequestMapping("empmoveupdate.do")
+	public String moveempUpdatePage(Employee employee,  Model model) {
+		model.addAttribute("employee", employee);
+		return "member/emp_update";
+	}
+	
 	
 	
 	
@@ -111,20 +122,96 @@ public class EmployeeController {
 	}
 	
 	// 직원 등록 
-  @RequestMapping(value = "empinsert.do",  method= {RequestMethod.GET,RequestMethod.POST})
-  public String memberInsertMethod(Employee employee, Model model) {
-    logger.info("empinsert.do" + employee.getDepId());
-    logger.info("empinsert.do" + employee);
-  
-    if (employeeService.insertEmployee(employee) > 0) {
-      return "redirect:mnlist.do";
-    } else {
-      model.addAttribute("message", "직원 등록 실패!");
-      return "common/error";
-    }
-	}
+		@RequestMapping(value = "empinsert.do",  method= {RequestMethod.GET,RequestMethod.POST})
+		public String employeeInsertMethod(@RequestParam(name= "file", required=false) MultipartFile file,HttpServletRequest request,Employee employee, Model model) {
+			logger.info("empinsert.do" + employee.getDepId());
+			logger.info("empinsert.do" + employee);
+			
+			String savePath = request.getSession().getServletContext().getRealPath(
+					"resources/member_upfiles");
+					
+			//첨부파일이 있을 때
+			if(!file.isEmpty()) {
+				//전송온 파일이름 추출함
+				String fileName = file.getOriginalFilename();
+				String renameFileName = null;
+				
+				//저장폴더에는 변경된 이름을 저장 처리함
+				//파일 이름바꾸기함 : 년월일시분초.확장자
+				if(fileName != null && fileName.length() > 0) {				
+					//바꿀 파일명에 대한 문자열 만들기
+					renameFileName = FileNameChange.change(fileName, 	"yyyyMMddHHmmss");
+					logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
+					try {	
+						//저장 폴더에 파일명 바꾸기 처리
+						file.transferTo(new File(savePath + "\\" + renameFileName));
+					
+					}catch(Exception e) {
+						e.printStackTrace();
+						model.addAttribute("message", "첨부파일 저장 실패!");
+						return "common/error";
+					}
+				}  //파일명 바꾸기
+				//notice 객체에 첨부파일 정보 저장 처리
+				employee.setProfile(fileName);
+				employee.setProfilechange(renameFileName);
+			} //첨부파일 있을 때		
+		
+					
+			if (employeeService.insertEmployee(employee) > 0) {
+				return "redirect:mnlist.do";
+			} else {
+				model.addAttribute("message", "직원 등록 실패!");
+				return "common/error";
+			}
+		}
 
-	//직원 조회
-	
+		
+		// 직원 수정 
+				@RequestMapping(value = "empupdate.do",  method= {RequestMethod.GET,RequestMethod.POST})
+				public String employeeUpdateMethod(@RequestParam(name= "file", required=false) MultipartFile file,HttpServletRequest request,Employee employee, Model model) {
+					logger.info("empinsert.do" + employee.getDepId());
+					logger.info("empinsert.do" + employee);
+					
+					String savePath = request.getSession().getServletContext().getRealPath(
+							"resources/member_upfiles");
+							
+					//첨부파일이 있을 때
+					if(!file.isEmpty()) {
+						//전송온 파일이름 추출함
+						String fileName = file.getOriginalFilename();
+						String renameFileName = null;
+						
+						//저장폴더에는 변경된 이름을 저장 처리함
+						//파일 이름바꾸기함 : 년월일시분초.확장자
+						if(fileName != null && fileName.length() > 0) {				
+							//바꿀 파일명에 대한 문자열 만들기
+							renameFileName = FileNameChange.change(fileName, 	"yyyyMMddHHmmss");
+							logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
+							try {	
+								//저장 폴더에 파일명 바꾸기 처리
+								file.transferTo(new File(savePath + "\\" + renameFileName));
+							
+							}catch(Exception e) {
+								e.printStackTrace();
+								model.addAttribute("message", "첨부파일 저장 실패!");
+								return "common/error";
+							}
+						}  //파일명 바꾸기
+						//notice 객체에 첨부파일 정보 저장 처리
+						employee.setProfile(fileName);
+						employee.setProfilechange(renameFileName);
+					} //첨부파일 있을 때		
+				
+							
+					if (employeeService.insertEmployee(employee) > 0) {
+						return "redirect:mnlist.do";
+					} else {
+						model.addAttribute("message", "직원 등록 실패!");
+						return "common/error";
+					}
+				}
+
+		
 		
 }

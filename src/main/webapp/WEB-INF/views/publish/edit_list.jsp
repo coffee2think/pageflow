@@ -11,7 +11,7 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func_new.js"></script>
 <script>
     const NOWPAGE = 3;
     const SUBPAGE = 2;
@@ -229,7 +229,7 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <table class="contents-table">
+                            <table class="contents-table" id="table_list">
                                 <tr>
                                     <th>체크</th>
                                     <th>편집번호</th>
@@ -246,14 +246,13 @@
 	                                <c:forEach items="${ editList }" var="edit">
 		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ edit.editId }">
 		                                     <td class="td-50">
-		                                        <input type="checkbox" name="check" value="${ edit.editId }">
+		                                        <input type="checkbox" name="check" value="${ edit.editId }_${ edit.depId }">
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
 		                                            <input type="input" name="editId" class="contents-input noline" value="${ edit.editId }" readonly>
 		                                        </div>
 		                                    </td>
-		                                    <input type="hidden" name="depId" value="${ edit.depId }">
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
 		                                            <input type="input" name="bookName" class="contents-input noline" value="${ edit.bookName }" readonly>
@@ -272,6 +271,7 @@
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
 		                                            <input type="input" name="depName" class="contents-input noline" value="${ edit.depName }" readonly>
+		                                            <input type="hidden" name="depId" value="${ edit.depId }">
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
@@ -290,9 +290,9 @@
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ edit.editId }" onclick="onUpdate(${ edit.editId }); return false;">
-		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ edit.editId }" onclick="submitUpdate(${ edit.editId }, 'edupdate.do'); return false;" style="display: none;">
-		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ edit.editId }" onclick="cancelUpdate(${ edit.editId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline update-btn" value="수정" id="updateBtn_${ edit.editId }" onclick="onUpdate(this); return false;">
+		                                        <input type="button" class="contents-input-btn noline complete-btn" value="완료" id="completeBtn_${ edit.editId }" onclick="submitUpdate(this, 'edupdate.do'); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline cancel-btn" value="취소" id="cancelBtn_${ edit.editId }" onclick="cancelUpdate(this); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
 									</c:forEach>

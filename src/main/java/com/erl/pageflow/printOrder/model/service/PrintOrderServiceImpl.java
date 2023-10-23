@@ -44,8 +44,8 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	}
 	
 	@Override
-	public int updatePrintOrder(PrintOrder clientId) {
-		return printOrderDao.updatePrintOrder(clientId);
+	public int updatePrintOrder(PrintOrder PrintOrder) {
+		return printOrderDao.updatePrintOrder(PrintOrder);
 	}
 	
 	@Override

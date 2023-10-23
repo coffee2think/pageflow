@@ -11,6 +11,7 @@ import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.contract.model.vo.Contract;
 import com.erl.pageflow.edit.model.vo.Edit;
+import com.erl.pageflow.sales.model.vo.BookOrder;
 
 @Repository("contractDao")
 public class ContractDao {
@@ -70,4 +71,17 @@ public class ContractDao {
 	public int selectContractCountByDate(Search search) {
 		return sqlSessionTemplate.selectOne("publishMapper.selectContractCountByDate", search);
 	}
+	
+	// 계약 키워드 검색 개수 (책이름)
+	public int selectContractCountByBook(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectContractCountByBook", search);
+	}
+	
+	// 계약 키워드 검색 (책이름)
+	public ArrayList<Contract> selectContractByBook(Search search) {
+		List<Contract> list = sqlSessionTemplate.selectList("publishMapper.selectContractByBook", search);
+		return (ArrayList<Contract>) list;
+	}
+	
+	
 }

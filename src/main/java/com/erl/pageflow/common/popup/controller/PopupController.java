@@ -26,6 +26,7 @@ import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 import com.erl.pageflow.sales.model.vo.Storage;
+import com.erl.pageflow.writer.model.vo.Writer;
 
 @Controller
 public class PopupController {
@@ -370,6 +371,8 @@ public class PopupController {
 			
 			job.put("empId", employee.getEmpId());
 			job.put("empName", URLEncoder.encode(employee.getEmpName(), "utf-8"));
+			job.put("depName", URLEncoder.encode(employee.getDepName(), "utf-8"));
+			job.put("jobName", URLEncoder.encode(employee.getJobName(), "utf-8"));
 			job.put("phone", employee.getPhone());
 			job.put("email", employee.getEmail());
 			
@@ -441,6 +444,66 @@ public class PopupController {
 			job.put("bookPrice", bookOrder.getBookPrice());
 			job.put("orderDate", bookOrder.getOrderDate().toString());
 			job.put("orderQuantity", bookOrder.getOrderQuantity());
+			
+			jarr.add(job);
+		}
+		
+		sendJson.put("list", jarr);
+		return sendJson.toJSONString();
+	}
+	
+	// 팝업창 주문 정보 조회
+	@RequestMapping("popupWriter.do")
+	@ResponseBody // response body에 담아서 보냄
+	public String popupWriterMethod(Search search,
+			@RequestParam(name="page", required=false) String page,
+			HttpServletResponse response) throws IOException {
+		
+		logger.info("popupWriter.do : " + search);
+		
+		// 타입에 따라 값 초기화
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = 10;
+		
+		// 페이징 처리를 위한 개수 조회
+		int listCount = 0;
+		switch(search.getSearchType()) {
+		case "writerName":
+			listCount = popupService.selectWriterCountByName(search.getKeyword());
+			break;
+		}
+		
+		// 페이징 처리
+		Paging paging = new Paging(listCount, currentPage, limit, "popupWriter.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		// 서비스로 목록 요청
+		ArrayList<Writer> list = null;
+		switch(search.getSearchType()) {
+		case "writerName":
+			list = popupService.selectWriterByName(search);
+			break;
+		}
+		
+		logger.info("list : " + list.toString());
+		
+		// response에 내보낼 값에 대한 mimeType 설정
+		response.setContentType("application/json; charset=utf-8");
+		
+		// 리턴된 list 결과를 json 배열에 담아서 내보내기
+		JSONObject sendJson = new JSONObject();
+		JSONArray jarr = new JSONArray();
+		
+		for(Writer writer : list) {
+			JSONObject job = new JSONObject();
+			
+			job.put("writerId", writer.getWriterId());
+			job.put("writerName", URLEncoder.encode(writer.getWriterName(), "utf-8"));
+			job.put("phone", writer.getPhone());
+			job.put("email", URLEncoder.encode(writer.getEmail(), "utf-8"));
 			
 			jarr.add(job);
 		}

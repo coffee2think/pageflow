@@ -9,15 +9,20 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script src="${ pageContext.servletContext.contextPath }/resources/js/lib/chart.min.js"></script>
 <script>
     const NOWPAGE = 5;
     const SUBPAGE = 4;
     const LNKPAGE = 1;
 
+    var monthly_sum = Array.from({length: 12}, () => 0);
+
     $(function() {
-        const table = $('#table_list');
-        var monthly_sum = Array.from({length: 12}, () => 0);
-        console.log('monthly_sum : ' + monthly_sum);
+        // 차트 숨기기
+        $('#chart').hide();
+    	
+    	const table = $('#table_list');
+        // var monthly_sum = Array.from({length: 12}, () => 0);
 
         // 컨텐츠 영역 합계
         const trList = table.find('tr.stats-data');
@@ -42,7 +47,49 @@
             total_sum += monthly_sum[index];
         });
         $('#total_sum').text(total_sum);
+        
+        // 차트 생성
+        makeChart();
     }); // document ready
+    
+    function makeChart() {
+    	const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: '전체 합계',
+                data: monthly_sum,
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }]
+        };
+        
+        var context = document
+            .getElementById('myChart')
+            .getContext('2d');
+        var myChart = new Chart(context, {
+            type: 'line', // 차트의 형태
+            data: data,
+            options: {
+                scales: {
+                    yAxes: [
+                        {
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }
+                    ]
+                }
+            }
+        });
+    }
+    
+    function showChart() {
+    	$('#chart').show();
+    	$('#table_list').hide();
+    	
+    }
 </script>
 <title></title>
 </head>
@@ -147,7 +194,7 @@
                                 	<input type="date" class="select-date select-date-second" name="end" value=${ end }>
 								</div>
                                 
-								<input type="button" class="contents-input-btn big noline" id="btn_chart" value="차트보기" onclick="chart">
+								<input type="button" class="contents-input-btn big noline" id="btn_chart" value="차트보기" onclick="showChart();">
                             </div>
 
                         </form>
@@ -345,8 +392,9 @@
 
                             </table>
 
-                            <div class="mainbox-tablebox graph width-65vw">
-                                <canvas id="myGraph" width="300" height="200">
+                            <!-- 차트 그리기 영역 -->
+                            <div class="mainbox-tablebox graph width-65vw" id="chart">
+                                <canvas id="myChart" width="300" height="200">
                                 
                                 </canvas>
                                 <script>
@@ -354,8 +402,10 @@
                                     make_graph.init('graph', 'myGraph');
                                 </script>
                             </div>
+                            <!-- 차트 그리기 영역 end -->
 
                         </div>
+
                     </div>
                     <!--컨텐츠영역 end-->
 

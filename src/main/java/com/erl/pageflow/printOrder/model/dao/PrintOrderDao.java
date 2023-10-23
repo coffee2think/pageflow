@@ -46,8 +46,8 @@ public class PrintOrderDao {
 	}
 	
 	//발주 수정
-	public int updatePrintOrder(PrintOrder clientId) {
-		return sqlSessionTemplate.update("printMapper.updatePrintOrder", clientId);
+	public int updatePrintOrder(PrintOrder PrintOrder) {
+		return sqlSessionTemplate.update("printMapper.updatePrintOrder", PrintOrder);
 	}
 	
 	//

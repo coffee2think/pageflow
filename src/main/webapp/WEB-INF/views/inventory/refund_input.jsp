@@ -20,99 +20,99 @@
 </script>
 <title></title>
 <script type="text/javascript">
-function addRow() {
-	const uniqueId = "row" + (new Date()).getTime();
+	function addRow() {
+		const uniqueId = "row" + (new Date()).getTime();
+		
+		$("#row").append(
+				`<tr id="`+ uniqueId +`" data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+					<input type="hidden" name="clientId" value="">
+		            <input type="hidden" name="empId" value="${ loginMember.empId }">
+		            <input type="hidden" name="empName" value="${ loginMember.empName }">
+	             <td class="td-50">
+	                 <div class="contents-check-div">
+	                     <button class="contents-input-plus" onclick="addRow(); return false">
+	                         <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
+	                     </button>
+	                     <button class="contents-input-minus" onclick="minusRow(\"" + uniqueId + "\");">
+	                         <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
+	                     </button>
+	                 </div>
+	             </td>
+	             <td class="td-100">
+	                 <div class="contents-input-div input-search">
+	                     <button class="input-search-btn">
+	                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+	                     </button>
+	                     <input type="input" name="bookId" class="contents-input" value="">
+	                 </div>
+	             </td>
+	             <td class="td-200">
+	                 <div class="contents-input-div input-search">
+	                     <button class="input-search-btn">
+	                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+	                     </button>
+	                     <input type="input" name="bookName" class="contents-input" value="">
+	                 </div>
+	             </td>
+	             <td class="td-100">
+	                 <div class="contents-input-div input-search">
+	                     <button class="input-search-btn">
+	                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+	                     </button>
+	                     <input type="input" name="clientName" class="contents-input" value="">
+	                 </div>
+	             </td>
+	             <td class="td-70">
+	                 <div class="contents-input-div">
+	                     <input type="input" name="refundState" class="contents-input">
+	                 </div>
+	             </td>
+	             <td class="td-100">
+	                 <div class="contents-input-div">
+	                     <input type="date" name="refundDate" class="select-date small">
+	                 </div>
+	             </td>
+	             <td class="td-70">
+	                 <div class="contents-input-div">
+	                     <input type="number" name="bookPrice" class="contents-input">
+	                 </div>
+	             </td>
+	             <td class="td-70">
+	                 <div class="contents-input-div">
+	                     <input type="number" name="refundAmount" class="contents-input">
+	                 </div>
+	             </td>
+	             <td class="td-100">
+	                 <div class="contents-input-div">
+	                     <input type="number" name="refundNum" class="contents-input">
+	                 </div>
+	             </td>
+	             <td class="td-120">
+	                 <div class="contents-input-div">
+	                     <input type="input" name="remark" class="contents-input">
+	                 </div>
+	             </td>
+	         </tr>`
+		);
 	
-	$("#row").append(
-			`<tr id="`+ uniqueId +`" data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-				<input type="hidden" name="clientId" value="">
-	            <input type="hidden" name="empId" value="${ loginMember.empId }">
-	            <input type="hidden" name="empName" value="${ loginMember.empName }">
-             <td class="td-50">
-                 <div class="contents-check-div">
-                     <button class="contents-input-plus" onclick="addRow(); return false">
-                         <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
-                     </button>
-                     <button class="contents-input-minus" onclick="minusRow(\"" + uniqueId + "\");">
-                         <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
-                     </button>
-                 </div>
-             </td>
-             <td class="td-100">
-                 <div class="contents-input-div input-search">
-                     <button class="input-search-btn">
-                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                     </button>
-                     <input type="input" name="bookId" class="contents-input" value="">
-                 </div>
-             </td>
-             <td class="td-200">
-                 <div class="contents-input-div input-search">
-                     <button class="input-search-btn">
-                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                     </button>
-                     <input type="input" name="bookName" class="contents-input" value="">
-                 </div>
-             </td>
-             <td class="td-100">
-                 <div class="contents-input-div input-search">
-                     <button class="input-search-btn">
-                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                     </button>
-                     <input type="input" name="clientName" class="contents-input" value="">
-                 </div>
-             </td>
-             <td class="td-70">
-                 <div class="contents-input-div">
-                     <input type="input" name="refundState" class="contents-input">
-                 </div>
-             </td>
-             <td class="td-100">
-                 <div class="contents-input-div">
-                     <input type="date" name="refundDate" class="select-date small">
-                 </div>
-             </td>
-             <td class="td-70">
-                 <div class="contents-input-div">
-                     <input type="number" name="bookPrice" class="contents-input">
-                 </div>
-             </td>
-             <td class="td-70">
-                 <div class="contents-input-div">
-                     <input type="number" name="refundAmount" class="contents-input">
-                 </div>
-             </td>
-             <td class="td-100">
-                 <div class="contents-input-div">
-                     <input type="number" name="refundNum" class="contents-input">
-                 </div>
-             </td>
-             <td class="td-120">
-                 <div class="contents-input-div">
-                     <input type="input" name="remark" class="contents-input">
-                 </div>
-             </td>
-         </tr>`
-	);
-
-	initPopupBtn();
-}
-function minusRow(rowId) {
-    $("#" + rowId).remove();
-    initPopupBtn();
-}
-
-function calcTotalPrice(currentIndex) {
-	const table = document.getElementById('input_table');
+		initPopupBtn();
+	}
+	function minusRow(rowId) {
+	    $("#" + rowId).remove();
+	    initPopupBtn();
+	}
 	
-	var row = table.rows[currentIndex];
-	var bookPrice = row.[8].children[0].children[0].value;
-	var refundNum = row.[9].children[0].children[0].value;
-	
-	var refundAmount = row[10];
-	 refundAmount.children[0].children[0].value = bookPrice * refundNum;
-	
-}
+	function calcTotalPrice(currentIndex) {
+		const table = document.getElementById('input_table');
+		
+		var row = table.rows[currentIndex];
+		var bookPrice = row.[8].children[0].children[0].value;
+		var refundNum = row.[9].children[0].children[0].value;
+		
+		var refundAmount = row[10];
+		 refundAmount.children[0].children[0].value = bookPrice * refundNum;
+		
+	}
 </script>
 </head>
 <body>

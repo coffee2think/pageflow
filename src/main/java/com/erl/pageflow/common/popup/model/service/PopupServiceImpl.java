@@ -13,6 +13,7 @@ import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 import com.erl.pageflow.sales.model.vo.Storage;
+import com.erl.pageflow.writer.model.vo.Writer;
 
 @Service("popupService")
 public class PopupServiceImpl implements PopupService {
@@ -138,6 +139,16 @@ public class PopupServiceImpl implements PopupService {
 	@Override
 	public ArrayList<BookOrder> selectBookOrderByDate(Search search) {
 		return popupDao.selectBookOrderByDate(search);
+	}
+
+	@Override
+	public int selectWriterCountByName(String writerName) {
+		return popupDao.selectWriterCountByName(writerName);
+	}
+
+	@Override
+	public ArrayList<Writer> selectWriterByName(Search search) {
+		return popupDao.selectWriterByName(search);
 	}
 
 }

@@ -9,6 +9,7 @@ import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 import com.erl.pageflow.sales.model.vo.Storage;
+import com.erl.pageflow.writer.model.vo.Writer;
 
 public interface PopupService {
 
@@ -59,5 +60,9 @@ public interface PopupService {
 	ArrayList<BookOrder> selectBookOrderByClientName(Search search);
 
 	ArrayList<BookOrder> selectBookOrderByDate(Search search);
+
+	int selectWriterCountByName(String writerName);
+
+	ArrayList<Writer> selectWriterByName(Search search);
 
 }

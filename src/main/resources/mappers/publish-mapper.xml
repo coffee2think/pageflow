@@ -16,17 +16,6 @@
 		<result property="writerName" column="WRITER_NAME" />
 	</resultMap>
 	
-	<resultMap type="Writer" id="resultWriterJoin">
-		<result property="writerId" column="WRITER_ID" />
-		<result property="writerName" column="WRITER_NAME" />
-		<result property="phone" column="PHONE" />
-		<result property="writerBirth" column="WRITER_BIRTH" />
-		<result property="email" column="EMAIL" />
-		<result property="address" column="ADDRESS" />
-		<result property="bank" column="BANK" />
-		<result property="account" column="ACCOUNT" />
-	</resultMap>
-	
 	
 	
 	<!-- Edit 편집 resultMap -->
@@ -91,7 +80,7 @@
 		where rnum between #{ startRow } and #{ endRow } 
 	</select>
 	
-	<select id="selectContractSearch" parameterType="Paging" resultMap="resultWriterJoin">
+	<select id="selectContractSearch" parameterType="Paging" resultMap="resultWriter">
 		<![CDATA[
 			select * 
 			from (select rownum rnum, CONTR_ID, EMP_ID, WRITER_ID, 
@@ -151,6 +140,25 @@
 		order by contr_date desc
 		]]>
 	</select>
+	
+	<select id="selectContractByCountBook" parameterType="Search" resultType="_int">
+		select count(*) from contract
+		join book using (book_id)
+		where book_name like '%' || #{ keyword } || '%'
+	</select>
+		
+	<select id="selectContractByBook" parameterType="Search" resultMap="resultContract">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from contract
+			  		join book using (book_id)
+					where book_name like '%' || #{ keyword } || '%'
+					order by contr_date desc, contr_id desc, book_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>	
+		
+		
+		
 		
 	<!-- Edit 편집 -->
 	<select id="selectEditList" parameterType="Paging" resultMap="resultEdit">
@@ -176,7 +184,7 @@
 		insert into Edit 
 		values (#{ editId }, #{ depId }, #{ empId }, 
 			   (select emp_name from employee where emp_id = #{ empId }),
-		        #{ bookName }, #{ editState }, default, default)
+		        #{ bookName }, #{ editState }, default, default, (select contr_id from contract where book_name = #{ bookName }))
 	</insert>
 	
 	<select id="selectMaxEditId" resultType="_int">
@@ -298,7 +306,7 @@
 					order by writer_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow } 
 	</select>
-	
+
 	<select id="selectWriter" parameterType="_int" resultMap="resultWriter">
 		select * 
 		from writer

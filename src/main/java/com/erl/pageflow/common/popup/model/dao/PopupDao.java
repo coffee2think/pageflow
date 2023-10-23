@@ -14,6 +14,7 @@ import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 import com.erl.pageflow.sales.model.vo.Storage;
+import com.erl.pageflow.writer.model.vo.Writer;
 
 @Repository("popupDao")
 public class PopupDao {
@@ -127,6 +128,15 @@ public class PopupDao {
 	public ArrayList<BookOrder> selectBookOrderByDate(Search search) {
 		List<BookOrder> list = sqlSession.selectList("popupMapper.selectBookOrderByDate", search);
 		return (ArrayList<BookOrder>) list;
+	}
+
+	public int selectWriterCountByName(String writerName) {
+		return sqlSession.selectOne("popupMapper.selectWriterCountByName", writerName);
+	}
+
+	public ArrayList<Writer> selectWriterByName(Search search) {
+		List<Writer> list = sqlSession.selectList("popupMapper.selectWriterByName", search);
+		return (ArrayList<Writer>) list;
 	}
 	
 }

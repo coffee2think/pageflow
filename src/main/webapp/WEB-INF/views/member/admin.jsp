@@ -24,6 +24,17 @@
     	}
     }
     
+    function onUpdate(empId) {
+        // empId를 기반으로 수정 페이지의 URL을 생성합니다.
+        //var updatePageUrl = '/updatePage?id=' + empId;
+        
+        // 수정 페이지로 이동합니다.
+        if(confirm('직원수정 페이지로 이동하시겠습니까?')){
+        	  window.location.href = 'empmoveupdate.do?empId=' + empId;
+        }
+      
+    }
+    
 </script>
 
 <style>
@@ -143,6 +154,7 @@
 									<th>직급</th>
 									<th>직책</th>
 									<th>부서</th>
+									<th>수정</th>
 								
 								</tr>
 								<c:if test="${ !empty list }">
@@ -159,15 +171,12 @@
 											</td>
 											<td class="td-100"><input type="input" name="phone"
 												class="contents-input noline" value="${ emp.phone }">
-
 											</td>
 											<td class="td-100"><input type="input" name="empBirth"
 												class="contents-input noline" value="${ emp.empBirth }">
-
 											</td>
 											<td class="td-100"><input type="input" name="email"
 												class="contents-input noline" value="${ emp.email }">
-
 											</td>
 											<td class="td-100">
 												<div class="contents-input-div">
@@ -201,10 +210,12 @@
 												</div>
 											</td>
 											
+											<td class="td-100">
+												<div class="contents-input-div">
+													 <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ emp.empId }" onclick="onUpdate(${ emp.empId }); return false;">
+												</div>
 											</td>
 											
-											</td>
-
 										</tr>
 									</c:forEach>
 								</c:if>
