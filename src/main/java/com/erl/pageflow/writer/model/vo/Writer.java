@@ -117,6 +117,4 @@ public class Writer implements Serializable {
 				+ writerBirth + ", email=" + email + ", address=" + address + ", bank=" + bank + ", account=" + account
 				+ "]";
 	}
-	
-	
 }

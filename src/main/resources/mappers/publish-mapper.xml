@@ -17,7 +17,6 @@
 	</resultMap>
 	
 	
-	
 	<!-- Edit 편집 resultMap -->
 	<resultMap type="Edit" id="resultEdit">
 		<result property="editId" column="EDIT_ID" />
@@ -30,7 +29,6 @@
 		<result property="endDate" column="END_DATE" />
 		<result property="depName" column="DEP_NAME" />
 	</resultMap>
-	
 	
 	
 	<!-- Book 도서 resultMap -->
@@ -51,7 +49,6 @@
 	</resultMap>
 
 
-
 	<!-- Writer 작가 resultMap -->
 	<resultMap type="Writer" id="resultWriter">
 		<result property="writerId" column="WRITER_ID" />
@@ -63,7 +60,6 @@
 		<result property="bank" column="BANK" />
 		<result property="account" column="ACCOUNT" />
 	</resultMap>
-
 
 
 	<!-- Contract 계약 -->
@@ -96,29 +92,9 @@
 	<select id="selectContract" parameterType="_int" resultMap="resultContract">
 		select * 
 		from contract
-		left join book using(CETEGORY)
 		where contract_id = #{ contractId }
 	</select>
 	
-	<insert id="insertContract" parameterType="Contract">
-		insert into Contract
-		values (#{ contrId },#{ empId }, #{ writerId }, #{ bookName },
-				(select emp_name from employee where emp_id = #{ empId }),
-				#{ contrDate }, default, default, #{ category })
-	</insert>
-	
-	<update id="updateContract" parameterType="Contract">
-		update contract
-		set emp_id = #{ empId }, contr_state = #{ contrState }, emp_name = (select emp_name from employee where emp_id = #{ empId }),
-			contr_date = #{ contrDate }, contr_doc = #{ contrDoc }
-		where contr_id = #{ contrId }
-	</update>
-	
-	<select id="deleteContract" parameterType="_int">
-		delete from contract
-		where contr_id = #{ contrId }
-	</select>
-		
 	<select id="selectMaxContrId" resultType="_int">
 		select nvl(max(CONTR_ID), 0) from Contract
 	</select>	
@@ -140,10 +116,9 @@
 		order by contr_date desc
 		]]>
 	</select>
-	
-	<select id="selectContractByCountBook" parameterType="Search" resultType="_int">
+
+	<select id="selectContractCountByBook" parameterType="Search" resultType="_int">
 		select count(*) from contract
-		join book using (book_id)
 		where book_name like '%' || #{ keyword } || '%'
 	</select>
 		
@@ -151,15 +126,75 @@
 		select *
 		from (select rownum rnum, sub.*
 			  from (select * from contract
-			  		join book using (book_id)
 					where book_name like '%' || #{ keyword } || '%'
-					order by contr_date desc, contr_id desc, book_id desc) sub)
+					order by contr_date desc, contr_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
 	</select>	
 		
+	<select id="selectContractCountByCategory" parameterType="Search" resultType="_int">
+		select count(*) from contract
+		where category like '%' || #{ keyword } || '%'
+	</select>
 		
+	<select id="selectContractByCategory" parameterType="Search" resultMap="resultContract">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from contract
+					where category like '%' || #{ keyword } || '%'
+					order by contr_date desc, contr_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>	
+	
+	<select id="selectContractCountByWriter" parameterType="Search" resultType="_int">
+		select count(*) from contract
+		join writer using (writer_id)
+		where writer_name like '%' || #{ keyword } || '%'
+	</select>
 		
+	<select id="selectContractByWriter" parameterType="Search" resultMap="resultContract">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from contract
+			  		join writer using (writer_id)
+					where writer_name like '%' || #{ keyword } || '%'
+					order by contr_date desc, contr_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>	
+	
+	<select id="selectContractCountByEmployee" parameterType="Search" resultType="_int">
+		select count(*) from contract
+		where emp_name like '%' || #{ keyword } || '%'
+	</select>
 		
+	<select id="selectContractByEmployee" parameterType="Search" resultMap="resultContract">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from contract
+					where emp_name like '%' || #{ keyword } || '%'
+					order by contr_date desc, contr_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<insert id="insertContract" parameterType="Contract">
+		insert into Contract
+		values (#{ contrId },#{ empId }, #{ writerId }, #{ bookName },
+				(select emp_name from employee where emp_id = #{ empId }),
+				#{ contrDate }, default, default, #{ category })
+	</insert>
+	
+	<update id="updateContract" parameterType="Contract">
+		update contract
+		set emp_id = #{ empId }, contr_state = #{ contrState }, emp_name = (select emp_name from employee where emp_id = #{ empId }),
+			contr_date = #{ contrDate }, contr_doc = #{ contrDoc }
+		where contr_id = #{ contrId }
+	</update>
+	
+	<select id="deleteContract" parameterType="_int">
+		delete from contract
+		where contr_id = #{ contrId }
+	</select>
+
+
 	<!-- Edit 편집 -->
 	<select id="selectEditList" parameterType="Paging" resultMap="resultEdit">
 		select *
@@ -180,27 +215,8 @@
 		select count(*) from edit
 	</select>
 	
-	<insert id="insertEdit" parameterType="Edit">
-		insert into Edit 
-		values (#{ editId }, #{ depId }, #{ empId }, 
-			   (select emp_name from employee where emp_id = #{ empId }),
-		        #{ bookName }, #{ editState }, default, default, (select contr_id from contract where book_name = #{ bookName }))
-	</insert>
-	
 	<select id="selectMaxEditId" resultType="_int">
 		select nvl(max(EDIT_ID), 0) from Edit
-	</select>
-	
-	<update id="updateEdit" parameterType="Edit">
-		update edit
-		set emp_id = #{ empId }, emp_name = (select emp_name from employee where emp_id = #{ empId }), edit_state = #{ editState },
-			start_date = #{ startDate }, end_date = #{ endDate }
-		where edit_id = #{ editId } and dep_id = #{ depId }
-	</update>
-	
-	<select id="deleteEdit" parameterType="_int">
-		delete from edit
-		where edit_id = #{ editId }
 	</select>
 	
 	<select id="selectEditCountBySDate" parameterType="Search" resultType="_int">
@@ -237,7 +253,70 @@
 		order by edit_id desc, end_date desc
 	</select>
 	
+	<select id="selectEditCountByDepartment" parameterType="Search" resultType="_int">
+		select count(*) from edit
+		join department using (dep_id)
+		where dep_name like '%' || #{ keyword } || '%'
+	</select>
+		
+	<select id="selectEditByDepartment" parameterType="Search" resultMap="resultEdit">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from edit
+			  		join department using (dep_id)
+					where dep_name like '%' || #{ keyword } || '%'
+					order by start_date desc, edit_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>	
+		
+	<select id="selectEditCountByEmployee" parameterType="Search" resultType="_int">
+		select count(*) from edit
+		where emp_name like '%' || #{ keyword } || '%'
+	</select>
+		
+	<select id="selectEditByEmployee" parameterType="Search" resultMap="resultEdit">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from edit
+					where emp_name like '%' || #{ keyword } || '%'
+					order by start_date desc, edit_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>	
 	
+	<select id="selectEditCountByBook" parameterType="Search" resultType="_int">
+		select count(*) from edit
+		where book_name like '%' || #{ keyword } || '%'
+	</select>
+		
+	<select id="selectEditByBook" parameterType="Search" resultMap="resultEdit">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from edit
+					where book_name like '%' || #{ keyword } || '%'
+					order by start_date desc, edit_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<insert id="insertEdit" parameterType="Edit">
+		insert into Edit 
+		values (#{ editId }, #{ depId }, #{ empId }, 
+			   (select emp_name from employee where emp_id = #{ empId }),
+		        #{ bookName }, #{ editState }, default, default, (select contr_id from contract where book_name = #{ bookName }))
+	</insert>
+	
+	<update id="updateEdit" parameterType="Edit">
+		update edit
+		set emp_id = #{ empId }, emp_name = (select emp_name from employee where emp_id = #{ empId }), edit_state = #{ editState },
+			start_date = #{ startDate }, end_date = #{ endDate }
+		where edit_id = #{ editId } and dep_id = #{ depId }
+	</update>
+	
+	<select id="deleteEdit" parameterType="_int">
+		delete from edit
+		where edit_id = #{ editId } and dep_id = #{ depId }
+	</select>
+	
+
 	<!-- Book 도서 -->
 	<select id="selectBookList" parameterType="Paging" resultMap="resultBook">
 		select *
@@ -257,27 +336,9 @@
 		select count(*) from book
 	</select>
 	
-	<insert id="insertBook" parameterType="Book">
-		insert into Book 
-		values (#{ bookId }, #{ writerId }, #{ bookName }, (select writer_name from writer where writer_id = #{ writerId }), 
-		        null, null, #{ bookPrice }, #{ category }, #{ isbn },
-		        #{ bookState }, #{ engraving }, default, default)
-	</insert>
-	
-	<select id="deleteBook" parameterType="_int">
-		delete from book
-		where book_id = #{ bookId }
-	</select>
-	
 	<select id="selectMaxBookId" resultType="_int">
 		select nvl(max(BOOK_ID), 0) from Book
 	</select>	
-	
-	<update id="updateBook" parameterType="Book">
-		update book
-		set book_state = #{ bookState }, engraving = #{ engraving }, pub_date = #{ pubDate }
-		where book_id = #{ bookId }
-	</update>
 	
 	<select id="selectBookCountByDate" parameterType="Search" resultType="_int">
 		select count(*) from book
@@ -295,6 +356,66 @@
 		where rnum between #{ startRow } AND #{ endRow }
 		order by reg_date desc
 		]]>
+	</select>
+	
+	<select id="selectBookCountByBook" parameterType="Search" resultType="_int">
+		select count(*) from book
+		where book_name like '%' || #{ keyword } || '%'
+	</select>
+		
+	<select id="selectBookByBook" parameterType="Search" resultMap="resultBook">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from book
+					where book_name like '%' || #{ keyword } || '%'
+					order by reg_date desc, book_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>	
+		
+	<select id="selectBookCountByCategory" parameterType="Search" resultType="_int">
+		select count(*) from book
+		where category like '%' || #{ keyword } || '%'
+	</select>
+		
+	<select id="selectBookByCategory" parameterType="Search" resultMap="resultBook">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from book
+					where category like '%' || #{ keyword } || '%'
+					order by reg_date desc, book_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>	
+	
+	<select id="selectBookCountByWriter" parameterType="Search" resultType="_int">
+		select count(*) from book
+		where writer_name like '%' || #{ keyword } || '%'
+	</select>
+		
+	<select id="selectBookByWriter" parameterType="Search" resultMap="resultBook">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from book
+					where writer_name like '%' || #{ keyword } || '%'
+					order by reg_date desc, book_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<insert id="insertBook" parameterType="Book">
+		insert into Book 
+		values (#{ bookId }, #{ writerId }, #{ bookName }, (select writer_name from writer where writer_id = #{ writerId }), 
+		        null, null, #{ bookPrice }, #{ category }, #{ isbn },
+		        #{ bookState }, #{ engraving }, default, default)
+	</insert>
+	
+	<update id="updateBook" parameterType="Book">
+		update book
+		set book_state = #{ bookState }, engraving = #{ engraving }, pub_date = #{ pubDate }
+		where book_id = #{ bookId }
+	</update>
+	
+	<select id="deleteBook" parameterType="_int">
+		delete from book
+		where book_id = #{ bookId }
 	</select>
 	
 	
@@ -317,20 +438,29 @@
 		select count(*) from writer
 	</select>
 	
+	<select id="selectMaxWriterId" resultType="_int">
+		select nvl(max(WRITER_ID), 0) from Writer
+	</select>
+	
+	<select id="selectWriterCountByWriter" parameterType="Search" resultType="_int">
+		select count(*) from writer
+		where writer_name like '%' || #{ keyword } || '%'
+	</select>
+		
+	<select id="selectWriterByWriter" parameterType="Search" resultMap="resultWriter">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from writer
+					where writer_name like '%' || #{ keyword } || '%'
+					order by writer_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+		
 	<insert id="insertWriter" parameterType="Writer">
 		insert into Writer 
 		values (#{ writerId }, #{ writerName }, #{ phone }, #{ writerBirth }, 
 		        #{ email }, #{ address }, #{ bank }, #{ account })
 	</insert>
-	
-	<select id="deleteWriter" parameterType="_int">
-		delete from writer
-		where writer_id = #{ writerId }
-	</select>
-	
-	<select id="selectMaxWriterId" resultType="_int">
-		select nvl(max(WRITER_ID), 0) from Writer
-	</select>
 	
 	<update id="updateWriter" parameterType="Writer">
 		update writer
@@ -338,4 +468,9 @@
 			address = #{ address }, bank = #{ bank }, account = #{ account }
 		where writer_id = #{ writerId }
 	</update>
+	
+	<select id="deleteWriter" parameterType="_int">
+		delete from writer
+		where writer_id = #{ writerId }
+	</select>
 </mapper>

@@ -3,7 +3,6 @@ package com.erl.pageflow.writer.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,9 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
-import com.erl.pageflow.edit.model.vo.Edit;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.writer.model.service.WriterService;
 import com.erl.pageflow.writer.model.vo.Writer;
 
@@ -112,7 +110,6 @@ public class WriterController {
 				return "common/error";
 			}
 		}
-		
 		return "redirect:wtlist.do";
 	}
 	
@@ -135,7 +132,7 @@ public class WriterController {
 		out.flush(); 
 	}
 	
-	// 도서 정보 삭제 요청 처리
+	// 작가 정보 삭제 요청 처리
 	@RequestMapping(value="wtdelete.do", method=RequestMethod.POST)
 	public String writerDeleteMethod(@RequestParam("IDs") int[] writerIDs, Model model) {
 		logger.info("wtdelete.do : " + writerIDs);
@@ -146,7 +143,59 @@ public class WriterController {
 				return "common/error";
 			}
 		}
-		
 		return "redirect:wtlist.do";
+	}
+	
+	// 키워드로 작가현황 검색
+	@RequestMapping(value="wtlistkwd.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String writerListByKeyword(Search search,
+			@RequestParam(name="searchType") String searchType,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+		
+		logger.info("wtlistkwd.do : searchType=" + searchType);
+		logger.info("wtlistkwd.do : " + search);
+		logger.info("wtlistkwd.do : page=" + page + ", limit=" + limitStr);
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		int listCount = 0;
+		
+		switch(searchType) {
+		case "writer":
+			listCount = writerService.selectWriterCountByWriter(search);
+			break;
+		}
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "wtlistkwd.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<Writer> list = null;
+		
+		switch(searchType) {
+		case "writer":
+			list = writerService.selectWriterByWriter(search);
+			break;
+		}
+		
+		if(list != null && list.size() > 0) {
+			
+			model.addAttribute("writerList", list);
+			model.addAttribute("searchType", searchType);
+			model.addAttribute("keyword", search.getKeyword());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "publish/writer_list";
+		} else {
+			model.addAttribute("message", "작가현황 " + search.getKeyword() + " 검색 실패");
+			return "common/error";
+		}
 	}
 }

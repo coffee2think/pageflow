@@ -36,21 +36,6 @@ public class BookServiceImpl implements BookService {
 	}
 	
 	@Override
-	public int insertBook(Book book) {
-		return bookDao.insertBook(book);
-	}
-	
-	@Override
-	public int updateBook(Book book) {
-		return bookDao.updateBook(book);
-	}
-	
-	@Override
-	public int deleteBook(int bookId) {
-		return bookDao.deleteBook(bookId);
-	}
-	
-	@Override
 	public int selectMaxBookId() {
 		return bookDao.selectMaxBookId();
 	}
@@ -63,5 +48,50 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public int selectBookCountByDate(Search search) {
 		return bookDao.selectBookCountByDate(search);
+	}
+
+	@Override
+	public int selectBookCountByBook(Search search) {
+		return bookDao.selectBookCountByBook(search);
+	}
+
+	@Override
+	public ArrayList<Book> selectBookByBook(Search search) {
+		return bookDao.selectBookByBook(search);
+	}
+
+	@Override
+	public int selectBookCountByCategory(Search search) {
+		return bookDao.selectBookCountByCategory(search);
+	}
+
+	@Override
+	public ArrayList<Book> selectBookByCategory(Search search) {
+		return bookDao.selectBookByCategory(search);
+	}
+
+	@Override
+	public int selectBookCountByWriter(Search search) {
+		return bookDao.selectBookCountByWriter(search);
+	}
+
+	@Override
+	public ArrayList<Book> selectBookByWriter(Search search) {
+		return bookDao.selectBookByWriter(search);
+	}
+	
+	@Override
+	public int insertBook(Book book) {
+		return bookDao.insertBook(book);
+	}
+	
+	@Override
+	public int updateBook(Book book) {
+		return bookDao.updateBook(book);
+	}
+	
+	@Override
+	public int deleteBook(int bookId) {
+		return bookDao.deleteBook(bookId);
 	}
 }
