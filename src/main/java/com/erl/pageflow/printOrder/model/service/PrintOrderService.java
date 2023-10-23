@@ -20,7 +20,7 @@ public interface PrintOrderService {
 	
 	public ArrayList<PrintOrder> selectPrintOrderList(Paging paging);
 	
-	public int updatePrintOrder(PrintOrder clientId);
+	public int updatePrintOrder(PrintOrder PrintOrder);
 	
 	public int selectMaxPrintOrderId();
 	

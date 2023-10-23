@@ -76,7 +76,7 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">거래처코드</option>
+                                            <option value="">정산코드</option>
                                             <option value="">인쇄소명</option>
                                             <option value="">도서코드</option>
                                             <option value="">도서명</option>
@@ -133,12 +133,12 @@
 								<fmt:formatDate var="monthago" value="${ monthago_ }" 
 									pattern="yyyy-MM-dd" />
 									
-								<c:url var="searchWeekUrl" value="polistdate.do">
+								<c:url var="searchWeekUrl" value="pclistdate.do">
 									<c:param name="begin" value="${ weekago }" />
 									<c:param name="end" value="${ today }" />
 								</c:url>
 								
-								<c:url var="searchMonthUrl" value="polistdate.do">
+								<c:url var="searchMonthUrl" value="pclistdate.do">
 									<c:param name="begin" value="${ monthago }" />
 									<c:param name="end" value="${ today }" />
 								</c:url>

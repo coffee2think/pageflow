@@ -303,6 +303,8 @@ public class PrintOrderController {
 			returnStr = "fail";
 		}
 		
+		logger.info("returnStr : " + returnStr);
+		
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
 		
