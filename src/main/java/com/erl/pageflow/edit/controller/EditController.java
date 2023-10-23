@@ -182,7 +182,6 @@ public class EditController {
 			model.addAttribute("message", "날짜 검색 실패");
 			return "common/error";
 		}
-
 	}
 	
 	// 편집 마감날짜 조회
@@ -220,6 +219,6 @@ public class EditController {
 			model.addAttribute("message", "날짜 검색 실패");
 			return "common/error";
 		}
-
 	}
+	
 }

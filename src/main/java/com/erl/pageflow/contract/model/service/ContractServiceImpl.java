@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.contract.model.dao.ContractDao;
 import com.erl.pageflow.contract.model.vo.Contract;
+import com.erl.pageflow.edit.model.vo.Edit;
 
 @Service("contractService")
 public class ContractServiceImpl implements ContractService {
@@ -52,5 +54,15 @@ public class ContractServiceImpl implements ContractService {
 	@Override
 	public int selectMaxContrId() {
 		return contractDao.selectMaxContrId();
+	}
+	
+	@Override
+	public ArrayList<Contract> selectContractByDate(Search search) {
+		return contractDao.selectContractByDate(search);
+	}
+	
+	@Override
+	public int selectContractCountByDate(Search search) {
+		return contractDao.selectContractCountByDate(search);
 	}
 }

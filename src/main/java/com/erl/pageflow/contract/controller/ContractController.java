@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.contract.model.service.ContractService;
 import com.erl.pageflow.contract.model.vo.Contract;
+import com.erl.pageflow.edit.model.vo.Edit;
 
 @Controller
 public class ContractController {
@@ -111,4 +113,57 @@ public class ContractController {
 		return "redirect:edlist.do";
 	}
 	
+	// 편집 날짜 조회
+	@RequestMapping("ctrlistdate.do")
+	public String selectContractByDate(Search search,
+			@RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String limitStr, 
+			Model model) {
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+
+		int listCount = contractService.selectContractCountByDate(search);
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "ctrlistdate.do");
+		
+		paging.calculator();
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+
+		ArrayList<Contract> list = contractService.selectContractByDate(search);
+		logger.info("search : " + search);
+		
+		if (list != null && list.size() > 0) {
+
+			model.addAttribute("contractList", list);
+			model.addAttribute("begin", search.getBegin().toString());
+			model.addAttribute("end", search.getEnd().toString());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+
+			return "publish/contr_list";
+		} else {
+			model.addAttribute("message", "날짜 검색 실패");
+			return "common/error";
+		}
+	}
+	
+	// 계약 정보 삭제 요청 처리
+	@RequestMapping(value="ctrdelete.do", method=RequestMethod.POST)
+	public String contractDeleteMethod(@RequestParam("IDs") int[] contrIDs, Model model) {
+		logger.info("ctrdelete.do : " + contrIDs);
+		
+		if(contrIDs != null) {
+			for(int contrId : contrIDs) {
+				if(contractService.deleteContract(contrId) == 0) {
+					model.addAttribute("message", contrId + "번 계약 삭제 실패!");
+					return "common/error";
+				}
+			}
+		}
+		
+		return "redirect:ctrlist.do";
+	}
 }

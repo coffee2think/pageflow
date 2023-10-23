@@ -134,6 +134,23 @@
 		select nvl(max(CONTR_ID), 0) from Contract
 	</select>	
 		
+	<select id="selectContractCountByDate" parameterType="Search" resultType="_int">
+		select count(*) from contract
+		where contr_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+	</select>
+	
+	<select id="selectContractByDate" parameterType="Search" resultMap="resultContract">
+		<![CDATA[
+		select *
+		from (select rownum rnum, contr_id, emp_id, writer_id, book_name, emp_name,
+					 contr_date, contr_doc, contr_state, category
+		      from (select *
+                    from contract
+                    where contr_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)))
+		where rnum between #{ startRow } AND #{ endRow }
+		order by contr_date desc
+		]]>
+	</select>
 		
 	<!-- Edit 편집 -->
 	<select id="selectEditList" parameterType="Paging" resultMap="resultEdit">
@@ -297,6 +314,11 @@
 		values (#{ writerId }, #{ writerName }, #{ phone }, #{ writerBirth }, 
 		        #{ email }, #{ address }, #{ bank }, #{ account })
 	</insert>
+	
+	<select id="deleteWriter" parameterType="_int">
+		delete from writer
+		where writer_id = #{ writerId }
+	</select>
 	
 	<select id="selectMaxWriterId" resultType="_int">
 		select nvl(max(WRITER_ID), 0) from Writer

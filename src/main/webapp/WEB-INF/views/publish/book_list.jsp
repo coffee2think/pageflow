@@ -269,7 +269,7 @@
 
                 
                 <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제">
+                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('eddelete.do'); return false;">
                 </div>
                 
             </div>

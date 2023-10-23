@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.contract.model.vo.Contract;
+import com.erl.pageflow.edit.model.vo.Edit;
 
 @Repository("contractDao")
 public class ContractDao {
@@ -56,5 +58,16 @@ public class ContractDao {
 	// 계약 등록 계약번호 +1 처리
 	public int selectMaxContrId() {
 		return sqlSessionTemplate.selectOne("publishMapper.selectMaxContrId");
+	}
+	
+	// 계약 날짜 검색
+	public ArrayList<Contract> selectContractByDate(Search search) {
+		List<Contract> list = sqlSessionTemplate.selectList("publishMapper.selectContractByDate", search);
+		return (ArrayList<Contract>) list;
+	}
+	
+	// 계약 날짜 검색 개수
+	public int selectContractCountByDate(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectContractCountByDate", search);
 	}
 }
