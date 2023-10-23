@@ -9,12 +9,12 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script src="${ pageContext.servletContext.contextPath }/resources/js/lib/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const NOWPAGE = 5;
     const SUBPAGE = 4;
     const LNKPAGE = 1;
-
+    
     var monthly_sum = Array.from({length: 12}, () => 0);
 
     $(function() {
@@ -52,7 +52,7 @@
         makeChart();
 
         // 매출년도 콤보박스 변경 시 요청 전송
-        $('sel_year').change(function() {
+        $('#sel_year').change(function() {
             location.href = 'statslist.do?year=' + $('#sel_year').val();
         });
     }); // document ready
@@ -90,7 +90,15 @@
         });
     }
     
+    import Chart from chart.js/auto
+    
     function showChart() {
+    	if (Chart.getChart(lineChart)) {
+			Chart.getChart(lineChart)?.destroy();
+		}
+    	
+    	makeChart();
+    	
     	$('#chart').show();
     	$('#table_list').hide();
     	$('#btn_chart').hide();
@@ -103,11 +111,28 @@
     	$('#btn_chart').show();
     	$('#btn_table').hide();
     }
-
-    function searchStatsByDate() {
-        var year = $('#sel_code');
-        
-    }
+    
+    // 차트 그리기 영역
+    const ctx = document.getElementById('myChart');
+	
+	new Chart(ctx, {
+		type: 'bar',
+		data: {
+			labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+			datasets: [{
+				label: '# of Votes',
+				data: [12, 19, 3, 5, 2, 3],
+				borderWidth: 1
+			}]
+		},
+		options: {
+			scales: {
+				y: {
+					beginAtZero: true
+				}
+			}
+		}
+	});
 </script>
 <title></title>
 </head>
@@ -180,9 +205,10 @@
                                 <div class="select-pan">
                                     <label for="sel_code"></label>
                                     <select name="year" id="sel_year">
-                                        <option value="">매출년도</option>
+                                        <c:set var="thisYear" value="" />
+                                        <option value="${ years }">매출년도</option>
                                         <c:forEach items="${ years }" var="y">
-	                                        <option value="${ y }">${ y }년</option>
+	                                        <option value="${ y }" <c:if test="${ y == year }">selected</c:if>>${ y }년</option>
                                         </c:forEach>
                                     </select>
                                 </div>
@@ -396,6 +422,13 @@
                                     make_graph.init('graph', 'myGraph');
                                 </script>
                             </div>
+							<div>
+								<canvas id="myChart"></canvas>
+							</div>
+							
+							<script>
+							  
+							</script>
                             <!-- 차트 그리기 영역 end -->
 
                         </div>
