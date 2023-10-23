@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
@@ -47,10 +46,11 @@ public class RefundController {
 	// 값------------------------------------------------------------------------------------------------------------------
 	// 반품현황 뷰
 	@RequestMapping("refundlist.do")
-	public String moveRefundList(Model model) {
+	public String moveRefundList(Model model, @RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String limitStr) {
 
-		int currentPage = 1;
-		int limit = 10;
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 
 		int listCount = refundService.selectGetListCount();
 
@@ -124,19 +124,18 @@ public class RefundController {
 		JSONParser jparser = new JSONParser();
 		JSONArray jarr = (JSONArray) jparser.parse(param);
 		String[] jst = null;
-		System.out.println(jarr);
+
 		int count = 0;
 
 		JSONObject job = (JSONObject) jarr.get(0);
 		JSONArray scbkeyArray = (JSONArray) job.get("scbkey");
-		System.out.println("job : " + job);
-		System.out.println("scbkeyArray : " + scbkeyArray);
+
 		for (int j = 0; j < scbkeyArray.size(); j++) {
 			String scbkey = (String) scbkeyArray.get(j);
 			int scbkeyInt = Integer.parseInt(scbkey);
-			System.out.println("scbkeyInt : " + scbkeyInt);
-			if (refundService.deleteInventory(scbkeyInt) >= 0) {
-				if (refundService.deleteRefund(scbkeyInt) >= 0) {
+
+			if (refundService.deleteInventory(scbkeyInt) > 0) {
+				if (refundService.deleteRefund(scbkeyInt) > 0) {
 					System.out.println("출고 삭제 : " + scbkeyInt);
 					count++;
 				}
@@ -150,9 +149,7 @@ public class RefundController {
 
 		PrintWriter out = response.getWriter();
 		out.append(str);
-		// 출력값은 버퍼에서 처리하니까 밀어내는 작업!
 		out.flush();
-
 		out.close();
 	}
 
@@ -233,58 +230,73 @@ public class RefundController {
 		String[] bookNames = request.getParameterValues("bookName");
 		String[] empIds = request.getParameterValues("empId");
 		String[] empNames = request.getParameterValues("empName");
-		String[] clientNames = request.getParameterValues("clientName");
 		String[] clientIds = request.getParameterValues("clientId");
-		String[] storageIds = request.getParameterValues("storageId");
-		String[] refundStates = request.getParameterValues("refundState");
-		String[] refundDates = request.getParameterValues("refundDate");
+		String[] clientNames = request.getParameterValues("clientName");
 		String[] refundNums = request.getParameterValues("refundNum");
+		String[] refundDates = request.getParameterValues("refundDate");
 		String[] refundAmounts = request.getParameterValues("refundAmount");
-		String[] bookPrices = request.getParameterValues("bookPrice");
+		String[] refundStates = request.getParameterValues("refundState");
 		String[] remarks = request.getParameterValues("remark");
 
 		int refundId = refundService.selectMaxRefundId() + 1;
-
+		logger.info("clientIds : " + clientIds);
 		ArrayList<Refund> refundList = new ArrayList<>();
 
 		for (int i = 0; i < bookIds.length; i++) {
 			Refund refund = new Refund();
-			
+
 			refund.setRefundId(refundId);
-			refund.setBookName(bookNames[i]);
 			refund.setBookId(Integer.parseInt(bookIds[i]));
-			refund.setStorageId(Integer.parseInt(storageIds[i]));
 			refund.setClientId(Integer.parseInt(clientIds[i]));
-			refund.setClientName(clientNames[i]);
-			refund.setRefundState(refundStates[i]);
-			refund.setRefundDate(Date.valueOf(refundDates[i]));
-			refund.setRefundNum(Integer.parseInt(refundNums[i]));
-			refund.setRefundAmount(Integer.parseInt(refundAmounts[i]));
-			refund.setBookPrice(Integer.parseInt(bookPrices[i]));
-			refund.setRemark(remarks[i]);
 			refund.setEmpId(Integer.parseInt(empIds[i]));
 			refund.setEmpName(empNames[i]);
-			logger.info("refundId : " + refundId);
-			refundList.add(refund);
+			refund.setRefundNum(Integer.parseInt(refundNums[i]));
+			refund.setRefundDate(Date.valueOf(refundDates[i]));
+			refund.setRefundAmount(Integer.parseInt(refundAmounts[i]));
+			refund.setRefundState(refundStates[i]);
+			refund.setRemark(remarks[i]);
+			refund.setBookName(bookNames[i]);
+			refund.setClientName(clientNames[i]);
+
+			logger.info("clientId : " + refund);
 			
+			refundList.add(refund);
 		}
-		logger.info("refundList : " + refundList);
+
 		for (Refund refund : refundList) {
-			if (refundService.insertRefund(refund) > 0 && refundService.insertInventory(refund) > 0) {
-				logger.info("refund : " + refund);
-				
-				int preinvenId = refundService.selectPreInvenId();
-				refund.setPrevInvenId(preinvenId);
+			if (refundService.insertRefund(refund) > 0) {
 
-				int currInven = refundService.selectCurrInven();
-				refund.setCurrInven(currInven);
+			} else {
+				model.addAttribute("message", "반품등록 실패! " + refund);
+				return "common/error";
+			}
+		}
+		ArrayList<Inventory> temp = new ArrayList<Inventory>();
 
-				return "redirect:refundlist.do";
+		for (Refund refund : refundList) {
+			Inventory inventory = new Inventory();
+			inventory.setBookId(refund.getBookId());
+			inventory.setBookName(refund.getBookName());
+			inventory.setClientId(refund.getClientId());
+			inventory.setRefundId(refundId);
+			inventory.setIncrease(refund.getRefundNum());
+			inventory.setInvenDate(refund.getRefundDate());
+			inventory.setRemark(refund.getRemark());
+			inventory.setClientName(refund.getClientName());
+			
+			// 이전재고, 현재고
+
+			temp.add(inventory);
+
+			if (refundService.insertRefund(refund) > 0) {
+
+			} else {
+				model.addAttribute("message", "재고 등록 실패!!");
+				return "common/error";
 			}
 
 		}
-		model.addAttribute("message", "반품등록 실패!");
-		return "common/error";
+		return "redirect:refundlist.do";
+	
 	}
-
 }

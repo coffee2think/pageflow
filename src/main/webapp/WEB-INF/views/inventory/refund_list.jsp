@@ -24,38 +24,7 @@
     const LNKPAGE = 1;
 </script>
 <title></title>
-<script type="text/javascript">
-	/* $(document).ready(function(){
-		$('#btn_delete').click(function(){
-			const selectedCheckbokes = $('input[name="selectedItems"]:checked');
-			const selectedRefundIds = [];
-			
-			selectedCheckbokes.each(function(){
-				selectedRefundIds.push($(this).val());
-			});
-			
-			if(selectedRefundIds.length === 0){
-				alert('선택된 항목이 없습니다.');
-			}else{
-				$.ajax({
-					type:'post',
-					url:'redelect.do',
-					dataType: "json",
-					data: { selectedRefundIds: selectedRefundIds.join(',') },
-					success: function(response){
-						alert('선택한 반품내역이 삭제되었습니다.');
-						location.reload();
-					},
-					error: function(){
-						alert('삭제 실패! 관리자에게 문의 하세요');
-					}
-				});
-			}
-			
-		});
-	});
-	 */
-	 
+<script type="text/javascript"> 
 	 $(document).ready(function(){
 		 $('#btn_delete').click(function() {
 				var jarr = new Array();

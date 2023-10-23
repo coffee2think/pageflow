@@ -301,7 +301,7 @@
 											<c:if test="${ inv.classify eq '출고' }">
 												<td class="td-100">
 													<div class="contents-input-div">
-														<input type="input" name="increase" class="contents-input noline" value="-${ inv.increase }">
+														<input type="input" name="increase" class="contents-input noline" value="${ inv.increase }">
 													</div>
 												</td>
 											</c:if>
@@ -376,7 +376,7 @@
 					</div>
 					<!--내용 end-->
 	 				<div class="submit-box">
-	                    <button class="contents-input-btn big noline" id="btn_delete">선택삭제</button> 
+	                    <button class="contents-input-btn big noline" id="btn_delete">선택삭제</button>
 	                </div>
 				</div>
 				<!--main-container end-->
