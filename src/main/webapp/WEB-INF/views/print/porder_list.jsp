@@ -11,7 +11,7 @@
 	content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/print_func.js"></script>
 <script type="text/javascript">
     const NOWPAGE = 2;
     const SUBPAGE = 1;
@@ -32,6 +32,20 @@
     
  
 </script>
+
+
+<script>
+	//수량/단가 변경시 총액 자동계산
+    function calculateAmount() {
+      var quantity = document.getElementsByName('quantity')[0].value;
+      var price = document.getElementsByName('price')[0].value;
+      var amount = quantity * price;
+      if (!isNaN(amount)) {
+        document.getElementsByName('amount')[0].value = amount;
+      }
+    }
+ </script>
+
 <script type="text/javascript">
 
 	//검색 키워드1
@@ -53,37 +67,6 @@
 </script>
 <title></title>
 <script type="text/javascript">
-	//발주 삭제	
-	$(document).ready(function(){
-		$('#btn_delete').click(function(){
-			var jarr = new Array();
-			var scb = $('.selectcheckbox:checked');
-			var scbValues = scb.map(function(){
-				return $(this).val();
-			}).get();
-			
-			var job = { scbkey : scbValues };
-			jarr.push(job);
-			
-			console.log("jarr : " + JSON.stringify(jarr));
-			if(scbValues.length === 0){
-				alert('선택된 항목이 없습니다.');
-			} else{
-				$.ajax({
-					url: 'podelete.do',
-					type: 'post',
-					data: JSON.stringify(jarr),
-					contentType: 'application/json; charset=utf-8',
-					success: function(){
-						alert('선택된 발주내역이 삭제되었습니다.');
-					},
-					error: function() {
-	                    alert('삭제 실패! 관리자에게 문의하세요.');
-	                }
-				});
-			}
-		});	
-	});
 	
 	//날짜 검색 버튼
 	function searchByDate() {
@@ -323,41 +306,41 @@
 								</tr>
 								<c:if test="${ !empty list }">
 									<c:forEach items="${ list }" var="printOrder">
-										<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ printOrder.clientId }">
-											<td class="td-50">
+										<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ printOrder.orderId }">
+											<td class="td-30">
 												<input type="checkbox" class="selectcheckbox" name="selectcheckbox" value="${ printOrder.orderId }">
 											</td>
-											<td class="td-100">
+											<td class="td-50">
 												<div class="contents-input-div">
 													<input type="text" name="orderId" class="contents-input noline" value="${ printOrder.orderId }" readonly>
 												</div>
 											</td>
-											<td class="td-100">
+											<td class="td-70">
 												<div class="contents-input-div">
 													<input type="text" name="clientId" class="contents-input noline" value="${ printOrder.clientId }" readonly>
 												</div>
 											</td>
-											<td class="td-120">
+											<td class="td-100">
 												<div class="contents-input-div">
 													<input type="text" name="clientName"  class="contents-input noline" value="${ printOrder.clientName }" readonly>
 												</div>
 											</td>
 											<td class="td-100">
 												<div class="contents-input-div">
-													<input type="text" name="orderDate" class="contents-input noline changeable" value="${ printOrder.orderDate }" readonly>
+													<input type="date" name="orderDate" class="contents-input noline changeable" value="${ printOrder.orderDate }" readonly>
 												</div>
 											</td>
 											<td class="td-100">
 												<div class="contents-input-div">
-													<input type="text" name="endDate" class="contents-input noline changeable" value="${ printOrder.endDate }" readonly>
+													<input type="date" name="endDate" class="contents-input noline changeable" value="${ printOrder.endDate }" readonly>
 												</div>
 											</td>
 											<td class="td-100">
 												<div class="contents-input-div">
-													<input type="text" name="pubDate" class="contents-input noline changeable" value="${ printOrder.pubDate }" readonly>
+													<input type="date" name="pubDate" class="contents-input noline changeable" value="${ printOrder.pubDate }" readonly>
 												</div>
 											</td>
-											<td class="td-70">
+											<td class="td-50">
 												<div class="contents-input-div">
 													<input type="text" name="bookId" class="contents-input noline" value="${ printOrder.bookId }" readonly>
 												</div>
@@ -367,22 +350,22 @@
 													<input type="text" name="bookName" class="contents-input noline" value="${ printOrder.bookName }" readonly>
 												</div>
 											</td>
-											<td class="td-50">
+											<td class="td-30">
 												<div class="contents-input-div">
 													<input type="text" name="unit" class="contents-input noline" value="${ printOrder.unit }" readonly>
 												</div>
 											</td>
-											<td class="td-70">
+											<td class="td-60">
 												<div class="contents-input-div">
-													<input type="text" name="quantity" class="contents-input noline changeable" value="${ printOrder.quantity }" readonly>
+													<input type="text" name="quantity" class="contents-input noline changeable" oninput="calculateAmount()" value="${ printOrder.quantity }" readonly>
 												</div>
 											</td>
-											<td class="td-100">
+											<td class="td-50">
 												<div class="contents-input-div">
-													<input type="text" name="price" class="contents-input noline changeable" value="${ printOrder.price }" readonly>
+													<input type="text" name="price" class="contents-input noline changeable" oninput="calculateAmount()" value="${ printOrder.price }" readonly>
 												</div>
 											</td>
-											<td class="td-120">
+											<td class="td-80">
 												<div class="contents-input-div">
 													<input type="text" name="amount" class="contents-input noline" value="${ printOrder.amount }" readonly>
 												</div>
@@ -392,7 +375,7 @@
 													<input type="text" name="state" class="contents-input noline changeable" value="${ printOrder.state }" readonly>
 												</div>
 											</td>
-											<td class="td-70">
+											<td class="td-50">
 												<input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ printOrder.orderId }" onclick="onUpdate(${ printOrder.orderId }); return false;">
 												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ printOrder.orderId }" onclick="submitUpdate(${ printOrder.orderId }, 'poupdate.do'); return false;" style="display: none;">
 												<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ printOrder.orderId }" onclick="cancelUpdate(${ printOrder.orderId }); return false;" style="display: none;">
@@ -410,8 +393,8 @@
 
 
 				<div class="submit-box">
-					<button type="button" class="contents-input-btn big noline" id="btn_delete">선택삭제</button> 
-				</div>
+                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('podelete.do'); return false;">
+                </div>
 
 			</div>
 			<!--main-container end-->
