@@ -7,8 +7,8 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.writer.model.vo.Writer;
 
 @Repository("writerDao")
@@ -37,6 +37,22 @@ public class WriterDao {
 	public Writer selectWriter(int writerId) {
 		return sqlSessionTemplate.selectOne("publishMapper.selectWriter", writerId);
 	}
+
+	// 작가 등록 작가번호 +1 처리
+	public int selectMaxWriterId() {
+		return sqlSessionTemplate.selectOne("publishMapper.selectMaxWriterId");
+	}
+	
+	// 작가 키워드 검색 개수 (작가명)
+	public int selectWriterCountByWriter(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectWriterCountByWriter", search);
+	}
+	
+	// 작가 키워드 검색 (작가명)
+	public ArrayList<Writer> selectWriterByWriter(Search search) {
+		List<Writer> list = sqlSessionTemplate.selectList("publishMapper.selectWriterByWriter", search);
+		return (ArrayList<Writer>) list;
+	}
 	
 	// 작가 등록
 	public int insertWriter(Writer writer) {
@@ -51,10 +67,5 @@ public class WriterDao {
 	// 작가 삭제
 	public int deleteWriter(int writerId) {
 		return sqlSessionTemplate.delete("publishMapper.deleteWriter", writerId);
-	}
-	
-	// 작가 등록 작가번호 +1 처리
-	public int selectMaxWriterId() {
-		return sqlSessionTemplate.selectOne("publishMapper.selectMaxWriterId");
 	}
 }

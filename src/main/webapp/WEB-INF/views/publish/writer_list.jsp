@@ -68,33 +68,19 @@
                                 <div class="select-box">
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
-                                            <option value="">작가명</option>
-                                            <option value="">연락처</option>
-                                            <option value="">이메일</option>
+                                        <select name="code" id="search_type">
+                                            <option value="writer" <c:if test="${ searchType == 'writer' }">selected</c:if>>작가명</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="search-box">
-                                    <button class="search-btn">
+                                   <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
+                                    <button class="search-btn" onclick="searchKeyword('wtlistkwd.do'); return false;">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                                 </div>
                             </div>
-
- <!--                            <div class="select-box">
-                                <div class="select-pan-nemo">
-                                    계약일자
-                                </div>
-
-                                <input type="date" class="select-date select-date-first">
-                                <input type="date" class="select-date select-date-second">
-
-                                <input type="button" name="week" class="select-pan-btn" value="일주일">
-                                <input type="button" name="month" class="select-pan-btn" value="한달">
-                            </div> -->
 
                         </form>
 
@@ -174,9 +160,9 @@
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ writer.writerId }" onclick="onUpdate(${ writer.writerId }); return false;">
-		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ writer.writerId }" onclick="submitUpdate(${ writer.writerId }, 'wtupdate.do'); return false;" style="display: none;">
-		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ writer.writerId }" onclick="cancelUpdate(${ writer.writerId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline update-btn" value="수정" id="updateBtn_${ writer.writerId }" onclick="onUpdate(this); return false;">
+		                                        <input type="button" class="contents-input-btn noline complete-btn" value="완료" id="completeBtn_${ writer.writerId }" onclick="submitUpdate(this, 'wtupdate.do'); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline cancel-btn" value="취소" id="cancelBtn_${ writer.writerId }" onclick="cancelUpdate(this); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
 									</c:forEach>

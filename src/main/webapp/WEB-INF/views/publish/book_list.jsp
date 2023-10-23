@@ -81,19 +81,19 @@
                                 <div class="select-box">
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
-                                            <option value="">도서명</option>
-                                            <option value="">카테고리</option>
-                                            <option value="">작가명</option>
+                                        <select name="code" id="search_type">
+                                            <option value="book" <c:if test="${ searchType == 'book' }">selected</c:if>>도서명</option>
+                                            <option value="category" <c:if test="${ searchType == 'category' }">selected</c:if>>카테고리</option>
+                                            <option value="writer" <c:if test="${ searchType == 'writer' }">selected</c:if>>작가명</option>
                                         </select>
                                     </div>
                                 </div>
 								
                                 <div class="search-box">
-                                    <button class="search-btn">
+                                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
+                                    <button class="search-btn" onclick="searchKeyword('bklistkwd.do'); return false;">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                                 </div>
                             </div>
 
@@ -105,16 +105,6 @@
                                         <option value="">정상</option>
                                         <option value="">품절</option>
                                         <option value="">절판</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
-                                        <option value="all">판쇄</option>
-                                        <option value="">초판</option>
-                                        <option value="">1쇄</option>
-                                        <option value="">2쇄</option>
                                     </select>
                                 </div>
                             </div>
@@ -251,9 +241,9 @@
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ book.bookId }" onclick="onUpdate(${ book.bookId }); return false;">
-		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ book.bookId }" onclick="submitUpdate(${ book.bookId }, 'bkupdate.do'); return false;" style="display: none;">
-		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ book.bookId }" onclick="cancelUpdate(${ book.bookId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline update-btn" value="수정" id="updateBtn_${ book.bookId }" onclick="onUpdate(this); return false;">
+		                                        <input type="button" class="contents-input-btn noline complete-btn" value="완료" id="completeBtn_${ book.bookId }" onclick="submitUpdate(this, 'bkupdate.do'); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline cancel-btn" value="취소" id="cancelBtn_${ book.bookId }" onclick="cancelUpdate(this); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
 		                            </c:forEach>
@@ -266,7 +256,7 @@
 
                 </div>
                 <!--내용 end-->
-
+                
                 
                 <div class="submit-box">
                     <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('bkdelete.do'); return false;">
@@ -274,7 +264,6 @@
                 
             </div>
             <!--main-container end-->
-
 
             <!--modal-pop-area-->
             <div class="modal-pop-area">

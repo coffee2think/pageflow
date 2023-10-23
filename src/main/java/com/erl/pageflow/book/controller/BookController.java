@@ -2,9 +2,7 @@ package com.erl.pageflow.book.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,16 +15,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.erl.pageflow.board.model.vo.Board;
 import com.erl.pageflow.book.model.service.BookService;
 import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
-import com.erl.pageflow.contract.model.vo.Contract;
-import com.erl.pageflow.inventory.model.vo.Inventory;
-import com.erl.pageflow.sales.model.vo.BookOrder;
 
 @Controller
 public class BookController {
@@ -41,8 +34,6 @@ public class BookController {
 	@RequestMapping("movebkinsert.do")
 	public String moveBookInsertPage() {
 		return "publish/book_input";
-		
-		
 	}
 	
 
@@ -119,7 +110,6 @@ public class BookController {
 				return "common/error";
 			}
 		}
-		
 		return "redirect:bklist.do";
 	}
 	
@@ -134,7 +124,6 @@ public class BookController {
 				return "common/error";
 			}
 		}
-		
 		return "redirect:bklist.do";
 	}
 	
@@ -193,6 +182,70 @@ public class BookController {
 			model.addAttribute("message", "날짜 검색 실패");
 			return "common/error";
 		}
-
+	}
+	
+	// 키워드로 도서현황 검색
+	@RequestMapping(value="bklistkwd.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String bookListByKeyword(Search search,
+			@RequestParam(name="searchType") String searchType,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+		
+		logger.info("bklistkwd.do : searchType=" + searchType);
+		logger.info("bklistkwd.do : " + search);
+		logger.info("bklistkwd.do : page=" + page + ", limit=" + limitStr);
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		int listCount = 0;
+		
+		switch(searchType) {
+		case "book":
+			listCount = bookService.selectBookCountByBook(search);
+			break;
+		case "category":
+			listCount = bookService.selectBookCountByCategory(search);
+			break;
+		case "writer":
+			listCount = bookService.selectBookCountByWriter(search);
+			break;
+		}
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "bklistkwd.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<Book> list = null;
+		
+		switch(searchType) {
+		case "book":
+			list = bookService.selectBookByBook(search);
+			break;
+		case "category":
+			list = bookService.selectBookByCategory(search);
+			break;
+		case "writer":
+			list = bookService.selectBookByWriter(search);
+			break;
+		}
+		
+		if(list != null && list.size() > 0) {
+			
+			model.addAttribute("bookList", list);
+			model.addAttribute("searchType", searchType);
+			model.addAttribute("keyword", search.getKeyword());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "publish/book_list";
+		} else {
+			model.addAttribute("message", "도서현황 " + search.getKeyword() + " 검색 실패");
+			return "common/error";
+		}
 	}
 }

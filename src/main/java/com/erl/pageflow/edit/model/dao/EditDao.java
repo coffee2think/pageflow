@@ -3,7 +3,6 @@ package com.erl.pageflow.edit.model.dao;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -39,22 +38,7 @@ public class EditDao {
 	public Edit selectEdit(int editId) {
 		return sqlSessionTemplate.selectOne("publishMapper.selectEdit", editId);
 	}
-	
-	// 편집 등록
-	public int insertEdit(Edit edit) {
-		return sqlSessionTemplate.insert("publishMapper.insertEdit", edit);
-	}
-	
-	// 편집 수정
-	public int updateEdit(Edit edit) {
-		return sqlSessionTemplate.update("publishMapper.updateEdit", edit);
-	}
-	
-	// 편집 삭제
-	public int deleteEdit(int editId) {
-		return sqlSessionTemplate.delete("publishMapper.deleteEdit", editId);
-	}
-	
+
 	// 편집 등록 편집번호 +1 처리
 	public int selectMaxEditId() {
 		return sqlSessionTemplate.selectOne("publishMapper.selectMaxEditId");
@@ -80,5 +64,53 @@ public class EditDao {
 	// 편집 마감날짜 검색 개수
 	public int selectEditCountByEDate(Search search) {
 		return sqlSessionTemplate.selectOne("publishMapper.selectEditCountByEDate", search);
+	}
+
+	// 편집 키워드 검색 개수 (부서명)
+	public int selectEditCountByDepartment(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectEditCountByDepartment", search);
+	}
+
+	// 편집 키워드 검색 (부서명)
+	public ArrayList<Edit> selectEditByDepartment(Search search) {
+		List<Edit> list = sqlSessionTemplate.selectList("publishMapper.selectEditByDepartment", search);
+		return (ArrayList<Edit>) list;
+	}
+
+	// 편집 키워드 검색 개수 (담당자명)
+	public int selectEditCountByEmployee(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectEditCountByEmployee", search);
+	}
+
+	// 편집 키워드 검색 (담당자명)
+	public ArrayList<Edit> selectEditByEmployee(Search search) {
+		List<Edit> list = sqlSessionTemplate.selectList("publishMapper.selectEditByEmployee", search);
+		return (ArrayList<Edit>) list;
+	}
+
+	// 편집 키워드 검색 개수 (도서명)
+	public int selectEditCountByBook(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectEditCountByBook", search);
+	}
+	
+	// 편집 키워드 검색 (도서명)
+	public ArrayList<Edit> selectEditByBook(Search search) {
+		List<Edit> list = sqlSessionTemplate.selectList("publishMapper.selectEditByBook", search);
+		return (ArrayList<Edit>) list;
+	}
+	
+	// 편집 등록
+	public int insertEdit(Edit edit) {
+		return sqlSessionTemplate.insert("publishMapper.insertEdit", edit);
+	}
+	
+	// 편집 수정
+	public int updateEdit(Edit edit) {
+		return sqlSessionTemplate.update("publishMapper.updateEdit", edit);
+	}
+	
+	// 편집 삭제
+	public int deleteEdit(Edit edit) {
+		return sqlSessionTemplate.delete("publishMapper.deleteEdit", edit);
 	}
 }

@@ -41,21 +41,6 @@ public class ContractDao {
 		return sqlSessionTemplate.selectOne("publishMapper.selectContract", contrId);
 	}
 	
-	// 계약 등록
-	public int insertContract(Contract contract) {
-		return sqlSessionTemplate.insert("publishMapper.insertContract", contract);
-	}
-	
-	// 계약 수정
-	public int updateContract(Contract contract) {
-		return sqlSessionTemplate.update("publishMapper.updateContract", contract);
-	}
-	
-	// 계약 삭제
-	public int deleteContract(int contrId) {
-		return sqlSessionTemplate.delete("publishMapper.deleteContract", contrId);
-	}
-	
 	// 계약 등록 계약번호 +1 처리
 	public int selectMaxContrId() {
 		return sqlSessionTemplate.selectOne("publishMapper.selectMaxContrId");
@@ -72,16 +57,62 @@ public class ContractDao {
 		return sqlSessionTemplate.selectOne("publishMapper.selectContractCountByDate", search);
 	}
 	
-	// 계약 키워드 검색 개수 (책이름)
+	// 계약 키워드 검색 개수 (도서명)
 	public int selectContractCountByBook(Search search) {
 		return sqlSessionTemplate.selectOne("publishMapper.selectContractCountByBook", search);
 	}
 	
-	// 계약 키워드 검색 (책이름)
+	// 계약 키워드 검색 (도서명)
 	public ArrayList<Contract> selectContractByBook(Search search) {
 		List<Contract> list = sqlSessionTemplate.selectList("publishMapper.selectContractByBook", search);
 		return (ArrayList<Contract>) list;
 	}
 	
+	// 계약 키워드 검색 개수 (카테고리)
+	public int selectContractCountByCategory(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectContractCountByCategory", search);
+	}
 	
+	// 계약 키워드 검색 (카테고리)
+	public ArrayList<Contract> selectContractByCategory(Search search) {
+		List<Contract> list = sqlSessionTemplate.selectList("publishMapper.selectContractByCategory", search);
+		return (ArrayList<Contract>) list;
+	}
+	
+	// 계약 키워드 검색 개수 (작가명)
+	public int selectContractCountByWriter(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectContractCountByWriter", search);
+	}
+	
+	// 계약 키워드 검색 (작가명)
+	public ArrayList<Contract> selectContractByWriter(Search search) {
+		List<Contract> list = sqlSessionTemplate.selectList("publishMapper.selectContractByWriter", search);
+		return (ArrayList<Contract>) list;
+	}
+	
+	// 계약 키워드 검색 개수 (담당자명)
+	public int selectContractCountByEmployee(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectContractCountByEmployee", search);
+	}
+	
+	// 계약 키워드 검색 (담당자명)
+	public ArrayList<Contract> selectContractByEmployee(Search search) {
+		List<Contract> list = sqlSessionTemplate.selectList("publishMapper.selectContractByEmployee", search);
+		return (ArrayList<Contract>) list;
+	}
+	
+	// 계약 등록
+	public int insertContract(Contract contract) {
+		return sqlSessionTemplate.insert("publishMapper.insertContract", contract);
+	}
+	
+	// 계약 수정
+	public int updateContract(Contract contract) {
+		return sqlSessionTemplate.update("publishMapper.updateContract", contract);
+	}
+	
+	// 계약 삭제
+	public int deleteContract(int contrId) {
+		return sqlSessionTemplate.delete("publishMapper.deleteContract", contrId);
+	}
 }

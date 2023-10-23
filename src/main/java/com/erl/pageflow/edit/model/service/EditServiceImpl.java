@@ -34,22 +34,7 @@ public class EditServiceImpl implements EditService {
 	public Edit selectEdit(int editId) {
 		return editDao.selectEdit(editId);
 	}
-	
-	@Override
-	public int insertEdit(Edit edit) {
-		return editDao.insertEdit(edit);
-	}
-	
-	@Override
-	public int updateEdit(Edit edit) {
-		return editDao.updateEdit(edit);
-	}
-	
-	@Override
-	public int deleteEdit(int editId) {
-		return editDao.deleteEdit(editId);
-	}
-	
+
 	@Override
 	public int selectMaxEditId() {
 		return editDao.selectMaxEditId();
@@ -73,5 +58,50 @@ public class EditServiceImpl implements EditService {
 	@Override
 	public int selectEditCountByEDate(Search search) {
 		return editDao.selectEditCountByEDate(search);
+	}
+
+	@Override
+	public int selectEditCountByDepartment(Search search) {
+		return editDao.selectEditCountByDepartment(search);
+	}
+
+	@Override
+	public ArrayList<Edit> selectEditByDepartment(Search search) {
+		return editDao.selectEditByDepartment(search);
+	}
+
+	@Override
+	public int selectEditCountByEmployee(Search search) {
+		return editDao.selectEditCountByEmployee(search);
+	}
+
+	@Override
+	public ArrayList<Edit> selectEditByEmployee(Search search) {
+		return editDao.selectEditByEmployee(search);
+	}
+
+	@Override
+	public int selectEditCountByBook(Search search) {
+		return editDao.selectEditCountByBook(search);
+	}
+
+	@Override
+	public ArrayList<Edit> selectEditByBook(Search search) {
+		return editDao.selectEditByBook(search);
+	}
+	
+	@Override
+	public int insertEdit(Edit edit) {
+		return editDao.insertEdit(edit);
+	}
+	
+	@Override
+	public int updateEdit(Edit edit) {
+		return editDao.updateEdit(edit);
+	}
+	
+	@Override
+	public int deleteEdit(Edit edit) {
+		return editDao.deleteEdit(edit);
 	}
 }
