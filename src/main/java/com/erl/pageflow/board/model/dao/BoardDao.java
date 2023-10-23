@@ -52,8 +52,8 @@ public class BoardDao {
 		return sqlSessionTemplate.insert("boardMapper.updateBoardViewNum", boardKeyword);
 	}
 
-	public int updateUploadBoard(Board board) {
-		return sqlSessionTemplate.update("boardMapper.updateUploadBoard", board);
+	public int updateUploadBoard(BoardUpload boardUpload) {
+		return sqlSessionTemplate.update("boardMapper.updateUploadBoard", boardUpload);
 	}
 	
 	//업무게시판 게시글 수정
@@ -120,6 +120,14 @@ public class BoardDao {
 
 	public int selectBoardId() {
 		return sqlSessionTemplate.selectOne("boardMapper.selectBoardId");
+	}
+
+	public int deleteBoardUpload(Board board) {
+		return sqlSessionTemplate.delete("boardMapper.deleteBoardUpload", board);
+	}
+
+	public int selectBoardUpload(Board board) {
+		return sqlSessionTemplate.selectOne("boardMapper.selectBoardUpload", board);
 	}
 	
 }

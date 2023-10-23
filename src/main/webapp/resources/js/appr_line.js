@@ -1,11 +1,8 @@
 //결재라인 
 $(function(){
-    initPopupBtn();
+    
 })
 
-function searchEmployee(){
-
-}
 
 //체크 버튼 4개만 클릭 가능하게
 function checkBtnEvent(){
@@ -41,6 +38,7 @@ function makePlusSaveLine(){
                 <button class="contents-input-minus" onclick="makeMinusSaveLine(); return false;">
                     <img src="/pageflow/resources/images/minus.png">
                 </button>
+                <input type="hidden" name="empId" value="">
             </div>
         </td>
         <td>
@@ -53,17 +51,17 @@ function makePlusSaveLine(){
                 <button class="input-search-btn">
                     <img class="search-image" src="/pageflow/resources/images/search_btn.png">
                 </button>
-                <input type="input" name="approver" class="contents-input" value="">
+                <input type="input" name="empName" class="contents-input" value="">
             </div>
         </td>
         <td>
             <div class="contents-input-div input-readonly">
-                <input type="input" name="position" class="contents-input" value="" readonly>
+                <input type="input" name="posName" class="contents-input" value="" readonly>
             </div>
         </td>
         <td>
             <div class="contents-input-div input-readonly">
-                <input type="input" name="category" class="contents-input nocalc-witdh" value="" readonly>
+                <input type="input" name="depName" class="contents-input nocalc-witdh" value="" readonly>
             </div>
         </td>
         <td>

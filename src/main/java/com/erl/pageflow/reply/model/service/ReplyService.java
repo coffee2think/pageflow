@@ -3,6 +3,7 @@ package com.erl.pageflow.reply.model.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.erl.pageflow.board.model.vo.Board;
 import com.erl.pageflow.common.ReplyKeyword;
 import com.erl.pageflow.common.UploadKeyword;
 import com.erl.pageflow.reply.model.vo.Reply;
@@ -35,4 +36,9 @@ public interface ReplyService {
 	public Reply selectReply(int replyId);
 
 	public int selectUploadReply(ReplyUpload replyUpload);
+
+	public int deleteReplyUpload(int replyId);
+
+	public int deleteReply(int boardId);
+
 }

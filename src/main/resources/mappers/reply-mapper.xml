@@ -139,6 +139,16 @@
 		where REPLY_ID = #{ replyId }
 	</update>
 	
+	<delete id="deleteBoardReplyUpload" parameterType="_int">
+		delete from upload_reply
+		where REPLY_ID = #{ replyId }
+	</delete>	
+	
+	<delete id="deleteBoardReply" parameterType="_int">
+		delete from reply
+		where board_id = #{ boardId }
+	</delete>
+	
 </mapper>
 
 
