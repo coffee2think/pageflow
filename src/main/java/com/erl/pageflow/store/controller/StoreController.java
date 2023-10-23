@@ -115,7 +115,7 @@ public class StoreController {
 			sto.setClientName(cname);
 			sto.setBookPrice(bprice);
 		}
-
+		logger.info("list : " + list);
 		if (list != null && list.size() > 0) {
 			model.addAttribute("storeList", list);
 			model.addAttribute("paging", paging);
@@ -419,8 +419,6 @@ public class StoreController {
 	@RequestMapping(value = "stoinsert.do", method = RequestMethod.POST)
 	public String insertStore(HttpServletRequest request, Model model) {
 
-		System.out.println("여기로 들어 오니??");
-
 		String[] bookIds = request.getParameterValues("bookId");
 		String[] bookNames = request.getParameterValues("bookName");
 		String[] clientIds = request.getParameterValues("clientId");
@@ -431,8 +429,7 @@ public class StoreController {
 		String[] storePrice = request.getParameterValues("storePrice");
 		String[] storeDate = request.getParameterValues("storeDate");
 		// ----------------------------------------
-		System.out.println("bookIds : " + bookIds);
-		logger.info("store : " + bookIds);
+
 		int storeId = storeService.selectMaxStoreId() + 1;
 
 		ArrayList<Store> storeList = new ArrayList<>();
@@ -450,9 +447,8 @@ public class StoreController {
 			store.setStoreNum(Integer.parseInt(storeNums[i]));
 			store.setStorePrice(Integer.parseInt(storePrice[i]));
 			store.setStoreDate(Date.valueOf(storeDate[i]));
-			System.out.println("store : " + store);
+			
 			storeList.add(store);
-			logger.info("store : " + store);
 		}
 
 		for (Store store : storeList) {
@@ -566,7 +562,7 @@ public class StoreController {
 	@RequestMapping(value = "stoupdate.do", method = RequestMethod.POST)
 	public void updateStore(Store store, HttpServletResponse response) throws IOException {
 		String returnStr = null;
-
+		logger.info("store : " + store);
 		if (storeService.updateStore(store) > 0) {
 		} else {
 			logger.info("입고 수정 : " + store);
