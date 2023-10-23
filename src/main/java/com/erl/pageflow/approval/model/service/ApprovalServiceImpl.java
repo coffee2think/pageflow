@@ -10,6 +10,7 @@ import com.erl.pageflow.approval.model.vo.Approval;
 import com.erl.pageflow.approval.model.vo.Draft;
 import com.erl.pageflow.approvalline.model.vo.ApprovalLine;
 import com.erl.pageflow.common.ApprovalKeyword;
+import com.erl.pageflow.common.ApprovalLineKeyword;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 
@@ -198,6 +199,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 	@Override
 	public Approval selectMyApproval(int approvalId) {
 		return approvalDao.selectMyApproval(approvalId);
+	}
+
+	@Override
+	public int updateApprovalState(ApprovalKeyword approvalKeyword) {
+		return approvalDao.updateApprovalState(approvalKeyword);
 	}
 
 	

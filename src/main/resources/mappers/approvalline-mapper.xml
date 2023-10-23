@@ -5,33 +5,49 @@
 <mapper namespace="approvalLineMapper">
 	<resultMap type="ApprovalLine" id="resultApprovalLine">
 		<result property="lineId" column="LINE_ID" />
+		<result property="lineDepth" column="LINE_DEPTH" />
 		<result property="empId" column="EMP_ID" />
-		<result property="lineName" column="LINE_NAME" />
-		<result property="empId1" column="EMP_ID1" />
-		<result property="empName1" column="EMP_NAME1" />
-		<result property="posName1" column="POS_NAME1" />
-		<result property="stampDate1" column="STAMP_DATE1" />
-		
-		<result property="empId2" column="EMP_ID2" />
-		<result property="empName2" column="EMP_NAME2" />
-		<result property="posName2" column="POS_NAME2" />
-		<result property="stampDate2" column="STAMP_DATE2" />
-		
-		<result property="empId3" column="EMP_ID3" />
-		<result property="empName3" column="EMP_NAME3" />
-		<result property="posName3" column="POS_NAME3" />
-		<result property="stampDate3" column="STAMP_DATE3" />
-		
-		<result property="empId4" column="EMP_ID4" />
-		<result property="empName4" column="EMP_NAME4" />
-		<result property="posName4" column="POS_NAME4" />
-		<result property="stampDate4" column="STAMP_DATE4" />
+		<result property="approverId" column="APPROVER_ID" />
+		<result property="approverName" column="APPROVER_NAME" />
+		<result property="posName" column="POS_NAME" />
+		<result property="stampCheck" column="STAMP_CHECK" />
+		<result property="stampDate" column="STAMP_DATE" />
 	</resultMap>
 	
-	<select id="selectMyApprovalLine" parameterType="_int" resultMap="resultApprovalLine">
+	<resultMap type="ApprovalLineSave" id="resultApprovalSaveLine">
+		<result property="savelineId" column="SAVELINE_ID" />
+		<result property="lineDepth" column="LINE_DEPTH" />
+		<result property="empId" column="EMP_ID" />
+		<result property="approverId" column="APPROVER_ID" />
+		<result property="approverName" column="APPROVER_NAME" />
+		<result property="posName" column="POS_NAME" />
+		<result property="lineName" column="LINE_NAME" />
+	</resultMap>
+	
+	<select id="selectApprovalLineList" parameterType="_int" resultMap="resultApprovalLine">
 		select * from approvalline
 		where line_id = #{ lineId }
+		order by LINE_DEPTH asc
 	</select>
 	
+	<select id="selectMyApprovalSaveLineList" parameterType="_int" resultMap="resultApprovalSaveLine">
+		select * from approvalline_save
+		where SAVELINE_ID = #{ lineId }
+		order by LINE_DEPTH asc
+	</select>
+	
+	<select id="selectMyApprovalSaveLineListEmpId" parameterType="_int" resultMap="resultApprovalSaveLine">
+		select * from approvalline_save
+		where EMP_ID = #{ empId }
+		order by SAVELINE_ID desc, LINE_DEPTH asc
+	</select>
+	
+	<update id="updateApprLineStampCheck" parameterType="ApprovalLineKeyword">
+		update approvalLine
+		set STAMP_CHECK = #{ stampCheck },
+			STAMP_DATE = sysdate
+		where LINE_ID = #{ lineId }
+		and   APPROVER_ID = #{ approverId }
+	</update>
 	
 </mapper>

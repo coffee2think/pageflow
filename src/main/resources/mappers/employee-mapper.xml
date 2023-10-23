@@ -24,9 +24,47 @@
 		<result property="loginOk" column="LOGIN_OK" />
 		<result property="adminYN" column="ADMIN_YN" />
 	</resultMap>
+	
+	<resultMap type="Employee" id="resultEmployeeJoin">
+		<result property="empId" column="EMP_ID" />
+		<result property="empPwd" column="EMP_PWD" />
+		<result property="empPwdUpdate" column="EMP_PWD_UPDATE" />
+		<result property="empName" column="EMP_NAME" />
+		<result property="phone" column="PHONE" />
+		<result property="empBirth" column="EMP_BIRTH" />
+		<result property="email" column="EMAIL" />
+		<result property="address" column="ADDRESS" />
+		<result property="salary" column="SALARY" />
+		<result property="profile" column="PROFILE" />
+		<result property="enrollDate" column="ENROLL_DATE" />
+		<result property="mdifyDate" column="MODIFY_DATE" />
+		<result property="leaveDate" column="LEAVE_DATE" />
+		<result property="lastDate" column="LAST_DATE" />
+		<result property="jobId" column="JOB_ID" />
+		<result property="posId" column="POS_ID" />
+		<result property="depId" column="DEP_ID" />
+		<result property="loginOk" column="LOGIN_OK" />
+		<result property="adminYN" column="ADMIN_YN" />
+		
+		<result property="depName" column="DEP_NAME" />
+		<result property="jobName" column="JOB_NAME" />
+		<result property="posName" column="POS_NAME" />
+	</resultMap>
 
 	<select id="selectEmployee" parameterType="_int" resultMap="resultEmployee">
 		select * from employee where emp_id = #{ empId } 
+	</select>
+	
+	<select id="selectEmployeeApproval" parameterType="_int" resultMap="resultEmployeeJoin">
+		select * 
+		from (select rownum rnum, sub.*
+		      from (select *
+		            from employee
+		            where emp_id = #{ empId }) sub
+		        )
+		left join department using(dep_id)
+		left join job using(JOB_ID)
+		left join position using(pos_id)
 	</select>
 	
 	<select id="selectEmployeeList" parameterType="Paging" resultMap="resultEmployee">
@@ -50,5 +88,5 @@
 				
 	</insert>
 	
-
+	
 </mapper>
