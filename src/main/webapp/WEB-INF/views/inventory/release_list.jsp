@@ -18,6 +18,7 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/inventory_update.js"></script>
 <script>
     const NOWPAGE = 4;
     const SUBPAGE = 3;
@@ -61,7 +62,7 @@
 	var curinput = "";
 	$(function(){
 		// 서치 버튼 클릭
-		$('.search-btn').on('click', function(){
+		$('.search-button').on('click', function(){
 			searchKey();
 		})
 		// 엔터 누르고 난뒤
@@ -77,27 +78,43 @@
 	})
 	
 	function searchKey(){
-        var begin = '<c:out value="${ begin }" />';
-    	var end = '<c:out value="${ end }" />';
-		
+
     	var url = 'relselectkeyword.do?';
-            url += '&keyword=' + $('.search-box-text').val();
+            url += 'keyword=' + $('.search-box-text').val();
             url += '&searchType='+ $('#sel_code option:selected').val();
             
             location.href = url;
 	}
 	 
-	function searchByDate(dateType) {
-	    	var begin = $('#begin_' + dateType).val();
-	    	var end = $('#end_' + dateType).val();
+	function searchByDate() {
+	    	var begin = $('#begin_startDate').val();
+	    	var end = $('#end_startDate').val();
 	    	
 	    	var url = 'releasedate.do?';
 	    	url += 'begin=' + begin;
 	    	url += '&end=' + end;
-	    	url += '&dateType=' + dateType;
 	        
 	    	location.href = url;
 	    }
+	
+	$(function(){
+		$('#table_list').find('input[name=storeNum]').each(function(){
+			$(this).change(function(){
+				var tr = $(this).parent().parent().parent();
+				var bookPrice = tr.find('input[name=bookPrice]').val();
+				var storeNum = tr.find('input[name=storeNum]').val();
+				var storePrice = bookPrice * storeNum;
+				/* tr.find('input[name=storePrice]').addClass,('.changeable'); */
+				tr.find('input[name=storePrice]').val(storePrice);
+
+				console.log("storePrice : " + storePrice);
+				console.log("bookPrice : " + bookPrice);
+				console.log("storeNum : " + storeNum);
+				
+			});
+		});
+	});
+	
 </script>
 </head>
 <body>
@@ -149,7 +166,7 @@
                                 <div class="select-box">
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
+                                        <select name="searchType" id="sel_code">
                                             <option value="bookId">도서코드</option>
                                             <option value="bookName">도서명</option>
                                             <option value="empName">인수자</option>
@@ -159,10 +176,10 @@
                                 </div>
 
                                 <div class="search-box">
-                                    <button class="search-btn" onclick="search(); return false;">
-                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                                    </button>
-                                    <c:if test="${ empty keyword }">
+                                	<c:if test="${ empty keyword }">
+	                                    <button class="search-btn" onclick="search(); return false;">
+	                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+	                                    </button>
 										<input type="text" placeholder="키워드를 입력하세요." class="search-box-text" > 
 									</c:if>
 										<c:if test="${ !empty keyword }">
@@ -229,7 +246,7 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <table class="contents-table">
+                            <table class="contents-table" id="table_list">
                                 <tr>
                                     <th>체크</th>
                                     <th>도서코드</th>
@@ -244,58 +261,66 @@
                                 </tr>
                                 <c:set var="totalStoreNum" value="0" />
                                 <c:set var="totalStorePrice" value="0" />
-                                <c:forEach var="rel" items="${ relList }">
-	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-	                                    <td class="td-50">
-	                                       <input type="checkbox" class="selectedItems" name="selectedItems" value="${ rel.storeId }">
-	                                    </td>
-	                                    <td class="td-100">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="bookId" class="contents-input noline" value="${ rel.bookId }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-250">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="bookName" class="contents-input noline" value="${ rel.bookName }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-100">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="clientName" class="contents-input noline" value="${ rel.clientName }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-70">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="empName" class="contents-input noline" value="${ rel.empName }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-120">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="storeDate" class="contents-input noline" value="${ rel.storeDate }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-70">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ rel.bookPrice }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-70">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="storeNum" class="contents-input noline" value="${ rel.storeNum }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-100">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="storePrice" class="contents-input noline" value="${ rel.storePrice }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-70">
-	                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-	                                    </td>
-	                                </tr>
-	                            <c:set var="totalStoreNum" value="${ totalStoreNum + rel.storeNum }"/>
-	                            <c:set var="totalStorePrice" value="${ totalStorePrice + rel.storePrice }"/>
-								</c:forEach>
+                                <c:if test="${ !empty relList }">
+	                                <c:forEach var="rel" items="${ relList }">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ rel.storeId }">
+		                                    <td class="td-50">
+		                                       <input type="checkbox" class="selectedItems" name="storeId" value="${ rel.storeId }">
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookId" class="contents-input noline" value="${ rel.bookId }" readonly>
+		                                            <input type="hidden" name="clientId" value="${ rel.clientId }">
+													<input type="hidden" name="empId" value="${ rel.empId }">
+													<input type="hidden" name="empName" value="${ rel.empName }">
+													<input type="hidden" name="storeId" value="${ rel.storeId }">
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-250">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookName" class="contents-input noline" value="${ rel.bookName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="clientName" class="contents-input noline" value="${ rel.clientName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="empName" class="contents-input noline" value="${ rel.empName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="storeDate" class="contents-input noline" value="${ rel.storeDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ rel.bookPrice }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="storeNum" class="contents-input noline changeable" value="${ rel.storeNum }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="storePrice" class="contents-input noline changeable" value="${ rel.storePrice }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ rel.storeId }" onclick="onUpdate(${ rel.storeId }); return false;">
+												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ rel.storeId }" onclick="submitUpdate(${ rel.storeId }, 'relupdate.do'); return false;" style="display: none;"> 
+												<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ rel.storeId }" onclick="cancelUpdate(${ rel.storeId }); return false;" style="display: none;">
+		                                    </td>
+		                                </tr>
+		                            <c:set var="totalStoreNum" value="${ totalStoreNum + rel.storeNum }"/>
+		                            <c:set var="totalStorePrice" value="${ totalStorePrice + rel.storePrice }"/>
+									</c:forEach>
+								</c:if>
                                 <!--합계-->
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
                                     <td></td>
@@ -305,8 +330,8 @@
                                     <td></td>
                                     <td></td>
                                     <td>합계</td>
-                                    <td>${ totalStoreNum }</td>
-                                    <td>${ totalStorePrice }</td>
+                                    <td id="td_totalStoreNum">${ totalStoreNum }</td>
+                                    <td id="td_totalStorePrice">${ totalStorePrice }</td>
                                     <td></td>
                                 </tr>
                                 <!--합계end-->

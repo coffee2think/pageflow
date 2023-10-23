@@ -76,24 +76,24 @@
 	})
 	
 	function searchKey(){
-        var begin = '<c:out value="${ begin }" />';
-    	var end = '<c:out value="${ end }" />';
-		
+
     	var url = 'refselectkeyword.do?';
-            url += '&keyword=' + $('.search-box-text').val();
+            url += 'keyword=' + $('.search-box-text').val();
             url += '&searchType='+ $('#sel_code option:selected').val();
             
             location.href = url;
 	}
 	 
-	function searchByDate(dateType) {
-	    	var begin = $('#begin_' + dateType).val();
-	    	var end = $('#end_' + dateType).val();
+	function searchByDate() {
+	    	var begin = $('#begin_startDate').val();
+	    	var end = $('#end_startDate').val();
+	    	
+	    	console.log('begin : ' + begin);
+	    	console.log('end : ' + end);
 	    	
 	    	var url = 'refunddate.do?';
 	    	url += 'begin=' + begin;
 	    	url += '&end=' + end;
-	    	url += '&dateType=' + dateType;
 	        
 	    	location.href = url;
 	    }

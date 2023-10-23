@@ -38,7 +38,7 @@
 				 	   join book using (book_id)
 				 	   join client using (client_id)
                        WHERE CLASSIFY = '출고'
-                       ORDER BY STORE_DATE, store_id DESC) sub)
+                       ORDER BY STORE_DATE DESC, store_id DESC) sub)
 			WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
 		]]>	
 	</select>
@@ -69,7 +69,7 @@
 				 	   join book using (book_id)
 				 	   join client using (client_id)
                        WHERE CLASSIFY = '입고'
-                       ORDER BY STORE_DATE, store_id DESC) sub)
+                       ORDER BY STORE_DATE DESC, store_id DESC) sub)
 			WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
 
 		]]>	
@@ -302,27 +302,27 @@
 	
 	<insert id="insertStore" parameterType="Store">
 		INSERT INTO STORE VALUES( 
-		(select max(store_id) + 1 from store), #{ bookId }, #{ clientId }, #{ empId }, #{ empName }, 
+		#{ storeId }, #{ bookId }, #{ clientId }, #{ empId }, #{ empName }, 
 		#{ storeNum }, #{ storePrice },#{ storeDate }, '입고')
 	</insert>
 	
 		
 	<insert id="insertRelease" parameterType="Store">
 		INSERT INTO STORE VALUES( 
-		(select max(store_id) + 1 from store), #{ bookId }, #{ clientId }, #{ empId }, #{ empName }, 
+		#{ storeId }, #{ bookId }, #{ clientId }, #{ empId }, #{ empName }, 
 		#{ storeNum }, #{ storePrice },#{ storeDate }, '출고')
 	</insert>
 	
 	<insert id="insertInventory" parameterType="Store">
 	<![CDATA[
-	INSERT INTO inventory 
-	VALUES ((SELECT MAX(inven_id) + 1 FROM inventory), #{ bookId }, #{ clientId }, #{ storeId }, NULL, (select max(inven_id) from inventory), -#{ storeNum },
-	                (nvl((SELECT curr_inven FROM inventory WHERE store_id = #{ storeId } AND book_id = #{ bookId }), 0)),
-	                TO_DATE('${ storeDate }', 'YYYY/MM/DD'), 
-	                '출고', 
-	                NULL
-	)	
-	]]>
+		INSERT INTO inventory 
+		VALUES ((SELECT MAX(inven_id) + 1 FROM inventory), #{ bookId }, #{ clientId }, #{ storeId }, NULL, (select max(inven_id) from inventory), -#{ storeNum },
+		                (nvl((SELECT curr_inven FROM inventory WHERE store_id = #{ storeId } AND book_id = #{ bookId }), 0)),
+		                TO_DATE('${ storeDate }', 'YYYY/MM/DD'), 
+		                '출고', 
+		                NULL
+		)	
+		]]>
 	</insert>
 
 	<insert id="insertStoreInventory" parameterType="Store">
@@ -347,7 +347,12 @@
 		SET STORE_NUM = #{ storeNum }, STORE_PRICE = #{ storePrice }
 		WHERE STORE_ID = #{ storeId } AND CLASSIFY = '입고'
 	</update>
-	
+		
+	<update id="updateRelease">
+		UPDATE STORE
+		SET STORE_NUM = #{ storeNum }, STORE_PRICE = #{ storePrice }
+		WHERE STORE_ID = #{ storeId } AND CLASSIFY = '출고'
+	</update>
 
 	
 </mapper>

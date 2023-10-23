@@ -156,11 +156,10 @@ public class StoreDao {
 	public int insertInventory(Store store) {
 		return sqlSessionTemplate.insert("storeMapper.insertInventory", store);
 	}
-	
+
 	public int insertStoreInventory(Store store) {
 		return sqlSessionTemplate.insert("storeMapper.insertStoreInventory", store);
 	}
-
 
 	public int selectPreInvenId() {
 		return sqlSessionTemplate.selectOne("storeMapper.selectPreInvenId");
@@ -180,6 +179,10 @@ public class StoreDao {
 
 	public int updateStore(Store store) {
 		return sqlSessionTemplate.update("storeMapper.updateStore", store);
+	}
+
+	public int updateRelease(Store store) {
+		return sqlSessionTemplate.update("storeMapper.updateRelease", store);
 	}
 
 }

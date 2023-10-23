@@ -80,24 +80,21 @@
 	})
 	
 	function searchKey(){
-        var begin = '<c:out value="${ begin }" />';
-    	var end = '<c:out value="${ end }" />';
-		
+
     	var url = 'stoselectkeyword.do?';
-            url += '&keyword=' + $('.search-box-text').val();
+            url += 'keyword=' + $('.search-box-text').val();
             url += '&searchType='+ $('#sel_code option:selected').val();
             
             location.href = url;
 	}
 	 
-	function searchByDate(dateType) {
-	    	var begin = $('#begin_' + dateType).val();
-	    	var end = $('#end_' + dateType).val();
+	function searchByDate() {
+	    	var begin = $('#begin_startDate').val();
+	    	var end = $('#end_startDate').val();
 	    	
 	    	var url = 'stolistdate.do?';
 	    	url += 'begin=' + begin;
 	    	url += '&end=' + end;
-	    	url += '&dateType=' + dateType;
 	        
 	    	location.href = url;
 	    }
@@ -170,8 +167,8 @@
 						<div class="select-search">
 							<div class="select-box">
 								<div class="select-pan">
-									<label for="sel_code"></label> <select name="searchType"
-										id="sel_code">
+									<label for="sel_code"></label> 
+									<select name="searchType" id="sel_code">
 										<option value="bookId">도서코드</option>
 										<option value="bookName">도서명</option>
 										<option value="empName">인수자</option>
@@ -329,8 +326,7 @@
 									</c:forEach>
 								</c:if>
 								<!--합계-->
-								<tr data-parent="1" data-num="1" data-depth="1"
-									class="table-td-depth1 sum">
+								<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
 									<td></td>
 									<td></td>
 									<td></td>
