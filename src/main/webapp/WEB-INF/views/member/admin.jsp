@@ -20,7 +20,7 @@
     
     function resiterPage() {
     	if(confirm('직원등록 페이지로 이동하시겠습니까?')) {
-        window.location.href = 'enrollemp.do'; 
+        window.location.href = 'empmoveinsert.do'; 
     	}
     }
     
@@ -140,9 +140,9 @@
 									<th>이메일</th>
 									<th>주소</th>
 									<th>입사일</th>
-									<th>직급번호</th>
-									<th>직책번호</th>
-									<th>부서번호</th>
+									<th>직급</th>
+									<th>직책</th>
+									<th>부서</th>
 								
 								</tr>
 								<c:if test="${ !empty list }">
@@ -181,7 +181,7 @@
 											<td class="td-100">
 												<div class="contents-input-div">
 													<input type="inpute" name="jobId"
-														class="contents-input noline" value="${  emp.jobId }"
+														class="contents-input noline" value="${  emp.jobName }"
 														readonly>
 												</div>
 											</td>
@@ -189,14 +189,14 @@
 											<td class="td-100">
 												<div class="contents-input-div">
 													<input type="inpute" name="posId"
-														class="contents-input noline" value="${  emp.posId }"
+														class="contents-input noline" value="${  emp.posName }"
 														readonly>
 												</div>
 											</td>
 											<td class="td-100">
 												<div class="contents-input-div">
 													<input type="input" name="depId"
-														class="contents-input noline" value="${ emp.depId }"
+														class="contents-input noline" value="${ emp.depName }"
 														readonly>
 												</div>
 											</td>
@@ -220,7 +220,7 @@
 		
    
 	<button onclick="resiterPage()" class="my-button" id="openModalBtn">직원 등록</button>
->
+
 					
 					
 					

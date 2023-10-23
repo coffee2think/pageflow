@@ -21,11 +21,14 @@
 		<result property="jobId" column="JOB_ID" />
 		<result property="posId" column="POS_ID" />
 		<result property="depId" column="DEP_ID" />
+		<result property="jobName" column="JOB_NAME" />
+		<result property="posName" column="POS_NAME" />
+		<result property="depName" column="DEP_NAME" />
 		<result property="loginOk" column="LOGIN_OK" />
 		<result property="adminYN" column="ADMIN_YN" />
 	</resultMap>
-	
-	<resultMap type="Employee" id="resultEmployeeJoin">
+  
+  <resultMap type="Employee" id="resultEmployeeJoin">
 		<result property="empId" column="EMP_ID" />
 		<result property="empPwd" column="EMP_PWD" />
 		<result property="empPwdUpdate" column="EMP_PWD_UPDATE" />
@@ -50,6 +53,15 @@
 		<result property="jobName" column="JOB_NAME" />
 		<result property="posName" column="POS_NAME" />
 	</resultMap>
+	
+  <insert id="insertEmployee" parameterType="Employee">
+  	insert into employee values(#{empId},
+				 #{empPwd},sysdate, #{empName},
+				#{phone}, #{empBirth}, #{email} , #{address},#{salary},#{profile},  
+				#{enrollDate},null,null,sysdate,
+				#{jobId}, #{posId}, #{depId},  
+				default, default)
+	</insert> 
 
 	<select id="selectEmployee" parameterType="_int" resultMap="resultEmployee">
 		select * from employee where emp_id = #{ empId } 
@@ -68,10 +80,10 @@
 	</select>
 	
 	<select id="selectEmployeeList" parameterType="Paging" resultMap="resultEmployee">
-		select *
+		select * 
 		from (select rownum rnum, EMP_ID, EMP_PWD, EMP_PWD_UPDATE, EMP_NAME, PHONE, 
-			  EMP_BIRTH, EMAIL, ADDRESS, SALARY , PROFILE, ENROLL_DATE ,MODIFY_DATE  , LEAVE_DATE, JOB_ID, POS_ID, LOGIN_OK, ADMIN_YN
-		from (select * from employee where ADMIN_YN = 'N'))
+			  EMP_BIRTH, EMAIL, ADDRESS, SALARY , PROFILE, ENROLL_DATE ,MODIFY_DATE  , LEAVE_DATE, JOB_Name, POS_Name,dep_name, LOGIN_OK, ADMIN_YN
+		from (select * from employee join job using(job_id) join position using(pos_id) join department using(dep_id) where ADMIN_YN = 'N'))
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
@@ -79,14 +91,7 @@
 		select count(*) from employee
 	</select>
 	
-	<insert id="insertEmployee" parameterType="Employee">
-		insert into employee
-		values ((select max(empId) + 1 from notice), 
-				#{empName}, #{phone}, #{empBirth}, 
-				#{email}, #{address}, #{enrollDate} , #{jobId},  
-				#{posId},#{depId},#{loginOk},#{adminYN})
-				
-	</insert>
+	
 	
 	
 </mapper>
