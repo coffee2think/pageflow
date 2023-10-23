@@ -73,15 +73,16 @@ public interface StoreService {
 
 	public int insertInventory(Store store);
 
+	public int insertStoreInventory(Store store);
+
 	public int selectPreInvenId();
 
 	public int selectCurrInven();
 
 	public int selectMaxStoreId();
-	
-	public int insertRelease(Store store);
-	
-	public int updateStore(Store store);
 
+	public int insertRelease(Store store);
+
+	public int updateStore(Store store);
 
 }

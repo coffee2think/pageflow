@@ -3,6 +3,7 @@ package com.erl.pageflow.store.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
+import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.store.model.service.StoreService;
 import com.erl.pageflow.store.model.vo.Store;
 
@@ -54,6 +56,7 @@ public class StoreController {
 	@RequestMapping("releaselist.do")
 	public String moveReleaseList(Model model, @RequestParam(name = "page", required = false) String page,
 			@RequestParam(name = "limit", required = false) String limitStr) {
+
 		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
 		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 
@@ -68,7 +71,6 @@ public class StoreController {
 			String cname = storeService.selectStoreClientName(sto.getClientId());
 			int bprice = storeService.selectStoreBookPrice(sto.getBookId());
 
-			logger.info("sto : " + sto);
 			sto.setBookName(bname);
 			sto.setClientName(cname);
 			sto.setBookPrice(bprice);
@@ -206,20 +208,19 @@ public class StoreController {
 		JSONParser jparser = new JSONParser();
 		JSONArray jarr = (JSONArray) jparser.parse(param);
 		String[] jst = null;
-		System.out.println(jarr);
+
 		int count = 0;
 
 		JSONObject job = (JSONObject) jarr.get(0);
 		JSONArray scbkeyArray = (JSONArray) job.get("scbkey");
-		System.out.println("job : " + job);
-		System.out.println("scbkeyArray : " + scbkeyArray);
+
 		for (int j = 0; j < scbkeyArray.size(); j++) {
 			String scbkey = (String) scbkeyArray.get(j);
 			int scbkeyInt = Integer.parseInt(scbkey);
-			System.out.println("scbkeyInt : " + scbkeyInt);
+
 			if (storeService.deleteInventory(scbkeyInt) > 0) {
 				if (storeService.deleteStore(scbkeyInt) > 0) {
-					System.out.println("입고 삭제 : " + scbkeyInt);
+
 					count++;
 				}
 			}
@@ -232,32 +233,10 @@ public class StoreController {
 
 		PrintWriter out = response.getWriter();
 		out.append(str);
-		// 출력값은 버퍼에서 처리하니까 밀어내는 작업!
 		out.flush();
 
 		out.close();
-		/*
-		 * for (int i = 0; i < jarr.size(); i++) { JSONObject job = (JSONObject)
-		 * jarr.get(i); System.out.println(job); JSONArray scbkeyArray = (JSONArray)
-		 * job.get("scbkey"); System.out.println(scbkeyArray);
-		 * 
-		 * jst = new String[scbkeyArray.size()];
-		 * 
-		 * for (int j = 0; j < scbkeyArray.size(); j++) { jst[j] = (String)
-		 * scbkeyArray.get(j); System.out.println("jst" + j + " : " + jst[j]);
-		 * 
-		 * for (int j2 = 0; j2 < jst.length; j2++) { String scbkey = (String)
-		 * scbkeyArray.get(j2); int scbkeyInt = Integer.parseInt(scbkey); if
-		 * (storeService.deleteInventory(scbkeyInt) >= 0) { if
-		 * (storeService.deleteStore(scbkeyInt) >= 0) { System.out.println("입고 삭제 : " +
-		 * scbkeyInt); } }
-		 * 
-		 * }
-		 * 
-		 * }
-		 * 
-		 * }
-		 */
+
 	}
 
 	// 출고 삭제
@@ -439,52 +418,76 @@ public class StoreController {
 	// 입고등록
 	@RequestMapping(value = "stoinsert.do", method = RequestMethod.POST)
 	public String insertStore(HttpServletRequest request, Model model) {
+
+		System.out.println("여기로 들어 오니??");
+
 		String[] bookIds = request.getParameterValues("bookId");
+		String[] bookNames = request.getParameterValues("bookName");
 		String[] clientIds = request.getParameterValues("clientId");
+		String[] clientNames = request.getParameterValues("clientName");
 		String[] empIds = request.getParameterValues("empId");
 		String[] empNames = request.getParameterValues("empName");
 		String[] storeNums = request.getParameterValues("storeNum");
 		String[] storePrice = request.getParameterValues("storePrice");
 		String[] storeDate = request.getParameterValues("storeDate");
 		// ----------------------------------------
-
+		System.out.println("bookIds : " + bookIds);
+		logger.info("store : " + bookIds);
 		int storeId = storeService.selectMaxStoreId() + 1;
 
 		ArrayList<Store> storeList = new ArrayList<>();
 
 		for (int i = 0; i < bookIds.length; i++) {
 			Store store = new Store();
-
+			
 			store.setStoreId(storeId);
 			store.setBookId(Integer.parseInt(bookIds[i]));
+			store.setBookName(bookNames[i]);
 			store.setClientId(Integer.parseInt(clientIds[i]));
+			store.setClientName(clientNames[i]);
 			store.setEmpId(Integer.parseInt(empIds[i]));
 			store.setEmpName(empNames[i]);
 			store.setStoreNum(Integer.parseInt(storeNums[i]));
 			store.setStorePrice(Integer.parseInt(storePrice[i]));
 			store.setStoreDate(Date.valueOf(storeDate[i]));
-
+			System.out.println("store : " + store);
 			storeList.add(store);
-
+			logger.info("store : " + store);
 		}
 
-		logger.info("storeList : " + storeList);
 		for (Store store : storeList) {
-			if (storeService.insertStore(store) > 0 && storeService.insertInventory(store) > 0) {
+			if (storeService.insertStore(store) > 0) {
 
-				int preinvenId = storeService.selectPreInvenId();
-				store.setPrevInvenId(preinvenId);
-
-				int currInven = storeService.selectCurrInven();
-				store.setCurrInven(currInven);
-
-				logger.info("currInven : " + currInven);
-
-				return "redirect:storelist.do";
+			} else {
+				model.addAttribute("message", "입고등록 실패!" + store);
+				return "common/error";
 			}
 		}
-		model.addAttribute("message", "입고 등록 실패!");
-		return "common/error";
+		ArrayList<Inventory> temp = new ArrayList<Inventory>();
+
+		for (Store store : storeList) {
+			Inventory inventory = new Inventory();
+			inventory.setBookId(store.getBookId());
+			inventory.setBookName(store.getBookName());
+			inventory.setClientId(store.getClientId());
+			inventory.setStoreId(storeId);
+			inventory.setIncrease(store.getStoreNum());
+			inventory.setInvenDate(store.getStoreDate());
+			inventory.setClassify(store.getClassify());
+			// 이전 재고 번호, 현재고
+
+			temp.add(inventory);
+
+			if (storeService.insertStoreInventory(store) > 0) {
+
+			} else {
+				model.addAttribute("message", "재고 등록 실패!");
+				return "common/error";
+			}
+
+		}
+
+		return "redirect:storelist.do";
 	}
 
 	// 출고 등록
@@ -525,18 +528,38 @@ public class StoreController {
 		}
 
 		for (Store store : releaseList) {
-			if (storeService.insertRelease(store) > 0 && storeService.insertInventory(store) > 0) {
-				int preinvenId = storeService.selectPreInvenId();
-				store.setPrevInvenId(preinvenId);
-
-				int currInven = storeService.selectCurrInven();
-				store.setCurrInven(currInven);
-
-				return "redirect:releaselist.do";
+			if (storeService.insertRelease(store) > 0) {
+			} else {
+				model.addAttribute("message", "반품등록 실패!" + store);
+				return "common/error";
 			}
 		}
-		model.addAttribute("message", "출고등록 실패!");
-		return "common/error";
+
+		ArrayList<Inventory> temp = new ArrayList<Inventory>();
+
+		for (Store store : releaseList) {
+			Inventory inventory = new Inventory();
+			inventory.setBookId(store.getBookId());
+			inventory.setBookName(store.getBookName());
+			inventory.setClientId(store.getClientId());
+			inventory.setStoreId(storeId);
+			inventory.setIncrease(store.getStoreNum());
+			inventory.setInvenDate(store.getStoreDate());
+			inventory.setClassify(store.getClassify());
+			// 이전 재고 번호, 현재고
+
+			temp.add(inventory);
+
+			if (storeService.insertInventory(store) > 0) {
+
+			} else {
+				model.addAttribute("message", "재고 등록 실패!");
+				return "common/error";
+			}
+
+		}
+		return "redirect:releaselist.do";
+
 	}
 
 	// 입고 수정
@@ -544,23 +567,24 @@ public class StoreController {
 	public void updateStore(Store store, HttpServletResponse response) throws IOException {
 		String returnStr = null;
 
-		logger.info("storeNum : " + store.getStoreNum());
-		logger.info("storePrice :" + store.getStorePrice());
-		logger.info("store : " + store);
-
 		if (storeService.updateStore(store) > 0) {
-			logger.info("updateStore : " + store);
-
-			if (storeService.insertInventory(store) > 0) {
-
-				logger.info("insertInventory : " + store);
-				returnStr = "success";
-			}
 		} else {
-
+			logger.info("입고 수정 : " + store);
 			returnStr = "fail";
-
 		}
+
+		if (storeService.deleteInventory(store.getStoreId()) > 0) {
+			logger.info("재고 삭제 : " + store);
+		} else {
+			returnStr = "fail";
+		}
+		
+		if (storeService.insertInventory(store) > 0) {
+			returnStr = "success";
+			logger.info("재고 등록 : " + store);
+						
+		}
+		logger.info("수정 성공!!");
 		response.setContentType("text/html; charset=utf-8");
 		PrintWriter out = response.getWriter();
 		out.append(returnStr);
