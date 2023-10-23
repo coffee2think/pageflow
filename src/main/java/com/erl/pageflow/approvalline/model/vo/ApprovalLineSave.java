@@ -13,6 +13,8 @@ public class ApprovalLineSave implements Serializable{
 	private String posName;
 	private String lineName;
 	
+	public ApprovalLineSave() {};
+	
 	public ApprovalLineSave(int savelineId, int lineDepth, int empId, int approverId, 
 			String approverName, String posName, String lineName) {
 		super();
