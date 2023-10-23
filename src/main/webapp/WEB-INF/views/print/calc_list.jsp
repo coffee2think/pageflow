@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,12 +12,18 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
+<script type="text/javascript">
     const NOWPAGE = 2;
     const SUBPAGE = 2;
     const LNKPAGE = 1;
+    
+    
 </script>
 <title></title>
+<script type="text/javascript">
+
+</script>
 </head>
 <body>
 	<div id="container">
@@ -67,7 +76,7 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">인쇄소코드</option>
+                                            <option value="">거래처코드</option>
                                             <option value="">인쇄소명</option>
                                             <option value="">도서코드</option>
                                             <option value="">도서명</option>
@@ -77,10 +86,11 @@
                                 </div>
 
                                 <div class="search-box">
+                                	<input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
                                     <button class="search-btn">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
+                                 
                                 </div>
                             </div>
 
@@ -111,13 +121,18 @@
                                 <input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
                                 <input type="date" class="select-date select-date-second" name="end" value=${ end }>
 
-								<c:set var="today_" value="<%= new java.util.Date() %>" />
-								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
-								<c:set var="weekago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*6) %>" />
-								<fmt:formatDate var="weekago" value="${ weekago_ }" pattern="yyyy-MM-dd" />
-								<c:set var="monthago_" value="<%= new java.util.Date(new java.util.Date().getTime() - 60*60*24*1000*30) %>" />
-								<fmt:formatDate var="monthago" value="${ monthago_ }" pattern="yyyy-MM-dd" />
-								
+								<c:set var="today_" value="<%=new java.util.Date()%>" />
+								<fmt:formatDate var="today" value="${ today_ }" 
+									pattern="yyyy-MM-dd" />
+								<c:set var="weekago_" 
+									value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 6)%>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }" 
+									pattern="yyyy-MM-dd" />
+								<c:set var="monthago_" 
+									value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 30)%>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }" 
+									pattern="yyyy-MM-dd" />
+									
 								<c:url var="searchWeekUrl" value="polistdate.do">
 									<c:param name="begin" value="${ weekago }" />
 									<c:param name="end" value="${ today }" />
@@ -129,7 +144,8 @@
 								</c:url>
 
                                 <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
-                                <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+								<input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
+								<input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
                             </div>
                             
                         </form>
@@ -153,6 +169,7 @@
                             <table class="contents-table">
                                 <tr>
                                     <th>체크</th>
+                                    <th>정산코드</th>
                                     <th>거래처코드</th>
                                     <th>인쇄소</th>
                                     <th>마감일</th>
@@ -167,63 +184,70 @@
                                 </tr>
                                 <c:if test="${ !empty list }">
 	                                <c:forEach items="${ list }" var="printCalc" >
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ printCalc.clientId }">
 		                                    <td class="td-50">
-		                                        <input type="checkbox" name="check" value="" >
+		                                        <input type="checkbox" class="selectcheckbox" name="selectcheckbox" value="${ printCalc.orderId }">
 		                                    </td>
 		                                    <td class="td-100">
+												<div class="contents-input-div">
+													<input type="text" name="orderId" class="contents-input noline" value="${ printCalc.orderId }" readonly>
+												</div>
+											</td>
+		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="printId" class="contents-input noline" value="${ printCalc.printId }" readonly>
+		                                            <input type="text" name="clientId" class="contents-input noline" value="${ printCalc.clientId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="clientName" class="contents-input noline" value="${ printCalc.clientName }" readonly>
+		                                            <input type="text" name="clientName" class="contents-input noline" value="${ printCalc.clientName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="endDate" class="contents-input noline" value="${ printCalc.endDate }" readonly>
+		                                            <input type="text" name="endDate" class="contents-input noline changeable" value="${ printCalc.endDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookId" class="contents-input noline" value="${ printCalc.bookId }" readonly>
+		                                            <input type="text" name="bookId" class="contents-input noline" value="${ printCalc.bookId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-250">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookName" class="contents-input noline" value="${ printCalc.bookName }" readonly>
+		                                            <input type="text" name="bookName" class="contents-input noline" value="${ printCalc.bookName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="unit" class="contents-input noline" value="${ printCalc.unit }" readonly>
+		                                            <input type="text" name="unit" class="contents-input noline" value="${ printCalc.unit }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="quantity" class="contents-input noline" value="${ printCalc.quantity }" readonly>
+		                                            <input type="text" name="quantity" class="contents-input noline changeable" value="${ printCalc.quantity }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="price" class="contents-input noline" value="${ printCalc.price }" readonly>
+		                                            <input type="text" name="price" class="contents-input noline changeable" value="${ printCalc.price }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="amount" class="contents-input noline" value="${ printCalc.amount }" readonly>
+		                                            <input type="text" name="amount" class="contents-input noline" value="${ printCalc.amount }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="state" class="contents-input noline" value="${ printCalc.state }" readonly>
+		                                            <input type="text" name="state" class="contents-input noline changeable" value="${ printCalc.state }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-		                                    </td>
+		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ printCalc.clientId }" onclick="onUpdate(${ printCalc.clientId }); return false;">
+												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ printCalc.clientId }" onclick="submitUpdate(${ printCalc.clientId }, 'pcupdate.do'); return false;" style="display: none;">
+												<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ printCalc.clientId }" onclick="cancelUpdate(${ printCalc.clientId }); return false;" style="display: none;">
+											</td>
 		                                </tr>
 	                                </c:forEach>
                                 </c:if>
@@ -236,9 +260,9 @@
                 <!--내용 end-->
 
                 
-                <div class="submit-box">
+                <!-- <div class="submit-box">
                     <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제">
-                </div>
+                </div> -->
                 
             </div>
             <!--main-container end-->

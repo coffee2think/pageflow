@@ -7,7 +7,10 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.erl.pageflow.approval.model.vo.Approval;
 import com.erl.pageflow.approvalline.model.vo.ApprovalLine;
+import com.erl.pageflow.approvalline.model.vo.ApprovalLineSave;
+import com.erl.pageflow.common.ApprovalLineKeyword;
 import com.erl.pageflow.common.Paging;
 
 @Repository("approvalLineDao")
@@ -33,9 +36,24 @@ public class ApprovalLineDao {
 		return sqlSessionTemplate.delete("approvalLineMapper.deleteApprovalLine", approvalLine);
 	}
 
-	public ApprovalLine selectMyApprovalLine(int lineId) {
-		return sqlSessionTemplate.selectOne("approvalLineMapper.selectMyApprovalLine", lineId);
+	public ArrayList<ApprovalLineSave> selectMyApprovalSaveLineList(int lineId) {
+		List<ApprovalLineSave> list = sqlSessionTemplate.selectList("approvalLineMapper.selectMyApprovalSaveLineList", lineId);
+		return (ArrayList<ApprovalLineSave>)list;
 	}
-	
+
+	public ArrayList<ApprovalLine> selectApprovalLineList(int lineId) {
+		List<ApprovalLine> list = sqlSessionTemplate.selectList("approvalLineMapper.selectApprovalLineList", lineId);
+		return (ArrayList<ApprovalLine>)list;
+	}
+
+	public ArrayList<ApprovalLineSave> selectMyApprovalSaveLineListEmpId(int empId) {
+		List<ApprovalLineSave> list = sqlSessionTemplate.selectList("approvalLineMapper.selectMyApprovalSaveLineListEmpId", empId);
+		return (ArrayList<ApprovalLineSave>)list;
+	}
+
+	public int updateApprLineStampCheck(ApprovalLineKeyword approvalLineKeyword) {
+		return sqlSessionTemplate.update("approvalLineMapper.updateApprLineStampCheck", approvalLineKeyword);
+	}
+
 	
 }

@@ -1,122 +1,119 @@
+
 /* 직원 */
-DROP TABLE employee 
-	CASCADE CONSTRAINTS;
+--DROP TABLE employee 
+--	CASCADE CONSTRAINTS;
 
 /* 직급 */
-DROP TABLE job 
-	CASCADE CONSTRAINTS;
+--DROP TABLE job 
+--	CASCADE CONSTRAINTS;
 
 /* 직책 */
-DROP TABLE position 
-	CASCADE CONSTRAINTS;
+--DROP TABLE position 
+--	CASCADE CONSTRAINTS;
 
 /* 부서 */
-DROP TABLE department 
-	CASCADE CONSTRAINTS;
+--DROP TABLE department 
+--	CASCADE CONSTRAINTS;
 
 /* 업무 게시판 */
-DROP TABLE board 
-	CASCADE CONSTRAINTS;
+--DROP TABLE board 
+--	CASCADE CONSTRAINTS;
 
 /* 업무 게시판 댓글 */
-DROP TABLE reply 
-	CASCADE CONSTRAINTS;
+--DROP TABLE reply 
+--	CASCADE CONSTRAINTS;
 
 /* 첨부파일 댓글 */
-DROP TABLE upload_reply 
-	CASCADE CONSTRAINTS;
+--DROP TABLE upload_reply 
+--	CASCADE CONSTRAINTS;
 
 /* 쪽지함 */
-DROP TABLE message 
-	CASCADE CONSTRAINTS;
+--DROP TABLE message 
+--	CASCADE CONSTRAINTS;
 
-/* 전자결재-기안서 */
-DROP TABLE approval 
-	CASCADE CONSTRAINTS;
 
-/* 전자결재 라인 */
-DROP TABLE approvalline 
-	CASCADE CONSTRAINTS;
 
 /* 기안서 내용(연차) */
-DROP TABLE draft_annual 
-	CASCADE CONSTRAINTS;
+--DROP TABLE draft_annual 
+--	CASCADE CONSTRAINTS;
 
 /* 참조 쪽지 업무 게시판 */
-DROP TABLE reference_board 
-	CASCADE CONSTRAINTS;
+--DROP TABLE reference_board 
+--	CASCADE CONSTRAINTS;
 
 /* 도서 */
-DROP TABLE book 
-	CASCADE CONSTRAINTS;
+--DROP TABLE book 
+--	CASCADE CONSTRAINTS;
 
 /* 편집관리 */
-DROP TABLE edit 
-	CASCADE CONSTRAINTS;
+--DROP TABLE edit 
+--	CASCADE CONSTRAINTS;
 
 /* 계약관리 */
-DROP TABLE contract 
-	CASCADE CONSTRAINTS;
+--DROP TABLE contract 
+--	CASCADE CONSTRAINTS;
 
 /* 작가 */
-DROP TABLE writer 
-	CASCADE CONSTRAINTS;
+--DROP TABLE writer 
+--	CASCADE CONSTRAINTS;
 
 /* 공지사항 */
-DROP TABLE notice 
-	CASCADE CONSTRAINTS;
+--DROP TABLE notice 
+--	CASCADE CONSTRAINTS;
 
 /* 발주/정산관리 */
-DROP TABLE print_order 
-	CASCADE CONSTRAINTS;
+--DROP TABLE print_order 
+--	CASCADE CONSTRAINTS;
 
 /* 재고관리 */
-DROP TABLE inventory 
-	CASCADE CONSTRAINTS;
+--DROP TABLE inventory 
+--	CASCADE CONSTRAINTS;
 
 /* 주문관리 */
-DROP TABLE book_order 
-	CASCADE CONSTRAINTS;
+--DROP TABLE book_order 
+--	CASCADE CONSTRAINTS;
 
 /* 도서 판매 랭킹 */
-DROP TABLE rank 
-	CASCADE CONSTRAINTS;
+--DROP TABLE rank 
+--	CASCADE CONSTRAINTS;
 
 /* 거래처(서점, 창고, 인쇄소) */
-DROP TABLE client 
-	CASCADE CONSTRAINTS;
+--DROP TABLE client 
+--	CASCADE CONSTRAINTS;
 
 /* 기안서 종류 */
-DROP TABLE draft 
-	CASCADE CONSTRAINTS;
+--DROP TABLE draft 
+--	CASCADE CONSTRAINTS;
 
 /* 반품관리 */
-DROP TABLE refund 
-	CASCADE CONSTRAINTS;
+--DROP TABLE refund 
+--	CASCADE CONSTRAINTS;
 
 /* 입/출고관리 */
-DROP TABLE store 
-	CASCADE CONSTRAINTS;
+--DROP TABLE store 
+--	CASCADE CONSTRAINTS;
 
 /* 첨부파일 업무 게시판 */
-DROP TABLE upload_board 
-	CASCADE CONSTRAINTS;
+--DROP TABLE upload_board 
+--	CASCADE CONSTRAINTS;
 
 /* 참조 결재 쪽지  */
-DROP TABLE reference_message 
-	CASCADE CONSTRAINTS;
+--DROP TABLE reference_message 
+--	CASCADE CONSTRAINTS;
 
 /* 참조 공지사항 쪽지  */
-DROP TABLE reference_notice 
-	CASCADE CONSTRAINTS;
+--DROP TABLE reference_notice 
+--	CASCADE CONSTRAINTS;
 
 /* 권한 레벨 */
-DROP TABLE authority_level 
-	CASCADE CONSTRAINTS;
+--DROP TABLE authority_level 
+--	CASCADE CONSTRAINTS;
 
 /* 권한 그룹 */
-DROP TABLE authority 
-	CASCADE CONSTRAINTS;
+--DROP TABLE authority 
+--	CASCADE CONSTRAINTS;
+
+
 
 /* 직원 */
 CREATE TABLE employee (
@@ -425,13 +422,38 @@ ALTER TABLE message
 		ENABLE
 		VALIDATE;
 
+
+
+
+/* 전자결재 라인 그룹 */
+--DROP TABLE approvalline_group 
+--	CASCADE CONSTRAINTS;
+/* 전자결재 세이브 라인 그룹 */
+--DROP TABLE approvalline_save_group 
+--	CASCADE CONSTRAINTS;
+
+
+/* 전자결재-기안서 */
+--DROP TABLE approval 
+--	CASCADE CONSTRAINTS;
+
+/* 전자결재 라인 */
+--DROP TABLE approvalline 
+--	CASCADE CONSTRAINTS;
+    
+/* 전자결재 세이브 라인 */  
+--DROP TABLE approvalline_save 
+--	CASCADE CONSTRAINTS;
+
+
+
 /* 전자결재-기안서 */
 CREATE TABLE approval (
 	appr_id NUMBER NOT NULL, /* 전자결재 번호 */
 	drafter NUMBER NOT NULL, /* 직원 번호(기안자) */
-	approver NUMBER NOT NULL, /* 직원 번호(결재자) */
 	draft_type VARCHAR2(30) NOT NULL, /* 기안서 종류 */
 	line_id NUMBER, /* 결재라인 번호 */
+	saveline_id NUMBER, /* 저장된 결재라인 번호 */
 	appr_state VARCHAR2(30), /* 진행 상태 */
 	appr_date DATE DEFAULT sysdate NOT NULL, /* 기안 일자 */
 	receipt_date DATE DEFAULT sysdate, /* 상신 일자 */
@@ -444,11 +466,11 @@ COMMENT ON COLUMN approval.appr_id IS '전자결재 번호';
 
 COMMENT ON COLUMN approval.drafter IS '직원 번호(기안자)';
 
-COMMENT ON COLUMN approval.approver IS '직원 번호(결재자)';
-
 COMMENT ON COLUMN approval.draft_type IS '기안서 종류';
 
 COMMENT ON COLUMN approval.line_id IS '결재라인 번호';
+
+COMMENT ON COLUMN approval.saveline_id IS '저장된 결재라인 번호';
 
 COMMENT ON COLUMN approval.appr_state IS '진행 상태';
 
@@ -458,92 +480,256 @@ COMMENT ON COLUMN approval.receipt_date IS '상신 일자';
 
 COMMENT ON COLUMN approval.rejection_date IS '반려 일자';
 
+CREATE UNIQUE INDEX PK_approval
+	ON approval (
+		appr_id ASC
+	);
+
 ALTER TABLE approval
 	ADD
 		CONSTRAINT PK_approval
 		PRIMARY KEY (
 			appr_id
-		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
+		);
 
 /* 전자결재 라인 */
 CREATE TABLE approvalline (
 	line_id NUMBER NOT NULL, /* 결재라인 번호 */
+	line_depth NUMBER NOT NULL, /* 결재라인 뎁스 */
 	emp_id NUMBER NOT NULL, /* 직원 번호(기안자) */
-	line_name VARCHAR2(30), /* 결재라인 이름 */
-	emp_id1 NUMBER DEFAULT 0, /* 직원 번호(결재자 1) */
-    emp_name1 VARCHAR2(30 BYTE), /* 직원 번호(결재자 1) */
-    pos_name1 VARCHAR2(30 BYTE), /* 직원 번호(결재자 1) */
-    stamp_date1 date, /* 직원 번호(결재자 1) */
-	emp_id2 NUMBER DEFAULT 0, /* 직원 번호(결재자 2) */
-    emp_name2 VARCHAR2(30 BYTE), /* 직원 번호(결재자 2) */
-    pos_name2 VARCHAR2(30 BYTE), /* 직원 번호(결재자 2) */
-    stamp_date2 date, /* 직원 번호(결재자 2) */
-	emp_id3 NUMBER DEFAULT 0, /* 직원 번호(결재자 3) */
-    emp_name3 VARCHAR2(30 BYTE), /* 직원 번호(결재자 3) */
-    pos_name3 VARCHAR2(30 BYTE), /* 직원 번호(결재자 3) */
-    stamp_date3 date, /* 직원 번호(결재자 3) */
-	emp_id4 NUMBER DEFAULT 0, /* 직원 번호(결재자 4) */
-    emp_name4 VARCHAR2(30 BYTE), /* 직원 번호(결재자 4) */
-    pos_name4 VARCHAR2(30 BYTE), /* 직원 번호(결재자 4) */
-    stamp_date4 date /* 직원 번호(결재자 4) */
+	approver_id NUMBER NOT NULL, /* 결재자 id */
+	approver_name VARCHAR2(30) NOT NULL, /* 결재자 이름 */
+	pos_name VARCHAR2(30), /* 결재자 직책 */
+	stamp_check CHAR(1) DEFAULT 'N' NOT NULL, /* 승인 여부 */
+	stamp_date DATE DEFAULT sysdate /* 승인 날짜 */
 );
 
 COMMENT ON TABLE approvalline IS '전자결재 라인';
 
 COMMENT ON COLUMN approvalline.line_id IS '결재라인 번호';
 
+COMMENT ON COLUMN approvalline.line_depth IS '결재라인 뎁스';
+
 COMMENT ON COLUMN approvalline.emp_id IS '직원 번호(기안자)';
 
-COMMENT ON COLUMN approvalline.line_name IS '결재라인 이름';
+COMMENT ON COLUMN approvalline.approver_id IS '결재자 id';
 
-COMMENT ON COLUMN approvalline.emp_id1 IS '직원 번호(결재자 1)';
-COMMENT ON COLUMN approvalline.emp_name1 IS '직원 번호(결재자 1) 이름';
-COMMENT ON COLUMN approvalline.pos_name1 IS '직원 번호(결재자 1) 직책';
-COMMENT ON COLUMN approvalline.stamp_date1 IS '직원 번호(결재자 1) 날짜';
+COMMENT ON COLUMN approvalline.approver_name IS '결재자 이름';
 
-COMMENT ON COLUMN approvalline.emp_id2 IS '직원 번호(결재자 2)';
-COMMENT ON COLUMN approvalline.emp_name2 IS '직원 번호(결재자 2) 이름';
-COMMENT ON COLUMN approvalline.pos_name2 IS '직원 번호(결재자 2) 직책';
-COMMENT ON COLUMN approvalline.stamp_date2 IS '직원 번호(결재자 2) 날짜';
+COMMENT ON COLUMN approvalline.pos_name IS '결재자 직책';
 
-COMMENT ON COLUMN approvalline.emp_id3 IS '직원 번호(결재자 3)';
-COMMENT ON COLUMN approvalline.emp_name3 IS '직원 번호(결재자 3) 이름';
-COMMENT ON COLUMN approvalline.pos_name3 IS '직원 번호(결재자 3) 직책';
-COMMENT ON COLUMN approvalline.stamp_date3 IS '직원 번호(결재자 3) 날짜';
+COMMENT ON COLUMN approvalline.stamp_check IS '승인 여부';
 
-COMMENT ON COLUMN approvalline.emp_id4 IS '직원 번호(결재자 4)';
-COMMENT ON COLUMN approvalline.emp_name4 IS '직원 번호(결재자 4) 이름';
-COMMENT ON COLUMN approvalline.pos_name4 IS '직원 번호(결재자 4) 직책';
-COMMENT ON COLUMN approvalline.stamp_date4 IS '직원 번호(결재자 4) 날짜';
+COMMENT ON COLUMN approvalline.stamp_date IS '승인 날짜';
+
+CREATE UNIQUE INDEX PK_approvalline
+	ON approvalline (
+		line_id ASC,
+		line_depth ASC
+	);
 
 ALTER TABLE approvalline
 	ADD
 		CONSTRAINT PK_approvalline
 		PRIMARY KEY (
+			line_id,
+			line_depth
+		);
+
+
+
+/* 전자결재 라인 그룹 */
+CREATE TABLE approvalline_group (
+	line_id NUMBER NOT NULL, /* 결재라인 번호 */
+	appr_id NUMBER /* 전자결재 번호 */
+);
+
+COMMENT ON TABLE approvalline_group IS '전자결재 라인 그룹';
+
+COMMENT ON COLUMN approvalline_group.line_id IS '결재라인 번호';
+
+COMMENT ON COLUMN approvalline_group.appr_id IS '전자결재 번호';
+
+CREATE UNIQUE INDEX PK_approvalline_group
+	ON approvalline_group (
+		line_id ASC
+	);
+
+ALTER TABLE approvalline_group
+	ADD
+		CONSTRAINT PK_approvalline_group
+		PRIMARY KEY (
 			line_id
+		);
+
+/* 전자결재 라인3 */
+CREATE TABLE approvalline_save (
+	saveline_id NUMBER NOT NULL, /* 결재라인 번호 */
+	line_depth NUMBER NOT NULL, /* 결재라인 뎁스 */
+	emp_id NUMBER NOT NULL, /* 직원 번호(기안자) */
+	approver_id NUMBER, /* 결재자 id */
+	approver_name VARCHAR2(30) NOT NULL, /* 결재자 이름 */
+	pos_name VARCHAR2(30) /* 결재자 직책 */
+);
+
+COMMENT ON TABLE approvalline_save IS '전자결재 라인3';
+
+COMMENT ON COLUMN approvalline_save.saveline_id IS '결재라인 번호';
+
+COMMENT ON COLUMN approvalline_save.line_depth IS '결재라인 뎁스';
+
+COMMENT ON COLUMN approvalline_save.emp_id IS '직원 번호(기안자)';
+
+COMMENT ON COLUMN approvalline_save.approver_id IS '결재자 id';
+
+COMMENT ON COLUMN approvalline_save.approver_name IS '결재자 이름';
+
+COMMENT ON COLUMN approvalline_save.pos_name IS '결재자 직책';
+
+CREATE UNIQUE INDEX PK_approvalline_save
+	ON approvalline_save (
+		saveline_id ASC,
+		line_depth ASC
+	);
+
+ALTER TABLE approvalline_save
+	ADD
+		CONSTRAINT PK_approvalline_save
+		PRIMARY KEY (
+			saveline_id,
+			line_depth
+		);
+
+/* 새 테이블 */
+CREATE TABLE approvalline_save_group (
+	saveline_id NUMBER NOT NULL, /* 저장된 결재라인 번호 */
+	appr_id NUMBER, /* 전자결재 번호 */
+	saveline_name VARCHAR2(255) /* 저장된 결재라인 이름 */
+);
+
+COMMENT ON TABLE approvalline_save_group IS '새 테이블';
+
+COMMENT ON COLUMN approvalline_save_group.saveline_id IS '저장된 결재라인 번호';
+
+COMMENT ON COLUMN approvalline_save_group.appr_id IS '전자결재 번호';
+
+COMMENT ON COLUMN approvalline_save_group.saveline_name IS '저장된 결재라인 이름';
+
+CREATE UNIQUE INDEX PK_approvalline_save_group
+	ON approvalline_save_group (
+		saveline_id ASC
+	);
+
+ALTER TABLE approvalline_save_group
+	ADD
+		CONSTRAINT PK_approvalline_save_group
+		PRIMARY KEY (
+			saveline_id
+		);
+
+
+ALTER TABLE approval
+	ADD
+		CONSTRAINT FK_employee_TO_approval
+		FOREIGN KEY (
+			drafter
 		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
-        
+		REFERENCES employee (
+			emp_id
+		);
+
+ALTER TABLE approval
+	ADD
+		CONSTRAINT FK_draft_TO_approval
+		FOREIGN KEY (
+			draft_type
+		)
+		REFERENCES draft (
+			draft_type
+		);
+
 ALTER TABLE approvalline
 	ADD
 		CONSTRAINT FK_employee_TO_approvalline
+		FOREIGN KEY (
+			approver_id
+		)
+		REFERENCES employee (
+			emp_id
+		);
+
+ALTER TABLE approvalline
+	ADD
+		CONSTRAINT FK_employee_TO_approvalline2
 		FOREIGN KEY (
 			emp_id
 		)
 		REFERENCES employee (
 			emp_id
+		);
+
+ALTER TABLE approvalline
+	ADD
+		CONSTRAINT FK_approvalline_group_TO_approvalline
+		FOREIGN KEY (
+			line_id
 		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
+		REFERENCES approvalline_group (
+			line_id
+		);
+
+ALTER TABLE approvalline_group
+	ADD
+		CONSTRAINT FK_approval_TO_approvalline_group
+		FOREIGN KEY (
+			appr_id
+		)
+		REFERENCES approval (
+			appr_id
+		);
+
+ALTER TABLE approvalline_save
+	ADD
+		CONSTRAINT FK_employee_TO_approvalline_save
+		FOREIGN KEY (
+			emp_id
+		)
+		REFERENCES employee (
+			emp_id
+		);
+
+ALTER TABLE approvalline_save
+	ADD
+		CONSTRAINT FK_employee_TO_approvalline_save2
+		FOREIGN KEY (
+			approver_id
+		)
+		REFERENCES employee (
+			emp_id
+		);
+
+ALTER TABLE approvalline_save
+	ADD
+		CONSTRAINT FK_approvalline_save_group_TO_approvalline_save
+		FOREIGN KEY (
+			saveline_id
+		)
+		REFERENCES approvalline_save_group (
+			saveline_id
+		);
+
+ALTER TABLE approvalline_save_group
+	ADD
+		CONSTRAINT FK_approval_TO_approvalline_save_group
+		FOREIGN KEY (
+			appr_id
+		)
+		REFERENCES approval (
+			appr_id
+		);
+
+
+
 
 /* 기안서 내용(연차) */
 CREATE TABLE draft_annual (
@@ -1501,64 +1687,7 @@ ALTER TABLE message
 		ENABLE
 		VALIDATE;
 
-ALTER TABLE approval
-	ADD
-		CONSTRAINT FK_employee_TO_approval
-		FOREIGN KEY (
-			drafter
-		)
-		REFERENCES employee (
-			emp_id
-		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
 
-ALTER TABLE approval
-	ADD
-		CONSTRAINT FK_employee_TO_approval2
-		FOREIGN KEY (
-			approver
-		)
-		REFERENCES employee (
-			emp_id
-		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
-
-ALTER TABLE approval
-	ADD
-		CONSTRAINT FK_draft_TO_approval
-		FOREIGN KEY (
-			draft_type
-		)
-		REFERENCES draft (
-			draft_type
-		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
-
-ALTER TABLE approval
-	ADD
-		CONSTRAINT FK_approvalline_TO_approval
-		FOREIGN KEY (
-			line_id
-		)
-		REFERENCES approvalline (
-			line_id
-		)
-		NOT DEFERRABLE
-		INITIALLY IMMEDIATE
-		ENABLE
-		VALIDATE;
-
-
-        
 
 ALTER TABLE draft_annual
 	ADD
@@ -2095,8 +2224,84 @@ MODIFY END_DATE date default null;
 alter TABLE JOB
 RENAME COLUMN JOP_ID TO JOB_ID;
 
-
-
-
 alter table draft_annual 
 ADD (detail_type VARCHAR2(30) default 'annual');
+
+alter TABLE print_order
+RENAME COLUMN PRINT_ID TO client_id;
+
+
+
+alter table inventory
+rename COLUMN storage_id to client_id;
+
+alter table store
+rename COLUMN storage_id to client_id;
+
+
+alter table approvalline_save 
+ADD (line_name VARCHAR2(50) NULL);
+
+alter table approvalline 
+modify STAMP_CHECK char(1) default 'E';
+
+alter table approval
+ADD (draft_sub_type VARCHAR2(20) NULL);
+
+ALTER TABLE approval DROP COLUMN draft_sub_type;
+
+alter table approval
+ADD (draft_sub_type VARCHAR2(20) NULL);
+
+alter table approval
+add (originFile VARCHAR2(1000) NULL);
+
+alter table approval
+add (renameFile VARCHAR2(1000) NULL);
+
+alter table approval
+rename COLUMN originFile to origin_file;
+
+alter table approval
+rename COLUMN renameFile to rename_file;
+
+--승준님 수정
+alter table inventory drop constraint FK_REFUND_TO_INVENTORY;
+alter table refund drop constraint PK_REFUND;
+alter table refund add constraint PK_REFUND primary key (REFUND_ID, BOOK_ID);
+ALTER TABLE inventory
+   ADD
+      CONSTRAINT FK_REFUND_TO_INVENTORY
+      FOREIGN KEY (
+         REFUND_ID,
+         BOOK_ID
+      )
+      REFERENCES refund (
+         REFUND_ID,
+         BOOK_ID
+      )
+      NOT DEFERRABLE
+      INITIALLY IMMEDIATE
+      ENABLE
+      VALIDATE;
+
+alter table inventory drop constraint FK_STORE_TO_INVENTORY;
+alter table store drop constraint PK_STORE;
+alter table store add constraint PK_STORE primary key (STORE_ID, BOOK_ID);
+ALTER TABLE inventory
+   ADD
+      CONSTRAINT FK_STORE_TO_INVENTORY
+      FOREIGN KEY (
+         STORE_ID,
+         BOOK_ID
+      )
+      REFERENCES store (
+         STORE_ID,
+         BOOK_ID
+      )
+      NOT DEFERRABLE
+      INITIALLY IMMEDIATE
+      ENABLE
+      VALIDATE;
+
+

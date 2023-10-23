@@ -21,7 +21,7 @@ public class StoreServiceImpl implements StoreService {
 	public int selectGetListCount() {
 		return storeDao.selectGetListCount();
 	}
-	
+
 	@Override
 	public int selectGetReleaseListCount() {
 		return storeDao.selectGetReleaseListCount();
@@ -178,6 +178,11 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
+	public int insertStoreInventory(Store store) {
+		return storeDao.insertStoreInventory(store);
+	}
+
+	@Override
 	public int selectPreInvenId() {
 		return storeDao.selectPreInvenId();
 	}
@@ -196,7 +201,7 @@ public class StoreServiceImpl implements StoreService {
 	public int insertRelease(Store store) {
 		return storeDao.insertRelease(store);
 	}
-	
+
 	@Override
 	public int updateStore(Store store) {
 		return storeDao.updateStore(store);

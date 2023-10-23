@@ -261,4 +261,8 @@ public class ApprovalDao {
 		return sqlSessionTemplate.selectOne("approvalMapper.selectMyApproval", approvalId);
 	}
 
+	public int updateApprovalState(ApprovalKeyword approvalKeyword) {
+		return sqlSessionTemplate.update("approvalMapper.updateApprovalState", approvalKeyword);
+	}
+
 }

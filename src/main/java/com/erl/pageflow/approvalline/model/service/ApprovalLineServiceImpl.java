@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.erl.pageflow.approval.model.vo.Approval;
 import com.erl.pageflow.approvalline.model.dao.ApprovalLineDao;
 import com.erl.pageflow.approvalline.model.vo.ApprovalLine;
+import com.erl.pageflow.approvalline.model.vo.ApprovalLineSave;
+import com.erl.pageflow.common.ApprovalLineKeyword;
 import com.erl.pageflow.common.Paging;
 
 @Service("approvalLineService")
@@ -36,9 +39,25 @@ public class ApprovalLineServiceImpl implements ApprovalLineService{
 	}
 
 	@Override
-	public ApprovalLine selectMyApprovalLine(int lineId) {
-		return approvalLineDao.selectMyApprovalLine(lineId);
+	public ArrayList<ApprovalLineSave> selectMyApprovalSaveLineList(int lineId) {
+		return approvalLineDao.selectMyApprovalSaveLineList(lineId);
 	}
+
+	@Override
+	public ArrayList<ApprovalLine> selectMyApprovalLineList(int lineId) {
+		return approvalLineDao.selectApprovalLineList(lineId);
+	}
+
+	@Override
+	public ArrayList<ApprovalLineSave> selectMyApprovalSaveLineListEmpId(int empId) {
+		return approvalLineDao.selectMyApprovalSaveLineListEmpId(empId);
+	}
+
+	@Override
+	public int updateApprLineStampCheck(ApprovalLineKeyword approvalLineKeyword) {
+		return approvalLineDao.updateApprLineStampCheck(approvalLineKeyword);
+	}
+	
 	
 	
 }

@@ -9,10 +9,21 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script>
+<script type="text/javascript">
     const NOWPAGE = 6;
     const SUBPAGE = 4;
     const LNKPAGE = 1;
+
+    $(function(){
+        //결재라인 
+    })
+
+    function makeApprSaveLine(){
+        let el = `
+        
+        `
+    }
+
 </script>
 <title></title>
 </head>
@@ -112,6 +123,7 @@
                                                 <input type="button" name="delete" class="contents-input-btn noline" value="삭제">
                                             </td>
                                         </tr>
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -128,7 +140,7 @@
 
                                     <input type="text" class="input-box-input noline">
                                 </div>
-
+                                <!--
                                 <div class="input-box">
                                     <div class="select-pan-nemo width-100">
                                         참조자
@@ -143,7 +155,7 @@
                                         </div>
                                     </div>
                                 </div>
-
+                                -->
                             </div>
                         </div>
                         <!--서치영역 end-->

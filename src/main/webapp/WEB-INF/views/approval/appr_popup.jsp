@@ -2,7 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+<c:set var="nowdays_" value="<%= java.util.Date.from(java.time.LocalDate.now().atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+<fmt:formatDate var="nowdays" value="${ nowdays_ }" pattern="yyyy-MM-dd" />
 
 <!DOCTYPE html>
 <html>
@@ -14,7 +15,8 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.ui.touch-punch.min.js"></script>
 <title>Insert title here</title>
 <script type="text/javascript">
-    var popup;
+    let popup;
+    const myEmpId = '<c:out value="${ loginMember.empId }" />';
 
     $(function(){
         popup = new Popup();
@@ -55,6 +57,7 @@
             $('.modal-pop-close').on('click', function(){
                 $(this).parent().parent('.modal-pop-box').hide();
                 $(this).parent().parent().parent('.modal-pop-area').hide();
+                closePopup();
             })
             
             $('.search-btn-pop').each(function(){
@@ -66,12 +69,30 @@
         }
     }
 
-    function setApprovalPopup(jdata){
+    function setApprovalPopup(json){
+
+        let jdata = json.approval;
+        let lineList = json.list;
 
         console.log('jdata.dep_name : ' + jdata.dep_name);
+        console.log('lineList : ' + lineList);
 
         $('.modal-title').text(jdata.drafter_name + '님의 ' + changeDraftType(jdata.draft_type) + '신청서입니다.');
-        $('.modal-number').text(jdata.appr_id);
+        $('.modal-number').text('기안서 번호 : ' + jdata.appr_id);
+
+        if(jdata.origin_file != undefined && jdata.origin_file != null && jdata.origin_file != '') {
+            el =`
+            <div class="contents-notice-down-box show">
+                <a class="contents-notice-down" href="apdown.do?ofile=`+jdata.originFile+`&rfile=`+jdata.renameFile+`">
+                    <img src="/pageflow/resources/images/side-icon-dep1-over.png">
+                    <span class="origin-file-name">`+jdata.originFile+`</span>
+                    <img class="down-img" src="/pageflow/resources/images/down.png">
+                </a>
+            </div>`
+
+            $('.modal-down').append(el);
+        }
+        
 
         $('.approval-depName').each(function(){
             $(this).text(jdata.dep_name);
@@ -89,17 +110,17 @@
         let t1 = 'o', t2 = '', t3 = '', t4 = '', t5 = '';
         if(jdata.detailType == 'annual') t1 = 'o';
 
-        let el = `
-        <td>종류</td>
-        <td>연차(`+t1+`)</td>
-        <td>월차(`+t2+`)</td>
-        <td>보건(`+t3+`)</td>
-        <td>특별(`+t4+`)</td>
-        <td>공가(`+t5+`)</td>
-        `
-        $('.approval-type').append(el);
-
-        makeApprovalLine(jdata);//라인생성
+        el = `
+            <td>종류</td>
+            <td>연차(`+t1+`)</td>
+            <td>월차(`+t2+`)</td>
+            <td>보건(`+t3+`)</td>
+            <td>특별(`+t4+`)</td>
+            <td>공가(`+t5+`)</td>
+            `
+            $('.approval-type').append(el);
+            makeApprovalLine(lineList, jdata);//라인생성
+        isFirst = true;
     }
 
     function changeDraftType(draftType){
@@ -116,56 +137,136 @@
         return draftStr;
     }
 
-    function makeApprovalLine(jdata){
+    function makeApprovalLine(lineList, jdata){
 
         let el = ``;
-        let empData = [];
-        for(let i=0; i<4; i++) {
-            if(jdata['emp_name'+(i+1)] != null && jdata['emp_name'+(i+1)] != undefined) {
-                empData.push({
-                    emp_name : jdata['emp_name'+(i+1)]
-                    ,pos_name : jdata['pos_name'+(i+1)]
-                    ,date : jdata['stamp_date'+(i+1)]
-                });
-            }
-        }
 
         //결재 도장 첫번째 tr
         el += `
         <tr>
-            <td rowspan="3" class="td-50">결재</td>`
+            <td rowspan="3" class="td-50">결재</td>
+            <td class="td-100">기안자</td>`
 
-        console.log('jdata.emp_name4 : ' + jdata.emp_name4)
-        for(let i=0; i<empData.length; i++) {
-            if(i == 0){
-                el += `<td class="td-100">기안자</td>`;
-            }else{
-                el += `<td class="td-100">`+empData[i]+`</td>`;
+        for(let i=0; i<lineList.length; i++) {
+            el += `<td class="td-100">`+lineList[i].pos_name+`</td>`;
+        }
+        el += `
+        </tr>`
+        let buttonvis = false;
+        let myLineId;
+        let stamp = '';
+        el += `
+        <tr>
+            <td class="ht-60"><div class="table-stamp">결재</div></td>`
+        //결재 도장 두번째 tr
+        for(let i=0; i<lineList.length; i++) {
+
+            if(lineList[i].stamp_check == 'Y') stamp = '<div class="table-stamp">결재</div>';
+            else if(lineList[i].stamp_check == 'N') stamp = '<div class="table-stamp">반려</div>';
+            else  stamp = '<div class="table-stamp"></div>';
+            el += `<td class="ht-60" id="myTag_`+lineList[i].approver_id+`">`+stamp+`</td>`;
+
+            if(lineList[i].approver_id == myEmpId && lineList[i].stamp_check == 'E') {
+                buttonvis = true;
+                myLineId = i;
             }
         }
         el += `
         </tr>`
 
-        let stamp = '결재';
-        el += `
-        <tr>`
-        //결재 도장 두번째 tr
-        for(let i=0; i<empData.length; i++) {
-            el += `<td class="ht-60">`+stamp+`</td>`;
-        }
-        el += `
-        </tr>`
 
         el += `
-        <tr>`
+        <tr>
+            <td class="font-10">`+jdata.appr_date+`</td>`
         //결재 도장 세번째 tr
-        for(let i=0; i<empData.length; i++) {
-            el += `<td class="font-10">`+empData[i].date+`</td>`;
+        for(let i=0; i<lineList.length; i++) {
+
+            el += `<td class="font-10" id="myDate_`+lineList[i].approver_id+`">`+lineList[i].stamp_date+`</td>`;
+            console.log('lineList[i].approver_id : ' + lineList[i].approver_id + '  myEmpId : ' + myEmpId);
+            
         }
         el += `
         </tr>`
         
         $('#aprovalLine_table').append(el);
+
+        $('.modal-table').css({'width' : (lineList.length+1)*100 + 'px'});
+
+        
+        if(buttonvis) {
+            el = `
+            <input type="button" class="contents-input-btn big noline" id="btn_aproval" value="결재">&nbsp;&nbsp; 
+            <input type="button" class="contents-input-btn big noline" id="btn_companion" value="반려">
+            `
+            
+            $('.modal-aproval-btnbox').append(el);
+
+            $('.contents-input-btn').each(function(){
+                $(this).on('click', function(){
+                    let id = $(this).attr('id');
+                    let str = '', type = '';
+                    
+
+                    if(id == 'btn_aproval') {
+                        //결재
+                        str = '결재하시겠습니까?';
+                        type = 'Y';
+
+                    }else {
+                        //반려
+                        str = '반려하시겠습니까?';
+                        type = 'N';
+                    }
+
+                    if(confirm(str)) {
+                        sendApproval(lineList[myLineId], jdata, type);
+                    }
+                         
+                })
+            })
+            
+        }
+        
+    }
+
+    function sendApproval(list, jdata, type){
+
+        $.ajax({
+        url: 'apsendapp.do',
+        type: 'post',
+        data: {
+            apprId : jdata.appr_id
+            ,lineId : list.line_id
+            ,approverId : list.approver_id
+            ,stampCheck : type
+        },
+        success: function(data){
+            $('.contents-input-btn').each(function(){
+                    $(this).hide();
+            })
+            if(data == 'ok') {
+                let stamp = (type == 'Y') ? '결재' : '반려';
+                $('#myTag_' + list.approver_id).empty();
+                $('#myTag_' + list.approver_id).append('<div class="table-stamp">'+stamp+'</div>');
+                $('#myDate_' + list.approver_id).text(${ nowdays });
+            }
+            
+        },
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+            alert('결재 검색이 되지 않습니다.');
+        }
+    });
+    }
+
+    function closePopup(){
+        location.href = 
+        'aplist.do?apType=ap&empId='+${empId};
+        return;
+
+        $('#aprovalLine_table').empty();
+        $('.modal-aproval-btnbox').empty();
+        $('.approval-type').empty();
     }
 
 </script>
@@ -195,6 +296,10 @@
                         
                     </thead>
                 </table>
+            </div>
+
+            <div class="modal-down">
+                
             </div>
             
             <div class="modal-aproval modal-line">
@@ -255,9 +360,8 @@
                 </table>
             </div>
 
-            <div class="modal-aproval flex-center">
-                <input type="button" class="contents-input-btn big noline" id="btn_aproval" value="결재">&nbsp;&nbsp; 
-                <input type="button" class="contents-input-btn big noline" id="btn_companion" value="반려">
+            <div class="modal-aproval flex-center modal-aproval-btnbox">
+                
             </div>
 
         </div>

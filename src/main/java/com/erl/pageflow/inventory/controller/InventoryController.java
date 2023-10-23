@@ -35,10 +35,11 @@ public class InventoryController {
 
 	// 재고 현황 들어갔을 때 보여지는 뷰
 	@RequestMapping("inventorylist.do")
-	public String moveInventoryList(Model model) {
+	public String moveInventoryList(Model model, @RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String limitStr) {
 
-		int currentPage = 1;
-		int limit = 10;
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 
 		int listCount = inventoryService.selectGetListCount();
 		Paging paging = new Paging(listCount, currentPage, limit, "inventorylist.do");
@@ -48,9 +49,9 @@ public class InventoryController {
 
 		for (Inventory inv : list) {
 			String bname = inventoryService.selectInventoryBookName(inv.getBookId());
-			String cname = inventoryService.selectInventoryClientName(inv.getStorageId());
+			String cname = inventoryService.selectInventoryClientName(inv.getClientId());
 			inv.setBookName(bname);
-			inv.setStorageName(cname);
+			inv.setClientName(cname);
 		}
 
 		if (list != null && list.size() > 0) {
@@ -71,25 +72,23 @@ public class InventoryController {
 
 	// 재고 날짜 조회
 	@RequestMapping("invlistdate.do")
-	public String selectReleaseByDate(Search search,
-			@RequestParam(name = "page", required = false) String page,
-			@RequestParam(name = "limit", required = false) String limitStr, 
-			Model model) {
-		
+	public String selectReleaseByDate(Search search, @RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String limitStr, Model model) {
+
 		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
 		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
 
 		int listCount = inventoryService.selectInventoryCountByDate(search);
-		
+
 		Paging paging = new Paging(listCount, currentPage, limit, "invlistdate.do");
-		
+
 		paging.calculator();
 		search.setStartRow(paging.getStartRow());
 		search.setEndRow(paging.getEndRow());
 
 		ArrayList<Inventory> list = inventoryService.selectInventoryByDate(search);
 		logger.info("search : " + search);
-		
+
 		if (list != null && list.size() > 0) {
 
 			model.addAttribute("invenList", list);
@@ -127,7 +126,7 @@ public class InventoryController {
 		case "bookName":
 			listCount = inventoryService.selectInventoryCountBybookName(search);
 			break;
-		case "storageName":
+		case "clientName":
 			listCount = inventoryService.selectInventoryCountBystorageName(search);
 			break;
 		case "store":
@@ -157,7 +156,7 @@ public class InventoryController {
 		case "bookName":
 			list = inventoryService.selectInventoryBybookName(search);
 			break;
-		case "storageName":
+		case "clientName":
 			list = inventoryService.selectInventoryBystorageName(search);
 			break;
 		case "store":

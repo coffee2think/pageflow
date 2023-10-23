@@ -7,7 +7,6 @@
 	<resultMap type="Store" id="resultStore">
 		<result property="storeId" column="STORE_ID" />
 		<result property="bookId" column="BOOK_ID" />
-		<result property="storageId" column="STORAGE_ID" />
 		<result property="empId" column="EMP_ID" />
 		<result property="empName" column="EMP_NAME" />
 		<result property="storeNum" column="STORE_NUM" />
@@ -22,35 +21,38 @@
 	</resultMap>
 	
 	<select id="selectGetListCount" resultType="_int">
-		select count(*) from store where CLASSIFY = '입고'
+		select count(*) from store
+		where classify = '입고'
 	</select>
 	
 	<select id="selectGetReleaseListCount" resultType="_int">
-		select count(*) from store where CLASSIFY = '출고'
+		select count(*) from store
+		where classify = '출고'
 	</select>
 	
 	<select id="selectReleaseList" parameterType="Paging" resultMap="resultStore">
 		<![CDATA[
 			SELECT *
-			FROM (SELECT ROWNUM RNUM, STORE_ID, BOOK_ID, STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, STORE_PRICE, STORE_DATE, CLASSIFY
-				 FROM (SELECT * 
-                       FROM STORE
+			FROM (SELECT ROWNUM RNUM, sub.*
+				 FROM (SELECT * FROM STORE
+				 	   join book using (book_id)
+				 	   join client using (client_id)
                        WHERE CLASSIFY = '출고'
-                       ORDER BY STORE_DATE DESC))
-			WHERE (RNUM BETWEEN #{ startRow } AND #{ endRow })
+                       ORDER BY STORE_DATE, store_id DESC) sub)
+			WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
 		]]>	
 	</select>
 	
 	<select id="selectStoreBookName" parameterType="_int" resultType="string">
 		SELECT BOOK_NAME
 		FROM BOOK
-		WHERE BOOK_ID = 1
+		WHERE BOOK_ID = #{ bookId }
 	</select>
 	
 	<select id="selectStoreClientName" parameterType="_int" resultType="string">
 		SELECT CLIENT_NAME
 		FROM CLIENT
-		WHERE CLIENT_ID = #{ storageId }
+		WHERE CLIENT_ID = #{ clientId }
 	</select>
 	
 	<select id="selectStoreBookPrice" parameterType="_int" resultType="_int">
@@ -62,12 +64,13 @@
 	<select id="selectStoreList" parameterType="Paging" resultMap ="resultStore">
 		<![CDATA[
 		SELECT *
-		FROM (SELECT ROWNUM RNUM, STORE_ID, BOOK_ID, STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, STORE_PRICE, STORE_DATE, CLASSIFY
-			 FROM (SELECT * 
-                        FROM STORE
-                        WHERE CLASSIFY = '입고'
-                        ORDER BY STORE_DATE DESC))
-		WHERE (RNUM BETWEEN #{ startRow } AND #{ endRow })
+			FROM (SELECT ROWNUM RNUM, store_id, book_id, client_id, emp_id, emp_name, store_num, store_price, store_date, classify, book_name, client_name
+				 FROM (SELECT * FROM STORE
+				 	   join book using (book_id)
+				 	   join client using (client_id)
+                       WHERE CLASSIFY = '입고'
+                       ORDER BY STORE_DATE, store_id DESC) sub)
+			WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
 
 		]]>	
 	</select>
@@ -82,11 +85,11 @@
 	<select id="selectStoreByDate" parameterType="Search" resultMap="resultStore">
 		<![CDATA[
 			SELECT *
-			FROM (SELECT ROWNUM RNUM, STORE_ID, BOOK_ID,  STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, 
+			FROM (SELECT ROWNUM RNUM, STORE_ID, BOOK_ID,  CLIENT_ID, EMP_ID, EMP_NAME, STORE_NUM, 
 			                            STORE_PRICE, STORE_DATE, CLASSIFY, BOOK_NAME, CLIENT_NAME
 			            FROM (SELECT *
 			                        FROM STORE
-			                        LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+			                        LEFT JOIN CLIENT USING (CLIENT_ID)
 			                        LEFT JOIN BOOK USING (BOOK_ID)   
 			                        WHERE STORE_DATE BETWEEN #{ begin } AND (TO_DATE(#{ end }) + 1 - 1/86400)))
 			WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
@@ -102,15 +105,15 @@
 	<select id="selectReleaseByDate" parameterType="Search" resultMap="resultStore">
 		<![CDATA[
 			SELECT *
-			FROM (SELECT ROWNUM RNUM, STORE_ID, BOOK_ID, STORAGE_ID, EMP_ID, EMP_NAME, STORE_NUM, STORE_PRICE, STORE_DATE, CLASSIFY
-			      FROM (SELECT *
-			            FROM STORE
-			            WHERE (STORE_DATE between to_date(#{ begin }) and to_date(#{ end }) + 1 - 1/86400) 
-			            AND CLASSIFY = '출고' 
-			            ORDER BY STORE_DATE DESC
-			            )
-			      )
-			WHERE RNUM between #{ startRow } and #{ endRow }
+			FROM (SELECT ROWNUM RNUM, STORE_ID, BOOK_ID,  CLIENT_ID, EMP_ID, EMP_NAME, STORE_NUM, 
+			                            STORE_PRICE, STORE_DATE, CLASSIFY, BOOK_NAME, CLIENT_NAME
+			            FROM (SELECT *
+			                        FROM STORE
+			                        LEFT JOIN CLIENT USING (CLIENT_ID)
+			                        LEFT JOIN BOOK USING (BOOK_ID)   
+			                        WHERE STORE_DATE BETWEEN #{ begin } AND (TO_DATE(#{ end }) + 1 - 1/86400)))
+			WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
+			ORDER BY STORE_DATE DESC
 		]]>
 	</select>
 	
@@ -136,7 +139,7 @@
 	<select id="selectStoreCountByClientName" parameterType="Search" resultType="_int">
 		SELECT COUNT(*)
 		FROM STORE
-		JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+		JOIN CLIENT USING (CLIENT_ID)
 		WHERE CLIENT_NAME LIKE '%' || #{ keyword } || '%'
 	</select>
 	
@@ -148,7 +151,7 @@
 	                        WHERE BOOK_ID LIKE '%' || #{ keyword } || '%'
 	                        ORDER BY BOOK_ID DESC) SUB)
 			LEFT JOIN BOOK USING (BOOK_ID)
-			LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+			LEFT JOIN CLIENT USING (CLIENT_ID)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow } AND CLASSIFY = '입고'
 		]]>
 	</select>
@@ -159,7 +162,7 @@
 			FROM (SELECT ROWNUM RUM, SUB.*
 		           FROM (SELECT * FROM STORE
                                LEFT JOIN BOOK USING (BOOK_ID)
-                              LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+                              LEFT JOIN CLIENT USING (CLIENT_ID)
                                 WHERE BOOK_NAME LIKE '%' || #{ keyword } || '%'
                                 ORDER BY BOOK_ID DESC) SUB)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow } AND CLASSIFY = '입고'
@@ -171,7 +174,7 @@
 			SELECT * FROM(SELECT ROWNUM RUM, SUB.*
 			FROM(SELECT * FROM STORE
 				LEFT JOIN BOOK USING (BOOK_ID)
-                LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+                LEFT JOIN CLIENT USING (CLIENT_ID)
                 WHERE EMP_NAME LIKE '%' || #{ keyword } || '%'
                 ORDER BY BOOK_ID DESC) SUB)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow } AND CLASSIFY = '입고'
@@ -183,7 +186,7 @@
 			SELECT * FROM(SELECT ROWNUM RUM, SUB.*
 			FROM(SELECT * FROM STORE
 				LEFT JOIN BOOK USING (BOOK_ID)
-                LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+                LEFT JOIN CLIENT USING (CLIENT_ID)
                 WHERE CLIENT_NAME LIKE '%' || #{ keyword } || '%'
                 ORDER BY BOOK_ID DESC) SUB)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow } AND CLASSIFY = '입고'
@@ -215,7 +218,7 @@
 	<select id="selectReleaseCountByClientName" parameterType="Search" resultType="_int">
 		SELECT COUNT(*)
 		FROM STORE
-		JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+		JOIN CLIENT USING (CLIENT_ID)
 		WHERE CLIENT_NAME LIKE '%' || #{ keyword } || '%'
 	</select>
 	
@@ -227,7 +230,7 @@
 	                        WHERE BOOK_ID LIKE '%' || #{ keyword } || '%'
 	                        ORDER BY BOOK_ID DESC) SUB)
 			LEFT JOIN BOOK USING (BOOK_ID)
-			LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+			LEFT JOIN CLIENT USING (CLIENT_ID)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow } AND CLASSIFY = '출고'
 		]]>
 	</select>
@@ -238,7 +241,7 @@
 			FROM (SELECT ROWNUM RUM, SUB.*
 		           FROM (SELECT * FROM STORE
                                LEFT JOIN BOOK USING (BOOK_ID)
-                              LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+                              LEFT JOIN CLIENT USING (CLIENT_ID)
                                 WHERE BOOK_NAME LIKE '%' || #{ keyword } || '%'
                                 ORDER BY BOOK_ID DESC) SUB)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow } AND CLASSIFY = '출고'
@@ -250,7 +253,7 @@
 			SELECT * FROM(SELECT ROWNUM RUM, SUB.*
 			FROM(SELECT * FROM STORE
 				LEFT JOIN BOOK USING (BOOK_ID)
-                LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+                LEFT JOIN CLIENT USING (CLIENT_ID)
                 WHERE EMP_NAME LIKE '%' || #{ keyword } || '%'
                 ORDER BY BOOK_ID DESC) SUB)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow } AND CLASSIFY = '출고'
@@ -262,7 +265,7 @@
 			SELECT * FROM(SELECT ROWNUM RUM, SUB.*
 			FROM(SELECT * FROM STORE
 				LEFT JOIN BOOK USING (BOOK_ID)
-                LEFT JOIN CLIENT ON (CLIENT_ID = STORAGE_ID)
+                LEFT JOIN CLIENT USING (CLIENT_ID)
                 WHERE CLIENT_NAME LIKE '%' || #{ keyword } || '%'
                 ORDER BY BOOK_ID DESC) SUB)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow } AND CLASSIFY = '출고'
@@ -299,52 +302,40 @@
 	
 	<insert id="insertStore" parameterType="Store">
 		INSERT INTO STORE VALUES( 
-		#{ storeId }, #{ bookId }, #{ storageId }, #{ empId }, #{ empName }, 
+		(select max(store_id) + 1 from store), #{ bookId }, #{ clientId }, #{ empId }, #{ empName }, 
 		#{ storeNum }, #{ storePrice },#{ storeDate }, '입고')
 	</insert>
 	
 		
 	<insert id="insertRelease" parameterType="Store">
 		INSERT INTO STORE VALUES( 
-		#{ storeId }, #{ bookId }, #{ storageId }, #{ empId }, #{ empName }, 
+		(select max(store_id) + 1 from store), #{ bookId }, #{ clientId }, #{ empId }, #{ empName }, 
 		#{ storeNum }, #{ storePrice },#{ storeDate }, '출고')
 	</insert>
 	
 	<insert id="insertInventory" parameterType="Store">
 	<![CDATA[
-	        INSERT INTO INVENTORY VALUES (
-		(SELECT MAX(INVEN_ID) + 1 FROM INVENTORY), #{ bookId }, #{ storageId }, #{ storeId }, NULL,
-		(SELECT INVEN_ID
-		FROM(SELECT INVEN_ID, ROWNUM
-		            FROM INVENTORY 
-		            ORDER BY INVEN_DATE DESC)
-		WHERE ROWNUM = 1),
-		
-		(SELECT STORE_NUM FROM (SELECT STORE_NUM, ROWNUM
-		FROM STORE
-		WHERE STORE_ID = #{ storeId }
-        ORDER BY STORE_DATE DESC)
-        WHERE ROWNUM = 1),
-		
-		((SELECT NVL(CURR_INVEN, 0)
-FROM (
-    SELECT CURR_INVEN, ROWNUM
-    FROM INVENTORY
-    WHERE BOOK_ID = #{ bookId }
-    ORDER BY INVEN_DATE DESC
-)
-WHERE ROWNUM = 1) + 
-		(
-        SELECT STORE_NUM
-        FROM(SELECT STORE_NUM, ROWNUM
-		FROM STORE
-		WHERE STORE_ID = #{ storeId } AND ROWNUM =1
-        ORDER BY STORE_DATE DESC)
-        )
-        
-        ),
-		#{ storeDate }, '입고', NULL)
-]]>
+	INSERT INTO inventory 
+	VALUES ((SELECT MAX(inven_id) + 1 FROM inventory), #{ bookId }, #{ clientId }, #{ storeId }, NULL, (select max(inven_id) from inventory), -#{ storeNum },
+	                (nvl((SELECT curr_inven FROM inventory WHERE store_id = #{ storeId } AND book_id = #{ bookId }), 0)),
+	                TO_DATE('${ storeDate }', 'YYYY/MM/DD'), 
+	                '출고', 
+	                NULL
+	)	
+	]]>
+	</insert>
+
+	<insert id="insertStoreInventory" parameterType="Store">
+		<![CDATA[
+			INSERT INTO inventory 
+			VALUES ((SELECT MAX(inven_id) + 1 FROM inventory), #{ bookId }, #{ clientId }, #{ storeId }, NULL, (select max(inven_id) from inventory), #{ storeNum },
+	                (nvl((SELECT curr_inven FROM inventory WHERE store_id = #{ storeId } AND book_id = #{ bookId }), 0)),
+	                TO_DATE('${ storeDate }', 'YYYY/MM/DD'), 
+	                '입고', 
+	                NULL
+			)
+					
+		]]>
 	</insert>
 
 	<select id="selectMaxStoreId" resultType="_int">

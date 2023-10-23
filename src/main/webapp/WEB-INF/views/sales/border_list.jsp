@@ -10,14 +10,14 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func_new.js"></script>
 <script>
     const NOWPAGE = 5;
     const SUBPAGE = 1;
     const LNKPAGE = 1;
     
-    // 수량 변경 시 총액 계산
     $(function() {
+    	// 수량 변경 시 총액 계산
     	$('#table_list').find('input[name=orderQuantity]').each(function() {
     		$(this).change(function() { 
     			var tr = $(this).parent().parent().parent();
@@ -27,18 +27,8 @@
     			totalPrice.val(bookPrice * quantity);
     		});
     	});
-    });
+    }); // document ready
     
-    function searchByDate() {
-    	var begin = $('#begin').val();
-    	var end = $('#end').val();
-    	
-    	var url = 'bolistdate.do?';
-    	url += 'begin=' + begin;
-    	url += '&end=' + end;
-    	
-    	location.href = url;
-    }
 </script>
 <title></title>
 </head>
@@ -93,16 +83,16 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="searchType" id="search_type">
-                                            <option value="book">도서명</option>
-                                            <option value="bookStore">서점명</option>
-                                            <option value="location">지역</option>
+                                        	<option value="book" <c:if test="${ searchType == 'book' }">selected</c:if>>도서명</option>
+                                          	<option value="bookStore" <c:if test="${ searchType == 'bookStore' }">selected</c:if>>서점명</option>
+                                          	<option value="location" <c:if test="${ searchType == 'location' }">selected</c:if>>지역</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="search-box">
                                     <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
-                                    <button class="search-btn" onclick="search('bolistkw.do'); return false;">
+                                    <button class="search-btn" onclick="searchKeyword('bolistkw.do'); return false;">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
                                 </div>
@@ -125,8 +115,8 @@
                                     기간
                                 </div>
 
-                                <input type="date" class="select-date select-date-first" name="begin" id="begin" value=${ begin }>
-                                <input type="date" class="select-date select-date-second" name="end" id="end" value=${ end }>
+                                <input type="date" class="select-date select-date-first" name="begin" id="begin" value="${ begin }">
+                                <input type="date" class="select-date select-date-second" name="end" id="end" value="${ end }">
 								
 								<c:set var="today_" value="<%= new java.util.Date() %>" />
 								<fmt:formatDate var="today" value="${ today_ }" pattern="yyyy-MM-dd" />
@@ -148,10 +138,10 @@
 									<c:param name="begin" value="${ monthago }" />
 									<c:param name="end" value="${ today }" />
 								</c:url>
-								
+
                                 <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
                                 <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
-                                <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
+                                <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate('bolistdate.do'); return false;">
                             </div>
 
                         </form>
@@ -189,9 +179,9 @@
                                 </tr>
                                 <c:if test="${ !empty list }">
 	                                <c:forEach items="${ list }" var="bookOrder" >
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ bookOrder.orderId }">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1"">
 		                                    <td class="td-50">
-		                                        <input type="checkbox" name="check" value="${ bookOrder.orderId }">
+		                                        <input type="checkbox" name="check" value="${ bookOrder.orderId }_${ bookOrder.bookId }">
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
@@ -244,9 +234,9 @@
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ bookOrder.orderId }" onclick="onUpdate(${ bookOrder.orderId }); return false;">
-		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ bookOrder.orderId }"  onclick="submitUpdate(${ bookOrder.orderId }, 'boupdate.do'); return false;" style="display: none;">
-		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ bookOrder.orderId }"  onclick="cancelUpdate(${ bookOrder.orderId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline update-btn" value="수정" id="updateBtn_${ bookOrder.orderId }" onclick="onUpdate(this); return false;">
+		                                        <input type="button" class="contents-input-btn noline complete-btn" value="완료" id="completeBtn_${ bookOrder.orderId }"  onclick="submitUpdate(this, 'boupdate.do'); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline cancel-btn" value="취소" id="cancelBtn_${ bookOrder.orderId }"  onclick="cancelUpdate(this); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
 	                                </c:forEach>

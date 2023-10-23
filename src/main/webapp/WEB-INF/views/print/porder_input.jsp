@@ -16,32 +16,6 @@ const LNKPAGE = 2;
 
 let client_type = 'printoffice'; 
 
-document.addEventListener("DOMContentLoaded", function(){
-	$('.input-search-btn').on('click', function() {
-		var input = $(this).parent().children('input');
-		var type = input.attr('name');
-		if(type.includes('book')) {
-			type = 'book';
-		}
-		
-		if(type.includes('client') || type.includes('print')) {
-			type = client_type;
-		}
-		
-		console.log('type : ' + type);
-		var tr = $(this).parent().parent().parent();
-		var trValue = tr.val();
-		console.log('tr : ' + tr);
-		console.log(tr);
-		console.log('trValue : ' + trValue);
-		popup.showPopup(type);
-		
-		
-		
-		curinput = $(this).parent('.input-search').find('input[type=input]');
-		return false;
-	});
-});
 
 function addRow(currentIndex) {
 	// table element 찾기
@@ -50,6 +24,13 @@ function addRow(currentIndex) {
 	// 새 행(Row) 추가 (테이블 중간에)
 	const newRow = table.insertRow(currentIndex + 1);
 
+	// orderId 전송용 input
+	const input_orderId = document.createElement('input');
+	input_orderId.setAttribute('type', 'hidden');
+	input_orderId.setAttribute('name', 'orderId');
+	input_orderId.setAttribute('value', ''); 
+    newRow.appendChild(input_orderId);
+    
 	// empId 전송용 input
     const input_empId = document.createElement('input');
     input_empId.setAttribute('type', 'hidden');
@@ -107,7 +88,7 @@ function addRow(currentIndex) {
 					+ '<button class="input-search-btn">'
 					+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 					+ '</button>'
-					+ '<input type="number" name="printId" class="contents-input" value="">'
+					+ '<input type="number" name="clientId" class="contents-input" value="">'
 					+ '</div>';
 					 
 	newCell3.innerHTML = '<div class="contents-input-div input-search">'
@@ -169,6 +150,7 @@ function addRow(currentIndex) {
 		
 		
 	initRowIndex();
+	initPopupBtn();
 }
 
 function removeRow(currentIndex) {
@@ -177,6 +159,8 @@ function removeRow(currentIndex) {
     	trList.eq(currentIndex).remove();
     	initRowIndex();
 	}
+	
+	initPopupBtn();
 }
 
 function initRowIndex() {
@@ -286,7 +270,7 @@ function initRowIndex() {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="text" name="printId" class="contents-input" value="">
+                                                <input type="text" name="clientId" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-150">

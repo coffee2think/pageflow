@@ -36,4 +36,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 		
 		return employeeDao.insertEmployee(employee);
 	}
+
+	@Override
+	public Employee selectEmployeeApproval(int empId) {
+		return employeeDao.selectEmployeeApproval(empId);
+	}
+	
+	
 }

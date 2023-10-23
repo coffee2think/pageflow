@@ -28,8 +28,8 @@ public class PrintCalcServiceImpl implements PrintCalcService{
 	}
 	
 	@Override
-	public PrintOffice selectPrintOffice(int printId) {
-		return printCalcDao.selectPrintOffice(printId);
+	public PrintOffice selectPrintOffice(int clientId) {
+		return printCalcDao.selectPrintOffice(clientId);
 	}
 	
 	@Override
@@ -37,7 +37,13 @@ public class PrintCalcServiceImpl implements PrintCalcService{
 		return printCalcDao.selectBook(bookId);
 	}
 	
+	@Override
 	public ArrayList<PrintCalc> selectPrintCalcList(Paging paging){
 		return printCalcDao.selectPrintCalcList(paging);
+	}
+	
+	@Override
+	public int updatePrintCalc(PrintCalc printCalc) {
+		return printCalcDao.updatePrintCalc(printCalc);
 	}
 }

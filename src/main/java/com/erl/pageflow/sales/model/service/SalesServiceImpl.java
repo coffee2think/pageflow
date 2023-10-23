@@ -13,6 +13,7 @@ import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.Client;
 import com.erl.pageflow.sales.model.vo.Sales;
+import com.erl.pageflow.sales.model.vo.SalesStatistics;
 
 @Service("salesService")
 public class SalesServiceImpl implements SalesService {
@@ -96,8 +97,8 @@ public class SalesServiceImpl implements SalesService {
 	}
 	
 	@Override
-	public int deleteBookOrder(int orderId) {
-		return salesDao.deleteBookOrder(orderId);
+	public int deleteBookOrder(BookOrder bookOrder) {
+		return salesDao.deleteBookOrder(bookOrder);
 	}
 
 	@Override
@@ -151,13 +152,18 @@ public class SalesServiceImpl implements SalesService {
 	}
 
 	@Override
-	public int selectSalesCountForStats() {
-		return salesDao.selectSalesCountForStats();
+	public ArrayList<SalesStatistics> selectSalesForStats(int year) {
+		return salesDao.selectSalesForStats(year);
 	}
 
 	@Override
-	public ArrayList<Sales> selectSalesForStats(Paging paging) {
-		return salesDao.selectSalesForStats(paging);
+	public int insertSales(Sales sales) {
+		return salesDao.insertSales(sales);
+	}
+
+	@Override
+	public int deleteSales(int salesId) {
+		return salesDao.deleteSales(salesId);
 	}
 
 }

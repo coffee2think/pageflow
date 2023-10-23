@@ -28,8 +28,8 @@ public class PrintCalcDao {
 		return (ArrayList<PrintCalc>) list;
 	}
 	
-	public PrintOffice selectPrintOffice(int printId) {
-		return sqlSessionTemplate.selectOne("printMapper.selectPrintOffice", printId);
+	public PrintOffice selectPrintOffice(int clientId) {
+		return sqlSessionTemplate.selectOne("printMapper.selectPrintOffice", clientId);
 	}
 	
 	public Book selectBook(int bookId) {
@@ -39,5 +39,9 @@ public class PrintCalcDao {
 	public ArrayList<PrintCalc> selectPrintCalcList(Paging paging){
 		List<PrintCalc> list = sqlSessionTemplate.selectList("printMapper.selectPrintCalcList",paging);
 		return (ArrayList<PrintCalc>) list;
+	}
+	
+	public int updatePrintCalc(PrintCalc printCalc) {
+		return sqlSessionTemplate.update("printMapper.updatePrintCalc", printCalc);
 	}
 }

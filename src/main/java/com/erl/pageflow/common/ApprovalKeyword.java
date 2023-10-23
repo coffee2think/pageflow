@@ -7,12 +7,20 @@ public class ApprovalKeyword implements Serializable{
 	private static final long serialVersionUID = -793238329131741966L;
 	private int apprId;
 	private String draftType;
+	private String apprState;
 	private int startRow;
 	private int endRow;
 	
 	public ApprovalKeyword(int apprId, String draftType) {
 		super();
 		this.apprId = apprId;
+		this.draftType = draftType;
+	}
+	
+	public ApprovalKeyword(int apprId, String apprState, String draftType) {
+		super();
+		this.apprId = apprId;
+		this.apprState = apprState;
 		this.draftType = draftType;
 	}
 	
@@ -55,12 +63,22 @@ public class ApprovalKeyword implements Serializable{
 	public void setEndRow(int endRow) {
 		this.endRow = endRow;
 	}
+	
+	public String getApprState() {
+		return apprState;
+	}
+
+	public void setApprState(String apprState) {
+		this.apprState = apprState;
+	}
 
 	@Override
 	public String toString() {
-		return "ApprovalKeyword [apprId=" + apprId + ", draftType=" + draftType + ", startRow=" + startRow + ", endRow="
-				+ endRow + "]";
+		return "ApprovalKeyword [apprId=" + apprId + ", draftType=" + draftType + ", apprState=" + apprState
+				+ ", startRow=" + startRow + ", endRow=" + endRow + "]";
 	}
+
+	
 
 	
 }

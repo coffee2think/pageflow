@@ -13,6 +13,7 @@
     const NOWPAGE = 4;
     const SUBPAGE = 2;
     const LNKPAGE = 2;
+    let client_type = 'bookstore';
 </script>
 <title></title>
 <script type="text/javascript">
@@ -20,74 +21,76 @@ function addRow() {
 	const uniqueId = "row" + (new Date()).getTime();
 	
 	$("#row").append(
-		"<tr id='" + uniqueId + "'>"
-    	+ "<td class='td-50'>"
-        + "<div class='contents-check-div'>"
-        + "<button class='contents-input-plus' onclick='addRow(); return false'>"
-        + "<img src='${ pageContext.servletContext.contextPath }/resources/images/plus.png'>"
-        + "</button>"
-        + "<button class='contents-input-minus' onclick='minusRow(\"" + uniqueId + "\");'>"
-        + "<img src='${ pageContext.servletContext.contextPath }/resources/images/minus.png'>"
-        + "</button>"
-        + "</div>"
-        + "</td>"
-        + "<td class='td-100'>"
-        + "<div class='contents-input-div input-search'>"
-        + "<button class='input-search-btn'>"
-        + "<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
-        + "</button>"
-        + "<input type='input' name='code' class='contents-input' value=''>"
-        + "</div>"
-        + "</td>"
-        + "<td class='td-200'>"
-        + "<div class='contents-input-div input-search'>"
-        + "<button class='input-search-btn'>"
-        + "<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
-        + "</button>"
-        + "<input type='input' name='name' class='contents-input' value=''>"
-        + "</div>"
-        + "</td>"
-        + "<td class='td-100'>"
-        + "<div class='contents-input-div input-search'>"
-        + "<button class='input-search-btn'>"
-        + "<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
-        + "</button>"
-        + "<input type='input' name='store' class='contents-input' value=''>"
-        + "</div>"
-        + "</td>"
-        + "<td class='td-100'>"
-        + "<div class='contents-input-div input-search'>"
-        + "<button class='input-search-btn'>"
-        + "<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
-        + "</button>"
-        + "<input type='input' name='man' class='contents-input' value=''>"
-        + "</div>"
-        + "</td>"
-        + "<td class='td-70'>"
-        + "<div class='contents-input-div'>"
-        + "<input type='date' name='date' class='select-date small'>"
-        + "</div>"
-        + "</td>"
-        + "<td class='td-70'>"
-        + "<div class='contents-input-div'>"
-        + "<input type='number' name='count' class='contents-input'>"
-        + "</div>"
-        + "</td>"
-        + "<td class='td-70'>"
-        + "<div class='contents-input-div'>"
-        + "<input type='number' name='price' class='contents-input'>"
-        + "</div>"
-        + "</td>"
-        + "<td class='td-100'>"
-        + "<div class='contents-input-div'>"
-        + "<input type='number' name='amount' class='contents-input'>"
-        + "</div>"
-        + "</td>"
-	    + "</tr>");
-
+			`<tr id="`+ uniqueId +`" data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">                   
+            <td class="td-50">
+                <div class="contents-check-div">
+                    <button class="contents-input-plus" onclick="addRow(); return false">
+                        <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
+                    </button>
+                    <button class="contents-input-minus" onclick="minusRow(`+ uniqueId +`); return false">
+                        <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
+                    </button>
+                </div>
+            </td>
+            <td class="td-100">
+                <div class="contents-input-div input-search">
+                    <button class="input-search-btn">
+                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+                    </button>
+                    <input type="input" name="bookId" class="contents-input">
+                </div>
+            </td>
+            <td class="td-200">
+                <div class="contents-input-div input-search">
+                    <button class="input-search-btn">
+                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+                    </button>
+                    <input type="input" name="bookName" class="contents-input">
+                </div>
+            </td>
+            <td class="td-100">
+                <div class="contents-input-div input-search">
+                    <button class="input-search-btn">
+                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+                    </button>
+                    <input type="input" name="clientName" class="contents-input">
+                </div>
+            </td>
+            <td class="td-100">
+                <div class="contents-input-div input-search">
+                    <button class="input-search-btn">
+                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+                    </button>
+                    <input type="input" name="empName" class="contents-input">
+                </div>
+            </td>
+            <td class="td-70">
+                <div class="contents-input-div">
+                    <input type="date" name="storeDate" class="select-date small">
+                </div>
+            </td>
+            <td class="td-70">
+                <div class="contents-input-div">
+                    <input type="input" name="storeNum" class="contents-input">
+                </div>
+            </td>
+            <td class="td-70">
+                <div class="contents-input-div">
+                    <input type="input" name="bookPrice" class="contents-input">
+                </div>
+            </td>
+            <td class="td-100">
+                <div class="contents-input-div">
+                    <input type="input" name="storePrice" class="contents-input">
+                </div>
+            </td>
+        </tr>`
+		);
+	initPopupBtn();
 }
 function minusRow(rowId) {
     $("#" + rowId).remove();
+    initPopupBtn();
 }
 
 
@@ -127,8 +130,8 @@ function minusRow(rowId) {
                 <!-- <form class="input-form" action="/comi/partyi" method="post" enctype="multipart/form-data">-->
                 <form class="input-form" action="stoinsert.do" method="post">
                     <!--main-header-bar-->
-                	<input type="hidden" name="empId" value="1"> <!-- 하드코딩 -->
-                	<input type="hidden" name="storageId" value="1"> <!-- 하드코딩 -->
+                	<input type="hidden" name="empId" value="1">
+                	<input type="hidden" name="clientId" value="">
                     <div class="main-header-bar">
                         <div class="main-title-box">
                             <img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
@@ -157,7 +160,8 @@ function minusRow(rowId) {
                                         <th>정가</th>
                                         <th>입고금액</th>
                                     </tr>
-                                    <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">                   
+                                    <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">       
+                                 
                                         <td class="td-50">
                                             <div class="contents-check-div">
                                                 <button class="contents-input-plus" onclick="addRow(); return false">
@@ -173,7 +177,7 @@ function minusRow(rowId) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="bookId" class="contents-input" value="">
+                                                <input type="input" name="bookId" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-200">
@@ -181,7 +185,7 @@ function minusRow(rowId) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="bookName" class="contents-input" value="">
+                                                <input type="input" name="bookName" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-100">
@@ -189,7 +193,7 @@ function minusRow(rowId) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="clientName" class="contents-input" value="">
+                                                <input type="input" name="clientName" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-100">
@@ -197,7 +201,7 @@ function minusRow(rowId) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="empName" class="contents-input" value="">
+                                                <input type="input" name="empName" class="contents-input">
                                             </div>
                                         </td>
                                         <td class="td-70">

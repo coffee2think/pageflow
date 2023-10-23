@@ -111,21 +111,20 @@ public class EmployeeController {
 	}
 	
 	// 직원 등록 
-		@RequestMapping(value = "empinsert.do",  method= {RequestMethod.GET,RequestMethod.POST})
-		public String memberInsertMethod(Employee employee, Model model) {
-			logger.info("empinsert.do" + employee.getDepId());
-			logger.info("empinsert.do" + employee);
-			
+  @RequestMapping(value = "empinsert.do",  method= {RequestMethod.GET,RequestMethod.POST})
+  public String memberInsertMethod(Employee employee, Model model) {
+    logger.info("empinsert.do" + employee.getDepId());
+    logger.info("empinsert.do" + employee);
+  
+    if (employeeService.insertEmployee(employee) > 0) {
+      return "redirect:mnlist.do";
+    } else {
+      model.addAttribute("message", "직원 등록 실패!");
+      return "common/error";
+    }
+	}
 
-			
-			if (employeeService.insertEmployee(employee) > 0) {
-				return "redirect:mnlist.do";
-			} else {
-				model.addAttribute("message", "직원 등록 실패!");
-				return "common/error";
-			}
-		}
-
-		
+	//직원 조회
+	
 		
 }

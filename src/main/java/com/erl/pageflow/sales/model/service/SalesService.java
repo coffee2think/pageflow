@@ -9,6 +9,7 @@ import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.Client;
 import com.erl.pageflow.sales.model.vo.Sales;
+import com.erl.pageflow.sales.model.vo.SalesStatistics;
 
 public interface SalesService {
 	public int selectBookOrderCountByDate(Search search);
@@ -26,7 +27,7 @@ public interface SalesService {
 	public ArrayList<Client> selectClientByEndDate(Search search);
 	public int insertBookOrder(BookOrder bookOrder);
 	public int updateBookOrder(BookOrder bookOrder);
-	public int deleteBookOrder(int orderId);
+	public int deleteBookOrder(BookOrder bookOrder);
 	public int insertClient(Client client);
 	public int updateClient(Client client);
 	public int deleteClient(int clientId);
@@ -37,7 +38,8 @@ public interface SalesService {
 	public ArrayList<BookOrder> selectBookOrderByBookStore(Search search);
 	public ArrayList<BookOrder> selectBookOrderByLocation(Search search);
 	public int selectMaxOrderId();
-	public int selectSalesCountForStats();
-	public ArrayList<Sales> selectSalesForStats(Paging paging);
+	public ArrayList<SalesStatistics> selectSalesForStats(int year);
+	public int insertSales(Sales sales);
+	public int deleteSales(int salesId);
 
 }

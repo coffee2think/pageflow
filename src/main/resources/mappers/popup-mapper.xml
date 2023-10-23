@@ -36,6 +36,73 @@
 		<result property="endDate" column="END_DATE" />
 	</resultMap>
 	
+	<resultMap type="BookStore" id="resultBookStore">
+		<result property="clientId" column="CLIENT_ID" />
+		<result property="category" column="CATEGORY" />
+		<result property="clientName" column="CLIENT_NAME" />
+		<result property="clientAddress" column="CLIENT_ADDRESS" />
+		<result property="clientContact" column="CLIENT_CONTACT" />
+		<result property="eid" column="EID" />
+		<result property="clientUrl" column="CLIENT_URL" />
+		<result property="manager" column="MANAGER" />
+		<result property="managerContact" column="MANAGER_CONTACT" />
+		<result property="managerEmail" column="MANAGER_EMAIL" />
+		<result property="startDate" column="START_DATE" />
+		<result property="endDate" column="END_DATE" />
+	</resultMap>
+	
+	<resultMap type="Storage" id="resultStorage">
+		<result property="clientId" column="CLIENT_ID" />
+		<result property="category" column="CATEGORY" />
+		<result property="clientName" column="CLIENT_NAME" />
+		<result property="clientAddress" column="CLIENT_ADDRESS" />
+		<result property="clientContact" column="CLIENT_CONTACT" />
+		<result property="eid" column="EID" />
+		<result property="clientUrl" column="CLIENT_URL" />
+		<result property="manager" column="MANAGER" />
+		<result property="managerContact" column="MANAGER_CONTACT" />
+		<result property="managerEmail" column="MANAGER_EMAIL" />
+		<result property="startDate" column="START_DATE" />
+		<result property="endDate" column="END_DATE" />
+	</resultMap>
+	
+	<resultMap type="Employee" id="resultEmployee">
+		<result property="empId" column="EMP_ID" />
+		<result property="empPwd" column="EMP_PWD" />
+		<result property="empName" column="EMP_NAME" />
+		<result property="empPwdUpdate" column="EMP_PWD_UPDATE" />
+		<result property="phone" column="PHONE" />
+		<result property="empBirth" column="EMP_BIRTH" />
+		<result property="email" column="EMAIL" />
+		<result property="address" column="ADDRESS" />
+		<result property="salary" column="SALARY" />
+		<result property="profile" column="PROFILE" />
+		<result property="enrollDate" column="ENROLL_DATE" />
+		<result property="modifyDate" column="MODIFY_DATE" />
+		<result property="leaveDate" column="LEAVE_DATE" />
+		<result property="lastDate" column="LAST_DATE" />
+		<result property="jobId" column="JOP_ID" />
+		<result property="posId" column="POS_ID" />
+		<result property="depId" column="DEP_ID" />
+		<result property="loginOk" column="LOGIN_OK" />
+		<result property="adminYN" column="ADMIN_YN" />
+	</resultMap>
+	
+	<resultMap type="BookOrder" id="resultBookOrder">
+		<result property="orderId" column="order_ID" />
+		<result property="bookId" column="BOOK_ID" />
+		<result property="clientId" column="CLIENT_ID" />
+		<result property="empId" column="EMP_ID" />
+		<result property="empName" column="EMP_NAME" />
+		<result property="orderQuantity" column="ORDER_QUANTITY" />
+		<result property="orderDate" column="ORDER_DATE" />
+		<result property="modifyDate" column="MODIFY_DATE" />
+		<result property="state" column="STATE" />
+		<result property="bookName" column="BOOK_NAME" />
+		<result property="bookPrice" column="BOOK_PRICE" />
+		<result property="bookStoreName" column="CLIENT_NAME" />
+	</resultMap>
+	
 	<select id="selectBookCountById" parameterType="_int" resultType="_int">
 		select count(*) from book
 		where book_id = #{ bookId }
@@ -46,18 +113,16 @@
 		where book_name like '%' || #{ bookName } || '%'
 	</select>
 	
-	<select id="selectBookById" parameterType="_int" resultMap="resultBookWithStock">
+	<select id="selectBookById" parameterType="Search" resultMap="resultBookWithStock">
 		select * from book
-		where book_id = #{ bookId }
+		where book_id = to_number( #{ keyword } )
+		order by book_id asc
 	</select>
 	
-	<select id="selectBookByName" parameterType="string" resultMap="resultBookWithStock">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from book
-			  where book_name like '%' || #{ bookName } || '%'
-			  order by book_id desc) sub)
-		where rnum between 1 and 10
+	<select id="selectBookByName" parameterType="Search" resultMap="resultBookWithStock">
+		select * from book
+		where book_name like '%' || #{ keyword } || '%'
+		order by book_id asc
 	</select>
 	
 	<select id="selectPrintOfficeCountById" parameterType="_int" resultType="_int">
@@ -65,12 +130,9 @@
 		where category = '인쇄소' and client_id = #{ clientId }
 	</select>
 	
-	<select id="selectPrintOfficeById" parameterType="_int" resultMap="resultPrintOffice">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from client
-					where category = '인쇄소' and client_id = #{ clientId }) sub)
-		where rnum between 1 and 10
+	<select id="selectPrintOfficeById" parameterType="Search" resultMap="resultPrintOffice">
+		select * from client
+		where category = '인쇄소' and client_id = to_number(#{ keyword })
 	</select>
 	
 	<select id="selectPrintOfficeCountByName" parameterType="string" resultType="_int">
@@ -78,12 +140,106 @@
 		where category = '인쇄소' and client_name like '%' || #{ clientName } || '%'
 	</select>
 	
-	<select id="selectPrintOfficeByName" parameterType="string" resultMap="resultPrintOffice">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from client
-					where category = '인쇄소' and client_name like '%' || #{ clientName } || '%') sub)
-		where rnum between 1 and 10
+	<select id="selectPrintOfficeByName" parameterType="Search" resultMap="resultPrintOffice">
+		select * from client
+		where category = '인쇄소' and client_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectBookStoreCountById" parameterType="_int" resultType="_int">
+		select count(*) from client
+		where category = '서점' and client_id = #{ clientId }
+	</select>
+	
+	<select id="selectBookStoreCountByName" parameterType="string" resultType="_int">
+		select count(*) from client
+		where category = '서점' and client_name like '%' || #{ clientName } || '%'
+	</select>
+	
+	<select id="selectBookStoreById" parameterType="Search" resultMap="resultBookStore">
+		select * from client
+		where category = '서점' and client_id = to_number(#{ keyword })
+	</select>
+	
+	<select id="selectBookStoreByName" parameterType="Search" resultMap="resultBookStore">
+		select * from client
+		where category = '서점' and client_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectStorageCountById" parameterType="_int" resultType="_int">
+		select count(*) from client
+		where category = '창고' and client_id = #{ clientId }
+	</select>
+	
+	<select id="selectStorageCountByName" parameterType="string" resultType="_int">
+		select count(*) from client
+		where category = '창고' and client_name like '%' || #{ clientName } || '%'
+	</select>
+	
+	<select id="selectStorageById" parameterType="Search" resultMap="resultStorage">
+		select * from client
+		where category = '창고' and client_id = to_number(#{ keyword })
+	</select>
+	
+	<select id="selectStorageByName" parameterType="Search" resultMap="resultStorage">
+		select * from client
+		where category = '창고' and client_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectEmployeeCountByEmpName" parameterType="string" resultType="_int">
+		select count(*) from employee
+		where emp_name like '%' || #{ empName } || '%'
+	</select>
+	
+	<select id="selectEmployeeCountByDepName" parameterType="string" resultType="_int">
+		select count(*)
+		from employee
+		left join department using (dep_id) 
+		where dep_name like '%' || #{ depName } || '%'
+	</select>
+	
+	<select id="selectEmployeeByEmpName" parameterType="Search" resultMap="resultEmployee">
+		select * from employee
+		where emp_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectEmployeeByDepName" parameterType="Search" resultMap="resultEmployee">
+		select * from employee
+  		left join department using (dep_id)
+		where dep_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectBookOrderCountByClientName" parameterType="string" resultType="_int">
+		select count(*) from book_order
+		left join client using (client_id)
+		where client_name like '%' || #{ clientName } || '%'
+			  and state not in ('주문취소', '반품')
+	</select>
+	
+	<select id="selectBookOrderCountByDate" parameterType="Search" resultType="_int">
+		select count(*) from book_order
+		where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+			  and state not in ('주문취소', '반품')
+		order by order_id desc
+	</select>
+	
+	<select id="selectBookOrderByClientName" parameterType="Search" resultMap="resultBookOrder">
+		select * from book_order
+		left join client using (client_id)
+		left join book using (book_id)
+		where client_name like '%' || #{ keyword } || '%'
+			  and state not in ('주문취소', '반품')
+			  and ((order_id, book_id) not in (select order_id, book_id from sales))
+		order by order_id desc
+	</select>
+	
+	<select id="selectBookOrderByDate" parameterType="Search" resultMap="resultBookOrder">
+		select * from book_order
+		left join client using (client_id)
+		left join book using (book_id)
+		where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+			  and state not in ('주문취소', '반품')
+			  and ((order_id, book_id) not in (select order_id, book_id from sales))
+		order by order_id desc
 	</select>
 	
 </mapper>

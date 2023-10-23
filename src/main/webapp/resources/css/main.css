@@ -747,3 +747,42 @@ body {
     background: none;
     border: none;
 }
+
+.detail-radio {
+    vertical-align: top;
+}
+
+.detail_area {
+    padding: 10px 10px;
+    text-align: left;
+    border: 1px solid;
+    border: 1px solid #9fc7ff;
+}
+
+.detail_emergency {
+    width: calc(100% - 22px);
+}
+
+.table-stamp {
+    border: 1px solid #1a70d3;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #1a70d3;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.search-btn-appr {
+    height: 100%;
+    border-right: 1px solid #d4d4d4;
+    cursor: pointer;
+}
+
+#appendTextArea {
+    position: absolute;
+    top: 0;
+    right: 50000px;
+    z-index: -9999999999;
+}

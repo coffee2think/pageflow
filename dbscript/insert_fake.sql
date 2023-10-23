@@ -99,20 +99,52 @@ values (1, 1, 'mascot.png', '202310140306.png');
 insert into draft
 values ('annual', '연차신청서');
 
-insert into approval
-values (1, 1, 3, 'annual', null, 'continue', sysdate, null, null);
-
 insert into draft_annual 
 values (1, 'annual', '연차를 신청합니다. 병원방문', '010-1234-1234', '2023-10-19', '2023-10-20', null);
-
-
-insert into approval
-values (2, 2, 3, 'annual', null, 'companion', sysdate, null, null);
 
 insert into draft_annual 
 values (2, 'annual', '2일 연차를 신청합니다. 쉴래요 구냥', '010-9999-9999', '2023-10-20', '2023-10-22' '2일 연차를 신청합니다.', 'annual');
 
+insert into approval
+values (1, 1, 'annual', 1, 1, 'continue', sysdate, null, null);
+
+insert into approval
+values (2, 2, 'annual', 2, 2, 'companion', '2023-10-19', null, null);
+
+
+
+insert into approvalline_group
+values (1, 1);
+
 insert into approvalline 
-values (1, 1, '결재라인 1', 2, '김태히', '직원', 3, '장덩근', '팀장', default, null, null, default, null, null);
+values (1, 1, 1, 2, '김태히', '직원', 'Y', '2023-10-20');
+
+insert into approvalline 
+values (1, 2, 1, 3, '장덩근', '팀장', 'N', null);
+
+insert into approvalline 
+values (2, 1, 2, 3, '장덩근', '팀장', 'Y', '2023-10-20');
+
+
+insert into approvalline_save
+values (1, 1, 1, 2, '김태히', '직원');
+insert into approvalline_save 
+values (1, 2, 1, 3, '장덩근', '팀장');
+
+
+insert into approvalline_save
+values (2, 1, 1, 2, '김태히', '직원', '홍길동의결재라인 2');
+insert into approvalline_save 
+values (2, 2, 1, 3, '장덩근', '팀장', '홍길동의결재라인 2');
+insert into approvalline_save
+values (2, 3, 1, 2, '김태히', '직원', '홍길동의결재라인 2');
+insert into approvalline_save 
+values (2, 4, 1, 3, '장덩근', '팀장', '홍길동의결재라인 2');
+
+
+ALTER TABLE approvalline DROP CONSTRAINT FK_APPROVALLINE_GROUP_TO_APPROVALLINE;
+ALTER TABLE approvalline_save DROP CONSTRAINT FK_APPROVALLINE_SAVE_GROUP_TO_APPROVALLINE_SAVE;
+
+
 
 commit;

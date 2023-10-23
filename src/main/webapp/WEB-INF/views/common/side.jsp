@@ -34,6 +34,10 @@
                 $('#sideSubBtn_1_2').attr('href', 'aplist.do?apType=ap&empId='+empId);
 
                 $('#sideBtn_2').attr('href', 'aplist.do?apType=all&empId='+empId);
+
+                $('#sideBtn_3').attr('href', 'apmoveinsert.do?empId='+empId);
+                $('#sideBtn_4').attr('href', 'allinelist.do?empId='+empId);
+                
             }
         }
     });

@@ -8,7 +8,7 @@ public class Inventory implements java.io.Serializable {
 
 	private int invenId;
 	private int bookId;
-	private int storageId;
+	private int clientId;
 	private int storeId;
 	private int refundId;
 	private int prevInbenId;
@@ -18,18 +18,18 @@ public class Inventory implements java.io.Serializable {
 	private String classify;
 	private String remark;
 	private String bookName;
-	private String storageName;
+	private String clientName;
 
 	public Inventory() {
 		super();
 	}
 
-	public Inventory(int invenId, int bookId, int storageId, int storeId, int refundId, int prevInbenId, int increase,
-			int currInven, Date invenDate, String classify, String remark, String bookName, String storageName) {
+	public Inventory(int invenId, int bookId, int clientId, int storeId, int refundId, int prevInbenId, int increase,
+			int currInven, Date invenDate, String classify, String remark, String bookName, String clientName) {
 		super();
 		this.invenId = invenId;
 		this.bookId = bookId;
-		this.storageId = storageId;
+		this.clientId = clientId;
 		this.storeId = storeId;
 		this.refundId = refundId;
 		this.prevInbenId = prevInbenId;
@@ -39,23 +39,7 @@ public class Inventory implements java.io.Serializable {
 		this.classify = classify;
 		this.remark = remark;
 		this.bookName = bookName;
-		this.storageName = storageName;
-	}
-
-	public String getBookName() {
-		return bookName;
-	}
-
-	public void setBookName(String bookName) {
-		this.bookName = bookName;
-	}
-
-	public String getStorageName() {
-		return storageName;
-	}
-
-	public void setStorageName(String storageName) {
-		this.storageName = storageName;
+		this.clientName = clientName;
 	}
 
 	public int getInvenId() {
@@ -74,12 +58,12 @@ public class Inventory implements java.io.Serializable {
 		this.bookId = bookId;
 	}
 
-	public int getStorageId() {
-		return storageId;
+	public int getClientId() {
+		return clientId;
 	}
 
-	public void setStorageId(int storageId) {
-		this.storageId = storageId;
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
 	}
 
 	public int getStoreId() {
@@ -146,16 +130,32 @@ public class Inventory implements java.io.Serializable {
 		this.remark = remark;
 	}
 
+	public String getBookName() {
+		return bookName;
+	}
+
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
 	@Override
 	public String toString() {
-		return "Inventory [invenId=" + invenId + ", bookId=" + bookId + ", storageId=" + storageId + ", storeId="
+		return "Inventory [invenId=" + invenId + ", bookId=" + bookId + ", clientId=" + clientId + ", storeId="
 				+ storeId + ", refundId=" + refundId + ", prevInbenId=" + prevInbenId + ", increase=" + increase
 				+ ", currInven=" + currInven + ", invenDate=" + invenDate + ", classify=" + classify + ", remark="
-				+ remark + ", bookName=" + bookName + ", storageName=" + storageName + "]";
+				+ remark + ", bookName=" + bookName + ", clientName=" + clientName + "]";
 	}
 
 }
