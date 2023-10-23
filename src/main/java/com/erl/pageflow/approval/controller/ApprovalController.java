@@ -1,5 +1,6 @@
 package com.erl.pageflow.approval.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
@@ -11,11 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,12 +30,18 @@ import com.erl.pageflow.approval.model.vo.Approval;
 import com.erl.pageflow.approval.model.vo.Draft;
 import com.erl.pageflow.approvalline.model.service.ApprovalLineService;
 import com.erl.pageflow.approvalline.model.vo.ApprovalLine;
+import com.erl.pageflow.approvalline.model.vo.ApprovalLineSave;
 import com.erl.pageflow.board.model.vo.Board;
+import com.erl.pageflow.board.model.vo.BoardUpload;
 import com.erl.pageflow.book.model.vo.BookWithStock;
 import com.erl.pageflow.common.ApprovalKeyword;
+import com.erl.pageflow.common.ApprovalLineKeyword;
+import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.ReplyKeyword;
 import com.erl.pageflow.common.Search;
+import com.erl.pageflow.employee.model.service.EmployeeService;
+import com.erl.pageflow.employee.model.vo.Employee;
 
 @Controller
 public class ApprovalController {
@@ -44,6 +53,9 @@ public class ApprovalController {
 	
 	@Autowired
 	private ApprovalLineService approvalLineService;
+	
+	@Autowired
+	private EmployeeService employeeService;
 	
 	//**************나의 전자결재****************
 	//기안서 검색
@@ -299,14 +311,22 @@ public class ApprovalController {
 			@RequestParam("approvalId") int approvalId,
 			HttpServletResponse response) throws IOException {
 		logger.info("approvalId : " + approvalId);
-		response.setContentType("application/json; charset=utf-8");
+		
 		
 		Approval approval = approvalService.selectMyApproval(approvalId);
 		setDraft(approval);
 		logger.info("approval : " + approval);
-		ApprovalLine approvalLine = approvalLineService.selectMyApprovalLine(approval.getLineId());
-		logger.info("approvalLine : " + approvalLine);
+		//기안서의 결재라인 리스트
+		ArrayList<ApprovalLine> lineList = approvalLineService.selectMyApprovalLineList(approval.getLineId());
+		logger.info("lineList : " + lineList);
 		
+		//기안서에 저장된 결재라인 
+		ArrayList<ApprovalLineSave> savelineList = approvalLineService.selectMyApprovalSaveLineList(approval.getLineId());
+		logger.info("savelineList : " + savelineList);
+		
+		response.setContentType("application/json; charset=utf-8");
+		JSONObject sendJson = new JSONObject();
+		JSONArray sendArr =  new JSONArray();
 		JSONObject jobj = new JSONObject();
 		
 		jobj.put("appr_id", approval.getApprId());
@@ -316,7 +336,10 @@ public class ApprovalController {
 		jobj.put("pos_name", approval.getPosName());
 		jobj.put("draft_type", approval.getDraftType());
 		jobj.put("drafter_name", approval.getDrafterName());
-		jobj.put("approver_name", approval.getApprover());
+		
+		jobj.put("origin_file", approval.getOriginFile());
+		jobj.put("rename_file", approval.getRenameFile());
+		
 		jobj.put("start_date", (approval.getStartDate() == null) ? "" : approval.getStartDate().toString());
 		jobj.put("end_date", (approval.getEndDate() == null) ? "" : approval.getEndDate().toString());
 		jobj.put("detail", approval.getDetail());
@@ -324,46 +347,153 @@ public class ApprovalController {
 		jobj.put("appr_date", (approval.getApprDate() == null) ? "" : approval.getApprDate().toString());
 		jobj.put("receipt_date", (approval.getReceiptDate() == null) ? "" : approval.getReceiptDate().toString());
 		jobj.put("rejection_date", (approval.getRejectionDate() == null) ? "" : approval.getRejectionDate().toString());
-		jobj.put("line_id", approvalLine.getLineId());
-		jobj.put("line_name", approvalLine.getLineName());
 		
+		jobj.put("line_id", approval.getLineId());
+		if(savelineList != null && savelineList.size() > 0) {
+			jobj.put("line_name", savelineList.get(0).getLineName());
+		}
 		
+		JSONArray jarr =  new JSONArray();
+		if(lineList != null && lineList.size() > 0) {
+			
+			for(ApprovalLine line :lineList) {
+				JSONObject job = new JSONObject();
+				job.put("emp_id", line.getEmpId());
+				job.put("line_id", line.getLineId());
+				job.put("approver_id", line.getApproverId());
+				job.put("approver_name", line.getApproverName());
+				job.put("pos_name", line.getPosName());
+				job.put("stamp_check", line.getStampCheck());
+				job.put("stamp_date", (line.getStampDate() == null) ? "" : line.getStampDate().toString());
+				jarr.add(job);
+			}
+		}
 		
-		jobj.put("emp_id1", approvalLine.getEmpId1());
-		jobj.put("emp_id2", approvalLine.getEmpId2());
-		jobj.put("emp_id3", approvalLine.getEmpId3());
-		jobj.put("emp_id4", approvalLine.getEmpId4());
+		//sendJson.put("approval", jobj);
+		sendJson.put("approval", jobj);
+		sendJson.put("list", jarr);
+		logger.info("sendJson : " + sendJson);
+		return sendJson.toJSONString();
 		
-		jobj.put("pos_name1", approvalLine.getPosName1());
-		jobj.put("pos_name2", approvalLine.getPosName2());
-		jobj.put("pos_name3", approvalLine.getPosName3());
-		jobj.put("pos_name4", approvalLine.getPosName4());
+	}
+	@RequestMapping(value = "apsendapp.do", method = RequestMethod.POST)
+	public void updateSendApp(
+			ApprovalLineKeyword approvalLineKeyword,
+			HttpServletResponse response) throws IOException {
 		
-		jobj.put("stamp_date1", (approvalLine.getStampDate1() == null) ? "" : approvalLine.getStampDate1().toString());
-		jobj.put("stamp_date2", (approvalLine.getStampDate2() == null) ? "" : approvalLine.getStampDate2().toString());
-		jobj.put("stamp_date3", (approvalLine.getStampDate3() == null) ? "" : approvalLine.getStampDate3().toString());
-		jobj.put("stamp_date4", (approvalLine.getStampDate4() == null) ? "" : approvalLine.getStampDate4().toString());
+		logger.info("approvalLineKeyword : " + approvalLineKeyword);
+		String chk = "no";
+		if(approvalLineService.updateApprLineStampCheck(approvalLineKeyword) > 0) {
+			chk = "ok";
+			
+			//모두 결재가 완료되면 기안서의 결재 진행상태가 완료로 변경
+			//만약 하나라도 반려가 되면 반려로 변경
+			ArrayList<ApprovalLine> lineList = approvalLineService.selectMyApprovalLineList(approvalLineKeyword.getLineId());
+			logger.info("lineList : " + lineList);
+			
+			String type = "continue";
+			int count = 0;
+			
+			for(ApprovalLine appLine : lineList) {
+				
+				logger.info("  appLine.getStampCheck() : " + appLine.getStampCheck());
+				
+				if(appLine.getStampCheck().equals("N")) {
+					type = "companion";
+					break;
+				}
+				
+				if(appLine.getStampCheck().equals("Y")) {
+					count ++;
+				}
+			}
+			
+			logger.info("count : " + count + "  lineList.size() : " + lineList.size());
+			 
+			if(type != "companion") {
+				if(count >= lineList.size()) {
+					type = "complete";
+				}
+			}
+			logger.info("type : " + type);
+			if(approvalService.updateApprovalState(
+					new ApprovalKeyword(approvalLineKeyword.getApprId(), type, null)) > 0) {
+				//진행상태 업데이트
+			}
+			
+		}
 		
-		jobj.put("emp_name1", approvalLine.getEmpName1());
-		jobj.put("emp_name2", approvalLine.getEmpName2());
-		jobj.put("emp_name3", approvalLine.getEmpName3());
-		jobj.put("emp_name4", approvalLine.getEmpName4());
-		
-		return jobj.toJSONString();
-		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print(chk);
+		out.flush();
+		out.close();
 	}
 	
 	//인서트
 	@RequestMapping("apmoveinsert.do")
-	public String insertMoveApprovalMethod() {
+	public String insertMoveApprovalMethod(@RequestParam(name="empId") int empId, Model model) {
+		logger.info("empId : " + empId);
+		Employee employee = employeeService.selectEmployeeApproval(empId);
+		logger.info("employee : " + employee);
+		//검색
+		model.addAttribute("empId", empId);
+		model.addAttribute("employee", employee);
 		return "approval/appr_input";
 	}
 	
 	@RequestMapping(value = "apinsert.do", method = RequestMethod.POST)
-	public String insertApprovalMethod(Approval approval, Model model,
-			HttpServletRequest request, 
-			@RequestParam(name = "upfile", required = false) MultipartFile mfile) {
+	public String insertApprovalMethod(
+			Approval approval,
+			@RequestParam(name="detail") String detail,
+			@RequestParam(name = "upfile", required = false) MultipartFile mfile, 
+			HttpServletRequest request, Model model) {
+		logger.info("apinsert.do - mfile : " + mfile);
+		logger.info("apinsert.do - detail : " + detail);
+		logger.info("apinsert.do - approval : " + approval);
+		String savePath = request.getSession().getServletContext().getRealPath(
+				"resources/appr_upfiles");
 		
-		return "approval/appr_input";
+		//첨부파일이 있을때 
+		if(mfile != null) {
+			if(!mfile.isEmpty()) {
+				//전송온 파일이름 추출함
+				String fileName = mfile.getOriginalFilename();
+				String renameFileName = null;
+				
+				//저장폴더에는 변경된 이름을 저장 처리함
+				//파일 이름 바꾸기함 : 년월일시분초.확장자
+				if(fileName != null && fileName.length() > 0) {
+					//바꿀 파일명에 대한 문자열 만들기
+					renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmss");
+					logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
+					
+					try {
+						//저장폴더에 파일명 바꾸기 처리
+						mfile.transferTo(new File(savePath + "\\" + renameFileName));
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+						model.addAttribute("message", "파일명 바꾸기 또는 첨부파일 저장 실패");
+						return "common/error";
+					}
+				}
+				
+				//첨부파일 정보 저장 처리
+				approval.setOriginFile(fileName);
+				approval.setRenameFile(renameFileName);
+			}
+		}
+		
+		if(approvalService.insertApproval(approval) > 0) {
+			model.addAttribute("apType", "my");
+			model.addAttribute("empId", approval.getDrafter());
+			return "redirect:aplist.do";
+		}else {
+			model.addAttribute("message", "새 게시글 등록 실패!");
+			return "common/error";
+		}
+		
 	}
+	
 }

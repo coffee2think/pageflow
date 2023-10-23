@@ -132,11 +132,39 @@
     text-align: center;
 }
 
-.modal-pop .contents-table td.approval-td {
+.modal-pop .contents-table td.approval-td, .contents-table.aproval .approval-td{
     text-align: left;
     padding: 0px 10px;
 }
 
 .emphtext {
     font-weight: bold;
+}
+
+.modal-down {
+    
+}
+
+.contents-notice-down-box.show {
+    margin: 0 15px;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.contents-notice-down {
+    position: relative;
+    /* width: 250px; */
+    height: 10px;
+    background-color: #fff;
+    border: 1px solid #e2e2e2;
+    padding: 10px 30px 10px 20px;
+    /* margin-bottom: 10px; */
+    /* margin-top: 5px; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contents-notice-down img, .contents-notice-down span{
+    margin-left: 10px;
 }

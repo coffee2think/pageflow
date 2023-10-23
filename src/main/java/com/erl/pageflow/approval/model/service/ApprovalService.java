@@ -84,5 +84,7 @@ public interface ApprovalService {
 
 	public Approval selectMyApproval(int approvalId);
 
+	public int updateApprovalState(ApprovalKeyword approvalKeyword);
+
 
 }
