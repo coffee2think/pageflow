@@ -16,22 +16,66 @@ public class Employee implements java.io.Serializable {
 	private String address;
 	private int salary;
 	private String profile;
+	private String profilechange;
 	private Date enrollDate;
 	private Date modifyDate;
 	private Date leaveDate;
+	public String getProfilechange() {
+		return profilechange;
+	}
+
+	public void setProfilechange(String profilechange) {
+		this.profilechange = profilechange;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	private Date lastDate;
 	private int jobId;
 	private int posId;
 	private int depId;
 	private String loginOk;
 	private String adminYN;
-	
 	private String jobName;
 	private String posName;
 	private String depName;
 	
 	public Employee() {
 		super();
+	}
+	
+	
+
+	public Employee(int empId, String empPwd, String empName, Date empPwdUpdate, String phone, String empBirth,
+			String email, String address, int salary, String profile, String profilechange, Date enrollDate,
+			Date modifyDate, Date leaveDate, Date lastDate, int jobId, int posId, int depId, String loginOk,
+			String adminYN, String jobName, String posName, String depName) {
+		super();
+		this.empId = empId;
+		this.empPwd = empPwd;
+		this.empName = empName;
+		this.empPwdUpdate = empPwdUpdate;
+		this.phone = phone;
+		this.empBirth = empBirth;
+		this.email = email;
+		this.address = address;
+		this.salary = salary;
+		this.profile = profile;
+		this.profilechange = profilechange;
+		this.enrollDate = enrollDate;
+		this.modifyDate = modifyDate;
+		this.leaveDate = leaveDate;
+		this.lastDate = lastDate;
+		this.jobId = jobId;
+		this.posId = posId;
+		this.depId = depId;
+		this.loginOk = loginOk;
+		this.adminYN = adminYN;
+		this.jobName = jobName;
+		this.posName = posName;
+		this.depName = depName;
 	}
 
 	public Employee(int empId, String empPwd, String empName, Date empPwdUpdate, String phone, String empBirth,
@@ -268,10 +312,13 @@ public class Employee implements java.io.Serializable {
 	public String toString() {
 		return "Employee [empId=" + empId + ", empPwd=" + empPwd + ", empName=" + empName + ", empPwdUpdate="
 				+ empPwdUpdate + ", phone=" + phone + ", empBirth=" + empBirth + ", email=" + email + ", address="
-				+ address + ", salary=" + salary + ", profile=" + profile + ", enrollDate=" + enrollDate
-				+ ", modifyDate=" + modifyDate + ", leaveDate=" + leaveDate + ", lastDate=" + lastDate + ", jobId="
-				+ jobId + ", posId=" + posId + ", depId=" + depId + ", loginOk=" + loginOk + ", adminYN=" + adminYN
-				+ ", depName=" + depName + ", jobName=" + jobName + ", posName=" + posName + "]";
+				+ address + ", salary=" + salary + ", profile=" + profile + ", profilechange=" + profilechange
+				+ ", enrollDate=" + enrollDate + ", modifyDate=" + modifyDate + ", leaveDate=" + leaveDate
+				+ ", lastDate=" + lastDate + ", jobId=" + jobId + ", posId=" + posId + ", depId=" + depId + ", loginOk="
+				+ loginOk + ", adminYN=" + adminYN + ", jobName=" + jobName + ", posName=" + posName + ", depName="
+				+ depName + "]";
 	}
+
+	
 
 }
