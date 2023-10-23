@@ -70,6 +70,14 @@ public class ReplyDao {
 	public int selectUploadReply(ReplyUpload replyUpload) {
 		return sqlSessionTemplate.selectOne("replyMapper.selectUploadReply", replyUpload);
 	}
+
+	public int deleteReplyUpload(int replyId) {
+		return sqlSessionTemplate.delete("replyMapper.deleteReplyUpload", replyId);
+	}
+
+	public int deleteReply(int boardId) {
+		return sqlSessionTemplate.delete("replyMapper.deleteReply", boardId);
+	}
 	
 	
 	

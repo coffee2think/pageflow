@@ -240,7 +240,7 @@ public class BoardController {
 		int empId = b.getEmpId();
 		int depId = b.getDepId();
 		int boardId = b.getBoardId();
-		
+		logger.info("search : " + search);
 		logger.info("empId : " + empId + " depId : " + depId + " boardId : " + boardId);
 		
 		Board board = boardService.selectBoard(new BoardKeyword(empId, depId, boardId));
@@ -281,6 +281,9 @@ public class BoardController {
 				board.setRenameFile(boardUpload.getRenameUrl());
 				board.setOriginFile(boardUpload.getUploadUrl());
 			}
+			
+			//String tempStr = board.getBoardDetail();
+			//board.setBoardDetail(tempStr.trim());
 			
 			model.addAttribute("board", board);
 			model.addAttribute("replyList", replyList);
@@ -410,7 +413,9 @@ public class BoardController {
 					//첨부파일 정보 저장 처리
 					BoardUpload boardUpload = new BoardUpload(
 							0, board.getDepId(), boardId, fileName, renameFileName);
-							
+					board.setBoardId(boardId);
+					board.setOriginFile(fileName);
+					board.setRenameFile(renameFileName);
 					boardService.insertUploadBoard(boardUpload);
 				}
 			}
@@ -451,8 +456,13 @@ public class BoardController {
 	
 	//업무게시판 게시글 수정
 	@RequestMapping("bdmoveupdate.do")
-	public String updateMoveBoardMethod(Board board, Model model) {
+	public String updateMoveBoardMethod(Board board, 
+			@RequestParam(name = "begin", required = false) Date begin,
+			@RequestParam(name = "end", required = false) Date end,
+			Model model) {
 		logger.info("bdmoveupdate.do => board : " + board);
+		logger.info("bdmoveupdate.do => boardDetail : " + board.getBoardDetail());
+		
 		//보드 첨부파일 찾기
 		BoardUpload boardUpload = boardService.selectBoardListFile(
 				new BoardKeyword(board.getEmpId(), board.getDepId(), board.getBoardId()));
@@ -462,6 +472,8 @@ public class BoardController {
 			board.setOriginFile(boardUpload.getUploadUrl());
 		}
 		
+		model.addAttribute("begin", begin);
+		model.addAttribute("end", end);
 		model.addAttribute("board", board);
 		model.addAttribute("depId", board.getDepId());
 		return "work/work_input";
@@ -469,48 +481,93 @@ public class BoardController {
 	
 	//업무게시판 게시글 수정
 	@RequestMapping("bdupdate.do")
-	public String updateBoardMethod(
-			@RequestParam("boardId") int boardId,
-			@RequestParam("depId") int depId,
-			@RequestParam("empId") int empId,
-			@RequestParam("boardTitle") String boardTitle,
-			@RequestParam("boardDetail") String boardDetail,
+	public String updateBoardMethod(Board board, 
+			HttpServletRequest request,
+			@RequestParam(name = "begin", required = false) Date begin,
+			@RequestParam(name = "end", required = false) Date end,
+			@RequestParam(name = "upfile", required = false) MultipartFile mfile,
 			Model model) {
-		logger.info("bdupdate.do => boardId : " + boardId);
-		logger.info("bdupdate.do => depId : " + depId);
+		logger.info("bdupdate.do => board : " + board);
+		logger.info("bdupdate.do => mfile : " + mfile);
 		//보드 첨부파일 찾기
 		BoardUpload boardUpload = boardService.selectBoardListFile(
-				new BoardKeyword(empId, depId, boardId));
+				new BoardKeyword(board.getEmpId(), board.getDepId(), board.getBoardId()));
 		
-		
-		if(boardUpload != null) {
-			Board board = new Board(depId, boardId, empId);
-			board.setRenameFile(boardUpload.getRenameUrl());
-			board.setOriginFile(boardUpload.getUploadUrl());
-			board.setBoardDetail(boardTitle);
-			board.setBoardDetail(boardDetail);
-			boardService.updateUploadBoard(board);
-			
-			if(boardService.updateBoard(board) > 0) {
-				model.addAttribute("message", "게시글 수정 실패!");
-				return "common/error";
+		logger.info("bdupdate.do => boardUpload : " + boardUpload);
+		String fileName = null;
+		String renameFileName = null;
+		String savePath = request.getSession().getServletContext().getRealPath(
+				"resources/board_upfiles");
+		//첨부파일이 있을때 
+		if(mfile != null) {
+			if(!mfile.isEmpty()) {
+				
+				//전송온 파일이름 추출함
+				fileName = mfile.getOriginalFilename();
+				renameFileName = null;
+				
+				//저장폴더에는 변경된 이름을 저장 처리함
+				//파일 이름 바꾸기함 : 년월일시분초.확장자
+				if(fileName != null && fileName.length() > 0) {
+					//바꿀 파일명에 대한 문자열 만들기
+					renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmss");
+					try {
+						mfile.transferTo(new File(savePath + "\\" + renameFileName));
+						logger.info("boardUpload : " + boardUpload);
+						logger.info("업데이트 첨부파일명 확인 fileName : " + fileName + ", renameFileName : " + renameFileName );
+						if(boardUpload != null) {//업데이트
+							
+							boardUpload.setUploadUrl(fileName);
+							boardUpload.setRenameUrl(renameFileName);
+							//저장폴더에 파일명 바꾸기 처리
+							boardService.updateUploadBoard(boardUpload);
+							
+						}else {
+							//upload_reply에 첨부파일 정보 저장 처리
+							boardService.insertUploadBoard(
+									new BoardUpload(board.getEmpId(), board.getDepId(), board.getBoardId(), fileName, renameFileName));
+						}
+						
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					
+					
+					
+					
+				}
+				
 			}
-			
 		}
-		model.addAttribute("empId", empId);
-		model.addAttribute("depId", depId);
-		model.addAttribute("boardId", boardId);
+		
+		
+		if(boardService.updateBoard(board) > 0) {
+			
+		}else {
+			model.addAttribute("message", "게시글 수정 실패!");
+			return "common/error";
+		}
+		model.addAttribute("begin", begin);
+		model.addAttribute("end", end);
+		
+		model.addAttribute("empId", board.getEmpId());
+		model.addAttribute("depId", board.getDepId());
+		model.addAttribute("boardId", board.getBoardId());
 		return "redirect:bdselect.do";
 	}
 	
 	//업무게시판 게시글 삭제
 	@RequestMapping("bddelete.do")
 	public String deleteBoardMethod(Board board) {
+		logger.info("bdupdate.do => board : " + board);
 		
-		if(boardService.deleteBoard(board) > 0) {
-			
+		
+		if(boardService.deleteBoardUpload(board) > 0) {
+			if(boardService.deleteBoard(board) > 0) {
+				
+			}
 		}
-		
+			
 		return "redirect:bdlist.do";
 	}
 	

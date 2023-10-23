@@ -45,8 +45,10 @@
         	//보드 수정
         	$('.button-update').on('click', function(){
                 if(confirm('수정 화면으로 이동하시겠습니까?')) {
+                    let boardDetail = '<c:out value="${ board.boardDetail }" />';
+                    
                     location.href = 
-                    'bdmoveupdate.do?boardId=${ board.boardId }&depId=${ board.depId }&empId=${ board.empId }&boardTitle=${ board.boardTitle }&boardDetail=${ board.boardDetail }&originFile=${ board.originFile }&renameFile=${ board.renameFile }';
+                    'bdmoveupdate.do?boardId=${ board.boardId }&depId=${ board.depId }&empId=${ board.empId }&boardTitle=${ board.boardTitle }&boardDetail='+boardDetail+'&originFile=${ board.originFile }&renameFile=${ board.renameFile }&begin=${begin}&end=${end}';
                 }
         	})
         	

@@ -53,7 +53,7 @@
                     el += `<span class="header-sep" id="header_sep_`+(i+1)+`"></span>`;
                 }
             }
-
+            console.log('===NOWPAGE : ' + NOWPAGE);
             $('.header-table').append(el);
 
             $('#headerBtn_'+NOWPAGE).addClass('active');

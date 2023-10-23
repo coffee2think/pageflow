@@ -195,6 +195,12 @@
 		select max(BOARD_ID) from board
 	</select>
 	
+	<select id="selectBoardUpload" resultType="Board">
+		select count(*) 
+		from UPLOAD_BOARD
+		where DEP_ID = #{ depId } and BOARD_ID = #{ boardId }
+	</select>
+	
 	<insert id="insertBoard" parameterType="Board">
 		insert into board 
 		values (#{depId}, (select max(BOARD_ID) + 1 from board), 
@@ -214,10 +220,10 @@
 		where DEP_ID = #{ depId } and BOARD_ID = #{ boardId }
 	</update>
 	
-	<update id="updateUploadBoard" parameterType="Board">
+	<update id="updateUploadBoard" parameterType="BoardUpload">
 		update upload_board set 
-		UPLOAD_URL = #{ originFile },
-		RENAME_URL = #{ renameFile }
+		UPLOAD_URL = #{ uploadUrl },
+		RENAME_URL = #{ renameUrl }
 		where DEP_ID = #{ depId } 
 		and BOARD_ID = #{ boardId }
 	</update>
@@ -230,6 +236,11 @@
 		where DEP_ID = #{ depId }
 		and BOARD_ID = #{ boardId }
 	</update>
+	
+	<delete id="deleteBoardUpload" parameterType="Board">
+		delete from reply 
+		where board_id = #{ boardId }
+	</delete>	
 	
 	<delete id="deleteBoard" parameterType="Board">
 		delete from board 

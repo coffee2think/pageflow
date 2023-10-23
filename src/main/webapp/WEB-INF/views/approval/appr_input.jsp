@@ -25,7 +25,12 @@
     })
     
     function inputSubmit(){
-    	$('#appendTextArea').val($('.detail_area').text());
+        var content = $('#editableDiv').html();
+        //content = content.replace(/<br>/g, '\n');
+        //console.log('content : ' + content);
+    	$('#appendTextArea').val(content);
+        return false;
+
     }
 </script>
 <title></title>

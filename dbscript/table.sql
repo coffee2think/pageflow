@@ -2266,13 +2266,15 @@ alter table approval
 rename COLUMN renameFile to rename_file;
 
 alter table edit
-add (contr_id number);
+add (CONTR_ID number);
 
 ALTER TABLE edit
-ADD CONSTRAINT 외래키제약명
-FOREIGN KEY (자식테이블의외래키열)
-REFERENCES 부모테이블 (부모테이블의기본키열);
+ADD CONSTRAINT FK_edit_TO_contract
+FOREIGN KEY (CONTR_ID)
+REFERENCES contract (CONTR_ID);
 
+alter table sales
+MODIFY COLLECT_DATE date null;
 
 --승준님 수정
 alter table inventory drop constraint FK_REFUND_TO_INVENTORY;
@@ -2313,4 +2315,18 @@ ALTER TABLE inventory
       ENABLE
       VALIDATE;
 
+ALTER TABLE inventory
+DROP CONSTRAINT FK_INVENTORY_TO_INVENTORY;
 
+
+ALTER TABLE notice
+MODIFY NOTICE_READCOUNT number not null;
+
+ALTER TABLE upload_reply
+add board_id number;
+
+alter table upload_reply 
+add CONSTRAINT FK_upload_reply_INVENTORY
+FOREIGN KEY (
+    board_id
+)

@@ -80,6 +80,16 @@ public class ReplyServiceImpl implements ReplyService {
 	public int selectUploadReply(ReplyUpload replyUpload) {
 		return replyDao.selectUploadReply(replyUpload);
 	}
+
+	@Override
+	public int deleteReplyUpload(int replyId) {
+		return replyDao.deleteReplyUpload(replyId);
+	}
+
+	@Override
+	public int deleteReply(int boardId) {
+		return replyDao.deleteReply(boardId);
+	}
 	
 	
 	
