@@ -217,6 +217,7 @@
 		left join department using (dep_id)
 		left join position using (pos_id)
 		where emp_name like '%' || #{ keyword } || '%'
+		order by emp_id asc
 	</select>
 	
 	<select id="selectEmployeeByDepName" parameterType="Search" resultMap="resultEmployee">
@@ -225,6 +226,7 @@
   		left join department using (dep_id)
 		left join position using (pos_id)
 		where dep_name like '%' || #{ keyword } || '%'
+		order by emp_id asc
 	</select>
 	
 	<select id="selectBookOrderCountByClientName" parameterType="string" resultType="_int">
@@ -270,7 +272,7 @@
 	<select id="selectWriterByName" parameterType="Search" resultMap="resultWriter">
 		select * from writer
 		where writer_name like '%' || #{ keyword } || '%'
-		order by writer_name asc
+		order by writer_id asc
 	</select>
 	
 </mapper>

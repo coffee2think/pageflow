@@ -166,4 +166,9 @@ public class SalesServiceImpl implements SalesService {
 		return salesDao.deleteSales(salesId);
 	}
 
+	@Override
+	public ArrayList<Integer> selectYears() {
+		return salesDao.selectYears();
+	}
+
 }

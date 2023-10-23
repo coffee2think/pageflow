@@ -52,7 +52,7 @@ function initPopupBtn() {
 		console.log('popup_type : ' + popup_type);
 		
 		var tr = $(this).parent().parent().parent();
-		var table = tr.parent();
+		var table = tr.parent().parent().parent().find('table');
 		table.find('tr').each(function(index) {
 			$(this).val(index - 1);
 		});
@@ -83,7 +83,7 @@ function register() {
 	const list = json_global.list[index_global];
 	const inputData = popup_inputData[popup_type];
 	for(i = 0; i < inputData.length; i++) {
-		$('input[name=' + inputData[i] + ']').eq(rowIndex_popup).val(decodeURIComponent(list[inputData[i]]).replace(/\+/gi, ' '));
+		$('table input[name=' + inputData[i] + ']').eq(rowIndex_popup).val(decodeURIComponent(list[inputData[i]]).replace(/\+/gi, ' '));
 		console.log($('input[name=' + inputData[i] + ']').eq(rowIndex_popup));
 		console.log(decodeURIComponent(list[inputData[i]]).replace(/\+/gi, ' '));
 	}
@@ -201,7 +201,7 @@ function checkOption() {
 	}
 }
 
-function searchByDate() {
+function searchPopupByDate() {
 	var begin = $('.modal-pop-box .search-box input#begin').val();
 	var end = $('.modal-pop-box .search-box input#end').val();
 	
@@ -240,9 +240,9 @@ function searchByDate() {
                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                     </button>
                     <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="" onkeyup="if(event.keyCode == 13){ searchPopup(); }">
-                    <input type="date" class="select-date select-date-first" name="begin" id="begin" onchange="searchByDate();">
+                    <input type="date" class="select-date select-date-first" name="begin" id="begin" onchange="searchPopupByDate();">
                     <span class="wave">~&nbsp;</span>
-					<input type="date" class="select-date select-date-second" name="end" id="end" onchange="searchByDate();">
+					<input type="date" class="select-date select-date-second" name="end" id="end" onchange="searchPopupByDate();">
                 </div>
             </div>
 

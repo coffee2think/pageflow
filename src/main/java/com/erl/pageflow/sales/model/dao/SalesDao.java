@@ -150,4 +150,9 @@ public class SalesDao {
 		return sqlSession.delete("salesMapper.deleteSales", salesId);
 	}
 
+	public ArrayList<Integer> selectYears() {
+		List<Integer> list = sqlSession.selectList("salesMapper.selectYears");
+		return (ArrayList<Integer>) list;
+	}
+
 }
