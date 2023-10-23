@@ -261,7 +261,7 @@
 
     function closePopup(){
         location.href = 
-        'aplist.do?apType=ap&empId='+${empId};
+        'aplist.do?apType='+appr_param+'&empId='+${empId};
         return;
 
         $('#aprovalLine_table').empty();

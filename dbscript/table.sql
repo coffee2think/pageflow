@@ -2265,6 +2265,15 @@ rename COLUMN originFile to origin_file;
 alter table approval
 rename COLUMN renameFile to rename_file;
 
+alter table edit
+add (contr_id number);
+
+ALTER TABLE edit
+ADD CONSTRAINT 외래키제약명
+FOREIGN KEY (자식테이블의외래키열)
+REFERENCES 부모테이블 (부모테이블의기본키열);
+
+
 --승준님 수정
 alter table inventory drop constraint FK_REFUND_TO_INVENTORY;
 alter table refund drop constraint PK_REFUND;

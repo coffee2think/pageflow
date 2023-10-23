@@ -40,6 +40,7 @@ public class ApprovalLineController {
 		ArrayList<ApprovalLineSave> apprLineSaveList = approvalLineService.selectMyApprovalSaveLineListEmpId(empId);
 		logger.info("apprLineSaveList : " + apprLineSaveList);
 		//검색
+		/*
 		JSONObject json = new JSONObject();
 		JSONArray coList = null;
 		
@@ -69,12 +70,50 @@ public class ApprovalLineController {
 				}
 			}
 		}
+		*/
+		
+		ArrayList<Object> coList = null;
+		
+		int count = 0;
+		if(apprLineSaveList.size() > 0) {
+			
+			coList = new ArrayList<Object>();
+			ArrayList<Object> cList = new ArrayList<Object>();
+			
+			for(int i=0; i<apprLineSaveList.size(); i++) {
+				//System.out.println("i : " + i);
+				int nextDepth = (i < apprLineSaveList.size()-1) ? apprLineSaveList.get(i+1).getLineDepth() : -1;//다음번 뎁스
+				
+				cList.add(apprLineSaveList.get(i));
+				
+				if(nextDepth == 1 || i == apprLineSaveList.size()-1) {//마지막이거나 다음 뎁스가 1일때
+					
+					ArrayList<Object> ctemp = (ArrayList<Object>) cList.clone();
+					coList.add(ctemp);
+					cList.clear();
+					count ++;
+				}
+			}
+		}
 		
 		logger.info("coList : " + coList);
 		
-		model.addAttribute("apprLineSaveList", apprLineSaveList);
+		model.addAttribute("apprLineSaveList", coList);
 		return "approval/appr_line";
 	}
+	/*
+	public JSONObject returnSaveLine(ApprovalLineSave approvalLineSave) throws UnsupportedEncodingException {
+		JSONObject json = new JSONObject();
+		json.put("saveLineId", approvalLineSave.getSavelineId());
+		json.put("lineDepth", approvalLineSave.getLineDepth());
+		json.put("empId", approvalLineSave.getEmpId());
+		json.put("approverId", approvalLineSave.getApproverId());
+		json.put("approverName", approvalLineSave.getApproverName());
+		json.put("posName", approvalLineSave.getPosName());
+		json.put("lineName", approvalLineSave.getLineName());
+		return json;
+	}
+	*/
 	
 	public JSONObject returnSaveLine(ApprovalLineSave approvalLineSave) throws UnsupportedEncodingException {
 		JSONObject json = new JSONObject();
