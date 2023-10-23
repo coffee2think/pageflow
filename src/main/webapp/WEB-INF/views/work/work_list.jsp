@@ -71,7 +71,18 @@
                 <!--main-header-bar end-->
 
                 <!--내용-->
+                <%-- 내용 검색 폼 --%>
+<form id="contentform" class="sform" action="nsearchContent.do" method="post">
+	<input type="hidden" name="action" value="content">	
+	<input type="hidden" name="limit" value="${ currentLimit }">
+<fieldset>
+	<legend>검색할 내용을 입력하세요.</legend>
+	<input type="search" name="keyword" size="50"> &nbsp;
+	<input type="submit" value="검색">
+</fieldset>
+</form>
                 <div class="main-contents-box">
+                
 
                     <!--서치영역-->
                     <div class="search-container noline">

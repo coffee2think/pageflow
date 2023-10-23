@@ -56,7 +56,7 @@
 	
   <insert id="insertEmployee" parameterType="Employee">
   	insert into employee values(#{empId},
-				 #{empPwd},sysdate, #{empName},
+				 #{empPwd}, sysdate, #{empName},
 				#{phone}, #{empBirth}, #{email} , #{address},#{salary},#{profile},  
 				#{enrollDate},null,null,sysdate,
 				#{jobId}, #{posId}, #{depId},  

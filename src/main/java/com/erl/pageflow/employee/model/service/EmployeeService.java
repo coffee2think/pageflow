@@ -10,5 +10,7 @@ public interface EmployeeService {
 	ArrayList<Employee> selectEmployeeList(Paging paging);
 	public int selectEmployeeListCount();
 	int insertEmployee(Employee employee);
-	public Employee selectEmployeeApproval(int empId); 
+	public Employee selectEmployeeApproval(int empId);
+	int updateEmployee(Employee employee);
+	public int selectCheckId(int empId);
 }

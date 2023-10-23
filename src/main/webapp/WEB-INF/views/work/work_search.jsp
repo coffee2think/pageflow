@@ -32,6 +32,8 @@
         else $('#sel_code').val(type);
         
     })
+    
+    
 
     function searchKey(){
         var begin = '<c:out value="${ begin }" />';

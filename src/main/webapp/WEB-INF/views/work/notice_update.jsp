@@ -205,7 +205,7 @@
 											<input type="submit" class="contents-input-btn big noline" id="btn_update" value="수정">
 											<input type="reset" class="contents-input-btn big nolines" id="btn_cancel" value="취소"
 											onclick="javascript:history.go(-1); return false;"> &nbsp;>
-											
+			
 										</div>
 									</div>
 								</div>

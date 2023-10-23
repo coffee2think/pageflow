@@ -25,6 +25,7 @@ public interface NoticeService {
 	int deleteNotice(int noticeId);
     int selectNoticeCountByDate(Search search);
     public ArrayList<Notice> selectNoticeByDate(Search search);
+    int updateReadCount(int noticeId);
 
 	
 	

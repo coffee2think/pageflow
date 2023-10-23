@@ -87,7 +87,7 @@
 
 							<div class="contents-title notice-tit">글쓰기</div>
 
-							<form action="noinsert.do" method="post" 
+							<form action="noinsert.do" method="post"
 								enctype="multipart/form-data" onsubmit="inputSubmit();">
 								<input type="hidden" value="${ sessionScope.loginMember.empId }"
 									name="empId">
@@ -103,13 +103,14 @@
 								<div class="select-box">
 									<div class="select-pan-nemo">
 
-							<input type="checkbox" class="select-checkbox" name="importance" value="Y" id="importance" checked> 필독
+										<input type="checkbox" class="select-checkbox"
+											name="importance" value="Y" id="importance" checked>
+										필독
 
 									</div>
 
 									<input type="date"
-											class="select-date select-date-first font-size13"
-									>
+										class="select-date select-date-first font-size13">
 								</div>
 
 								<div class="select-box">
@@ -119,9 +120,9 @@
 											<option value="all" selected>전체 공지</option>
 											<option value="dept">부서 공지</option>
 											<option value="emp">직원 공지</option>
-											
+
 										</select>
-										
+
 									</div>
 
 									<div class="select-pan font-size13">
@@ -138,65 +139,66 @@
 
 								<div class="select-box">
 									<div class="select-pan-nemo">파일첨부</div>
-										<c:url var="ndown" value="bfdown.do">
-                                                <c:param name="ofile" value="${ notice.noticeOriginalFileName }" />
-                                                <c:param name="rfile" value="${ notice.noticeRenameFileName }" />
-                                        </c:url>
-                                            <div class="contents-notice-down-box show">
-                                                <a class="contents-notice-down" href="${ ndown }">
-                                                    <img src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
-                                                    <span class="origin-file-name">${ notice.noticeOriginalFileName }</span>
-                                                    <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
-                                                </a>
-                                            </div>
-                                 <div class="select-pan margin-left20px">
-                                                <input type="file" name="ofile" class="select-file">
-                                 </div>
-                                        
-                                       
-                                          <!--   <div class="select-pan">
+									<c:url var="ndown" value="bfdown.do">
+										<c:param name="mfile"
+											value="${ notice.noticeOriginalFileName }" />
+										<c:param name="rfile" value="${ notice.noticeRenameFileName }" />
+									</c:url>
+									<div class="contents-notice-down-box show">
+										<a class="contents-notice-down" href="${ ndown }"> <img
+											src="${ pageContext.servletContext.contextPath }/resources/images/side-icon-dep1-over.png">
+											<span class="origin-file-name">${ notice.noticeOriginalFileName }</span>
+											<img class="down-img"
+											src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
+										</a>
+									</div>
+									<div class="select-pan margin-left20px">
+										<input type="file" name="nofile" class="select-file">
+									</div>
+
+
+									<!--   <div class="select-pan">
                                                 <input type="file" name="nfile" class="select-file">
                                             </div>
                                          -->
 								</div>
-								
-								
+
+
 								<div class="content-input-area  height-long">
-									<div class="content-input" contenteditable="true">
-
-									</div>
-									<textarea name="noticeDetail" id="appendTextArea" ></textarea>
+									<div class="content-input" contenteditable="true"></div>
+									<textarea name="noticeDetail" id="appendTextArea"></textarea>
 								</div>
-									
-							
+
+
 								<div class="content-input-btn-box">
-									<input type="submit" class="contents-input-btn big noline" id="btn_insert" value="등록">
+									<input type="submit" class="contents-input-btn big noline"
+										id="btn_insert" value="등록">
 								</div>
 
-							</form>	
-								
-								
-								
-							 
-						
+							</form>
+
+
+
+
+
+
+						</div>
+						<!--컨텐츠영역 end-->
 
 					</div>
-					<!--컨텐츠영역 end-->
+					<!--내용 end-->
 
-				</div>
-				<!--내용 end-->
-
-				<!--
+					<!--
                 <div class="submit-box">
                     <input type="button" class="contents-input-btn big noline" id="btn_write" value="글쓰기">
                 </div>
                 -->
-			</div>
-			<!--main-container end-->
+				</div>
+				<!--main-container end-->
 
-			<!--modal-pop-area-->
-			<div class="modal-pop-area"></div>
-			<!--modal-pop-area end-->
+				<!--modal-pop-area-->
+				<div class="modal-pop-area"></div>
+				<!--modal-pop-area end-->
 		</main>
 
 	</div>
