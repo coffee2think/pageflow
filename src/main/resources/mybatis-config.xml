@@ -64,6 +64,8 @@
 		
 		<!-- 전자결재라인 -->
 		<typeAlias type="com.erl.pageflow.approvalline.model.vo.ApprovalLine" alias="ApprovalLine" />
+		<typeAlias type="com.erl.pageflow.approvalline.model.vo.ApprovalLineSave" alias="ApprovalLineSave" />
+		<typeAlias type="com.erl.pageflow.common.ApprovalLineKeyword" alias="ApprovalLineKeyword" />
 		
 	</typeAliases>
 	
