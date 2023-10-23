@@ -24,6 +24,9 @@ import com.erl.pageflow.sales.model.service.SalesService;
 import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.Client;
 import com.erl.pageflow.sales.model.vo.Sales;
+import com.erl.pageflow.sales.model.vo.SalesStatistics;
+
+import oracle.sql.DATE;
 
 @Controller
 public class SalesController {
@@ -202,7 +205,7 @@ public class SalesController {
 			
 			return "sales/border_list";
 		} else {
-			model.addAttribute("message", "\"" + searchType + "\" 분류에 대한 \"" + search.getKeyword() + "\" 검색어에 대한 주문현황 조회 실패");
+			model.addAttribute("message", "주문현황 " + search.getKeyword() + " 검색 실패");
 			return "common/error";
 		}
 	}
@@ -248,6 +251,40 @@ public class SalesController {
 		}
 	}
 	
+	// 판매 정보 등록 요청 처리
+	@RequestMapping(value="ssinsert.do", method=RequestMethod.POST)
+	public String salesInsertMethod(HttpServletRequest request, Model model) {
+		String[] orderIds = request.getParameterValues("orderId");
+		String[] bookIds = request.getParameterValues("bookId");
+		String[] collectedAmounts = request.getParameterValues("collectedAmount");
+		
+		logger.info("ssinsert.do ---------------------------- START");
+		logger.info("orderIds : " + Arrays.toString(orderIds));
+		logger.info("bookIds : " +  Arrays.toString(bookIds));
+		logger.info("collectedAmounts : " + Arrays.toString(collectedAmounts));
+		logger.info("ssinsert.do ---------------------------- END");
+		
+		ArrayList<Sales> salesList = new ArrayList<>();
+		for(int i = 0; i < orderIds.length; i++) {
+			Sales sales = new Sales();
+			
+			sales.setOrderId(Integer.parseInt(orderIds[i]));
+			sales.setBookId(Integer.parseInt(bookIds[i]));
+			sales.setCollectedAmount(Integer.parseInt(collectedAmounts[i]));
+			
+			salesList.add(sales);
+		}
+		
+		for(Sales sales : salesList) {
+			if(salesService.insertSales(sales) == 0) {
+				model.addAttribute("message", sales + "판매 등록 실패!");
+				return "common/error";
+			}
+		}
+		
+		return "redirect:movesales.do";
+	}
+	
 	// 판매 정보 수정 요청 처리(ajax 통신)
 	@RequestMapping(value="ssupdate.do", method=RequestMethod.POST)
 	public void salesUpdateMethod(Sales sales, HttpServletResponse response) throws IOException {
@@ -266,6 +303,21 @@ public class SalesController {
 		out.append(returnStr);
 		out.flush();
 		out.close();
+	}
+	
+	// 판매 정보 삭제 요청 처리
+	@RequestMapping(value="ssdelete.do", method=RequestMethod.POST)
+	public String salesDeleteMethod(@RequestParam("IDs") int[] IDs, Model model) {
+		logger.info("ssdelete.do : " + IDs);
+		
+		for(int salesId : IDs) {
+			if(salesService.deleteSales(salesId) == 0) {
+				model.addAttribute("message", salesId + "번 판매 정보 삭제 실패!");
+				return "common/error";
+			}
+		}
+		
+		return "redirect:movesales.do";
 	}
 	
 	// 주문 정보 등록 요청 처리
@@ -335,12 +387,17 @@ public class SalesController {
 	
 	// 거래처 정보 삭제 요청 처리
 	@RequestMapping(value="bodelete.do", method=RequestMethod.POST)
-	public String bookOrderDeleteMethod(@RequestParam("IDs") int[] orderIDs, Model model) {
-		logger.info("bodelete.do : " + orderIDs);
+	public String bookOrderDeleteMethod(@RequestParam("IDs") String[] IDs, Model model) {
+		logger.info("bodelete.do : " + IDs);
 		
-		for(int orderId : orderIDs) {
-			if(salesService.deleteBookOrder(orderId) == 0) {
-				model.addAttribute("message", orderId + "번 주문 정보 삭제 실패!");
+		for(String id : IDs) {
+			String[] splitId = id.split("_");
+			BookOrder bookOrder = new BookOrder();
+			bookOrder.setOrderId(Integer.parseInt(splitId[0]));
+			bookOrder.setBookId(Integer.parseInt(splitId[1]));
+			
+			if(salesService.deleteBookOrder(bookOrder) == 0) {
+				model.addAttribute("message", bookOrder.getOrderId() + "-" + bookOrder.getBookId() + "번 주문 정보 삭제 실패!");
 				return "common/error";
 			}
 		}
@@ -482,31 +539,15 @@ public class SalesController {
 	// 매출통계 조회 요청 처리
 	@RequestMapping("statslist.do")
 	public String salesStatisticsMethod(
-			@RequestParam(name="page", required=false) String page,
-			@RequestParam(name="limit", required=false) String limitStr,
+			@RequestParam(name="year", required=false) String yearStr, 
 			Model model) {
 		
-		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
-		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
-		
-		// 1년동안 매출이 있는 도서 정보 목록을 가져옴
-		int listCount = salesService.selectSalesCountForStats();
-		
-		Paging paging = new Paging(listCount, currentPage, limit, "sslistdate.do");
-		paging.calculator();
-		
-		ArrayList<Sales> list = salesService.selectSalesForStats(paging);
+		int year = (yearStr != null) ? Integer.parseInt(yearStr) : LocalDate.now().getYear();
+		ArrayList<SalesStatistics> list = salesService.selectSalesForStats(year);
 		
 		if(list != null && list.size() > 0) {
-			for(Sales sales : list) {
-				sales.calcTotalPrice();
-			}
-	
 			model.addAttribute("list", list);
-			model.addAttribute("paging", paging);
-			model.addAttribute("currentPage", currentPage);
-			model.addAttribute("limit", limit);
-			
+			model.addAttribute("year", year);
 			return "sales/sales_stats";
 		} else {
 			model.addAttribute("message", "매출통계 조회 실패");
