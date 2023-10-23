@@ -12,7 +12,7 @@ import com.erl.pageflow.sales.model.vo.PrintOffice;
 public interface PrintOrderService {
 	public ArrayList<PrintOrder> selectPrintOrderByDate(Search search);
 	
-	public PrintOffice selectPrintOffice(int printId);
+	public PrintOffice selectPrintOffice(int clientId);
 	
 	public Book selectBook(int bookId);
 	
@@ -20,7 +20,7 @@ public interface PrintOrderService {
 	
 	public ArrayList<PrintOrder> selectPrintOrderList(Paging paging);
 	
-	public int updatePrintOrder(PrintOrder printId);
+	public int updatePrintOrder(PrintOrder clientId);
 	
 	public int selectMaxPrintOrderId();
 	
@@ -28,7 +28,7 @@ public interface PrintOrderService {
 	
 	public int deletePrintOrder(int orderId);
 	
-	public int selectPrintOrderCountByPrintId(Search search);
+	public int selectPrintOrderCountByClientId(Search search);
 	
 	public int selectPrintOrderCountByPrintName(Search search);
 	
@@ -36,7 +36,7 @@ public interface PrintOrderService {
 	
 	public int selectPrintOrderCountByBookName(Search search);
 	
-	public ArrayList<PrintOrder> selectPrintOrderByPrintId(Search search);
+	public ArrayList<PrintOrder> selectPrintOrderByClientId(Search search);
 	
 	public ArrayList<PrintOrder> selectPrintOrderByPrintName(Search search);
 	

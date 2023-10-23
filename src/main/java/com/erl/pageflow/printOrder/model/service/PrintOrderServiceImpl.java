@@ -24,8 +24,8 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	}
 	
 	@Override
-	public PrintOffice selectPrintOffice(int printId) {
-		return printOrderDao.selectPrintOffice(printId);
+	public PrintOffice selectPrintOffice(int clientId) {
+		return printOrderDao.selectPrintOffice(clientId);
 	}
 	
 	@Override
@@ -44,8 +44,8 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	}
 	
 	@Override
-	public int updatePrintOrder(PrintOrder printId) {
-		return printOrderDao.updatePrintOrder(printId);
+	public int updatePrintOrder(PrintOrder clientId) {
+		return printOrderDao.updatePrintOrder(clientId);
 	}
 	
 	@Override
@@ -64,8 +64,8 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	}
 	
 	@Override
-	public int selectPrintOrderCountByPrintId(Search search) {
-		return printOrderDao.selectPrintOrderCountByPrintId(search);
+	public int selectPrintOrderCountByClientId(Search search) {
+		return printOrderDao.selectPrintOrderCountByClientId(search);
 	}
 	
 	@Override
@@ -84,8 +84,8 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	}
 	
 	@Override
-	public ArrayList<PrintOrder> selectPrintOrderByPrintId(Search search){
-		return printOrderDao.selectPrintOrderByPrintId(search);
+	public ArrayList<PrintOrder> selectPrintOrderByClientId(Search search){
+		return printOrderDao.selectPrintOrderByClientId(search);
 	}
 	
 	@Override
