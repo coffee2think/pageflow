@@ -34,15 +34,20 @@
 </script>
 <script type="text/javascript">
 
-	//검색 키워드
+	//검색 키워드1
 	var searchKeyword = "";
 	// 서치 버튼 클릭
 	$(function(){
 		$('.search-btn').on('click', function(){
 			searchKey();
-		})
-	//After Enter Key
-	$('.search-box-text').
+		});
+
+		// After Enter Key
+		$('.search-box-text').on('keypress', function(e){
+			if (e.which === 13) {
+				searchKey();
+			}
+		});
 	});
 
 </script>
@@ -146,7 +151,7 @@
 									<div class="select-pan">
 										<label for="sel_code"></label> 
 										<select name="searchType" id="sel_code">
-											<option value="">거래처코드</option>
+											<option value="">발주코드</option>
 											<option value="">인쇄소명</option>
 											<option value="">도서코드</option>
 											<option value="">도서명</option>
@@ -155,7 +160,7 @@
 								</div>
 
 								<div class="search-box">
-									<input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
+									<input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
 									<button class="search-btn" onclick="search('pokeyword.do'); return false; ">
 										<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
 									</button>
@@ -298,7 +303,7 @@
 					<!--컨텐츠영역-->
 					<div class="contents-container sort-row">
 						<div class="contents-box">
-							<table class="contents-table">
+							<table class="contents-table" id="table_list">
 								<tr>
 									<th>체크</th>
 									<th>발주코드</th>
