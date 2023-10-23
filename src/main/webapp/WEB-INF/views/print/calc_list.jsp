@@ -169,6 +169,7 @@
                             <table class="contents-table">
                                 <tr>
                                     <th>체크</th>
+                                    <th>정산코드</th>
                                     <th>거래처코드</th>
                                     <th>인쇄소</th>
                                     <th>마감일</th>
@@ -183,13 +184,18 @@
                                 </tr>
                                 <c:if test="${ !empty list }">
 	                                <c:forEach items="${ list }" var="printCalc" >
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ printCalc.printId }">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ printCalc.clientId }">
 		                                    <td class="td-50">
 		                                        <input type="checkbox" class="selectcheckbox" name="selectcheckbox" value="${ printCalc.orderId }">
 		                                    </td>
 		                                    <td class="td-100">
+												<div class="contents-input-div">
+													<input type="text" name="orderId" class="contents-input noline" value="${ printCalc.orderId }" readonly>
+												</div>
+											</td>
+		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="text" name="printId" class="contents-input noline" value="${ printCalc.printId }" readonly>
+		                                            <input type="text" name="clientId" class="contents-input noline" value="${ printCalc.clientId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-120">
@@ -238,9 +244,9 @@
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ printCalc.printId }" onclick="onUpdate(${ printCalc.printId }); return false;">
-												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ printCalc.printId }" onclick="submitUpdate(${ printCalc.printId }, 'pcupdate.do'); return false;" style="display: none;">
-												<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ printCalc.printId }" onclick="cancelUpdate(${ printCalc.printId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ printCalc.clientId }" onclick="onUpdate(${ printCalc.clientId }); return false;">
+												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ printCalc.clientId }" onclick="submitUpdate(${ printCalc.clientId }, 'pcupdate.do'); return false;" style="display: none;">
+												<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ printCalc.clientId }" onclick="cancelUpdate(${ printCalc.clientId }); return false;" style="display: none;">
 											</td>
 		                                </tr>
 	                                </c:forEach>

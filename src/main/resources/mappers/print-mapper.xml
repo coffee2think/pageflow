@@ -7,7 +7,7 @@
 	<resultMap type="PrintOrder" id="resultPrintOrder">
 		<result property="orderId" column="ORDER_ID"/>
 		<result property="bookId" column="BOOK_ID"/>
-		<result property="printId" column="PRINT_ID"/>
+		<result property="clientId" column="CLIENT_ID"/>
 		<result property="empId" column="EMP_ID"/>
 		<result property="empName" column="EMP_NAME"/>
 		<result property="classify" column="CLASSIFY"/>
@@ -24,7 +24,7 @@
 	<resultMap type="PrintCalc" id="resultPrintCalc">
 		<result property="orderId" column="ORDER_ID"/>
 		<result property="bookId" column="BOOK_ID"/>
-		<result property="printId" column="PRINT_ID"/>
+		<result property="clientId" column="CLIENT_ID"/>
 		<result property="empId" column="EMP_ID"/>
 		<result property="empName" column="EMP_NAME"/>
 		<result property="classify" column="CLASSIFY"/>
@@ -132,7 +132,7 @@
 	<select id ="selectPrintOffice" parameterType="_int" resultMap="resultPrintOffice">
 		select *
 		from client
-		where CLIENT_ID = #{ printId }
+		where CLIENT_ID = #{ clientId }
 	</select>
 	
 	<select id="selectBook" parameterType="_int" resultMap="resultBook">
@@ -144,7 +144,7 @@
 	<insert id="insertPrintOrder" parameterType="PrintOrder">
 		insert into print_order
 		values ((select max(ORDER_ID) + 1 from print_order), #{bookId}, 
-		#{printId}, #{empId}, #{empName}, #{classify}, #{unit}, #{quantity}, 
+		#{clientId}, #{empId}, #{empName}, #{classify}, #{unit}, #{quantity}, 
 		#{price}, #{amount}, #{state}, sysdate, #{endDate}, #{pubDate})	
 	</insert>
 	
@@ -160,18 +160,18 @@
 		update print_order
 		set order_date = #{ orderDate }, end_date = #{ endDate }, pub_date = #{ pubDate },
    			quantity = #{ quantity }, price = #{ price }, amount = #{ amount }
-		where print_id = #{ printId }
+		where order_id = #{ orderId }
 	</update>
 	
-	<select id ="selectPrintOrderCountByPrintId" parameterType="Search" resultType="_int">
+	<select id ="selectPrintOrderCountByClientId" parameterType="Search" resultType="_int">
 		select count(*) from print_order
-		join client using (print_id)
+		join client using (client_id)
 		where client_id like '%' || ${ keyword } || '%'     
 	</select>
 	
 	<select id="selectPrintOrderCountByPrintName" parameterType="Search" resultType="_int">
 		select count(*) from print_order
-		join client using (print_id)
+		join client using (client_id)
 		where client_name like '%' || ${ keyword } || '%'
 	</select>
 	
@@ -187,14 +187,14 @@
 		where book_name like '%' || ${ keyword } || '%'
 	</select>
 	
-	<select id="selectPrintOrderByPrintId" parameterType="Search" resultMap="resultPrintOrder">
+	<select id="selectPrintOrderByClientId" parameterType="Search" resultMap="resultPrintOrder">
 		select *
 		from (select rowrum rnum, sub.*
 			  from (select * from print_order
-			  		join client using(print_id)
+			  		join client using(client_id)
 			  		join book using(book_id)
 			  		where client_id like '%' || ${ keyword } || '%'
-			  		order by order_date desc, order_id desc, print_id desc ) sub)
+			  		order by order_id desc, order_date desc ) sub)
 		where reum between #{ startRow } and #{ endRow }
 	</select>
 	
@@ -202,10 +202,10 @@
 		select *
 		from (select rowrum rnum, sub.*
 			  from (select * from print_order
-			  		join client using (print_id) 
+			  		join client using (client_id) 
 			  		join book using(book_id)
 			  		where client_name like '%' || ${ keyword } || '%'
-			  		order by order_date desc, order_id desc, print_id desc ) sub)
+			  		order by order_id desc, order_date desc ) sub)
   		where reum between #{ startRow } and #{ endRow }
 	</select>
 	
@@ -213,10 +213,10 @@
 		select *
 		from (select rowrum rnum, sub.*
 			  from (select * from print_order
-			  		join client using (print_id) 
+			  		join client using (client_id) 
 			  		join book using(book_id)
 			  		where book_id like '%' || ${ keyword } || '%'
-			  		order by order_date desc, order_id desc, print_id desc ) sub)
+			  		order by order_id desc, order_date desc ) sub)
   		where reum between #{ startRow } and #{ endRow }
 	</select>
 	
@@ -224,10 +224,10 @@
 		select *
 		from (select rowrum rnum, sub.*
 			  from (select * from print_order
-			  		join client using (print_id) 
+			  		join client using (client_id) 
 			  		join book using(book_id)
 			  		where book_name like '%' || ${ keyword } || '%'
-			  		order by order_date desc, order_id desc, print_id desc ) sub)
+			  		order by order_id desc, order_date desc ) sub)
   		where reum between #{ startRow } and #{ endRow }
 	</select>
 	

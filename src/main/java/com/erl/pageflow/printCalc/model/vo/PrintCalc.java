@@ -7,7 +7,7 @@ public class PrintCalc implements java.io.Serializable{
 	
 	private int orderId;
 	private int bookId;
-	private int printId;
+	private int clientId;
 	private int empId;
 	private String empName;
 	private String classify;
@@ -26,13 +26,13 @@ public class PrintCalc implements java.io.Serializable{
 		super();
 	}
 
-	public PrintCalc(int orderId, int bookId, int printId, int empId, String empName, String classify, String unit,
+	public PrintCalc(int orderId, int bookId, int clientId, int empId, String empName, String classify, String unit,
 			int quantity, int price, int amount, String state, Date orderDate, Date endDate, Date pubDate,
 			String clientName, String bookName) {
 		super();
 		this.orderId = orderId;
 		this.bookId = bookId;
-		this.printId = printId;
+		this.clientId = clientId;
 		this.empId = empId;
 		this.empName = empName;
 		this.classify = classify;
@@ -64,12 +64,12 @@ public class PrintCalc implements java.io.Serializable{
 		this.bookId = bookId;
 	}
 
-	public int getPrintId() {
-		return printId;
+	public int getClientId() {
+		return clientId;
 	}
 
-	public void setPrintId(int printId) {
-		this.printId = printId;
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
 	}
 
 	public int getEmpId() {
@@ -182,7 +182,7 @@ public class PrintCalc implements java.io.Serializable{
 
 	@Override
 	public String toString() {
-		return "PrintCalc [orderId=" + orderId + ", bookId=" + bookId + ", printId=" + printId + ", empId=" + empId
+		return "PrintCalc [orderId=" + orderId + ", bookId=" + bookId + ", clientId=" + clientId + ", empId=" + empId
 				+ ", empName=" + empName + ", classify=" + classify + ", unit=" + unit + ", quantity=" + quantity
 				+ ", price=" + price + ", amount=" + amount + ", state=" + state + ", orderDate=" + orderDate
 				+ ", endDate=" + endDate + ", pubDate=" + pubDate + ", clientName=" + clientName + ", bookName="

@@ -84,7 +84,7 @@ public class PrintOrderController {
 		ArrayList<PrintOrder> list = printOrderService.selectPrintOrderByDate(search);
 		
 		for(PrintOrder po : list) {
-			PrintOffice poffice  = printOrderService.selectPrintOffice(po.getPrintId());
+			PrintOffice poffice  = printOrderService.selectPrintOffice(po.getClientId());
 			Book book = printOrderService.selectBook(po.getBookId());
 			
 			po.setClientName(poffice.getClientName());
@@ -163,8 +163,8 @@ public class PrintOrderController {
 		
 		//스위치문을 쓰는 이유 : ?
 		switch(searchType) {
-		case "printId":
-			listCount = printOrderService.selectPrintOrderCountByPrintId(search);
+		case "clientId":
+			listCount = printOrderService.selectPrintOrderCountByClientId(search);
 			break;
 		case "printName":
 			listCount = printOrderService.selectPrintOrderCountByPrintName(search);
@@ -187,8 +187,8 @@ public class PrintOrderController {
 		ArrayList<PrintOrder> list = null;
 		
 		switch(searchType) {
-		case "printId":
-			list = printOrderService.selectPrintOrderByPrintId(search);
+		case "clientId":
+			list = printOrderService.selectPrintOrderByClientId(search);
 			break;
 		case "printName":
 			list = printOrderService.selectPrintOrderByPrintName(search);
@@ -226,7 +226,7 @@ public class PrintOrderController {
 		@RequestMapping(value="poinsert.do", method=RequestMethod.POST)
 		public String printOrderInsertMethod(Model model, HttpServletRequest request) {
 			
-			String[] printIds = request.getParameterValues("printId");
+			String[] clientIds = request.getParameterValues("clientId");
 			String[] empIds = request.getParameterValues("empId");
 			String[] empNames = request.getParameterValues("empName");
 			String[] orderDates = request.getParameterValues("orderDate");
@@ -240,7 +240,7 @@ public class PrintOrderController {
 			String[] states = request.getParameterValues("state");
 			
 			logger.info("poinsert.do ---------------------------- START");
-			logger.info("printIds : " + Arrays.toString(printIds));
+			logger.info("clientIds : " + Arrays.toString(clientIds));
 			logger.info("empIds : " + Arrays.toString(empIds));
 			logger.info("empNames : " + Arrays.toString(empNames));
 			logger.info("orderDates : " + Arrays.toString(orderDates));
@@ -257,13 +257,13 @@ public class PrintOrderController {
 			int orderId = printOrderService.selectMaxPrintOrderId() + 1;
 			
 			ArrayList<PrintOrder> list = new ArrayList<>();
-			for(int i = 0; i < printIds.length; i++) {
+			for(int i = 0; i < clientIds.length; i++) {
 				PrintOrder printOrder = new PrintOrder();
 				
 				printOrder.setOrderId(orderId);
 				printOrder.setEmpName(empNames[i]);
 				printOrder.setEmpId(Integer.parseInt(empIds[i]));
-				printOrder.setPrintId(Integer.parseInt(printIds[i]));
+				printOrder.setClientId(Integer.parseInt(clientIds[i]));
 				printOrder.setOrderDate(Date.valueOf(orderDates[i]));
 				printOrder.setEndDate(Date.valueOf(endDates[i]));
 				printOrder.setPubDate(Date.valueOf(pubDates[i]));
