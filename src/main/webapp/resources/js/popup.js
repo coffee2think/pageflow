@@ -84,6 +84,7 @@ Popup.prototype = {
 			'bookstore': '서점검색',
 			'storage': '창고검색',
 			'employee': '직원검색',
+            'writer': '작가검색',
 			'book_order': '주문검색'
 		};
 		
@@ -93,6 +94,7 @@ Popup.prototype = {
 			'bookstore': ['', '거래처코드', '서점명', '담당자', '연락처'],
 			'storage': ['', '거래처코드', '창고명', '담당자', '연락처'],
 			'employee': ['', '직원번호', '담당부서', '직원명', '직책'],
+            'writer': ['', '작가번호', '작가명', '연락처', '이메일'],
 			'book_order': ['', '주문번호', '서점명', '도서명', '주문수량']
 		};
 		
@@ -102,14 +104,15 @@ Popup.prototype = {
 			'bookstore': {'clientName': '서점명', 'clientId': '거래처코드'},
 			'storage': {'clientName': '창고명', 'clientId': '거래처코드'},
 			'employee': {'empName': '직원명', 'depName': '부서'},
+            'writer': {'writerName': '작가명'},
 			'book_order': {'clientName': '서점명', 'orderDate': '주문일'}
 		};
 		
 		// 검색바 초기화
-		$('#sel_code').children('option').each(function(){
+		$('#sel_code').find('option').each(function(){
 			$(this).attr('selected', false);
 		});
-		$('#sel_code').children('option:eq(0)').attr('selected', true);
+		$('#sel_code').find('option:eq(0)').attr('selected', true);
 		$('input[type=search]').val('');
 		
 		var option = $('#sel_code').val();
@@ -133,7 +136,7 @@ Popup.prototype = {
 		});
 		
 		// 제목행 초기화
-		const thead = table.children('thead');
+		const thead = table.find('thead');
 		thead.find('th').each(function(index) {
 			$(this).text(popup_thead[popup_type][index]);
 		});

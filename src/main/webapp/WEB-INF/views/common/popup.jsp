@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
 function initPopupBtn() {
 	$('.input-search-btn').on('click', function() {
-		var input = $(this).parent().children('input').eq(0);
+		var input = $(this).parent().find('input').eq(0);
 		var popup_type = input.attr('name');
 		if(popup_type.includes('book')) {
 			popup_type = 'book';
@@ -43,6 +43,10 @@ function initPopupBtn() {
 		
 		if(popup_type.includes('order')) {
 			popup_type = 'book_order';
+		}
+
+		if(popup_type.includes('writer')) {
+			popup_type = 'writer';
 		}
 		
 		console.log('popup_type : ' + popup_type);
@@ -68,6 +72,8 @@ function register() {
 			'printoffice': ['clientId', 'clientName', ''],
 			'bookstore': ['clientId', 'clientName'],
 			'storage': ['clientId', 'clientName'],
+			'employee': ['empId', 'empName', 'depName', 'posName', 'phone', 'email'],
+			'writer': ['writerId', 'writerName', 'phone', 'email'],
 			'book_order': ['orderId', 'bookId', 'bookName', 'clientId', 'clientName', 'orderDate', 'bookPrice', 'orderQuantity']
 	};
 	
@@ -105,6 +111,7 @@ function searchPopup() {
 			'bookstore': 'popupBookStore.do',
 			'storage': 'popupStorage.do',
 			'employee': 'popupEmployee.do',
+			'writer': 'popupWriter.do',
 			'book_order': 'popupBookOrder.do'
 	};
 	
@@ -113,7 +120,8 @@ function searchPopup() {
 			'printoffice': ['', 'clientId', 'clientName', 'manager', 'managerContact'],
 			'bookstore': ['', 'clientId', 'clientName', 'manager', 'managerContact'],
 			'storage': ['', 'clientId', 'clientName', 'manager', 'managerContact'],
-			'employee': ['', 'empId', 'depName', 'empName', 'jobName'],
+			'employee': ['', 'empId', 'depName', 'empName', 'posName'],
+			'writer': ['', 'writerId', 'writerName', 'phone', 'email'],
 			'book_order': ['', 'orderId', 'clientName', 'bookName', 'orderQuantity']
 	};
 	
