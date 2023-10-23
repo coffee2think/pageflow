@@ -38,7 +38,7 @@
 		select * from notice join employee using (EMP_ID) where NOTICE_ID = #{ noticeId}
 	</select>	
 	
-	<select id="getListCount" resultType="_int">
+	<select id="selectListCount" resultType="_int">
 		select count(*) from notice
 	</select>
 	
@@ -55,6 +55,12 @@
 		update notice 
 		set NOTICE_TITLE = #{noticeTitle},  
 			NOTICE_DETAIL = #{noticeDetail}
+		where NOTICE_ID = #{noticeId}
+	</update>
+	
+	<update id="updateReadCount" parameterType="_int">
+		update notice
+		set NOTICE_READCOUNT = NOTICE_READCOUNT +1
 		where NOTICE_ID = #{noticeId}
 	</update>
 	

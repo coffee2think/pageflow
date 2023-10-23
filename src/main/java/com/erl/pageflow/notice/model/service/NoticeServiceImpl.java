@@ -92,6 +92,12 @@ public class NoticeServiceImpl implements NoticeService{
 		return noticeDao.selectNoticeByDate(search);
 	}
 
+	@Override
+	public int updateReadCount(int noticeId) {
+		
+		return noticeDao.updateReadCount(noticeId);
+	}
+
 	
 
 	
