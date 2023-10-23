@@ -130,7 +130,7 @@ public class BookController {
 		
 		for(int bookId : bookIDs) {
 			if(bookService.deleteBook(bookId) == 0) {
-				model.addAttribute("message", bookId + "번 주문 정보 삭제 실패!");
+				model.addAttribute("message", bookId + "번 도서 정보 삭제 실패!");
 				return "common/error";
 			}
 		}
