@@ -30,7 +30,11 @@ public class EmployeeDao {
 	}
 	
 	public int insertEmployee(Employee employee) {
-		return sqlSessionTemplate.insert("employeeMapper.insertEmployee");
+		return sqlSessionTemplate.insert("employeeMapper.insertEmployee", employee);
+	}
+
+	public Employee selectEmployeeApproval(int empId) {
+		return sqlSessionTemplate.selectOne("employeeMapper.selectEmployeeApproval", empId);
 	}
 	
 	

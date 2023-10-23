@@ -111,7 +111,7 @@
 				var storePrice = bookPrice * storeNum;
 				/* tr.find('input[name=storePrice]').addClass,('.changeable'); */
 				tr.find('input[name=storePrice]').val(storePrice);
-				
+
 				console.log("storePrice : " + storePrice);
 				console.log("bookPrice : " + bookPrice);
 				console.log("storeNum : " + storeNum);
@@ -266,19 +266,18 @@
 									<th>입고금액</th>
 									<th>수정</th>
 								</tr>
-							
 								<c:set var="totalStoreNum" value="0" />
 								<c:set var="totalStorePrice" value="0" />
 								<c:if test="${ !empty storeList }">
 									<c:forEach var="sto" items="${ storeList }">
+									<input type="hidden" name="clientId" value=""></input>
 										<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ sto.storeId }">
 											<td class="td-50">
-												<input type="checkbox" class="selectedItems" name="selectedItems" value="${ sto.storeId }">
+												<input type="checkbox" class="selectedItems" name="storeId" value="${ sto.storeId }">
 											</td>
 											<td class="td-100">
 												<div class="contents-input-div">
 													<input type="input" name="bookId" class="contents-input noline" value="${ sto.bookId }" readonly>
-													<input type="hidden" name="storeId" value="${ sto.storeId }">
 												</div>
 											</td>
 											<td class="td-250">

@@ -23,9 +23,9 @@ public class InventoryDao {
 	public String selectInventoryBookName(int bookId) {
 		return sqlSessionTemplate.selectOne("inventoryMapper.selectInventoryBookName", bookId);
 	}
-
-	public String selectInventoryClientName(int storageId) {
-		return sqlSessionTemplate.selectOne("inventoryMapper.selectInventoryClientName", storageId);
+	
+	public String selectInventoryClientName(int clientId) {
+		return sqlSessionTemplate.selectOne("inventoryMapper.selectInventoryClientName", clientId);
 	}
 
 	// 재고 리스트

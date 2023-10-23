@@ -72,7 +72,7 @@ public class PrintCalcController {
 		ArrayList<PrintCalc> list = printCalcService.selectPrintCalcByDate(search);
 		
 		for(PrintCalc pc : list) {
-			PrintOffice poffice  = printCalcService.selectPrintOffice(pc.getPrintId());
+			PrintOffice poffice  = printCalcService.selectPrintOffice(pc.getClientId());
 			Book book = printCalcService.selectBook(pc.getBookId());
 			
 			pc.setClientName(poffice.getClientName());

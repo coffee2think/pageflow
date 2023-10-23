@@ -14,7 +14,7 @@ public interface PrintCalcService {
 	
 	public ArrayList<PrintCalc> selectPrintCalcByDate(Search search);
 	
-	public PrintOffice selectPrintOffice(int printId);
+	public PrintOffice selectPrintOffice(int clientId);
 	
 	public Book selectBook(int bookId);
 	

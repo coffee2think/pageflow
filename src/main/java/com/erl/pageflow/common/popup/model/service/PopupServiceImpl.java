@@ -9,6 +9,7 @@ import com.erl.pageflow.book.model.vo.BookWithStock;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.common.popup.model.dao.PopupDao;
 import com.erl.pageflow.employee.model.vo.Employee;
+import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 import com.erl.pageflow.sales.model.vo.Storage;
@@ -117,6 +118,26 @@ public class PopupServiceImpl implements PopupService {
 	@Override
 	public ArrayList<Employee> selectEmployeeByDepName(Search search) {
 		return popupDao.selectEmployeeByDepName(search);
+	}
+
+	@Override
+	public int selectBookOrderCountByClientName(String clientName) {
+		return popupDao.selectBookOrderCountByClientName(clientName);
+	}
+
+	@Override
+	public int selectBookOrderCountByDate(Search search) {
+		return popupDao.selectBookOrderCountByDate(search);
+	}
+
+	@Override
+	public ArrayList<BookOrder> selectBookOrderByClientName(Search search) {
+		return popupDao.selectBookOrderByClientName(search);
+	}
+
+	@Override
+	public ArrayList<BookOrder> selectBookOrderByDate(Search search) {
+		return popupDao.selectBookOrderByDate(search);
 	}
 
 }

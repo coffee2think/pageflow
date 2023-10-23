@@ -122,14 +122,29 @@ values (1, 1, 1, 2, '김태히', '직원', 'Y', '2023-10-20');
 insert into approvalline 
 values (1, 2, 1, 3, '장덩근', '팀장', 'N', null);
 
-
-insert into approvalline_save_group
-values (1, 1, '나의 결재1');
+insert into approvalline 
+values (2, 1, 2, 3, '장덩근', '팀장', 'Y', '2023-10-20');
 
 
 insert into approvalline_save
 values (1, 1, 1, 2, '김태히', '직원');
 insert into approvalline_save 
 values (1, 2, 1, 3, '장덩근', '팀장');
+
+
+insert into approvalline_save
+values (2, 1, 1, 2, '김태히', '직원', '홍길동의결재라인 2');
+insert into approvalline_save 
+values (2, 2, 1, 3, '장덩근', '팀장', '홍길동의결재라인 2');
+insert into approvalline_save
+values (2, 3, 1, 2, '김태히', '직원', '홍길동의결재라인 2');
+insert into approvalline_save 
+values (2, 4, 1, 3, '장덩근', '팀장', '홍길동의결재라인 2');
+
+
+ALTER TABLE approvalline DROP CONSTRAINT FK_APPROVALLINE_GROUP_TO_APPROVALLINE;
+ALTER TABLE approvalline_save DROP CONSTRAINT FK_APPROVALLINE_SAVE_GROUP_TO_APPROVALLINE_SAVE;
+
+
 
 commit;

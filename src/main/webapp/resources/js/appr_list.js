@@ -28,17 +28,18 @@ function getApprovalData(id){
     $.ajax({
         url: 'apapprovalpop.do',
         type: 'post',
-        dataType : 'json',
         data: {
             approvalId : id
         },
+        dataType : 'json',
         success: function(data){
-            //var jsonStr = JSON.stringify(data);
-			//var json = JSON.parse(jsonStr);
-            console.log('data : ' + data);
-            console.log('data.appr_id : ' + data.appr_id);
+            var jsonStr = JSON.stringify(data);
+			var json = JSON.parse(jsonStr);
+            console.log('jsonStr : ' + jsonStr);
+            console.log('json.approval : ' + json.approval);
+            console.log('json.list : ' + json.list);
             //lineData : {"emp_name4":null,"appr_date":2023-10-18,"draft_type":"annual","emp_name2":"장덩근","emp_name3":null,"approver_name":3,"dep_name":"개발팀","title":null,"line_id":1,"rejection_date":null,"appr_id":1,"job_name":"부장","pos_name":null,"drafter_name":1,"receipt_date":null,"line_name":"결재라인 1","detail":"연차를 신청합니다. 병원방문","emp_name1":"김태히","start_date":2023-10-19}
-            setApprovalPopup(data);
+            setApprovalPopup(json);
 
 
             //팝업창 뜨기

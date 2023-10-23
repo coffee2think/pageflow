@@ -10,7 +10,7 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func_new.js"></script>
 <script>
     const NOWPAGE = 5;
     const SUBPAGE = 2;
@@ -39,30 +39,33 @@
     		});
     	});
     });
- 	
-    function submitUpdate(id, url) {
-        var currentRow = $('#completeBtn_' + id).parent().parent();
+
+    function submitUpdate(btn, url) {
+        const tr = $(btn).parent().parent();
+        const tds = tr.children('td');
+        const id = tr.find('input[type=checkbox]').val();
         var json = {};
         
         // 서버로 전송할 값 json에 담기
-        var len = currentRow.children('td').length;
-        currentRow.find('input').each(function(index) {
+        tds.each(function(index) {
             // 양끝열(체크박스와 수정버튼 열)은 건너뜀
-            if(index == 0 || index >= len - 1) {
+            if(index == 0 || index == tds.length - 1) {
                 return; 
             }
-            
-            // endDate에 값이 들어있지 않다면 담지 않고 건너뜀
-            if($(this).attr('name') == 'endDate' && $(this).val() == '') {
-    			return;
-    		}
-            
-            // 콤마를 삭제한 value 값이 숫자라면 숫자로 파싱
-            if(!isNaN($(this).val().replace(/,/g, ''))) {
-    			$(this).val(Number($(this).val()));
-    		}
-            
-            json[$(this).attr('name')] = $(this).val();
+
+            $(this).find('input').each(function() {
+                // endDate에 값이 들어있지 않다면 담지 않고 건너뜀
+                if($(this).attr('name') == 'endDate' && $(this).val() == '') {
+                    return;
+                }
+                
+                // 콤마를 삭제한 value 값이 숫자라면 숫자로 파싱
+                if(!isNaN($(this).val().replace(/,/g, ''))) {
+                    $(this).val(Number($(this).val()));
+                }
+                
+                json[$(this).attr('name')] = $(this).val();
+            });
         });
         
         // ajax로 update 요청 보내기
@@ -76,10 +79,13 @@
                     alert(id + "번 정보 수정 성공");
                 } else {
                     alert("정보 수정 실패");
+                    cancelUpdate(btn);
                 }
                 
                 // 수정 이전 스타일로 되돌리기
-                offUpdate(id);
+                offUpdate(btn);
+                
+                // 집계영역 재계산
                 totalCalc();
             },
             error: function(jqXHR, textStatus, errorThrown){
@@ -174,9 +180,9 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="searchType" id="search_type">
-                                            <option value="book">도서명</option>
-                                            <option value="bookStore">서점명</option>
-                                            <option value="location">지역</option>
+                                            <option value="book" <c:if test="${ searchType == 'book' }">selected</c:if>>도서명</option>
+                                            <option value="bookStore" <c:if test="${ searchType == 'bookStore' }">selected</c:if>>서점명</option>
+                                            <option value="location" <c:if test="${ searchType == 'location' }">selected</c:if>>지역</option>
                                         </select>
                                     </div>
                                 </div>
@@ -296,11 +302,12 @@
 		                                
 		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 content-row" id="tr_${ sales.salesId }">
 		                                    <td class="td-50">
-		                                        <input type="checkbox" name="check" value="${ sales.salesId }" >
+		                                        <input type="checkbox" name="check" value="${ sales.salesId }">
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="salesId" class="contents-input noline" value="${ sales.salesId }" readonly>
+		                                            <input type="hidden" name="salesId" value="${ sales.salesId }" readonly>
+                                                    <input type="input" name="orderId" class="contents-input noline" value="${ sales.orderId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
@@ -354,9 +361,9 @@
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ sales.salesId }" onclick="onUpdate(${ sales.salesId }); return false;">
-		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ sales.salesId }"  onclick="submitUpdate(${ sales.salesId }, 'ssupdate.do'); return false;" style="display: none;">
-		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ sales.salesId }"  onclick="cancelUpdate(${ sales.salesId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline update-btn" value="수정" id="updateBtn_${ sales.salesId }" onclick="onUpdate(this); return false;">
+		                                        <input type="button" class="contents-input-btn noline complete-btn" value="완료" id="completeBtn_${ sales.salesId }"  onclick="submitUpdate(this, 'ssupdate.do'); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline cancel-btn" value="취소" id="cancelBtn_${ sales.salesId }"  onclick="cancelUpdate(this); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
 									</c:forEach>
@@ -395,7 +402,7 @@
 
                 
                 <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제">
+                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('ssdelete.do'); return false;">
                 </div>
                 
             </div>

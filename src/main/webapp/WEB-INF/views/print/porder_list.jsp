@@ -301,6 +301,7 @@
 							<table class="contents-table">
 								<tr>
 									<th>체크</th>
+									<th>발주코드</th>
 									<th>거래처코드</th>
 									<th>인쇄소</th>
 									<th>발주일</th>
@@ -317,13 +318,18 @@
 								</tr>
 								<c:if test="${ !empty list }">
 									<c:forEach items="${ list }" var="printOrder">
-										<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ printOrder.printId }">
+										<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ printOrder.clientId }">
 											<td class="td-50">
 												<input type="checkbox" class="selectcheckbox" name="selectcheckbox" value="${ printOrder.orderId }">
 											</td>
 											<td class="td-100">
 												<div class="contents-input-div">
-													<input type="text" name="printId" class="contents-input noline" value="${ printOrder.printId }" readonly>
+													<input type="text" name="orderId" class="contents-input noline" value="${ printOrder.orderId }" readonly>
+												</div>
+											</td>
+											<td class="td-100">
+												<div class="contents-input-div">
+													<input type="text" name="clientId" class="contents-input noline" value="${ printOrder.clientId }" readonly>
 												</div>
 											</td>
 											<td class="td-120">
@@ -382,9 +388,9 @@
 												</div>
 											</td>
 											<td class="td-70">
-												<input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ printOrder.printId }" onclick="onUpdate(${ printOrder.printId }); return false;">
-												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ printOrder.printId }" onclick="submitUpdate(${ printOrder.printId }, 'poupdate.do'); return false;" style="display: none;">
-												<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ printOrder.printId }" onclick="cancelUpdate(${ printOrder.printId }); return false;" style="display: none;">
+												<input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ printOrder.orderId }" onclick="onUpdate(${ printOrder.orderId }); return false;">
+												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ printOrder.orderId }" onclick="submitUpdate(${ printOrder.orderId }, 'poupdate.do'); return false;" style="display: none;">
+												<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ printOrder.orderId }" onclick="cancelUpdate(${ printOrder.orderId }); return false;" style="display: none;">
 											</td>
 										</tr>
 									</c:forEach>

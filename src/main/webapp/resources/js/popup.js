@@ -57,7 +57,7 @@ Popup.prototype = {
     }
     ,
     insertVal : function(){
-		console.log('curinput : ' + curinput);
+		//console.log('curinput : ' + curinput);
 		//setList();
 	}
 	,
@@ -83,17 +83,17 @@ Popup.prototype = {
 			'printoffice': '인쇄소검색',
 			'bookstore': '서점검색',
 			'storage': '창고검색',
-			'book_order': '주문검색',
-			'employee': '직원검색'
+			'employee': '직원검색',
+			'book_order': '주문검색'
 		};
 		
 		popup_thead = {
-			'book': ['', 'No.', '도서코드', '도서명', '재고현황'],
-			'printoffice': ['', 'No.', '거래처코드', '인쇄소명', '연락처'],
-			'bookstore': ['', 'No.', '거래처코드', '서점명', '연락처'],
-			'storage': ['', 'No.', '거래처코드', '창고명', '연락처'],
-			'book_order': ['', 'No.', '주문번호', '도서명', '주문수량'],
-			'employee': ['', 'No.', '직원번호', '직원명', '담당부서']
+			'book': ['', '도서코드', '도서명', '정가', '재고현황'],
+			'printoffice': ['', '거래처코드', '인쇄소명', '담당자', '연락처'],
+			'bookstore': ['', '거래처코드', '서점명', '담당자', '연락처'],
+			'storage': ['', '거래처코드', '창고명', '담당자', '연락처'],
+			'employee': ['', '직원번호', '담당부서', '직원명', '직책'],
+			'book_order': ['', '주문번호', '서점명', '도서명', '주문수량']
 		};
 		
 		popup_selectbox = {
@@ -101,8 +101,8 @@ Popup.prototype = {
 			'printoffice': {'clientName': '인쇄소명', 'clientId': '거래처코드'},
 			'bookstore': {'clientName': '서점명', 'clientId': '거래처코드'},
 			'storage': {'clientName': '창고명', 'clientId': '거래처코드'},
-			'book_order': {'bookName': '도서명', 'orderId': '주문번호'},
-			'employee': {'empName': '직원명', 'depName': '부서'}
+			'employee': {'empName': '직원명', 'depName': '부서'},
+			'book_order': {'clientName': '서점명', 'orderDate': '주문일'}
 		};
 		
 		// 검색바 초기화
@@ -111,6 +111,17 @@ Popup.prototype = {
 		});
 		$('#sel_code').children('option:eq(0)').attr('selected', true);
 		$('input[type=search]').val('');
+		
+		var option = $('#sel_code').val();
+		if(option.toLowerCase().includes('date')) {
+			$('.modal-pop-search .search-box input[type=search]').hide();
+			$('.modal-pop-search .search-box input[type=date]').show();
+			$('span.wave').show();
+		} else {
+			$('.modal-pop-search .search-box input[type=search]').show();
+			$('.modal-pop-search .search-box input[type=date]').hide();
+			$('span.wave').hide();
+		}
 		
 		// 창닫기 시 조회된 테이블 정보 삭제
 		const table = $('#popup_table');

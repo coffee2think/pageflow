@@ -32,6 +32,7 @@
 		<!-- 영업관리 -->
 		<typeAlias type="com.erl.pageflow.sales.model.vo.BookOrder" alias="BookOrder" />
 		<typeAlias type="com.erl.pageflow.sales.model.vo.Sales" alias="Sales" />
+		<typeAlias type="com.erl.pageflow.sales.model.vo.SalesStatistics" alias="SalesStatistics" />
 		
 		<!-- 거래처 -->
 		<typeAlias type="com.erl.pageflow.sales.model.vo.Client" alias="Client" />
@@ -63,6 +64,8 @@
 		
 		<!-- 전자결재라인 -->
 		<typeAlias type="com.erl.pageflow.approvalline.model.vo.ApprovalLine" alias="ApprovalLine" />
+		<typeAlias type="com.erl.pageflow.approvalline.model.vo.ApprovalLineSave" alias="ApprovalLineSave" />
+		<typeAlias type="com.erl.pageflow.common.ApprovalLineKeyword" alias="ApprovalLineKeyword" />
 		
 	</typeAliases>
 	

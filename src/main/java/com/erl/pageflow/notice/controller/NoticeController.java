@@ -38,6 +38,8 @@ public class NoticeController {
 		return "work/notice_input";
 	}
 	
+	
+	
 	//공지글 수정페이지로 이동 처리용
 		@RequestMapping("ndmoveupdate.do")
 		public ModelAndView moveUpdatePage(

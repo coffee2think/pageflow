@@ -26,36 +26,6 @@
 <title></title>
 
 <script type="text/javascript">
-/* 	$(document).ready(function(){
-		$('#btn_delete').click(function(){
-			const selectedCheckbokes = $('input[name="selectedItems"]:checked');
-			const selectedStoreIds = [];
-			
-			selectedCheckbokes.each(function(){
-				selectedStoreIds.push($(this).val());
-			});
-			
-			if(selectedStoreIds.length === 0){
-				alert('선택된 항목이 없습니다.');
-			}else{
-				$.ajax({
-					type:'post',
-					url:'releasedelete.do',
-					dataType: "json",
-					data: { selectedStoreIds: selectedStoreIds.join(',') },
-					success: function(response){
-						alert('선택한 출고내역이 삭제되었습니다.');
-						location.reload();
-					},
-					error: function(){
-						alert('삭제 실패! 관리자에게 문의 하세요');
-					}
-				});
-			}
-			
-		});
-	}); */
-	
 	$(document).ready(function(){
 		 $('#btn_delete').click(function() {
 				var jarr = new Array();
@@ -77,7 +47,7 @@
 		                data: JSON.stringify(jarr), // 데이터를 JSON 문자열로 변환
 		                contentType: 'application/json; charset=utf-8', // 컨텐츠 타입 설정
 		                success: function() {
-		                    alert('선택한 입고내역이 삭제되었습니다.');
+		                    alert('선택한 출고내역이 삭제되었습니다.');
 		                    location.reload();
 		                },
 		                error: function() {

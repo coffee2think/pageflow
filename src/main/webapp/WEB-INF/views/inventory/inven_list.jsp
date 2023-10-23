@@ -155,7 +155,7 @@
 										<select name="code" id="sel_code">
 											<option value="bookId">도서코드</option>
 											<option value="bookName">도서명</option>
-											<option value="storageName">창고명</option>
+											<option value="clientName">창고명</option>
 										</select>
 									</div>
 								</div>
@@ -277,7 +277,7 @@
 											</td>
 											<td class="td-70">
 												<div class="contents-input-div">
-													<input type="input" name="clientName" class="contents-input noline" value="${ inv.storageName }">
+													<input type="input" name="clientName" class="contents-input noline" value="${ inv.clientName }">
 												</div>
 											</td>
 											<td class="td-105">
@@ -301,7 +301,7 @@
 											<c:if test="${ inv.classify eq '출고' }">
 												<td class="td-100">
 													<div class="contents-input-div">
-														<input type="input" name="increase" class="contents-input noline" value="-${ inv.increase }">
+														<input type="input" name="increase" class="contents-input noline" value="${ inv.increase }">
 													</div>
 												</td>
 											</c:if>
@@ -376,7 +376,7 @@
 					</div>
 					<!--내용 end-->
 	 				<div class="submit-box">
-	                    <button class="contents-input-btn big noline" id="btn_delete">선택삭제</button> 
+	                    <button class="contents-input-btn big noline" id="btn_delete">선택삭제</button>
 	                </div>
 				</div>
 				<!--main-container end-->

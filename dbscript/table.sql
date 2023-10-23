@@ -423,25 +423,29 @@ ALTER TABLE message
 		VALIDATE;
 
 
-/* 전자결재-기안서 */
-DROP TABLE approval 
-	CASCADE CONSTRAINTS;
 
-/* 전자결재 라인 */
-DROP TABLE approvalline 
-	CASCADE CONSTRAINTS;
 
 /* 전자결재 라인 그룹 */
-DROP TABLE approvalline_group 
-	CASCADE CONSTRAINTS;
-
-/* 전자결재 세이브 라인 */
-DROP TABLE approvalline_save 
-	CASCADE CONSTRAINTS;
-
+--DROP TABLE approvalline_group 
+--	CASCADE CONSTRAINTS;
 /* 전자결재 세이브 라인 그룹 */
-DROP TABLE approvalline_save_group 
-	CASCADE CONSTRAINTS;
+--DROP TABLE approvalline_save_group 
+--	CASCADE CONSTRAINTS;
+
+
+/* 전자결재-기안서 */
+--DROP TABLE approval 
+--	CASCADE CONSTRAINTS;
+
+/* 전자결재 라인 */
+--DROP TABLE approvalline 
+--	CASCADE CONSTRAINTS;
+    
+/* 전자결재 세이브 라인 */  
+--DROP TABLE approvalline_save 
+--	CASCADE CONSTRAINTS;
+
+
 
 /* 전자결재-기안서 */
 CREATE TABLE approval (
@@ -2223,5 +2227,81 @@ RENAME COLUMN JOP_ID TO JOB_ID;
 alter table draft_annual 
 ADD (detail_type VARCHAR2(30) default 'annual');
 
+alter TABLE print_order
+RENAME COLUMN PRINT_ID TO client_id;
+
+
+
+alter table inventory
+rename COLUMN storage_id to client_id;
+
+alter table store
+rename COLUMN storage_id to client_id;
+
+
+alter table approvalline_save 
+ADD (line_name VARCHAR2(50) NULL);
+
+alter table approvalline 
+modify STAMP_CHECK char(1) default 'E';
+
+alter table approval
+ADD (draft_sub_type VARCHAR2(20) NULL);
+
+ALTER TABLE approval DROP COLUMN draft_sub_type;
+
+alter table approval
+ADD (draft_sub_type VARCHAR2(20) NULL);
+
+alter table approval
+add (originFile VARCHAR2(1000) NULL);
+
+alter table approval
+add (renameFile VARCHAR2(1000) NULL);
+
+alter table approval
+rename COLUMN originFile to origin_file;
+
+alter table approval
+rename COLUMN renameFile to rename_file;
+
+--승준님 수정
+alter table inventory drop constraint FK_REFUND_TO_INVENTORY;
+alter table refund drop constraint PK_REFUND;
+alter table refund add constraint PK_REFUND primary key (REFUND_ID, BOOK_ID);
+ALTER TABLE inventory
+   ADD
+      CONSTRAINT FK_REFUND_TO_INVENTORY
+      FOREIGN KEY (
+         REFUND_ID,
+         BOOK_ID
+      )
+      REFERENCES refund (
+         REFUND_ID,
+         BOOK_ID
+      )
+      NOT DEFERRABLE
+      INITIALLY IMMEDIATE
+      ENABLE
+      VALIDATE;
+
+alter table inventory drop constraint FK_STORE_TO_INVENTORY;
+alter table store drop constraint PK_STORE;
+alter table store add constraint PK_STORE primary key (STORE_ID, BOOK_ID);
+ALTER TABLE inventory
+   ADD
+      CONSTRAINT FK_STORE_TO_INVENTORY
+      FOREIGN KEY (
+         STORE_ID,
+         BOOK_ID
+      )
+      REFERENCES store (
+         STORE_ID,
+         BOOK_ID
+      )
+      NOT DEFERRABLE
+      INITIALLY IMMEDIATE
+      ENABLE
+      VALIDATE;
 
 

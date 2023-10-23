@@ -17,10 +17,10 @@
     const LNKPAGE = 2;
     
     let curinput;
-    let client_type = 'bookstore'; 
+    let client_type = 'bookstore';
 
     function addRow(currentIndex) {
-    	if($('#input_table').find('tr').length >= 10) {
+    	if($('#input_table').find('tr').length > 10) {
     		alert('더이상 추가할 수 없습니다.');
             return;
     	}
@@ -35,7 +35,7 @@
         const input_empId = document.createElement('input');
         input_empId.setAttribute('type', 'hidden');
         input_empId.setAttribute('name', 'empId');
-        input_empId.setAttribute('value', '1'); // loginMember.empId 임시 코드
+        input_empId.setAttribute('value', '${ loginMember.empId }'); // loginMember.empId 임시 코드
         newRow.appendChild(input_empId);
 
 		// 새 행(Row)에 Cell 추가

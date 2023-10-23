@@ -15,6 +15,18 @@
     const NOWPAGE = 3;
     const SUBPAGE = 1;
     const LNKPAGE = 1;
+    
+    function searchByDate(dateType) {
+    	var begin = $('#begin_' + dateType).val();
+    	var end = $('#end_' + dateType).val();
+    	
+    	var url = 'ctrlistdate.do?';
+    	url += 'begin=' + begin;
+    	url += '&end=' + end;
+    	url += '&dateType=' + dateType;
+        
+    	location.href = url;
+    }
 </script>
 <title>계약현황</title>
 </head>
@@ -242,7 +254,7 @@
 
                 
                 <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제">
+                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('ctrdelete.do'); return false;">
                 </div>
                 
             </div>

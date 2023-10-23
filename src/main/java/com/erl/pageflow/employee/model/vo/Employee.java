@@ -25,7 +25,11 @@ public class Employee implements java.io.Serializable {
 	private int depId;
 	private String loginOk;
 	private String adminYN;
-
+	
+	private String jobName;
+	private String posName;
+	private String depName;
+	
 	public Employee() {
 		super();
 	}
@@ -53,6 +57,35 @@ public class Employee implements java.io.Serializable {
 		this.depId = depId;
 		this.loginOk = loginOk;
 		this.adminYN = adminYN;
+	}
+	
+	public Employee(int empId, String empPwd, String empName, Date empPwdUpdate, String phone, String empBirth,
+			String email, String address, int salary, String profile, Date enrollDate, Date modifyDate, Date leaveDate,
+			Date lastDate, int jobId, int posId, int depId, String loginOk, String adminYN, String depName,
+			String jobName, String posName) {
+		super();
+		this.empId = empId;
+		this.empPwd = empPwd;
+		this.empName = empName;
+		this.empPwdUpdate = empPwdUpdate;
+		this.phone = phone;
+		this.empBirth = empBirth;
+		this.email = email;
+		this.address = address;
+		this.salary = salary;
+		this.profile = profile;
+		this.enrollDate = enrollDate;
+		this.modifyDate = modifyDate;
+		this.leaveDate = leaveDate;
+		this.lastDate = lastDate;
+		this.jobId = jobId;
+		this.posId = posId;
+		this.depId = depId;
+		this.loginOk = loginOk;
+		this.adminYN = adminYN;
+		this.depName = depName;
+		this.jobName = jobName;
+		this.posName = posName;
 	}
 
 	public int getEmpId() {
@@ -207,8 +240,28 @@ public class Employee implements java.io.Serializable {
 		this.adminYN = adminYN;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public String getDepName() {
+		return depName;
+	}
+
+	public void setDepName(String depName) {
+		this.depName = depName;
+	}
+
+	public String getJobName() {
+		return jobName;
+	}
+
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
+	}
+
+	public String getPosName() {
+		return posName;
+	}
+
+	public void setPosName(String posName) {
+		this.posName = posName;
 	}
 
 	@Override
@@ -218,7 +271,7 @@ public class Employee implements java.io.Serializable {
 				+ address + ", salary=" + salary + ", profile=" + profile + ", enrollDate=" + enrollDate
 				+ ", modifyDate=" + modifyDate + ", leaveDate=" + leaveDate + ", lastDate=" + lastDate + ", jobId="
 				+ jobId + ", posId=" + posId + ", depId=" + depId + ", loginOk=" + loginOk + ", adminYN=" + adminYN
-				+ "]";
+				+ ", depName=" + depName + ", jobName=" + jobName + ", posName=" + posName + "]";
 	}
 
 }

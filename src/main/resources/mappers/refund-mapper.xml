@@ -18,7 +18,6 @@
 		<result property="bookName" column="BOOK_NAME" />
 		<result property="clientName" column="CLIENT_NAME" />
 		<result property="clientAddredd" column="CLIENT_ADDRESS" />
-		<result property="storageId" column="STORAGE_ID" />
 	</resultMap>
 	
 	
@@ -29,8 +28,10 @@
 	<select id="selectRefundList" parameterType="Paging" resultMap="resultRefund">
 		<![CDATA[
 			SELECT *
-			FROM (SELECT ROWNUM RNUM, REFUND_ID, BOOK_ID, CLIENT_ID, EMP_ID, EMP_NAME, REFUND_NUM, REFUND_DATE, REFUND_AMOUNT, REFUND_STATE, REMARK 
+			FROM (SELECT ROWNUM RNUM, REFUND_ID, BOOK_ID, CLIENT_ID, EMP_ID, EMP_NAME, REFUND_NUM, REFUND_DATE, REFUND_AMOUNT, REFUND_STATE, REMARK, book_name, client_name
 			            FROM (SELECT * FROM REFUND
+			            	  join book using (book_id)
+				 	  		  join client using (client_id)
 			                  ORDER BY REFUND_DATE DESC))
 			WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
 		]]>
@@ -45,7 +46,7 @@
 	<select id="selectRefundClientName" parameterType="_int"  resultType="string">
 		SELECT CLIENT_NAME
 		FROM CLIENT
-		WHERE CLIENT_ID = #{ storageId }
+		WHERE CLIENT_ID = #{ clientId }
 	</select>
 	
 	<select id="selectRefundBookPrice" parameterType="_int"  resultType="_int">
@@ -180,41 +181,16 @@
             ORDER BY INVEN_ID, INVEN_DATE  DESC)
 	</select>
 	
-	<insert id="insertInventory" parameterType="refund">
+	<insert id="insertInventory" parameterType="Refund">
 	<![CDATA[
-	       INSERT INTO INVENTORY VALUES (
-		(SELECT MAX(INVEN_ID) + 1 FROM INVENTORY), #{ bookId }, #{ storageId }, NULL, #{ refundId },
-		(SELECT INVEN_ID
-		FROM(SELECT INVEN_ID, ROWNUM
-		            FROM INVENTORY 
-		            ORDER BY INVEN_DATE DESC)
-		WHERE ROWNUM = 1),
-		
-		(SELECT REFUND_NUM FROM (SELECT REFUND_NUM, ROWNUM
-		FROM REFUND
-		WHERE REFUND_ID = #{ refundId }
-        ORDER BY REFUND_DATE DESC)
-        WHERE ROWNUM = 1),
-		
-		((SELECT NVL(CURR_INVEN, 0)
-		FROM (
-		    SELECT CURR_INVEN, ROWNUM
-		    FROM INVENTORY
-		    WHERE BOOK_ID = #{ bookId }
-		    ORDER BY INVEN_DATE DESC
-		)
-		WHERE ROWNUM = 1) + 
-				(
-		        SELECT REFUND_NUM
-		        FROM(SELECT REFUND_NUM, ROWNUM
-				FROM REFUND
-				WHERE REFUND_ID = #{ refundId } AND ROWNUM =1
-		        ORDER BY REFUND_DATE DESC)
-		        )
-		        
-		        ),
-				#{ refundDate }, '반품', NULL)
-]]>
+		INSERT INTO inventory 
+		VALUES ((SELECT MAX(inven_id) + 1 FROM inventory), #{ bookId }, #{ clientId }, NULL, #{ refundId },(select max(inven_id) from inventory), #{ refundNum },
+	                (nvl((SELECT curr_inven FROM inventory WHERE refund_id = #{ refundId } AND book_id = #{ bookId }), 0)),
+	                TO_DATE('${ refundDate }', 'YYYY/MM/DD'), 
+	                '반품', 
+	                #{ remark }
+	)	
+	]]>
 	</insert>
 	
 	<insert id="insertRefund" parameterType="Refund">
