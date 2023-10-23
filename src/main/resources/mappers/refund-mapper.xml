@@ -32,7 +32,7 @@
 			            FROM (SELECT * FROM REFUND
 			            	  join book using (book_id)
 				 	  		  join client using (client_id)
-			                  ORDER BY REFUND_DATE DESC))
+			                  ORDER BY REFUND_DATE DESC, refund_id ))
 			WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
 		]]>
 	</select>

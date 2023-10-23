@@ -207,4 +207,9 @@ public class StoreServiceImpl implements StoreService {
 		return storeDao.updateStore(store);
 	}
 
+	@Override
+	public int updateRelease(Store store) {
+		return storeDao.updateRelease(store);
+	}
+
 }

@@ -436,7 +436,7 @@ public class StoreController {
 
 		for (int i = 0; i < bookIds.length; i++) {
 			Store store = new Store();
-			
+
 			store.setStoreId(storeId);
 			store.setBookId(Integer.parseInt(bookIds[i]));
 			store.setBookName(bookNames[i]);
@@ -447,7 +447,7 @@ public class StoreController {
 			store.setStoreNum(Integer.parseInt(storeNums[i]));
 			store.setStorePrice(Integer.parseInt(storePrice[i]));
 			store.setStoreDate(Date.valueOf(storeDate[i]));
-			
+
 			storeList.add(store);
 		}
 
@@ -526,7 +526,7 @@ public class StoreController {
 		for (Store store : releaseList) {
 			if (storeService.insertRelease(store) > 0) {
 			} else {
-				model.addAttribute("message", "반품등록 실패!" + store);
+				model.addAttribute("message", "출고등록 실패!" + store);
 				return "common/error";
 			}
 		}
@@ -574,11 +574,42 @@ public class StoreController {
 		} else {
 			returnStr = "fail";
 		}
-		
+
+		if (storeService.insertStoreInventory(store) > 0) {
+			returnStr = "success";
+			logger.info("재고 등록 : " + store);
+
+		}
+		logger.info("수정 성공!!");
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.append(returnStr);
+		out.flush();
+		out.close();
+
+	}
+
+	// 출고 수정
+	@RequestMapping(value = "relupdate.do", method = RequestMethod.POST)
+	public void updateRelease(Store store, HttpServletResponse response) throws IOException {
+		String returnStr = null;
+		logger.info("store : " + store);
+		if (storeService.updateRelease(store) > 0) {
+		} else {
+			logger.info("출고 수정 : " + store);
+			returnStr = "fail";
+		}
+
+		if (storeService.deleteInventory(store.getStoreId()) > 0) {
+			logger.info("재고 삭제 : " + store);
+		} else {
+			returnStr = "fail";
+		}
+
 		if (storeService.insertInventory(store) > 0) {
 			returnStr = "success";
 			logger.info("재고 등록 : " + store);
-						
+
 		}
 		logger.info("수정 성공!!");
 		response.setContentType("text/html; charset=utf-8");

@@ -74,14 +74,12 @@ function submitUpdate(id, url) {
     var len = currentRow.children('td').length;
     currentRow.find('input').each(function(index) {
         // 양끝열(체크박스와 수정버튼 열)은 건너뜀
+         console.log($(this).attr('name'));
         if(index == 0 || index >= len) {
-            return; 
+          
+            //return;
+            
         }
-
-        // endDate에 값이 들어있지 않다면 담지 않고 건너뜀
-        if($(this).attr('name') == 'endDate' && $(this).val() == '') {
-			return;
-		}
 
         // 콤마를 삭제한 value 값이 숫자라면 숫자로 파싱
         if(!isNaN($(this).val().replace(/,/g, ''))) {
@@ -89,8 +87,9 @@ function submitUpdate(id, url) {
 		}
 
         json[$(this).attr('name')] = $(this).val();
-  		 
+
     });
+
     console.log("json : " + JSON.stringify(json));
     // ajax로 update 요청 보내기
     $.ajax({
