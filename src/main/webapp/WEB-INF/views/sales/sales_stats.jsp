@@ -90,15 +90,7 @@
         });
     }
     
-    import Chart from chart.js/auto
-    
     function showChart() {
-    	if (Chart.getChart(lineChart)) {
-			Chart.getChart(lineChart)?.destroy();
-		}
-    	
-    	makeChart();
-    	
     	$('#chart').show();
     	$('#table_list').hide();
     	$('#btn_chart').hide();
@@ -111,28 +103,6 @@
     	$('#btn_chart').show();
     	$('#btn_table').hide();
     }
-    
-    // 차트 그리기 영역
-    const ctx = document.getElementById('myChart');
-	
-	new Chart(ctx, {
-		type: 'bar',
-		data: {
-			labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-			datasets: [{
-				label: '# of Votes',
-				data: [12, 19, 3, 5, 2, 3],
-				borderWidth: 1
-			}]
-		},
-		options: {
-			scales: {
-				y: {
-					beginAtZero: true
-				}
-			}
-		}
-	});
 </script>
 <title></title>
 </head>
@@ -415,20 +385,8 @@
                             <!-- 차트 그리기 영역 -->
                             <div class="mainbox-tablebox graph width-65vw" id="chart">
                                 <canvas id="myChart" width="300" height="200">
-                                
                                 </canvas>
-                                <script>
-                                    var make_graph = new Make_graph();
-                                    make_graph.init('graph', 'myGraph');
-                                </script>
                             </div>
-							<div>
-								<canvas id="myChart"></canvas>
-							</div>
-							
-							<script>
-							  
-							</script>
                             <!-- 차트 그리기 영역 end -->
 
                         </div>
