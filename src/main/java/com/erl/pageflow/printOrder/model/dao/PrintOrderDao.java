@@ -61,8 +61,8 @@ public class PrintOrderDao {
 	}
 	
 	//발주 삭제
-	public int deletePrintOrder(int orderId) {
-		return sqlSessionTemplate.delete("printMapper.deletePrintOrder", orderId);
+	public int deletePrintOrder(int printOrder) {
+		return sqlSessionTemplate.delete("printMapper.deletePrintOrder", printOrder);
 	}
 	
 	public int selectPrintOrderCountByClientId(Search search) {

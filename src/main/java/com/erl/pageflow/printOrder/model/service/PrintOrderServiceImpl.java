@@ -59,8 +59,8 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	}
 	
 	@Override
-	public int deletePrintOrder(int orderId) {
-		return printOrderDao.deletePrintOrder(orderId);
+	public int deletePrintOrder(int printOrder) {
+		return printOrderDao.deletePrintOrder(printOrder);
 	}
 	
 	@Override

@@ -12,7 +12,7 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/print_func.js"></script>
 <script type="text/javascript">
     const NOWPAGE = 2;
     const SUBPAGE = 2;
@@ -24,6 +24,19 @@
 <script type="text/javascript">
 
 </script>
+
+<script>
+	//수량/단가 변경시 총액 자동계산
+    function calculateAmount() {
+      var quantity = document.getElementsByName('quantity')[0].value;
+      var price = document.getElementsByName('price')[0].value;
+      var amount = quantity * price;
+      if (!isNaN(amount)) {
+        document.getElementsByName('amount')[0].value = amount;
+      }
+    }
+ </script>
+
 </head>
 <body>
 	<div id="container">
@@ -184,11 +197,11 @@
                                 </tr>
                                 <c:if test="${ !empty list }">
 	                                <c:forEach items="${ list }" var="printCalc" >
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ printCalc.clientId }">
-		                                    <td class="td-50">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ printCalc.orderId }">
+		                                    <td class="td-30">
 		                                        <input type="checkbox" class="selectcheckbox" name="selectcheckbox" value="${ printCalc.orderId }">
 		                                    </td>
-		                                    <td class="td-100">
+		                                    <td class="td-70">
 												<div class="contents-input-div">
 													<input type="text" name="orderId" class="contents-input noline" value="${ printCalc.orderId }" readonly>
 												</div>
@@ -203,9 +216,9 @@
 		                                            <input type="text" name="clientName" class="contents-input noline" value="${ printCalc.clientName }" readonly>
 		                                        </div>
 		                                    </td>
-		                                    <td class="td-100">
+		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="text" name="endDate" class="contents-input noline changeable" value="${ printCalc.endDate }" readonly>
+		                                            <input type="date" name="endDate" class="contents-input noline changeable" value="${ printCalc.endDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
@@ -225,12 +238,12 @@
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="text" name="quantity" class="contents-input noline changeable" value="${ printCalc.quantity }" readonly>
+		                                            <input type="text" name="quantity" class="contents-input noline changeable" oninput="calculateAmount()" value="${ printCalc.quantity }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="text" name="price" class="contents-input noline changeable" value="${ printCalc.price }" readonly>
+		                                            <input type="text" name="price" class="contents-input noline changeable" oninput="calculateAmount()" value="${ printCalc.price }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-120">
@@ -244,9 +257,9 @@
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ printCalc.clientId }" onclick="onUpdate(${ printCalc.clientId }); return false;">
-												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ printCalc.clientId }" onclick="submitUpdate(${ printCalc.clientId }, 'pcupdate.do'); return false;" style="display: none;">
-												<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ printCalc.clientId }" onclick="cancelUpdate(${ printCalc.clientId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ printCalc.orderId }" onclick="onUpdate(${ printCalc.orderId }); return false;">
+												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ printCalc.orderId }" onclick="submitUpdate(${ printCalc.orderId }, 'pcupdate.do'); return false;" style="display: none;">
+												<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ printCalc.orderId }" onclick="cancelUpdate(${ printCalc.orderId }); return false;" style="display: none;">
 											</td>
 		                                </tr>
 	                                </c:forEach>

@@ -29,6 +29,7 @@ import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.printOrder.model.service.PrintOrderService;
 import com.erl.pageflow.printOrder.model.vo.PrintOrder;
+import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 
 @Controller
@@ -43,7 +44,10 @@ public class PrintOrderController {
 	
 	//발주현황 페이지 이동 처리용
 	@RequestMapping("polist.do")
-	public String movePrintOrderPage(Model model) {
+	
+	public String movePrintOrderPage(@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
 		
 		
 		
@@ -51,6 +55,8 @@ public class PrintOrderController {
 		LocalDate today = LocalDate.now();
 		model.addAttribute("begin", today.minusWeeks(1).plusDays(1));	//1주일 전부터
 		model.addAttribute("end", today);	//오늘까지
+		model.addAttribute("page", page);
+		model.addAttribute("limit", limitStr);
 		
 		return "redirect:polistdate.do";
 	}
@@ -318,43 +324,20 @@ public class PrintOrderController {
 	
 	//발주 삭제 요청 처리용
 	@RequestMapping(value= "podelete.do", method=RequestMethod.POST)
-	public String deletePrintOrder(HttpServletResponse response, @RequestBody String parma)
-			throws ParseException, IOException {
-		JSONParser jparser = new JSONParser();
-		JSONArray jarr = (JSONArray) jparser.parse(parma);
-		String[] jst = null;
-		System.out.println(jarr);
+	public String deletePrintOrderMethod(@RequestParam("IDs") int[] IDs, Model model) {
+		logger.info("podelete.do : " + IDs);
 		
-		int count = 0;
-		
-		JSONObject job = (JSONObject) jarr.get(0);
-		JSONArray scbkeyArray = (JSONArray) job.get("scbkey");
-		System.out.println("job : " + job);
-		System.out.println("scbkeyArray : " + scbkeyArray);
-		
-		for (int j = 0; j < scbkeyArray.size(); j++) {
-			String scbkey = (String) scbkeyArray.get(j);
-			int scbkeyInt = Integer.parseInt(scbkey);
-			System.out.println("scbkeyInt : " + scbkeyInt);
-			if(printOrderService.deletePrintOrder(scbkeyInt) >= 0) {
-				System.out.println("발주 삭제 : " + scbkeyInt);
-				count++;
+		for(int orderId : IDs) {
 			
+			
+			
+		if (printOrderService.deletePrintOrder(orderId) == 0) {
+			model.addAttribute("message", orderId + "번 발주 정보 삭제 실패!");
+			return "common/error";
 		}
 		
-		String str = "no";
-		if (count >= scbkeyArray.size()) {
-			str = "ok";
-		}
-		
-		PrintWriter out = response.getWriter();
-		out.append(str);
-		// 출력값은 버퍼에서 처리하니까 밀어내는 작업!
-		out.flush();
-
-		out.close();
 	}
 	
-	return "redirect:polist.do";
+		return "redirect:podelete.do";
 	}
 }

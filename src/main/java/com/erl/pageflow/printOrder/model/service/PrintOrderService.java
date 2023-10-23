@@ -26,7 +26,7 @@ public interface PrintOrderService {
 	
 	public int insertPrintOrder(PrintOrder printOrder);
 	
-	public int deletePrintOrder(int orderId);
+	public int deletePrintOrder(int printOrder);
 	
 	public int selectPrintOrderCountByClientId(Search search);
 	

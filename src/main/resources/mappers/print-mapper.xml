@@ -75,7 +75,7 @@
       select * 
       from (select rownum rnum, sub.*
             from (select * from print_order 
-                order by ORDER_DATE desc) sub) 
+                order by order_id desc, ORDER_DATE desc) sub) 
       where rnum >= #{ startRow } and rnum <= #{ endRow }
       ]]>
    </select>
@@ -85,7 +85,7 @@
       select * 
       from (select rownum rnum, sub.*
             from (select * from print_order 
-                order by ORDER_DATE desc) sub) 
+                order by order_id desc, ORDER_DATE desc) sub) 
       where rnum >= #{ startRow } and rnum <= #{ endRow }
       ]]>
    </select>
@@ -96,7 +96,7 @@
       from (select rownum rnum, sub.*
             from (select * from print_order
 		where order_date between #{ begin } and #{ end } + 1 - 1/86400
-		order by order_date desc) sub) 
+		order by order_id desc, order_date desc) sub) 
       where rnum >= #{ startRow } and rnum <= #{ endRow }
       ]]>
    </select>
@@ -107,7 +107,7 @@
       from (select rownum rnum, sub.*
             from (select * from print_order
 		where order_date between #{ begin } and #{ end } + 1 - 1/86400
-		order by order_date desc) sub) 
+		order by order_id desc, order_date desc) sub) 
       where rnum >= #{ startRow } and rnum <= #{ endRow }
       ]]>
    </select>
