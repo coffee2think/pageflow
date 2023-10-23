@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.erl.pageflow.book.model.vo.BookWithStock;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.employee.model.vo.Employee;
+import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 import com.erl.pageflow.sales.model.vo.Storage;
@@ -108,6 +109,24 @@ public class PopupDao {
 	public ArrayList<Employee> selectEmployeeByDepName(Search search) {
 		List<Employee> list = sqlSession.selectList("popupMapper.selectEmployeeByDepName", search);
 		return (ArrayList<Employee>) list;
+	}
+
+	public int selectBookOrderCountByClientName(String clientName) {
+		return sqlSession.selectOne("popupMapper.selectBookOrderCountByClientName", clientName);
+	}
+
+	public int selectBookOrderCountByDate(Search search) {
+		return sqlSession.selectOne("popupMapper.selectBookOrderCountByDate", search);
+	}
+
+	public ArrayList<BookOrder> selectBookOrderByClientName(Search search) {
+		List<BookOrder> list = sqlSession.selectList("popupMapper.selectBookOrderByClientName", search);
+		return (ArrayList<BookOrder>) list;
+	}
+
+	public ArrayList<BookOrder> selectBookOrderByDate(Search search) {
+		List<BookOrder> list = sqlSession.selectList("popupMapper.selectBookOrderByDate", search);
+		return (ArrayList<BookOrder>) list;
 	}
 	
 }

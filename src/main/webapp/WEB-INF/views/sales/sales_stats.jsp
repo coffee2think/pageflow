@@ -13,6 +13,36 @@
     const NOWPAGE = 5;
     const SUBPAGE = 4;
     const LNKPAGE = 1;
+
+    $(function() {
+        const table = $('#table_list');
+        var monthly_sum = Array.from({length: 12}, () => 0);
+        console.log('monthly_sum : ' + monthly_sum);
+
+        // 컨텐츠 영역 합계
+        const trList = table.find('tr.stats-data');
+        trList.each(function() {
+            var sum = 0;
+            var month = 0;
+
+            $(this).find('input.monthly-sales').each(function() {
+                sum += Number($(this).val());
+                monthly_sum[month] += Number($(this).val());
+                month += 1;
+            });
+
+            $(this).find('input[name=sum]').val(sum);
+        });
+
+        // 집계 영역 합계
+        const totalSumRow = table.find('tr.row-total-sum');
+        var total_sum = 0;
+        totalSumRow.find('td.monthly-total').each(function(index) {
+            $(this).text(monthly_sum[index]);
+            total_sum += monthly_sum[index];
+        });
+        $('#total_sum').text(total_sum);
+    }); // document ready
 </script>
 <title></title>
 </head>
@@ -122,11 +152,6 @@
 
                         </form>
 
-                        <div class="paging-box">
-                            <!-- 페이징 -->
-                            <c:import url="../common/paging.jsp" />
-                        </div>
-
                         <button class="search-visible-btn" id="search_visible_btn">
                             <img class="search-close" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
                             <img class="search-open" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
@@ -138,7 +163,7 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <table class="contents-table">
+                            <table class="contents-table" id="table_list">
                                 <tr>
                                     <th>도서코드</th>
                                     <th>도서명</th>
@@ -156,105 +181,105 @@
                                     <th>12월</th>
                                     <th>합계</th>
                                 </tr>
-                                <%-- <c:if test="${ !empty list }">
-                                	<c:forEach items=${ list } var="sales"> --%>
-		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+                                <c:if test="${ !empty list }">
+                                	<c:forEach items="${ list }" var="stats">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 stats-data">
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookId" class="contents-input noline" value="${ sales.bookId }" readonly>
+		                                            <input type="input" name="bookId" class="contents-input noline" value="${ stats.bookId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-200">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookName" class="contents-input noline" value="${ sales.bookName }" readonly>
+		                                            <input type="input" name="bookName" class="contents-input noline" value="${ stats.bookName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m1" class="contents-input noline" value="${ sales.m1 }" readonly>
+		                                            <input type="input" name="m01" class="contents-input noline monthly-sales m01" value="${ stats.salesMonth01 }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m2" class="contents-input noline" value="" readonly>
+		                                            <input type="input" name="m02" class="contents-input noline monthly-sales m02" value="${ stats.salesMonth02 }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m3" class="contents-input noline" value="" readonly>
+		                                            <input type="input" name="m03" class="contents-input noline monthly-sales m03" value="${ stats.salesMonth03 }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m4" class="contents-input noline" value="" readonly>
+		                                            <input type="input" name="m04" class="contents-input noline monthly-sales m04" value="${ stats.salesMonth04 }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m5" class="contents-input noline" value="" readonly>
+		                                            <input type="input" name="m05" class="contents-input noline monthly-sales m05" value="${ stats.salesMonth05 }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m6" class="contents-input noline" value="" readonly>
+		                                            <input type="input" name="m06" class="contents-input noline monthly-sales m06" value="${ stats.salesMonth06 }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m7" class="contents-input noline" value="" readonly>
+		                                            <input type="input" name="m07" class="contents-input noline monthly-sales m07" value="${ stats.salesMonth07 }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m8" class="contents-input noline" value="90" readonly>
+		                                            <input type="input" name="m08" class="contents-input noline monthly-sales m08" value="${ stats.salesMonth08 }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m9" class="contents-input noline" value="78" readonly>
+		                                            <input type="input" name="m09" class="contents-input noline monthly-sales m09" value="${ stats.salesMonth09 }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m10" class="contents-input noline" value="89" readonly>
+		                                            <input type="input" name="m10" class="contents-input noline monthly-sales m10" value="${ stats.salesMonth10 }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m11" class="contents-input noline" value="120" readonly>
+		                                            <input type="input" name="m11" class="contents-input noline monthly-sales m11" value="${ stats.salesMonth11 }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m12" class="contents-input noline" value="100" readonly>
+		                                            <input type="input" name="m12" class="contents-input noline monthly-sales m12" value="${ stats.salesMonth12 }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="m12" class="contents-input noline" value="1400" readonly>
+		                                            <input type="input" name="sum" class="contents-input noline" value="" readonly>
 		                                        </div>
 		                                    </td>
 		                                </tr>
-	                                <%-- </c:forEach>
-                                </c:if> --%>
+	                                </c:forEach>
+                                </c:if>
 
                                 <!--합계-->
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
+                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum row-total-sum">
                                     <td></td>
                                     <td>전체합계</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td class="monthly-total"></td>
+                                    <td class="monthly-total"></td>
+                                    <td class="monthly-total"></td>
+                                    <td class="monthly-total"></td>
+                                    <td class="monthly-total"></td>
+                                    <td class="monthly-total"></td>
+                                    <td class="monthly-total"></td>
+                                    <td class="monthly-total"></td>
+                                    <td class="monthly-total"></td>
+                                    <td class="monthly-total"></td>
+                                    <td class="monthly-total"></td>
+                                    <td class="monthly-total"></td>
+                                    <td id="total_sum"></td>
                                 </tr>
                                 <!--합계end-->
 

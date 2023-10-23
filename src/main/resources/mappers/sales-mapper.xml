@@ -82,6 +82,23 @@
 		<result property="endDate" column="END_DATE" />
 	</resultMap>
 	
+	<resultMap type="SalesStatistics" id="resultSalesStatistics">
+		<result property="bookId" column="BOOK_ID" />
+		<result property="bookName" column="BOOK_NAME" />
+		<result property="salesMonth01" column="M01" />
+		<result property="salesMonth02" column="M02" />
+		<result property="salesMonth03" column="M03" />
+		<result property="salesMonth04" column="M04" />
+		<result property="salesMonth05" column="M05" />
+		<result property="salesMonth06" column="M06" />
+		<result property="salesMonth07" column="M07" />
+		<result property="salesMonth08" column="M08" />
+		<result property="salesMonth09" column="M09" />
+		<result property="salesMonth10" column="M10" />
+		<result property="salesMonth11" column="M11" />
+		<result property="salesMonth12" column="M12" />
+	</resultMap>
+	
 	<select id="selectBookOrderCountByDate" parameterType="Search" resultType="_int">
 		select count(*) from book_order
 		where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
@@ -100,7 +117,8 @@
 	
 	<select id="selectSalesCountByDate" parameterType="Search" resultType="_int">
 		select count(*) from sales
-		where create_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+		left join book_order using (order_id, book_id)
+		where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
 	</select>
 	
 	<select id="selectSalesListByDate" parameterType="Search" resultMap="resultSales">
@@ -110,8 +128,8 @@
 					join book using (book_id)
 					join book_order using (order_id, book_id)
 					join client using (client_id)
-					where create_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
-					order by create_date desc, sales_id desc) sub)
+					where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+					order by order_date desc, order_id desc, book_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
@@ -182,12 +200,12 @@
 		set order_quantity = #{ orderQuantity },
 			state = #{ state },
 			modify_date = sysdate
-		where order_id = #{ orderId }
+		where order_id = #{ orderId } and book_id = #{ bookId }
 	</update>
 	
-	<delete id="deleteBookOrder" parameterType="_int">
+	<delete id="deleteBookOrder" parameterType="BookOrder">
 		delete from book_order
-		where order_id = #{ orderId }
+		where order_id = #{ orderId } and book_id = #{ bookId }
 	</delete>
 	
 	<insert id="insertClient" parameterType="Client">
@@ -283,12 +301,42 @@
 		select nvl(max(order_id), 0) from book_order
 	</select>
 	
-	<select id="selectSalesCountForStats" resultType="_int">
-		
+	<select id="selectSalesForStats" parameterType="_int" resultMap="resultSalesStatistics">
+		SELECT book_id, book_name
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '01', collected_amount, 0)) AS M01
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '02', collected_amount, 0)) AS M02
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '03', collected_amount, 0)) AS M03
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '04', collected_amount, 0)) AS M04
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '05', collected_amount, 0)) AS M05
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '06', collected_amount, 0)) AS M06
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '07', collected_amount, 0)) AS M07
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '08', collected_amount, 0)) AS M08
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '09', collected_amount, 0)) AS M09
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '10', collected_amount, 0)) AS M10
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '11', collected_amount, 0)) AS M11
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '12', collected_amount, 0)) AS M12
+		FROM book LEFT JOIN sales USING (book_id)
+		WHERE TO_CHAR(collect_date, 'YYYY') = #{ year }
+		GROUP BY book_id, book_name
 	</select>
 	
-	<select id="selectSalesForStats" parameterType="Paging" resultMap="resultSales">
-		
-	</select>
+	<insert id="insertSales" parameterType="Sales">
+		insert into sales values
+		((select nvl(max(sales_id), 0) + 1 from sales), #{ orderId }, #{ bookId }, #{ collectedAmount }, 
+		<choose>
+			<when test="collectedAmount > 0">
+				sysdate
+			</when>
+			<otherwise>
+				null
+			</otherwise>
+		</choose>
+		, sysdate)
+	</insert>
+	
+	<delete id="deleteSales" parameterType="_int">
+		delete from sales
+		where sales_id = #{ salesId }
+	</delete>
 
 </mapper>
