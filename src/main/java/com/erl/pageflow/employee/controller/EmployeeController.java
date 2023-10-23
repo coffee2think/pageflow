@@ -35,6 +35,17 @@ public class EmployeeController {
 		return "member/login";
 	}
 	
+	// 직원등록 페이지로 이동
+	@RequestMapping("empmoveinsert.do")
+	public String moveempInsertPage() {
+		return "member/emp_input";
+	}
+	
+	@RequestMapping("idck.do")
+	public String idck() {
+		return "member/emp_input";
+	}
+	
 	
 	
 	// 값---------------------------------------------------------------------
@@ -100,9 +111,11 @@ public class EmployeeController {
 	}
 	
 	// 직원 등록 
-		@RequestMapping(value = "enrollemp.do", method = RequestMethod.POST)
+		@RequestMapping(value = "empinsert.do",  method= {RequestMethod.GET,RequestMethod.POST})
 		public String memberInsertMethod(Employee employee, Model model) {
-			logger.info("enrollemp.do" + employee);
+			logger.info("empinsert.do" + employee.getDepId());
+			logger.info("empinsert.do" + employee);
+			
 
 			
 			if (employeeService.insertEmployee(employee) > 0) {

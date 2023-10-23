@@ -23,8 +23,64 @@ public class Employee implements java.io.Serializable {
 	private int jobId;
 	private int posId;
 	private int depId;
+	private String jobName;
+	private String posName;
+	private String depName;
 	private String loginOk;
 	private String adminYN;
+
+	public Employee(int empId, String empPwd, String empName, Date empPwdUpdate, String phone, String empBirth,
+			String email, String address, int salary, String profile, Date enrollDate, Date mdifyDate, Date leaveDate,
+			Date lastDate, int jobId, int posId, int depId, String jobName, String posName, String depName,
+			String loginOk, String adminYN) {
+		super();
+		this.empId = empId;
+		this.empPwd = empPwd;
+		this.empName = empName;
+		this.empPwdUpdate = empPwdUpdate;
+		this.phone = phone;
+		this.empBirth = empBirth;
+		this.email = email;
+		this.address = address;
+		this.salary = salary;
+		this.profile = profile;
+		this.enrollDate = enrollDate;
+		this.mdifyDate = mdifyDate;
+		this.leaveDate = leaveDate;
+		this.lastDate = lastDate;
+		this.jobId = jobId;
+		this.posId = posId;
+		this.depId = depId;
+		this.jobName = jobName;
+		this.posName = posName;
+		this.depName = depName;
+		this.loginOk = loginOk;
+		this.adminYN = adminYN;
+	}
+
+	public String getJobName() {
+		return jobName;
+	}
+
+	public void setJobName(String jobName) {
+		this.jobName = jobName;
+	}
+
+	public String getPosName() {
+		return posName;
+	}
+
+	public void setPosName(String posName) {
+		this.posName = posName;
+	}
+
+	public String getDepName() {
+		return depName;
+	}
+
+	public void setDepName(String depName) {
+		this.depName = depName;
+	}
 
 	public Employee() {
 		super();
@@ -217,8 +273,10 @@ public class Employee implements java.io.Serializable {
 				+ empPwdUpdate + ", phone=" + phone + ", empBirth=" + empBirth + ", email=" + email + ", address="
 				+ address + ", salary=" + salary + ", profile=" + profile + ", enrollDate=" + enrollDate
 				+ ", mdifyDate=" + mdifyDate + ", leaveDate=" + leaveDate + ", lastDate=" + lastDate + ", jobId="
-				+ jobId + ", posId=" + posId + ", depId=" + depId + ", loginOk=" + loginOk + ", adminYN=" + adminYN
-				+ "]";
+				+ jobId + ", posId=" + posId + ", depId=" + depId + ", jobName=" + jobName + ", posName=" + posName
+				+ ", depName=" + depName + ", loginOk=" + loginOk + ", adminYN=" + adminYN + "]";
 	}
+
+	
 
 }
