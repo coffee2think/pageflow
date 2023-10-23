@@ -16,7 +16,27 @@
     const NOWPAGE = 6;
     const SUBPAGE = 4;
     const LNKPAGE = 1;
+    function inputSubmit(){
+        //체크된 것만 넘기기
+    	e.preventDefault(); // Prevent the form from being submitted immediately
 
+        // Get an array of selected values
+        var checkedValues = $("input[name='check']:checked").map(function() {
+          return $(this).closest("tr").find("input").val();
+        }).get();
+
+        // Add the selected items as a hidden input to the form
+        var selectedItemsInput = $("<input>")
+          .attr("type", "hidden")
+          .attr("name", "selectedItems")
+          .val(selectedItems.join(','));
+
+        console.log('selectedItemsInput : ' + selectedItemsInput);
+
+        $('.input-form').append(selectedItemsInput);
+
+        $('.input-form').submit();
+    }
 </script>
 <title></title>
 </head>
@@ -50,7 +70,7 @@
             <div class="main-container">
 
                 <!--!!!form!!!-->
-                <form class="input-form">
+                <form class="input-form" action="alinsert.do" method="post" onsubmit="inputSubmit();">
 
                     <!--main-header-bar-->
                     <div class="main-header-bar">
@@ -190,7 +210,7 @@
                             <div class="contents-box aprovalline">
                                 <!--테이블 1-->
                                 <table class="contents-table aprovalline">
-                                    <thead>
+                                    <tbody class="my-line-body">
                                         <tr>
                                             <th class="td-50">
                                                 
@@ -211,8 +231,7 @@
                                                 순서
                                             </th>
                                         </tr>
-                                    </thead>
-                                    <tbody class="my-line-body">
+
                                         <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="mySaveLine_1">
                                             <td>
                                                 <div class="contents-check-div">
@@ -238,7 +257,7 @@
                                             </td>
                                             <td>
                                                 <div class="contents-input-div input-readonly">
-                                                    <input type="input" name="jobName" class="contents-input" value="" readonly>
+                                                    <input type="input" name="posName" class="contents-input" value="" readonly>
                                                 </div>
                                             </td>
                                             <td>
@@ -252,7 +271,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        
+                                        <!--
                                         <tr data-parent="1" data-num="2" data-depth="1" class="table-td-depth1" id="mySaveLine_2">
                                             <td>
                                                 <div class="contents-check-div">
@@ -293,7 +312,7 @@
                                                 </div>
                                             </td>
                                         </tr>
-
+                                        -->
                                     </tbody>
                                     
                                 </table>

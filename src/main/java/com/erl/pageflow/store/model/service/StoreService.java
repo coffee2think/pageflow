@@ -84,5 +84,7 @@ public interface StoreService {
 	public int insertRelease(Store store);
 
 	public int updateStore(Store store);
+	
+	public int updateRelease(Store store);
 
 }

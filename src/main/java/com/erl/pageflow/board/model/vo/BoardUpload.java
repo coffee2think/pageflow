@@ -11,6 +11,8 @@ public class BoardUpload implements Serializable {
 	private String uploadUrl;
 	private String renameUrl;
 	
+	public BoardUpload() {}
+	
 	public BoardUpload(int uploadId, int depId, int boardId, String uploadUrl, String renameUrl) {
 		super();
 		this.uploadId = uploadId;

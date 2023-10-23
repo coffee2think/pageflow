@@ -18,16 +18,7 @@ public interface ContractService {
 	
 	// 계약 조회
 	public Contract selectContract(int contrId);
-	
-	// 계약 등록
-	public int insertContract(Contract contract);
-	
-	// 계약 수정
-	public int updateContract(Contract contract);
-	
-	// 계약 삭제
-	public int deleteContract(int contrId);
-	
+
 	// 계약 등록 계약번호 +1 처리
 	public int selectMaxContrId();
 	
@@ -42,4 +33,31 @@ public interface ContractService {
 	
 	// 계약 키워드 검색 (책이름)
 	public ArrayList<Contract> selectContractByBook(Search search);
+	
+	// 계약 키워드 검색 개수 (카테고리)
+	public int selectContractCountByCategory(Search search);
+	
+	// 계약 키워드 검색 (카테고리)
+	public ArrayList<Contract> selectContractByCategory(Search search);
+	
+	// 계약 키워드 검색 개수 (작가명)
+	public int selectContractCountByWriter(Search search);
+	
+	// 계약 키워드 검색 (작가명)
+	public ArrayList<Contract> selectContractByWriter(Search search);
+	
+	// 계약 키워드 검색 개수 (담당자명)
+	public int selectContractCountByEmployee(Search search);
+	
+	// 계약 키워드 검색 (담당자명)
+	public ArrayList<Contract> selectContractByEmployee(Search search);
+	
+	// 계약 등록
+	public int insertContract(Contract contract);
+	
+	// 계약 수정
+	public int updateContract(Contract contract);
+	
+	// 계약 삭제
+	public int deleteContract(int contrId);
 }	

@@ -58,8 +58,8 @@ public class BoardServiceImpl implements BoardService{
 	}
 
 	@Override
-	public int updateUploadBoard(Board board) {
-		return boardDao.updateUploadBoard(board);
+	public int updateUploadBoard(BoardUpload boardUpload) {
+		return boardDao.updateUploadBoard(boardUpload);
 	}
 	
 	//----------------마이-----------------
@@ -128,6 +128,16 @@ public class BoardServiceImpl implements BoardService{
 	@Override
 	public int selectBoardId() {
 		return boardDao.selectBoardId();
+	}
+
+	@Override
+	public int deleteBoardUpload(Board board) {
+		return boardDao.deleteBoardUpload(board);
+	}
+
+	@Override
+	public int selectBoardUpload(Board board) {
+		return boardDao.selectBoardUpload(board);
 	}
 	
 	

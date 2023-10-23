@@ -203,6 +203,7 @@
 											<span>${notice.noticeId }</span> <span>|</span> <span>${notice.empName}</span>
 											<span>|</span> <span>${notice.noticeCreateDate }</span> <span>|</span>
 											<span>${notice.noticeReadCount }</span>
+											<span>|</span>
 											<c:if test="${!empty notice.noticeOriginalFileName}">
 												<span>첨부파일 : ★ </span>
 											</c:if>

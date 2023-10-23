@@ -20,7 +20,7 @@
 <script type="text/javascript">
 	function addRow() {
 		const uniqueId = "row_" + (new Date()).getTime();
-
+		console.log("uniqueId : " + uniqueId);
 		$("#input_table").append(
 		`<tr id="`+uniqueId+`" data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 content-row">       
            <td class="td-50">
@@ -74,12 +74,12 @@
            </td>
            <td class="td-70">
                <div class="contents-input-div">
-                   <input type="input" id="storeNumInput_`+uniqueId+`" name="storeNum" class="contents-input" onchange="calcTotalPrice(`+uniqueId+`); return false;">
+                   <input type="input" id="storeNumInput_`+uniqueId+`" name="storeNum" class="contents-input" onchange="calcTotalPrice('`+uniqueId+`'); return false;">
                </div>
            </td>
            <td class="td-70">
                <div class="contents-input-div">
-                   <input type="input" id="bookPriceInput_`+uniqueId+`" name="bookPrice" class="contents-input" onchange="calcTotalPrice(1); return false;">
+                   <input type="input" id="bookPriceInput_`+uniqueId+`" name="bookPrice" class="contents-input" onchange="calcTotalPrice('`+uniqueId+`'); return false;">
                </div>
            </td>
            <td class="td-100">
@@ -236,7 +236,7 @@
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div">
-                                                <input type="input" id="storePrice_1" name="storePrice" class="contents-input" readonly>
+                                                <input type="input" id="storePrice_row_1" name="storePrice" class="contents-input" readonly>
                                             </div>
                                         </td>
                                     </tr>

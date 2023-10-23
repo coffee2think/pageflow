@@ -60,6 +60,7 @@ public class ContractController {
 			return "common/error";
 		}
 	}
+	
 	// 계약 정보 수정 요청 처리
 	@RequestMapping(value="ctrupdate.do", method=RequestMethod.POST)
 	public void contractUpdateMethod(Contract contract, HttpServletResponse response) throws IOException {
@@ -114,7 +115,7 @@ public class ContractController {
 		return "redirect:ctrlist.do";
 	}
 	
-	// 편집 날짜 조회
+	// 계약 날짜 조회
 	@RequestMapping("ctrlistdate.do")
 	public String selectContractByDate(Search search,
 			@RequestParam(name = "page", required = false) String page,
@@ -164,7 +165,6 @@ public class ContractController {
 				}
 			}
 		}
-		
 		return "redirect:ctrlist.do";
 	}
 	
@@ -189,15 +189,15 @@ public class ContractController {
 		case "book":
 			listCount = contractService.selectContractCountByBook(search);
 			break;
-//		case "category":
-//			listCount = contractService.selectContractCountByCategory(search);
-//			break;
-//		case "writer":
-//			listCount = contractService.selectContractCountByWriter(search);
-//			break;
-//		case "employee":
-//			listCount = contractService.selectContractCountByEmployee(search);
-//			break;
+		case "category":
+			listCount = contractService.selectContractCountByCategory(search);
+			break;
+		case "writer":
+			listCount = contractService.selectContractCountByWriter(search);
+			break;
+		case "employee":
+			listCount = contractService.selectContractCountByEmployee(search);
+			break;
 		}
 		
 		Paging paging = new Paging(listCount, currentPage, limit, "ctrlistkwd.do");
@@ -212,20 +212,20 @@ public class ContractController {
 		case "book":
 			list = contractService.selectContractByBook(search);
 			break;
-//		case "category":
-//			list = contractService.selectContractByCategory(search);
-//			break;
-//		case "writer":
-//			list = contractService.selectContractByWriter(search);
-//			break;
-//		case "employee":
-//			list = contractService.selectContractByEmployee(search);
-//			break;
+		case "category":
+			list = contractService.selectContractByCategory(search);
+			break;
+		case "writer":
+			list = contractService.selectContractByWriter(search);
+			break;
+		case "employee":
+			list = contractService.selectContractByEmployee(search);
+			break;
 		}
 		
 		if(list != null && list.size() > 0) {
 			
-			model.addAttribute("list", list);
+			model.addAttribute("contractList", list);
 			model.addAttribute("searchType", searchType);
 			model.addAttribute("keyword", search.getKeyword());
 			model.addAttribute("paging", paging);

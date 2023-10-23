@@ -3,7 +3,6 @@ package com.erl.pageflow.edit.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,13 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
-import com.erl.pageflow.contract.model.vo.Contract;
 import com.erl.pageflow.edit.model.service.EditService;
 import com.erl.pageflow.edit.model.vo.Edit;
-import com.erl.pageflow.sales.model.vo.BookOrder;
 
 @Controller
 public class EditController {
@@ -108,7 +104,6 @@ public class EditController {
 				return "common/error";
 			}
 		}
-		
 		return "redirect:edlist.do";
 	}
 	
@@ -132,20 +127,24 @@ public class EditController {
 		out.close();
 	}
 	
-//	// 편집 정보 삭제 요청 처리
-//	@RequestMapping(value="eddelete.do", method=RequestMethod.POST)
-//	public String editDeleteMethod(@RequestParam("IDs") String[] IDs, Model model) {
-//		logger.info("eddelete.do : " + IDs);
-//		
-//		for(String editId : IDs) {
-//			if(editService.deleteEdit(editId) == 0) {
-//				model.addAttribute("message", editId + "번 편집 정보 삭제 실패!");
-//				return "common/error";
-//			}
-//		}
-//		
-//		return "redirect:edlist.do";
-//	}
+	// 편집 정보 삭제 요청 처리
+	@RequestMapping(value="eddelete.do", method=RequestMethod.POST)
+	public String editDeleteMethod(@RequestParam("IDs") String[] IDs, Model model) {
+		logger.info("eddelete.do : " + IDs);
+		
+		for(String id : IDs) {
+			String[] splitId = id.split("_");
+			Edit edit = new Edit();
+			edit.setEditId(Integer.parseInt(splitId[0]));
+			edit.setDepId(Integer.parseInt(splitId[1]));
+			
+			if(editService.deleteEdit(edit) == 0) {
+				model.addAttribute("message", edit.getEditId() + "_" + edit.getDepId() + "번 편집 정보 삭제 실패!");
+				return "common/error";
+			}
+		}
+		return "redirect:edlist.do";
+	}
 	
 	// 편집 시작날짜 조회
 	@RequestMapping("edlistSdate.do")
@@ -221,4 +220,68 @@ public class EditController {
 		}
 	}
 	
+	// 키워드로 편집현황 검색
+	@RequestMapping(value="edlistkwd.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String editListByKeyword(Search search,
+			@RequestParam(name="searchType") String searchType,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+		
+		logger.info("edlistkwd.do : searchType=" + searchType);
+		logger.info("edlistkwd.do : " + search);
+		logger.info("edlistkwd.do : page=" + page + ", limit=" + limitStr);
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		int listCount = 0;
+		
+		switch(searchType) {
+		case "department":
+			listCount = editService.selectEditCountByDepartment(search);
+			break;
+		case "employee":
+			listCount = editService.selectEditCountByEmployee(search);
+			break;
+		case "book":
+			listCount = editService.selectEditCountByBook(search);
+			break;
+		}
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "edlistkwd.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<Edit> list = null;
+		
+		switch(searchType) {
+		case "department":
+			list = editService.selectEditByDepartment(search);
+			break;
+		case "employee":
+			list = editService.selectEditByEmployee(search);
+			break;
+		case "book":
+			list = editService.selectEditByBook(search);
+			break;
+		}
+		
+		if(list != null && list.size() > 0) {
+			
+			model.addAttribute("editList", list);
+			model.addAttribute("searchType", searchType);
+			model.addAttribute("keyword", search.getKeyword());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "publish/edit_list";
+		} else {
+			model.addAttribute("message", "편집현황 " + search.getKeyword() + " 검색 실패");
+			return "common/error";
+		}
+	}
 }

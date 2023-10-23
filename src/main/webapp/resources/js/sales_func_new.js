@@ -158,7 +158,8 @@ function deleteCheckedRow(url) {
 }
 
 function searchByDate(url) {
-	var begin = $('#begin').val();
+	console.log('searchByDate 실행됨');
+    var begin = $('#begin').val();
 	var end = $('#end').val();
 	
     var newUrl = url;

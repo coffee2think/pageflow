@@ -530,13 +530,28 @@ body {
     margin-top: 2px;
 }
 
+.td-30 {
+    width: 30px;
+}
 
 .td-50 {
     width: 50px;
 }
 
+.td-60 {
+    width: 60px;
+}
+
 .td-70 {
     width: 70px;
+}
+
+.td-80 {
+    width: 80px;
+}
+
+.td-90 {
+    width: 90px;
 }
 
 .td-100 {

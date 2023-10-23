@@ -43,5 +43,4 @@ public class BookWithStock extends Book {
 				+ ", category=" + super.getCategory() + ", isbn=" + super.getIsbn() + ", bookState=" + super.getBookState() + ", engraving=" + super.getEngraving()
 				+ ", pubDate=" + super.getPubDate() + ", regDate=" + super.getRegDate() + ", stock=" + this.stock + "]";
 	}
-
 }

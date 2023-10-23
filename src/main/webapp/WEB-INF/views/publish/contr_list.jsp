@@ -237,9 +237,9 @@
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ contract.contrId }" onclick="onUpdate(${ contract.contrId }); return false;">
-		                                        <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ contract.contrId }" onclick="submitUpdate(${ contract.contrId }, 'ctrupdate.do'); return false;" style="display: none;">
-		                                        <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ contract.contrId }" onclick="cancelUpdate(${ contract.contrId }); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline update-btn" value="수정" id="updateBtn_${ contract.contrId }" onclick="onUpdate(this); return false;">
+		                                        <input type="button" class="contents-input-btn noline complete-btn" value="완료" id="completeBtn_${ contract.contrId }" onclick="submitUpdate(this, 'ctrupdate.do'); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline cancel-btn" value="취소" id="cancelBtn_${ contract.contrId }" onclick="cancelUpdate(this); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
     								</c:forEach>

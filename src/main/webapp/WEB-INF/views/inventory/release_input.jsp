@@ -16,79 +16,95 @@
 </script>
 <title></title>
 <script type="text/javascript">
-function addRow() {
-	const uniqueId = "row" + (new Date()).getTime();
+	function addRow() {
+		const uniqueId = "row_" + (new Date()).getTime();
+		
+		$("#input_table").append(
+				 `<tr id="`+uniqueId+`" data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 content-row">
+	             
+	             <td class="td-50">
+	                 <div class="contents-check-div">
+	                     <button class="contents-input-plus" onclick="addRow(`+uniqueId+`);">
+	                         <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
+	                     </button>
+	                     <button class="contents-input-minus" onclick="minusRow(`+uniqueId+`);">
+	                         <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
+	                     </button>
+	                 </div>
+	             </td>
+	             <td class="td-100">
+	                 <div class="contents-input-div input-search">
+	                     <button class="input-search-btn">
+	                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+	                     </button>
+	                     <input type="input" name="bookId" class="contents-input" value="">
+	                 </div>
+	             </td>
+	             <td class="td-200">
+	                 <div class="contents-input-div input-search">
+	                     <button class="input-search-btn">
+	                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+	                     </button>
+	                     <input type="input" name="bookName" class="contents-input" value="">
+	                 </div>
+	             </td>
+	             <td class="td-100">
+	                 <div class="contents-input-div input-search">
+	                     <button class="input-search-btn">
+	                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+	                     </button>
+	                     <input type="hidden" name="clientId" value="">
+	                     <input type="input" name="clientName" class="contents-input" value="">
+	                 </div>
+	             </td>
+	             <td class="td-100">
+	                 <div class="contents-input-div input-search">
+	                     <button class="input-search-btn">
+	                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+	                     </button>
+	                     <input type="hidden" name="empId">
+	                     <input type="input" name="empName" class="contents-input" value="">
+	                 </div>
+	             </td>
+	             <td class="td-70">
+	                 <div class="contents-input-div">
+	                     <input type="date" name="storeDate" class="select-date small">
+	                 </div>
+	             </td>
+	             <td class="td-70">
+	                 <div class="contents-input-div">
+	                     <input type="input" id="storeNumInput_`+uniqueId+`" name="storeNum" class="contents-input" onchange="calcTotalPrice('`+uniqueId+`'); return false;">
+	                 </div>
+	             </td>
+	             <td class="td-70">
+	                 <div class="contents-input-div">
+	                     <input type="input" id="bookPriceInput_`+uniqueId+`" name="bookPrice" class="contents-input" onchange="calcTotalPrice('`+uniqueId+`'); return false;">
+	                 </div>
+	             </td>
+	             <td class="td-100">
+	                 <div class="contents-input-div">
+	                     <input type="input" id="storePrice_`+uniqueId+`" name="storePrice" class="contents-input" readonly>
+	                 </div>
+	             </td>
+	         </tr>`);
+		initPopupBtn();
+	}
+	function minusRow(rowId) {
+	    $("#" + rowId).remove();
+	    initPopupBtn();
+	}
 	
-	$("#row").append(
-		  "<tr id='" + uniqueId + "'>"
-	      +"<td class='td-50'>"
-	      +"<div class='contents-check-div'>"
-	      +"<button class='contents-input-plus' onclick='addRow(); return false'>"
-	      +"<img src='${ pageContext.servletContext.contextPath }/resources/images/plus.png'>"
-	      +"</button>"
-	      + "<button class='contents-input-minus' onclick='minusRow(\"" + uniqueId + "\");'>"
-	      +"<img src='${ pageContext.servletContext.contextPath }/resources/images/minus.png'>"
-	      +"</button>"
-	      +"</div>"
-	      +"</td>"
-	      +"<td class='td-100'>"
-	      +"<div class='contents-input-div input-search'>"
-	      +"<button class='input-search-btn'>"
-	      +"<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
-	      +"</button>"
-	      +"<input type='input' name='code' class='contents-input' value=''>"
-	      +"</div>"
-		  +"</td>"
-		  +"<td class='td-200'>"
-	      +"<div class='contents-input-div input-search'>"
-	      +"<button class='input-search-btn'>"
-	      +"<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
-	      +"</button>"
-	      +"<input type='input' name='name' class='contents-input' value=''>"
-	      +"</div>"
-		  +"</td>"
-		  +"<td class='td-100'>"
-	      +"<div class='contents-input-div input-search'>"
-	      +"<button class='input-search-btn'>"
-	      +"<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
-	      +"</button>"
-	      +"<input type='input' name='store' class='contents-input' value=''>"
-	      +"</div>"
-		  +"</td>"
-		  +"<td class='td-100'>"
-	      +"<div class='contents-input-div input-search'>"
-	      +"<button class='input-search-btn'>"
-	      +"<img class='search-image' src='${ pageContext.servletContext.contextPath }/resources/images/search_btn.png'>"
-	      +"</button>"
-	      +"<input type='input' name='man' class='contents-input' value=''>"
-	      +"</div>"
-		  +"</td>"
-		  +"<td class='td-70'>"
-	      +"<div class='contents-input-div'>"
-	       +"<input type='date' name='date' class='select-date small'>"
-	      +"</div>"
-		  +"</td>"
-		  +"<td class='td-70'>"
-	      +"<div class='contents-input-div'>"
-	      +"<input type='number' name='count' class='contents-input'>"
-	      +"</div>"
-		  +"</td>"
-		  +"<td class='td-70'>"
-	      +"<div class='contents-input-div'>"
-	      +"<input type='number' name='price' class='contents-input'>"
-	      +"</div>"
-		  +"</td>"
-		  +"<td class='td-100'>"
-	      +"<div class='contents-input-div'>"
-	      +"<input type='number' name='amount' class='contents-input'>"
-	      +"</div>"
-		  +"</td>"
-		  +"</tr>");
-
-}
-function minusRow(rowId) {
-    $("#" + rowId).remove();
-}
+	function calcTotalPrice(uniqueId) {
+		console.log("uniqueId : " + uniqueId)
+		var bookPrice = Number($('#bookPriceInput_'+uniqueId).val());
+		var storeNum = Number($('#storeNumInput_'+uniqueId).val()); // .val()을 쓰면 String 이됨!! Number 안에 작성해줌!!
+		
+		var storePrice = Number($('#storePrice_'+uniqueId).val(bookPrice * storeNum));
+		
+		console.log("bookPrice : " + bookPrice);
+		console.log("storeNum : " + storeNum);
+		console.log("storePrice : " + storePrice);
+	}
 </script>
 </head>
 <body>
@@ -123,9 +139,8 @@ function minusRow(rowId) {
                 <!--form-->
                 <!-- <form class="input-form" action="/comi/partyi" method="post" enctype="multipart/form-data">-->
                 <form class="input-form" action="releaseinput.do" method="post">
-                	<input type="hidden" name="empId" value="1"> <!-- 하드코딩 -->
-                	<input type="hidden" name="clientId" value="1"> <!-- 하드코딩 -->
-                	<input type="hidden" name="storageId" value="1"> <!-- 하드코딩 -->
+                	<input type="hidden" name="empId" value="${ loginMember.empId }">
+                	<input type="hidden" name="empName" value="${ loginMember.empName }">
                     <!--main-header-bar-->
                     <div class="main-header-bar">
                         <div class="main-title-box">
@@ -143,7 +158,7 @@ function minusRow(rowId) {
                         <!--컨텐츠영역-->
                         <div class="contents-container sort-row">
                             <div class="contents-box">
-                                <table class="contents-table" id="row">
+                                <table class="contents-table" id="input_table" border="1">
                                     <tr>
                                         <th></th>
                                         <th>도서코드</th>
@@ -155,14 +170,14 @@ function minusRow(rowId) {
                                         <th>정가</th>
                                         <th>출고금액</th>
                                     </tr>
-                                    <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
+                                    <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 content-row" id="row_1"> 
                                         
                                         <td class="td-50">
                                             <div class="contents-check-div">
                                                 <button class="contents-input-plus" onclick="addRow(); return false">
                                                     <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
                                                 </button>
-                                                <button class="contents-input-minus">
+                                                <button class="contents-input-minus" onclick="minusRow(); return false">
                                                     <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
                                                 </button>
                                             </div>
@@ -188,6 +203,7 @@ function minusRow(rowId) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
+                                                <input type="hidden" name="clientId" value="">
                                                 <input type="input" name="clientName" class="contents-input" value="">
                                             </div>
                                         </td>
@@ -196,6 +212,7 @@ function minusRow(rowId) {
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
+                                                <input type="hidden" name="empId">
                                                 <input type="input" name="empName" class="contents-input" value="">
                                             </div>
                                         </td>
@@ -206,36 +223,21 @@ function minusRow(rowId) {
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="number" name="storeNum" class="contents-input">
+                                                <input type="input" id="storeNumInput_row_1" name="storeNum" class="contents-input" onchange="calcTotalPrice('row_1'); return false;">
                                             </div>
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="number" name="bookPrice" class="contents-input">
+                                                <input type="input" id="bookPriceInput_row_1" name="bookPrice" class="contents-input" onchange="calcTotalPrice('row_1'); return false;">
                                             </div>
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div">
-                                                <input type="number" name="storePrice" class="contents-input">
+                                                <input type="input" id="storePrice_row_1" name="storePrice" class="contents-input" readonly>
                                             </div>
                                         </td>
                                     </tr>
 								</table>
-								 <table class="contents-table">
-                                    <!--합계-->
-                                    <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
-                                        <td class="td-50"></td>
-                                        <td class="td-100"></td>
-                                        <td class="td-200"></td>
-                                        <td class="td-100"></td>
-                                        <td class="td-100"></td>
-                                        <td class="td-70">합계</td>
-                                        <td class="td-70">12123</td>
-                                        <td class="td-70">100213</td>
-                                        <td class="td-100">150000</td>
-                                    </tr>
-                                    <!--합계end-->
-                                </table>
                             </div>
                         </div>
                         <!--컨텐츠영역 end-->

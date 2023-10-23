@@ -37,21 +37,6 @@ public class ContractServiceImpl implements ContractService {
 	}
 
 	@Override
-	public int insertContract(Contract contract) {
-		return contractDao.insertContract(contract);
-	}
-	
-	@Override
-	public int updateContract(Contract contract) {
-		return contractDao.updateContract(contract);
-	}
-	
-	@Override
-	public int deleteContract(int contrId) {
-		return contractDao.deleteContract(contrId);
-	}
-	
-	@Override
 	public int selectMaxContrId() {
 		return contractDao.selectMaxContrId();
 	}
@@ -74,5 +59,51 @@ public class ContractServiceImpl implements ContractService {
 	@Override
 	public ArrayList<Contract> selectContractByBook(Search search) {
 		return contractDao.selectContractByBook(search);
+	}
+
+	@Override
+	public int selectContractCountByCategory(Search search) {
+		return contractDao.selectContractCountByCategory(search);
+	}
+
+	@Override
+	public ArrayList<Contract> selectContractByCategory(Search search) {
+		return contractDao.selectContractByCategory(search);
+	}
+
+	@Override
+	public int selectContractCountByWriter(Search search) {
+		return contractDao.selectContractCountByWriter(search);
+
+	}
+
+	@Override
+	public ArrayList<Contract> selectContractByWriter(Search search) {
+		return contractDao.selectContractByWriter(search);
+	}
+
+	@Override
+	public int selectContractCountByEmployee(Search search) {
+		return contractDao.selectContractCountByEmployee(search);
+	}
+
+	@Override
+	public ArrayList<Contract> selectContractByEmployee(Search search) {
+		return contractDao.selectContractByEmployee(search);
+	}
+	
+	@Override
+	public int insertContract(Contract contract) {
+		return contractDao.insertContract(contract);
+	}
+	
+	@Override
+	public int updateContract(Contract contract) {
+		return contractDao.updateContract(contract);
+	}
+	
+	@Override
+	public int deleteContract(int contrId) {
+		return contractDao.deleteContract(contrId);
 	}
 }

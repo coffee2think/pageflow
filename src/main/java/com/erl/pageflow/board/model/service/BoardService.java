@@ -31,7 +31,7 @@ public interface BoardService {
 
 	public int updateBoardViewNum(BoardKeyword boardKeyword);
 
-	public int updateUploadBoard(Board board);
+	public int updateUploadBoard(BoardUpload boardUpload);
 	
 	//----------------마이-----------------
 	public int selectBoardListCountMy(BoardKeyword boardKeyword);
@@ -62,4 +62,8 @@ public interface BoardService {
 	public int deleteBoard(Board board);
 
 	public int selectBoardId();
+
+	public int deleteBoardUpload(Board board);
+
+	public int selectBoardUpload(Board board);
 }

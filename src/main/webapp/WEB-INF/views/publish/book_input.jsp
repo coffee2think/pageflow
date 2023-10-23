@@ -122,7 +122,6 @@
 				+ '</button>'
 				+ '</div>';
 		} //for
-		
 	} //initRowIndex
 </script>
 <title>도서등록</title>
@@ -238,7 +237,6 @@
                                             </div>
                                         </td>
                                     </tr>
-
                                 </table>
                             </div>
                         </div>
@@ -250,7 +248,7 @@
                     <div class="submit-box">
                         <input type="submit" class="contents-input-btn big noline" id="btn_save" value="저장">
                     </div>
-
+                    
                 </form>
                 <!--form end-->
             </div>

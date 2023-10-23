@@ -25,7 +25,7 @@ public class NoticeDao {
 	}
 
 	public int selectListCount() {
-		return sqlSessionTemplate.selectOne("noticeMapper.getListCount");
+		return sqlSessionTemplate.selectOne("noticeMapper.selectListCount");
 	}
 	
 	public int insertNotice(Notice notice ) {
@@ -69,6 +69,10 @@ public class NoticeDao {
 	public ArrayList<Notice> selectNoticeByDate(Search search) {
 		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectNoticeByDate", search);
 		return (ArrayList<Notice>) list;
+	}
+	
+	public int updateReadCount(int noiceId) {
+		return sqlSessionTemplate.update("noticeMapper.updateReadCount", noiceId );
 	}
 
 	

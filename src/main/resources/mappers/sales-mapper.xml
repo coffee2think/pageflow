@@ -341,5 +341,12 @@
 		delete from sales
 		where sales_id = #{ salesId }
 	</delete>
+	
+	<select id="selectYears" resultType="_int">
+		select to_char(collect_date, 'YYYY') from sales
+		where collect_date is not null
+		group by to_char(collect_date, 'YYYY')
+		order by to_char(collect_date, 'YYYY') desc
+	</select>
 
 </mapper>

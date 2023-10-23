@@ -95,19 +95,19 @@
                                 <div class="select-box">
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
-                                            <option value="">부서명</option>
-                                            <option value="">담당자명</option>
-                                            <option value="">도서명</option>
+                                        <select name="code" id="search_type">
+                                            <option value="department" <c:if test="${ searchType == 'department' }">selected</c:if>>부서명</option>
+                                            <option value="employee" <c:if test="${ searchType == 'employee' }">selected</c:if>>담당자명</option>
+                                            <option value="book" <c:if test="${ searchType == 'book' }">selected</c:if>>도서명</option>
                                         </select>
                                     </div>
                                 </div>
 								
-                                <div class="search-box">
-                                    <button class="search-btn">
+                                 <div class="search-box">
+                                   <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
+                                    <button class="search-btn" onclick="searchKeyword('edlistkwd.do'); return false;">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                                 </div>
                             </div>
 

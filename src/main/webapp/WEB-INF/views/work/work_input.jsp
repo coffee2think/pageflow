@@ -109,10 +109,12 @@
                             	<input type="hidden" name="boardId" value="${ board.boardId }">
                             	<input type="hidden" name="empId" value="${ board.empId }">
                             	<input type="hidden" name="depId" value="${ board.depId }">
-                            	<input type="hidden" name="createDate" value="${ board.createDate }">
-                            	<input type="hidden" name="modifyDate" value="${ board.modifyDate }">
+                            	
                             	<input type="hidden" name="originFile" value="${ board.originFile }">
                             	<input type="hidden" name="renameFile" value="${ board.renameFile }">
+
+                                <input type="hidden" name="begin" value="${ begin }">
+                            	<input type="hidden" name="end" value="${ end }">
                             </c:if>
                             	
                             	<input type="hidden" name="depId" value="${ depId }">

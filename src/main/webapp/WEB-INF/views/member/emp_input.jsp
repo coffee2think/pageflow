@@ -45,7 +45,7 @@ function dupIDCheck(){
    $.ajax({
       url: "idchk.do",
       type: "post",
-      data: { userid: $('#empid').val() },
+      data: { empid: $('#empId').val() },
       success: function(data){
          console.log("success : " + data);
          if(data == "ok"){
@@ -53,7 +53,7 @@ function dupIDCheck(){
             $('#userpwd').focus();
          }else{
             alert("이미 사용중인 아이디입니다.");
-            $('#userid').select();
+            $('#empId').select();
          }
       },
       error: function(jqXHR, textStatus, errorThrown){
@@ -138,24 +138,23 @@ window.onload = function(){
 						<c:param name="rfile" value="${ notice.noticeRenameFileName }" />
 				</c:url>
 				 <input type="file" name="file" id="photofile">
-   				 <input type="submit" value="Upload" name="submit">
 				</td>
 				 
    				
 			<tr>
 				<th width="120">*사번</th>
-				<td><input type="text" name="empId" id="empid" required> &nbsp;
+				<td><input type="text" name="empId" id="empId" required> &nbsp;
          <input type="button" value="중복체크"
 					onclick="return dupIDCheck();">
       </td>        
    </tr>
    <tr>
 				<th>*암호</th>
-   <td><input type="password" name="empPwd" id="userpwd" required></td>
+   <td><input type="password" name="empPwd" id="emppwd" required></td>
 			</tr>
    <tr>
 				<th>*암호확인</th>
-   <td><input type="password" id="emppwd2" required></td>
+   <td><input type="password" name="emppwd2" id="emppwd2" required></td>
 			</tr>
    <tr>
 				<th>*이름</th>

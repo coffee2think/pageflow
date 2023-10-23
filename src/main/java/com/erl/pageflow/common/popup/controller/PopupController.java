@@ -372,6 +372,7 @@ public class PopupController {
 			job.put("empId", employee.getEmpId());
 			job.put("empName", URLEncoder.encode(employee.getEmpName(), "utf-8"));
 			job.put("depName", URLEncoder.encode(employee.getDepName(), "utf-8"));
+			job.put("posName", URLEncoder.encode(employee.getPosName(), "utf-8"));
 			job.put("jobName", URLEncoder.encode(employee.getJobName(), "utf-8"));
 			job.put("phone", employee.getPhone());
 			job.put("email", employee.getEmail());
