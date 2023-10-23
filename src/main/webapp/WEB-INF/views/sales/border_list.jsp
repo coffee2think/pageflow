@@ -185,52 +185,52 @@
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="orderId" class="contents-input noline" value="${ bookOrder.orderId }" readonly>
+		                                            <input type="number" name="orderId" class="contents-input noline" value="${ bookOrder.orderId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookId" class="contents-input noline" value="${ bookOrder.bookId }" readonly>
+		                                            <input type="number" name="bookId" class="contents-input noline" value="${ bookOrder.bookId }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-200">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookName" class="contents-input noline" value="${ bookOrder.bookName }" readonly>
+		                                            <input type="text" name="bookName" class="contents-input noline" value="${ bookOrder.bookName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="location" class="contents-input noline" value="강남" readonly>
+		                                            <input type="text" name="location" class="contents-input noline" value="강남" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookStoreName" class="contents-input noline" value="${ bookOrder.bookStoreName }" readonly>
+		                                            <input type="text" name="bookStoreName" class="contents-input noline" value="${ bookOrder.bookStoreName }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ bookOrder.bookPrice }" readonly>
+		                                            <input type="number" name="bookPrice" class="contents-input noline" value="${ bookOrder.bookPrice }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-50">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="orderQuantity" class="contents-input noline changeable" value="${ bookOrder.orderQuantity }" readonly>
+		                                            <input type="number" name="orderQuantity" class="contents-input noline changeable" value="${ bookOrder.orderQuantity }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-120">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="totalPrice" class="contents-input noline" value="${ bookOrder.totalPrice }" readonly>
+		                                            <input type="number" name="totalPrice" class="contents-input noline" value="${ bookOrder.totalPrice }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="state" class="contents-input noline changeable" value="${ bookOrder.state }" readonly>
+		                                            <input type="text" name="state" class="contents-input noline changeable" value="${ bookOrder.state }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="input" name="orderDate" class="contents-input noline" value="${ bookOrder.orderDate }" readonly>
+		                                            <input type="date" name="orderDate" class="contents-input noline" value="${ bookOrder.orderDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">

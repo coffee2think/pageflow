@@ -303,21 +303,24 @@
 	
 	<select id="selectSalesForStats" parameterType="_int" resultMap="resultSalesStatistics">
 		SELECT book_id, book_name
-		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '01', collected_amount, 0)) AS M01
-		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '02', collected_amount, 0)) AS M02
-		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '03', collected_amount, 0)) AS M03
-		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '04', collected_amount, 0)) AS M04
-		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '05', collected_amount, 0)) AS M05
-		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '06', collected_amount, 0)) AS M06
-		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '07', collected_amount, 0)) AS M07
-		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '08', collected_amount, 0)) AS M08
-		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '09', collected_amount, 0)) AS M09
-		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '10', collected_amount, 0)) AS M10
-		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '11', collected_amount, 0)) AS M11
-		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '12', collected_amount, 0)) AS M12
-		FROM book LEFT JOIN sales USING (book_id)
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '01', order_quantity, 0)) AS M01
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '02', order_quantity, 0)) AS M02
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '03', order_quantity, 0)) AS M03
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '04', order_quantity, 0)) AS M04
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '05', order_quantity, 0)) AS M05
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '06', order_quantity, 0)) AS M06
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '07', order_quantity, 0)) AS M07
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '08', order_quantity, 0)) AS M08
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '09', order_quantity, 0)) AS M09
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '10', order_quantity, 0)) AS M10
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '11', order_quantity, 0)) AS M11
+		    , SUM(DECODE(TO_CHAR(collect_date, 'MM'), '12', order_quantity, 0)) AS M12
+		FROM book
+		LEFT JOIN sales USING (book_id)
+		LEFT JOIN book_order USING (order_id, book_id)
 		WHERE TO_CHAR(collect_date, 'YYYY') = #{ year }
 		GROUP BY book_id, book_name
+		ORDER BY book_id asc
 	</select>
 	
 	<insert id="insertSales" parameterType="Sales">
