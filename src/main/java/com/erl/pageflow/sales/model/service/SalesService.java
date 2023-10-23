@@ -41,5 +41,6 @@ public interface SalesService {
 	public ArrayList<SalesStatistics> selectSalesForStats(int year);
 	public int insertSales(Sales sales);
 	public int deleteSales(int salesId);
+	public ArrayList<Integer> selectYears();
 
 }

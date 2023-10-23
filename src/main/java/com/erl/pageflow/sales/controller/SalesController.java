@@ -95,7 +95,7 @@ public class SalesController {
 	
 	// 매출현황 페이지 이동
 	@RequestMapping("movestats.do")
-	public String moveStatistics() {
+	public String moveStatistics(Model model) {
 		return "redirect:statslist.do";
 	}
 	
@@ -539,15 +539,17 @@ public class SalesController {
 	// 매출통계 조회 요청 처리
 	@RequestMapping("statslist.do")
 	public String salesStatisticsMethod(
-			@RequestParam(name="year", required=false) String yearStr, 
+			@RequestParam(name="year", required=false) String yearStr,
 			Model model) {
 		
 		int year = (yearStr != null) ? Integer.parseInt(yearStr) : LocalDate.now().getYear();
+		ArrayList<Integer> years = salesService.selectYears();
 		ArrayList<SalesStatistics> list = salesService.selectSalesForStats(year);
 		
 		if(list != null && list.size() > 0) {
 			model.addAttribute("list", list);
 			model.addAttribute("year", year);
+			model.addAttribute("years", years);
 			return "sales/sales_stats";
 		} else {
 			model.addAttribute("message", "매출통계 조회 실패");

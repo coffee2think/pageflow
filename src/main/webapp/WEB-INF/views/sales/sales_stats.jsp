@@ -18,8 +18,8 @@
     var monthly_sum = Array.from({length: 12}, () => 0);
 
     $(function() {
-        // 차트 숨기기
-        $('#chart').hide();
+    	// 차트 숨기기
+    	$('#chart').hide();
     	
     	const table = $('#table_list');
         // var monthly_sum = Array.from({length: 12}, () => 0);
@@ -50,6 +50,11 @@
         
         // 차트 생성
         makeChart();
+
+        // 매출년도 콤보박스 변경 시 요청 전송
+        $('sel_year').change(function() {
+            location.href = 'statslist.do?year=' + $('#sel_year').val();
+        });
     }); // document ready
     
     function makeChart() {
@@ -88,7 +93,20 @@
     function showChart() {
     	$('#chart').show();
     	$('#table_list').hide();
-    	
+    	$('#btn_chart').hide();
+    	$('#btn_table').show();
+    }
+    
+    function showTable() {
+    	$('#chart').hide();
+    	$('#table_list').show();
+    	$('#btn_chart').show();
+    	$('#btn_table').hide();
+    }
+
+    function searchStatsByDate() {
+        var year = $('#sel_code');
+        
     }
 </script>
 <title></title>
@@ -144,8 +162,8 @@
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
                                         <select name="code" id="sel_code">
-                                            <option value="">도서코드</option>
-                                            <option value="">도서명</option>
+                                            <option value="bookName">도서명</option>
+                                            <option value="bookId">도서코드</option>
                                         </select>
                                     </div>
                                 </div>
@@ -161,42 +179,18 @@
                             <div class="select-box">
                                 <div class="select-pan">
                                     <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
-                                        <option value="all">매출년도</option>
-                                        <option value="">2023년</option>
-                                        <option value="">2022년</option>
-                                        <option value="">2021년</option>
+                                    <select name="year" id="sel_year">
+                                        <option value="">매출년도</option>
+                                        <c:forEach items="${ years }" var="y">
+	                                        <option value="${ y }">${ y }년</option>
+                                        </c:forEach>
                                     </select>
                                 </div>
-                                
-                                <div class="select-pan">
-                                    <label for="start_month"></label>
-                                    <select name="startMonth" id="start_month">
-                                        <option value="all">매출월</option>
-                                        <option value="jan">1월</option>
-                                        <option value="feb">2월</option>
-                                        <option value="mar">3월</option>
-                                        <option value="apr">4월</option>
-                                        <option value="may">5월</option>
-                                        <option value="jun">6월</option>
-                                        <option value="jul">7월</option>
-                                        <option value="aug">8월</option>
-                                        <option value="sep">9월</option>
-                                        <option value="oct">10월</option>
-                                        <option value="nov">11월</option>
-                                        <option value="dec">12월</option>
-                                    </select>
+                                <div>
+                                    <input type="button" class="contents-input-btn big noline" id="btn_chart" value="차트보기" onclick="showChart();">
+                                    <input type="button" class="contents-input-btn big noline" id="btn_table" value="표 보기" onclick="showTable();" style="display: none;">
                                 </div>
-
-								<div>
-									기간 지정
-									<input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
-                                	<input type="date" class="select-date select-date-second" name="end" value=${ end }>
-								</div>
-                                
-								<input type="button" class="contents-input-btn big noline" id="btn_chart" value="차트보기" onclick="showChart();">
                             </div>
-
                         </form>
 
                         <button class="search-visible-btn" id="search_visible_btn">
@@ -411,12 +405,6 @@
 
                 </div>
                 <!--내용 end-->
-
-                <!--
-                <div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제">
-                </div>
-                -->
             </div>
             <!--main-container end-->
 
