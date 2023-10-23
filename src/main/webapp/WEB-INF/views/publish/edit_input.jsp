@@ -15,15 +15,6 @@
     const LNKPAGE = 2;
     
     let curinput;
-
-    document.addEventListener("DOMContentLoaded", function(){
-    	$('.input-search-btn').on('click', function() {
-    		var type = $(this).attr('class').split(' ')[1];
-    		popup.showPopup(type);
-    		curinput = $(this).parent('.input-search').find('input[type=input]');
-    		return false;
-    	})
-    }); 
     
     function addRow(currentIndex) {
     	if($('#edinsert_table').find('tr').length >= 10) {

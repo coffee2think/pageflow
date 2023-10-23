@@ -134,4 +134,19 @@ public class WriterController {
 		out.append(returnStr);
 		out.flush(); 
 	}
+	
+	// 도서 정보 삭제 요청 처리
+	@RequestMapping(value="wtdelete.do", method=RequestMethod.POST)
+	public String writerDeleteMethod(@RequestParam("IDs") int[] writerIDs, Model model) {
+		logger.info("wtdelete.do : " + writerIDs);
+		
+		for(int writerId : writerIDs) {
+			if(writerService.deleteWriter(writerId) == 0) {
+				model.addAttribute("message", writerId + "번 작가 정보 삭제 실패!");
+				return "common/error";
+			}
+		}
+		
+		return "redirect:wtlist.do";
+	}
 }

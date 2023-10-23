@@ -36,4 +36,10 @@ public interface ContractService {
 	
 	// 계약 날짜 카운트
 	public int selectContractCountByDate(Search search);
+	
+	// 계약 키워드 검색 개수 (책이름)
+	public int selectContractCountByBook(Search search);
+	
+	// 계약 키워드 검색 (책이름)
+	public ArrayList<Contract> selectContractByBook(Search search);
 }	

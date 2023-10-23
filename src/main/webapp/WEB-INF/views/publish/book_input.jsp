@@ -71,8 +71,11 @@
 						+ '<input type="input" name="category" class="contents-input" value="">'
 						+ '</div>';
 								
-		newCell4.innerHTML = '<div class="contents-input-div">'
-						+ '<input type="input" name="writerId" class="contents-input">'
+		newCell4.innerHTML = '<div class="contents-input-div input-search">'
+						+ '<button class="input-search-btn">'
+						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
+						+ ' </button>'
+						+ '<input type="input" name="writerId" class="contents-input" value="">'
 						+ '</div>';
 
 		newCell5.innerHTML = '<div class="contents-input-div">'
@@ -207,7 +210,10 @@
                                             </div>
                                         </td>
                                         <td class="td-70">
-                                            <div class="contents-input-div">
+                                            <div class="contents-input-div input-search">
+                                            	 <button class="input-search-btn">
+                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+                                                </button>
                                                 <input type="input" name="writerId" class="contents-input" value="">
                                             </div>
                                         </td>

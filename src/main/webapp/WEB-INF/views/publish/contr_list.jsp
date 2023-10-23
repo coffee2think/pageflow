@@ -10,7 +10,7 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/sales_func_new.js"></script>
 <script>
     const NOWPAGE = 3;
     const SUBPAGE = 1;
@@ -80,20 +80,20 @@
                                 <div class="select-box">
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
-                                            <option value="">도서명</option>
-                                            <option value="">카테고리</option>
-                                            <option value="">작가명</option>
-                                            <option value="">담당직원</option>
+                                        <select name="code" id="search_type">
+                                            <option value="book" <c:if test="${ searchType == 'book' }">selected</c:if>>도서명</option>
+                                            <option value="category" <c:if test="${ searchType == 'category' }">selected</c:if>>카테고리</option>
+                                            <option value="writer" <c:if test="${ searchType == 'writer' }">selected</c:if>>작가명</option>
+                                            <option value="employee" <c:if test="${ searchType == 'employee' }">selected</c:if>>담당직원</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="search-box">
-                                    <button class="search-btn">
+                                   <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
+                                    <button class="search-btn" onclick="searchKeyword('ctrlistkwd.do'); return false;">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="">
                                 </div>
                             </div>
 
@@ -171,7 +171,7 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <table class="contents-table">
+                            <table class="contents-table" id="table_list">
                                 <tr>
                                     <th>체크</th>
                                     <th>계약번호</th>

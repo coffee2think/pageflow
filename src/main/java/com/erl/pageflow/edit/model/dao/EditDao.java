@@ -17,7 +17,6 @@ public class EditDao {
 	
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
-	private SqlSession sqlSession;
 	
 	// 편집 리스트 개수 조회
 	public int selectEditListCount() {
