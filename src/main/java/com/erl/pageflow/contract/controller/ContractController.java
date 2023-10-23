@@ -22,6 +22,7 @@ import com.erl.pageflow.common.Search;
 import com.erl.pageflow.contract.model.service.ContractService;
 import com.erl.pageflow.contract.model.vo.Contract;
 import com.erl.pageflow.edit.model.vo.Edit;
+import com.erl.pageflow.sales.model.vo.BookOrder;
 
 @Controller
 public class ContractController {
@@ -110,7 +111,7 @@ public class ContractController {
 			}
 		}
 		
-		return "redirect:edlist.do";
+		return "redirect:ctrlist.do";
 	}
 	
 	// 편집 날짜 조회
@@ -165,5 +166,76 @@ public class ContractController {
 		}
 		
 		return "redirect:ctrlist.do";
+	}
+	
+	// 키워드로 계약현황 검색
+	@RequestMapping(value="ctrlistkwd.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String contractListByKeyword(Search search,
+			@RequestParam(name="searchType") String searchType,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+		
+		logger.info("ctrlistkwd.do : searchType=" + searchType);
+		logger.info("ctrlistkwd.do : " + search);
+		logger.info("ctrlistkwd.do : page=" + page + ", limit=" + limitStr);
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		int listCount = 0;
+		
+		switch(searchType) {
+		case "book":
+			listCount = contractService.selectContractCountByBook(search);
+			break;
+//		case "category":
+//			listCount = contractService.selectContractCountByCategory(search);
+//			break;
+//		case "writer":
+//			listCount = contractService.selectContractCountByWriter(search);
+//			break;
+//		case "employee":
+//			listCount = contractService.selectContractCountByEmployee(search);
+//			break;
+		}
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "ctrlistkwd.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<Contract> list = null;
+		
+		switch(searchType) {
+		case "book":
+			list = contractService.selectContractByBook(search);
+			break;
+//		case "category":
+//			list = contractService.selectContractByCategory(search);
+//			break;
+//		case "writer":
+//			list = contractService.selectContractByWriter(search);
+//			break;
+//		case "employee":
+//			list = contractService.selectContractByEmployee(search);
+//			break;
+		}
+		
+		if(list != null && list.size() > 0) {
+			
+			model.addAttribute("list", list);
+			model.addAttribute("searchType", searchType);
+			model.addAttribute("keyword", search.getKeyword());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "publish/contr_list";
+		} else {
+			model.addAttribute("message", "계약현황 " + search.getKeyword() + " 검색 실패");
+			return "common/error";
+		}
 	}
 }

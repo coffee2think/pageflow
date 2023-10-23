@@ -65,4 +65,14 @@ public class ContractServiceImpl implements ContractService {
 	public int selectContractCountByDate(Search search) {
 		return contractDao.selectContractCountByDate(search);
 	}
+
+	@Override
+	public int selectContractCountByBook(Search search) {
+		return contractDao.selectContractCountByBook(search);
+	}
+
+	@Override
+	public ArrayList<Contract> selectContractByBook(Search search) {
+		return contractDao.selectContractByBook(search);
+	}
 }
