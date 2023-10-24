@@ -160,7 +160,7 @@
 	} //initRowIndex
     
 </script>
-<title></title>
+<title>판매 입력</title>
 </head>
 <body>
 	<div id="container">

@@ -104,7 +104,7 @@
     	$('#btn_table').hide();
     }
 </script>
-<title></title>
+<title>매출 통계</title>
 </head>
 <body>
 	<div id="container">

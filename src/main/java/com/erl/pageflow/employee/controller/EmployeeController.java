@@ -96,6 +96,12 @@ public class EmployeeController {
 		
 		return mv;
 	}
+	
+	// 쪽지함 페이지 이동
+	@RequestMapping("movemsgbox.do")
+	public String moveMsgBoxPage() {
+		return "member/message_box";
+	}
 
 	// 값---------------------------------------------------------------------
 
@@ -105,7 +111,7 @@ public class EmployeeController {
 
 		Employee loginMember = employeeService.selectEmployee(employee.getEmpId());
 
-		if (loginMember != null && loginMember.getLoginOk().equals("Y")
+    if (loginMember != null && loginMember.getLoginOk().equals("Y")
 				&& bcryptPasswordEncoder.matches(employee.getEmpPwd(), loginMember.getEmpPwd())) {
 			session.setAttribute("loginMember", loginMember);
 			status.setComplete();
