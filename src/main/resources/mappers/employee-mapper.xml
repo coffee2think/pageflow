@@ -64,7 +64,7 @@
 	</insert>  
 
 	<select id="selectEmployee" parameterType="_int" resultMap="resultEmployee">
-		select * from employee where emp_id = #{ empId } 
+		select * from employee where emp_id = #{ empId } and LEAVE_DATE is NULL
 	</select>
 	
 	<select id="selectEmployeeApproval" parameterType="_int" resultMap="resultEmployeeJoin">
@@ -77,18 +77,21 @@
 		left join department using(dep_id)
 		left join job using(JOB_ID)
 		left join position using(pos_id)
+		where LEAVE_DATE is NULL
 	</select>
 	
 	<select id="selectEmployeeList" parameterType="Paging" resultMap="resultEmployee">
 		select * 
 		from (select rownum rnum, EMP_ID, EMP_PWD, EMP_PWD_UPDATE, EMP_NAME, PHONE, 
 			  EMP_BIRTH, EMAIL, ADDRESS, SALARY , PROFILE, ENROLL_DATE ,MODIFY_DATE  , LEAVE_DATE, JOB_Name, POS_Name,dep_name, LOGIN_OK, ADMIN_YN
-		from (select * from employee join job using(job_id) join position using(pos_id) join department using(dep_id)))
+		from (select * from employee join job using(job_id) join position using(pos_id) join department using(dep_id)
+			  where LEAVE_DATE is NULL))
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
 	<select id="selectListCount" resultType="_int">
 		select count(*) from employee 
+		where LEAVE_DATE is NULL
 	</select>
 	
 	<select id="selectCheckId" parameterType="_int" resultType="_int">
@@ -97,20 +100,16 @@
 	
 	<update id="updateEmployee" parameterType="Employee">
 		update employee
-		set phone = #{ PHONE }, email= #{EMAIL}, address = #{ ADDRESS }, JOB_ID = #{ jobId }, 
-			POS_ID = #{ posId }, DEP_ID = {depId }
+		set emp_Pwd = #{empPwd}, PROFILE = #{profile},
+			phone = #{ phone }, email= #{email}, address = #{ address }, JOB_ID = #{ jobId }, 
+			POS_ID = #{ posId }, DEP_ID = #{depId }
 		where EMP_ID = #{ empId }
 	</update>
-	
-	<select id="selectSearchDeptCount" parameterType="string"  resultType="_int">
-		select count(*) from employee 
-		left join department using(dep_id)
-		where DEP_NAME like '%' || #{ keyword} || '%'
-	</select>
 	
 	<select id="selectSearchEmpCount" parameterType="string"  resultType="_int">
 		select count(*) from employee 
 		where EMP_NAME like '%' || #{ keyword} || '%'
+		and LEAVE_DATE is NULL
 	</select>
 	
 	<select id="selectSearchEmp" parameterType="Search" resultMap="resultEmployee">
@@ -118,16 +117,87 @@
 		from (select rownum rnum, EMP_ID, EMP_PWD, EMP_PWD_UPDATE, EMP_NAME, PHONE, 
 			  EMP_BIRTH, EMAIL, ADDRESS, SALARY , PROFILE, ENROLL_DATE ,MODIFY_DATE  , LEAVE_DATE, JOB_Name, POS_Name,dep_name, LOGIN_OK, ADMIN_YN
 		from (select * from employee left join job using(job_id) left join position using(pos_id) left join department using(dep_id)
-			  where EMP_NAME like '%' || #{ keyword} || '%'))
+			  where EMP_NAME like '%' || #{ keyword} || '%'
+			  and LEAVE_DATE is NULL))
 		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<update id="updateLoginOK" parameterType="Employee">
+		update employee set LOGIN_OK = #{loginOk} where EMP_ID = #{empId}
+	</update>
+	
+	<update id="updateAdminYN" parameterType="Employee">
+		update employee set ADMIN_YN = #{adminYN} where EMP_ID = #{empId}
+	</update>
+	
+	<update id="updateEmpLeave" parameterType="_int">
+		update employee set LEAVE_DATE = sysdate where EMP_ID = #{empId}
+	</update>
+	
+	<!-- 권한 페이지 검색 -->
+	<select id="selectSearchDeptCount" parameterType="string"  resultType="_int">
+		select count(*) from employee 
+		left join department using(dep_id)
+		where DEP_NAME like '%' || #{ keyword} || '%'
+		and LEAVE_DATE is NULL
+	</select>
+	
+	<select id="selectSearchPosCount" parameterType="string"  resultType="_int">
+		select count(*) from employee 
+		left join position using(pos_id)
+		where POS_NAME like '%' || #{ keyword} || '%'
+		and LEAVE_DATE is NULL
+	</select>
+	
+	<select id="selectSearchDeptPosCount" parameterType="Employee"  resultType="_int">
+		select count(*) from employee 
+		left join department using(dep_id)
+		left join position using(pos_id)
+		where DEP_NAME like '%' || #{ depName} || '%'
+		and  POS_NAME like '%' || #{ posName} || '%'
+		and LEAVE_DATE is NULL
 	</select>
 	
 	<select id="selectSearchDept" parameterType="Search" resultMap="resultEmployee">
 		select * 
 		from (select rownum rnum, EMP_ID, EMP_PWD, EMP_PWD_UPDATE, EMP_NAME, PHONE, 
-			  EMP_BIRTH, EMAIL, ADDRESS, SALARY , PROFILE, ENROLL_DATE ,MODIFY_DATE  , LEAVE_DATE, JOB_Name, POS_Name,dep_name, LOGIN_OK, ADMIN_YN
-		from (select * from employee left join job using(job_id) left join position using(pos_id) left join department using(dep_id)
-			  where DEP_NAME like '%' || #{ keyword} || '%'))
+			  EMP_BIRTH, EMAIL, ADDRESS, SALARY , PROFILE, ENROLL_DATE ,MODIFY_DATE  ,
+			   LEAVE_DATE, JOB_Name, POS_Name,dep_name, LOGIN_OK, ADMIN_YN
+		from (select * from employee 
+			  left join job using(job_id) 
+			  left join position using(pos_id) 
+			  left join department using(dep_id)
+			  where DEP_NAME like '%' || #{ keyword} || '%'
+			  and LEAVE_DATE is NULL))
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectSearchPos" parameterType="Search" resultMap="resultEmployee">
+		select * 
+		from (select rownum rnum, EMP_ID, EMP_PWD, EMP_PWD_UPDATE, EMP_NAME, PHONE, 
+			  EMP_BIRTH, EMAIL, ADDRESS, SALARY , PROFILE, ENROLL_DATE ,MODIFY_DATE  ,
+			   LEAVE_DATE, JOB_Name, POS_Name,dep_name, LOGIN_OK, ADMIN_YN
+		from (select * from employee 
+			  left join job using(job_id) 
+			  left join position using(pos_id) 
+			  left join department using(dep_id)
+			  where POS_NAME like '%' || #{ keyword} || '%'
+			  and LEAVE_DATE is NULL))
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectSearchDeptPos" parameterType="com.erl.pageflow.employee.model.vo.SearchEmp" resultMap="resultEmployee">
+		select * 
+		from (select rownum rnum, EMP_ID, EMP_PWD, EMP_PWD_UPDATE, EMP_NAME, PHONE, 
+			  EMP_BIRTH, EMAIL, ADDRESS, SALARY , PROFILE, ENROLL_DATE ,MODIFY_DATE  ,
+			   LEAVE_DATE, JOB_Name, POS_Name,dep_name, LOGIN_OK, ADMIN_YN
+		from (select * from employee 
+			  left join job using(job_id) 
+			  left join position using(pos_id) 
+			  left join department using(dep_id)
+			  where DEP_NAME like '%' || #{ deptName} || '%'
+			  and POS_NAME like '%' || #{ posName} || '%'
+			  and LEAVE_DATE is NULL))
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
