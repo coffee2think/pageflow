@@ -37,6 +37,42 @@
     }
  </script>
 
+<script type="text/javascript">
+	
+	/* //검색 키워드
+	var searchkeyword = "";
+	
+	//검색 버튼 클릭
+	$(function(){
+		$('.search-btn').on('click', fucntion(){
+			searchkey();
+		});
+		
+		// After Enter key
+		$('.search-box-text').on('keypress', function(){
+			if(e.which === 13){
+				searchkey();
+			}
+		});
+	}); */
+</script>
+
+<script type="text/javascript">
+	
+	/* //날짜 검색 버튼
+	function searchByDate(){
+		var begin = $('#begin').val();
+		var end = $('#end').val();
+		
+		var url = 'pclistdate.do?';
+		url += 'begin' + begin;
+		url += '&end' + end;
+		
+		location.herf = url;
+	} */
+	
+</script>
+
 </head>
 <body>
 	<div id="container">
@@ -88,22 +124,20 @@
                                 <div class="select-box">
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
-                                            <option value="">정산코드</option>
-                                            <option value="">인쇄소명</option>
-                                            <option value="">도서코드</option>
-                                            <option value="">도서명</option>
-                                           
+                                        <select name="searchType" id="sel_code">
+                                            <option value="orderId">정산코드</option>
+                                            <option value="printName">인쇄소명</option>
+                                            <option value="bookId">도서코드</option>
+                                            <option value="bookName">도서명</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="search-box">
                                 	<input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
-                                    <button class="search-btn">
+                                    <button class="search-btn" onclick="searchkeyword('pckeyword.do'); return false; ">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                 
                                 </div>
                             </div>
 
