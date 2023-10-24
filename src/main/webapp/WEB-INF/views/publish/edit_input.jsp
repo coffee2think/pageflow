@@ -53,11 +53,11 @@
 						+ '<button class="input-search-btn">'
 						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 						+ ' </button>'
-						+ '<input type="input" name="depId" class="contents-input" value="">'
+						+ '<input type="input" name="depName" class="contents-input" value="">'
 						+ '</div>';
 		
 		newCell3.innerHTML = '<div class="contents-input-div">'
-						+ '<input type="input" name="empId" class="contents-input" value="">'
+						+ '<input type="input" name="empName" class="contents-input" value="">'
 						+ '</div>';
 
 		newCell4.innerHTML = '<div class="contents-input-div input-search">'
@@ -156,8 +156,8 @@
                                 <table class="contents-table" id="edinsert_table" border="1">
                                     <tr>
                                         <th></th>
-                                        <th>부서번호</th>
-                                        <th>담당직원번호</th>
+                                        <th>부서명</th>
+                                        <th>담당직원명</th>
                                         <th>도서명</th>
                                         <th>진행상태</th>
                                     </tr>
@@ -178,12 +178,12 @@
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="depId" class="contents-input" value="">
+                                                <input type="input" name="depName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-200">
                                             <div class="contents-input-div">
-                                                <input type="input" name="empId" class="contents-input" value="">
+                                                <input type="input" name="empName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-70">

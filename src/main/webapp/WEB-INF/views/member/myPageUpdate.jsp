@@ -11,48 +11,51 @@
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<title>수정페이지</title>
-<script type="text/javascript">
-	function validate(){
-	   
-	   //암호와 암호확인이 일치하지 않는지 확인
-	   //var pwdValue = document.getElementById("userpwd").value;
-	   //var pwdValue2 = document.getElementById("userpwd2").value;
-	   //jQuery 선택자 사용으로 바꾼다면
-	   var pwdValue = $('#empPwd').val();
-	   var pwdValue2 = $('#empPwd2').val();
-	   
-	   if(pwdValue !== pwdValue2){
-	      alert("암호와 암호확인이 일치하지 않습니다. 다시 입력하세요.");
-	      document.getElementById("empPwd").value = "";
-	      document.getElementById("empPwd2").select();
-	      return false;  //전송 취소함
-	   }
-	   return true;  //전송보냄
-	}
-	
-	window.onload = function(){
-		
-	   //선택한 사진파일 이미지 미리보기 처리
-	   var photofile = document.getElementById("photofile");
-	   photofile.addEventListener('change', function(event){      
-	      const files = event.currentTarget.files;
-	       const file = files[0];
-	       const myphoto = document.getElementById("photo");       
-	       console.log(file.name);
-	       
-	       const reader = new FileReader();
-	        reader.onload = (e) => {          
-	          myphoto.setAttribute('src', e.target.result);
-	          myphoto.setAttribute('data-file', file.name);
-	        };
-	        reader.readAsDataURL(file);    
-	   });
-	}
+<script>
+    const NOWPAGE = 7;
+    const SUBPAGE = 1;
+    const LNKPAGE = 1;
+    
+    function validate(){
+ 	   
+ 	   //암호와 암호확인이 일치하지 않는지 확인
+ 	   //var pwdValue = document.getElementById("userpwd").value;
+ 	   //var pwdValue2 = document.getElementById("userpwd2").value;
+ 	   //jQuery 선택자 사용으로 바꾼다면
+ 	   var pwdValue = $('#empPwd').val();
+ 	   var pwdValue2 = $('#empPwd2').val();
+ 	   
+ 	   if(pwdValue !== pwdValue2){
+ 	      alert("암호와 암호확인이 일치하지 않습니다. 다시 입력하세요.");
+ 	      document.getElementById("empPwd").value = "";
+ 	      document.getElementById("empPwd2").select();
+ 	      return false;  //전송 취소함
+ 	   }
+ 	   return true;  //전송보냄
+ 	}
+ 	
+ 	window.onload = function(){
+ 		
+ 	   //선택한 사진파일 이미지 미리보기 처리
+ 	   var photofile = document.getElementById("photofile");
+ 	   photofile.addEventListener('change', function(event){      
+ 	      const files = event.currentTarget.files;
+ 	       const file = files[0];
+ 	       const myphoto = document.getElementById("photo");       
+ 	       console.log(file.name);
+ 	       
+ 	       const reader = new FileReader();
+ 	        reader.onload = (e) => {          
+ 	          myphoto.setAttribute('src', e.target.result);
+ 	          myphoto.setAttribute('data-file', file.name);
+ 	        };
+ 	        reader.readAsDataURL(file);    
+ 	   });
+ 	}
 </script>
+<title>수정페이지</title>
 </head>
 <body>
-
 	<header class="main-header">
 		<!--header-container-->
 		<div class="header-container">
@@ -85,7 +88,7 @@
 		onsubmit="return validate();">
 		<table id="outer" align="center" width="700" cellspacing="5"
 			cellpadding="0">
-
+		<input type="hidden" name="origin_emppwd" value="${ loginMember.empPwd }">
 			<tr>
 				<th colspan="3">내 정보</th>
 				<td rowspan="7" width="100" align="center" valign="middle">
@@ -106,57 +109,31 @@
 					type="submit" value="Upload" name="submit"></td>
 			<tr>
 				<th width="120">사번</th>
-				<td><input type="input" name="empId" id="empid" value="${ loginMember.empId }" readonly>
-			</tr>
-			<tr>
-				<th>*암호</th>
-				<td><input type="password" name="empPwd" id="empPwd" value="${ loginMember.empPwd }" required></td>
-			</tr>
-			<tr>
-				<th>*암호확인</th>
-				<td><input type="password" name="empPwd2" id="empPwd2" value="${ loginMember.empPwd }" required></td>
-			</tr>
-			<tr>
-				<th>변경일</th>
-				<td><input type="date" id="empPwdUpdate" value="${ loginMember.empPwdUpdate }" readonly></td>
+				<td><input type="input" name="empId" id="empid" value="${ employee.empId }" readonly>
 			</tr>
 			<tr>
 				<th>이름</th>
-				<td><input type="input" name="empName" value="${ loginMember.empName }" readonly></td>
+				<td><input type="input" name="empName" value="${ employee.empName }" readonly></td>
+			</tr>
+			<tr>
+				<th>*암호</th>
+				<td><input type="password" name="empPwd" id="empPwd" value="" required></td>
+			</tr>
+			<tr>
+				<th>*암호확인</th>
+				<td><input type="password" name="empPwd2" id="empPwd2" value="" required></td>
+			</tr>
+			<tr>
+				<td><input type="hidden" name="empPwdUpdate" id="empPwdUpdate" value="${ employee.empPwdUpdate }" readonly></td>
 			</tr>
 			<tr>
 				<th>*전화번호</th>
-				<td><input type="input" name="phone" value="${ loginMember.phone }" required></td>
-			</tr>
-			<tr>
-				<th>생년월일</th>
-				<td><input type="input" name="empBirth" value="${ loginMember.empBirth }" readonly></td>
-			</tr>
-			<tr>
-				<th>이메일</th>
-				<td><input type="input" name="email" value="${ loginMember.email }" readonly></td>
+				<td><input type="input" name="phone" value="${ employee.phone }" required></td>
 			</tr>
 			<tr>
 				<th>*주소</th>
-				<td><input type="input" name="address" value="${ loginMember.address }" required></td>
+				<td><input type="input" name="address" value="${ employee.address }" required></td>
 			</tr>
-			<tr>
-				<th>직급</th>
-				<td><input type="input" name="jobName" value="${ loginMember.jobName }" readonly></td>
-			</tr>
-			<tr>
-				<th>직책</th>
-				<td><input name="input" name="posName" value="${ loginMember.posName }" readonly></td>
-			</tr>
-			<tr>
-				<th>부서</th>
-				<td><input type="input" name="depName" value="${ loginMember.depName }" readonly></td>
-			</tr>
-			<tr>
-				<th>입사일</th>
-				<td><input type="date" name="enrollDate" value="${ loginMember.enrollDate }" readonly></td>
-			</tr>
-
 			<tr>
 				<th colspan="3"><input type="submit" value="수정하기">
 					&nbsp; <input type="reset" value="수정취소"> &nbsp; <a

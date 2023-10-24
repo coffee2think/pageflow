@@ -47,7 +47,7 @@
         form.submit();
     } */
     
-    function changeTab() {h
+    function changeTab() {
         var selectedTabId = selectElement.value;
         var tabs = document.querySelectorAll(".nav-tabs li");
 
