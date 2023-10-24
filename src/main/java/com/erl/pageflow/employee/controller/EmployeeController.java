@@ -74,14 +74,14 @@ public class EmployeeController {
 		return mv;
 
 	}
-	
-	//마이페이지로 이동
+
+	// 마이페이지로 이동
 	@RequestMapping("movemypage.do")
 	public String moveMyPage() {
 		return "member/myPage";
 	}
-	
-	//수정페이지로 이동
+
+	// 수정페이지로 이동
 	@RequestMapping("movemyupdate.do")
 	public ModelAndView moveMyUpdatePage(@RequestParam("empId") int empId, ModelAndView mv) {
 		Employee employee = employeeService.selectEmployee(empId);
@@ -96,7 +96,7 @@ public class EmployeeController {
 		
 		return mv;
 	}
-	
+
 	// 값---------------------------------------------------------------------
 
 	// 로그인 값전송
@@ -105,7 +105,8 @@ public class EmployeeController {
 
 		Employee loginMember = employeeService.selectEmployee(employee.getEmpId());
 
-		if (loginMember != null) {
+		if (loginMember != null && loginMember.getLoginOk().equals("Y")
+				&& bcryptPasswordEncoder.matches(employee.getEmpPwd(), loginMember.getEmpPwd())) {
 			session.setAttribute("loginMember", loginMember);
 			status.setComplete();
 			return "common/main";
@@ -121,7 +122,7 @@ public class EmployeeController {
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();
-			return "common/main";
+			return "redirect:loginPage.do";
 		} else {
 			model.addAttribute("message", "로그아웃 실패");
 			return "common/error";
@@ -288,8 +289,8 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "msearch.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView memberSearch(@RequestParam("searchType") String searchType, @RequestParam("keyword") String keyword,
-			@RequestParam(name = "page", required = false) String page,
+	public ModelAndView memberSearch(@RequestParam("searchType") String searchType,
+			@RequestParam("keyword") String keyword, @RequestParam(name = "page", required = false) String page,
 			@RequestParam(name = "limit", required = false) String slimit, ModelAndView mv) {
 		// 검색결과에 대한 페이징 처리
 		// 출력할 페이지 지정
@@ -346,7 +347,7 @@ public class EmployeeController {
 			mv.addObject("limit", limit);
 			mv.addObject("searchType", searchType);
 			mv.addObject("keyword", keyword);
-			
+
 			mv.setViewName("member/admin");
 		} else {
 			mv.addObject("message", searchType + "에 대한 " + keyword + "검색 결과가 존재하지 않습니다.");

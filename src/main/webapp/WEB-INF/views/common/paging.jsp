@@ -8,7 +8,7 @@
 <c:set var="endPage" value="${ requestScope.paging.endPage }"/>
 <c:set var="maxPage" value="${ requestScope.paging.maxPage }"/>
 <c:set var="limit" value="${ requestScope.paging.limit }"/>
-<c:set var="urlMapping" value="${ requestScope.paging.urlMapping }"/>
+
 <c:set var="begin" value="${ requestScope.begin }" />
 <c:set var="end" value="${ requestScope.end }" />
 <c:set var="searchType" value="${ searchType }" />
@@ -33,23 +33,81 @@
 	        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/left-btn2.png"></span>
 	    </span>
 	</c:if>
+	<!-- 맨왼쪽 -->
 	<c:if test="${ currentPage > 1 }">
-		<a href="" class="paging-list-btn prev">
+			<c:url var="pUrl" value="${ urlMapping }">
+				<c:param name="page" value="1" />
+				<c:if test="${ !empty limit }">
+					<c:param name="limit" value="${ limit }" />
+				</c:if>
+				<c:if test="${ !empty firstType }">
+					<c:param name="firstType" value="${ firstType }" />
+				</c:if>
+				
+				<!-- 키워드 검색 시 -->
+				<c:if test="${ !empty begin and !empty end }">
+					<c:param name="searchType" value="${ searchType }" />
+					<c:param name="keyword" value="${ keyword }" />
+				</c:if>
+				<c:if test="${ !empty searchType }">
+					<c:param name="searchType" value="${ searchType }"/>
+				</c:if>
+				
+				<!-- 날짜 검색 시 -->
+				<c:if test="${ !empty begin and !empty end }">
+					<c:param name="begin" value="${ begin }" />
+					<c:param name="end" value="${ end }" />
+				</c:if>
+				<!-- dateType이 있을 시 -->
+				<c:if test="${ !empty dateType }">
+					<c:param name="dateType" value="${ dateType }" />
+				</c:if>
+			</c:url>
+		<a href="${ pUrl }" class="paging-list-btn prev">
 	        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/left-btn2.png"></span>
 	    </a>
+	    <c:choose>
+			<c:when test="${ !((currentPage - 10) < startPage && (currentPage - 10) > 1) }">
+					<c:url var="pUrl" value="${ urlMapping }">
+						<c:param name="page" value="${ currentPage - 1 }" />
+						<c:if test="${ !empty limit }">
+							<c:param name="limit" value="${ limit }" />
+						</c:if>
+						<c:if test="${ !empty firstType }">
+							<c:param name="firstType" value="${ firstType }" />
+						</c:if>
+						
+						<!-- 키워드 검색 시 -->
+						<c:if test="${ !empty begin and !empty end }">
+							<c:param name="searchType" value="${ searchType }" />
+							<c:param name="keyword" value="${ keyword }" />
+						</c:if>
+						<c:if test="${ !empty searchType }">
+							<c:param name="searchType" value="${ searchType }"/>
+						</c:if>
+						
+						<!-- 날짜 검색 시 -->
+						<c:if test="${ !empty begin and !empty end }">
+							<c:param name="begin" value="${ begin }" />
+							<c:param name="end" value="${ end }" />
+						</c:if>
+						<!-- dateType이 있을 시 -->
+						<c:if test="${ !empty dateType }">
+							<c:param name="dateType" value="${ dateType }" />
+						</c:if>
+					</c:url>
+				<a href="${ pUrl }" class="paging-list-btn prev">
+			        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/left-btn.png"></span>
+			    </a>
+			</c:when>
+			<c:otherwise>
+				<span class="paging-list-btn prev greybtn">
+			        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/left-btn.png"></span>
+			    </span>
+			</c:otherwise>	
+		</c:choose>
 	</c:if>
-	
-    <c:if test="${ (currentPage - limit) < startPage && (currentPage - limit) > 1 }">
-		<a href="" class="paging-list-btn prev">
-	        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/left-btn.png"></span>
-	    </a>
-	</c:if>
-	
-	<c:if test="${ !((currentPage - limit) < startPage && (currentPage - limit) > 1) }">
-		<span class="paging-list-btn prev greybtn">
-	        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/left-btn.png"></span>
-	    </span>
-	</c:if>
+	<!-- 이전그룹 -->
 	
 	<c:forEach var="p" begin="${ startPage }" end="${ endPage }" step="1">
 		<!-- 키워드 검색시 페이징 처리 -->
@@ -59,13 +117,20 @@
 		<c:if test="${ p ne currentPage }">
 			<c:url var="pUrl" value="${ urlMapping }">
 				<c:param name="page" value="${ p }" />
-				<c:param name="limit" value="${ limit }" />
-				<c:param name="firstType" value="${ firstType }" />
-
+				<c:if test="${ !empty limit }">
+					<c:param name="limit" value="${ limit }" />
+				</c:if>
+				<c:if test="${ !empty firstType }">
+					<c:param name="firstType" value="${ firstType }" />
+				</c:if>
+				
 				<!-- 키워드 검색 시 -->
-				<c:if test="${ !empty searchType and !empty keyword }">
+				<c:if test="${ !empty begin and !empty end }">
 					<c:param name="searchType" value="${ searchType }" />
 					<c:param name="keyword" value="${ keyword }" />
+				</c:if>
+				<c:if test="${ !empty searchType }">
+					<c:param name="searchType" value="${ searchType }"/>
 				</c:if>
 				
 				<!-- 날짜 검색 시 -->
@@ -73,36 +138,91 @@
 					<c:param name="begin" value="${ begin }" />
 					<c:param name="end" value="${ end }" />
 				</c:if>
-				
 				<!-- dateType이 있을 시 -->
 				<c:if test="${ !empty dateType }">
 					<c:param name="dateType" value="${ dateType }" />
 				</c:if>
 			</c:url>
-			
 			<a href="${ pUrl }" class="paging-list-btn"><span>${ p }</span></a>
 		</c:if>
 	</c:forEach>
-    
-	<c:if test="${ (currentPage + limit) > endPage && (currentPage + limit) < maxPage }">
-		<a href="" class="paging-list-btn next">
-	        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/right-btn.png"></span>
-	    </a>
-	</c:if>
-	
-	<c:if test="${ !((currentPage + limit) > endPage && (currentPage + limit) < maxPage) }">
-		<span class="paging-list-btn next greybtn">
-	        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/right-btn.png"></span>
-	    </span>
-	</c:if>
-	
     <c:if test="${ currentPage >= maxPage }">
 		<span class="paging-list-btn next greybtn">
 	        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/right-btn2.png"></span>
 	    </span>
 	</c:if>
+	<!-- 맨 오른쪽 -->
 	<c:if test="${ !(currentPage >= maxPage) }">
-		<a href="" class="paging-list-btn next">
+		    <!-- 다음그룹 -->
+	    <c:choose>
+			<c:when test="${ !((currentPage + limit) > endPage && (currentPage + limit) < maxPage) }">
+					<c:url var="pUrl" value="${ urlMapping }">
+						<c:param name="page" value="${ currentPage + 1 }" />
+						<c:if test="${ !empty limit }">
+							<c:param name="limit" value="${ limit }" />
+						</c:if>
+						<c:if test="${ !empty firstType }">
+							<c:param name="firstType" value="${ firstType }" />
+						</c:if>
+						
+						<!-- 키워드 검색 시 -->
+						<c:if test="${ !empty begin and !empty end }">
+							<c:param name="searchType" value="${ searchType }" />
+							<c:param name="keyword" value="${ keyword }" />
+						</c:if>
+						<c:if test="${ !empty searchType }">
+							<c:param name="searchType" value="${ searchType }"/>
+						</c:if>
+						
+						<!-- 날짜 검색 시 -->
+						<c:if test="${ !empty begin and !empty end }">
+							<c:param name="begin" value="${ begin }" />
+							<c:param name="end" value="${ end }" />
+						</c:if>
+						<!-- dateType이 있을 시 -->
+						<c:if test="${ !empty dateType }">
+							<c:param name="dateType" value="${ dateType }" />
+						</c:if>
+					</c:url>
+				<a href="${ pUrl }" class="paging-list-btn next">
+			        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/right-btn.png"></span>
+			    </a>
+			</c:when>
+			<c:otherwise>
+				<span class="paging-list-btn next greybtn">
+			        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/right-btn.png"></span>
+			    </span>
+			</c:otherwise>
+			</c:choose>
+				<c:url var="pUrl" value="${ urlMapping }">
+						<c:param name="page" value="${ maxPage }" />
+						<c:if test="${ !empty limit }">
+							<c:param name="limit" value="${ limit }" />
+						</c:if>
+						<c:if test="${ !empty firstType }">
+							<c:param name="firstType" value="${ firstType }" />
+						</c:if>
+						
+						<!-- 키워드 검색 시 -->
+						<c:if test="${ !empty begin and !empty end }">
+							<c:param name="searchType" value="${ searchType }" />
+							<c:param name="keyword" value="${ keyword }" />
+						</c:if>
+						<c:if test="${ !empty searchType }">
+							<c:param name="searchType" value="${ searchType }"/>
+						</c:if>
+						
+						<!-- 날짜 검색 시 -->
+						<c:if test="${ !empty begin and !empty end }">
+							<c:param name="begin" value="${ begin }" />
+							<c:param name="end" value="${ end }" />
+						</c:if>
+						<!-- dateType이 있을 시 -->
+						<c:if test="${ !empty dateType }">
+							<c:param name="dateType" value="${ dateType }" />
+						</c:if>
+					</c:url>
+		<a href="${ pUrl }" class="paging-list-btn next">
 	        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/right-btn2.png"></span>
 	    </a>
 	</c:if>

@@ -27,10 +27,10 @@
 		`<tr id="`+uniqueId+`" data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 content-row">
              <td class="td-50">
                  <div class="contents-check-div">
-                     <button class="contents-input-plus" onclick="addRow(`+uniqueId+`);">
+                     <button class="contents-input-plus" onclick="addRow('`+uniqueId+`'); return false;">
                          <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
                      </button>
-                     <button class="contents-input-minus" onclick="minusRow(`+uniqueId+`);">
+                     <button class="contents-input-minus" onclick="minusRow('`+uniqueId+`');">
                          <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
                      </button>
                  </div>
@@ -100,29 +100,15 @@
 	
 		initPopupBtn();
 	}
-	function minusRow() {
-	   var deleteBtn = document.getElementByClassName('contents-input-minus');
-	   
-	   for(var i = 0; i < deleteBtn.length; i++){
-		   deleteBtn[i].addEventListener('click', function(){
-			   console.log('event 동작!');
-		   });
-	   }
-	   
-	   for(var i = 0; i < deleteBtn.length; i++){
-		   deleteBtn[i].addEventListener('click', function(){
-			   var parent = document.querySelector('#row_' + id);
-			   if(i > 1){
-				   parent.removeChild(this.parentElement.parentElement);
-				   i--;
-			   }else{
-					alert('마지막 행은 삭제 불가합니다.');   
-			   }
-		   });
-	   
-		}
-
-	     
+	
+	function minusRow(uniqueId) {
+		console.log('Trying to remove row with uniqueId: ' + uniqueId);
+	    var rowToRemove = document.querySelector('#' + uniqueId);
+	    if (rowToRemove) {
+	        rowToRemove.remove();
+	    } else {
+	        alert('해당 ID를 가진 행을 찾을 수 없습니다.');
+	    }
 	}
 	
 	function calcTotalPrice(uniqueId) {
