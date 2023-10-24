@@ -32,101 +32,169 @@ public class PrintCalcController {
 	@Autowired
 	private PrintCalcService printCalcService;
 	
+	
+	
 	//*************************** 뷰 페이지 이동 *****************************
 	
+	// 정산현황 리스트 조회
 	@RequestMapping("pclist.do")
 	public String movePrintCalcPage(@RequestParam(name="page", required=false) String page,
-			@RequestParam(name="limit", required=false) String limitStr,
-			Model model) {
-		
-		// 첫 이동시 해당 기간 데이터 조회
-		LocalDate today = LocalDate.now();
-		model.addAttribute("begin", today.minusWeeks(1).plusDays(1));	//1주일 전부터
-		model.addAttribute("end", today);	//오늘까지
-		model.addAttribute("page", page);
-		model.addAttribute("limit", limitStr);
-		
-		return "redirect:pclistdate.do";
-	}
-	
-	// 날짜로 정산현황 검색 처리용
-	@RequestMapping("pclistdate.do")
-	public String printCalcList(Search search,
-			@RequestParam(name="page", required=false) String page,
-			@RequestParam(name="limit", required=false) String limitStr,
-			Model model) {
+			@RequestParam(name="limit", required=false) String limitStr, Model model) {
 		
 		int currentPage = 1;
-		if (page != null) {
-			currentPage = Integer.parseInt(page);
+		
+		if(page != null) {
+			currentPage = Integer.parseInt(page); 
 		}
 		
 		int limit = 10;
-		if (limitStr != null) {
+		if(limitStr != null) {
 			limit = Integer.parseInt(limitStr);
 		}
 		
 		int listCount = printCalcService.selectPrintCalcListCount();
 		
-		Paging paging = new Paging(listCount, currentPage, limit, "pclistdate.do");
-		paging.calculator();
-		
-		search.setStartRow(paging.getStartRow());
-		search.setEndRow(paging.getEndRow());
-		
-		ArrayList<PrintCalc> list = printCalcService.selectPrintCalcByDate(search);
-		
-		for(PrintCalc pc : list) {
-			PrintOffice poffice  = printCalcService.selectPrintOffice(pc.getClientId());
-			Book book = printCalcService.selectBook(pc.getBookId());
-			
-			pc.setClientName(poffice.getClientName());
-			pc.setBookName(book.getBookName());
-		}	
-		
-		model.addAttribute("list", list);
-		model.addAttribute("begin", search.getBegin().toString());
-		model.addAttribute("end", search.getEnd().toString());
-		
-		return "print/calc_list";
-	}
-	
-	//정산현황 조회 처리용
-	@RequestMapping("printCacllist.do")
-	public String printCalcList(
-			@RequestParam(name="page", required=false) String page,
-			@RequestParam(name="limit", required=false) String limitStr,
-			Model model) {
-		
-		int currentPage = 1;
-		if (page != null) {
-			currentPage = Integer.parseInt(page);
-		}
-		
-		int limit = 10;
-		if (limitStr != null) {
-			limit = Integer.parseInt(limitStr);
-		}
-		
-		int listCount = printCalcService.selectPrintCalcListCount();
-		
-		Paging paging = new Paging(listCount, currentPage, limit, "printCalclist.do");
+		Paging paging = new Paging(listCount, currentPage, limit, "pclist.do");
 		paging.calculator();
 		
 		ArrayList<PrintCalc> list = printCalcService.selectPrintCalcList(paging);
 		
 		if(list != null && list.size() > 0) {
-			model.addAttribute("list", list);
+			model.addAttribute("editList", list);
 			model.addAttribute("paging", paging);
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
 			
 			return "print/calc_list";
 		} else {
-			model.addAttribute("message", "발주 조회 실패 : 등록된 거래처가 없습니다");
+			model.addAttribute("message", "정산 목록 조회 실패!");
+			return "common/error";
+		}	
+	}
+	
+	
+	// 시작날짜로 정산현황 검색 처리용
+	@RequestMapping("pclistSdate.do")
+	public String selectPrintCalcBySDate(Search search,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+		
+		int currentPage = 1;
+		if (page != null) {
+			currentPage = Integer.parseInt(page);
+		}
+		
+		int limit = 10;
+		if (limitStr != null) {
+			limit = Integer.parseInt(limitStr);
+		} 
+		
+		int listCount = printCalcService.selectPrintCalcCountByDate(search);
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "pclistSdate.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<PrintCalc> list = printCalcService.selectPrintCalcBySDate(search);
+		logger.info("search : " + search);
+		
+		if (list != null && list.size() > 0) {
+			model.addAttribute("list", list);
+			model.addAttribute("begin", search.getBegin().toString());
+			model.addAttribute("end", search.getEnd().toString());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "print/calc_list";
+		} else {
+			model.addAttribute("message", "날짜 검색 실패");
 			return "common/error";
 		}
 	}
+	
+	// 마감날짜로 정산현황 검색 처리용
+		@RequestMapping("pclistEdate.do")
+		public String selectPrintCalcByEDate(Search search,
+				@RequestParam(name="page", required=false) String page,
+				@RequestParam(name="limit", required=false) String limitStr,
+				Model model) {
+			
+			int currentPage = 1;
+			if (page != null) {
+				currentPage = Integer.parseInt(page);
+			}
+			
+			int limit = 10;
+			if (limitStr != null) {
+				limit = Integer.parseInt(limitStr);
+			} 
+			
+			int listCount = printCalcService.selectPrintCalcCountByDate(search);
+			
+			Paging paging = new Paging(listCount, currentPage, limit, "pclistEdate.do");
+			paging.calculator();
+			
+			search.setStartRow(paging.getStartRow());
+			search.setEndRow(paging.getEndRow());
+			
+			ArrayList<PrintCalc> list = printCalcService.selectPrintCalcByEDate(search);
+			logger.info("search : " + search);
+			
+			if (list != null && list.size() > 0) {
+				model.addAttribute("list", list);
+				model.addAttribute("begin", search.getBegin().toString());
+				model.addAttribute("end", search.getEnd().toString());
+				model.addAttribute("paging", paging);
+				model.addAttribute("currentPage", currentPage);
+				model.addAttribute("limit", limit);
+				
+				return "print/calc_list";
+			} else {
+				model.addAttribute("message", "날짜 검색 실패");
+				return "common/error";
+			}
+		}
+	
+//	//정산현황 조회 처리용
+//	@RequestMapping("printCacllist.do")
+//	public String printCalcList(
+//			@RequestParam(name="page", required=false) String page,
+//			@RequestParam(name="limit", required=false) String limitStr,
+//			Model model) {
+//		
+//		int currentPage = 1;
+//		if (page != null) {
+//			currentPage = Integer.parseInt(page);
+//		}
+//		
+//		int limit = 10;
+//		if (limitStr != null) {
+//			limit = Integer.parseInt(limitStr);
+//		}
+//		
+//		int listCount = printCalcService.selectPrintCalcListCount();
+//		
+//		Paging paging = new Paging(listCount, currentPage, limit, "printCalclist.do");
+//		paging.calculator();
+//		
+//		ArrayList<PrintCalc> list = printCalcService.selectPrintCalcList(paging);
+//		
+//		if(list != null && list.size() > 0) {
+//			model.addAttribute("list", list);
+//			model.addAttribute("paging", paging);
+//			model.addAttribute("currentPage", currentPage);
+//			model.addAttribute("limit", limit);
+//			
+//			return "print/calc_list";
+//		} else {
+//			model.addAttribute("message", "발주 조회 실패 : 등록된 거래처가 없습니다");
+//			return "common/error";
+//		}
+//	}
 	//키워드[정산코드,인쇄소명,도서코드,도서명]로 정산현황 검색		
 	@RequestMapping(value="pckeyword.do", method= {RequestMethod.GET, RequestMethod.POST})
 	public String selectPrintCalcByKeyword(Search search,
@@ -163,10 +231,10 @@ public class PrintCalcController {
 			listCount = printCalcService.selectPrintCalcCountByPrintName(search);
 			break;
 		case "bookId":
-			listCount = printCalcService.selectPrintCalcCountBookId(Integer.parseInt(search.getKeyword()));
+			listCount = printCalcService.selectPrintCalcCountByBookId(Integer.parseInt(search.getKeyword()));
 			break;
 		case "bookName":
-			listCount = printCalcService.selectPrintCalcCountBookName(search);
+			listCount = printCalcService.selectPrintCalcCountByBookName(search);
 		}
 		
 		Paging paging = new Paging(listCount, currentPage, limit, "pckeyword.do");
