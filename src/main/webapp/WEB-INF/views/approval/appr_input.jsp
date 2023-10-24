@@ -22,6 +22,8 @@
         $('.search-btn-appr').on('click', function(){
             return false;
         })
+
+        initPopupBtn();
     })
     function inputSubmit(){
     	$('#appendTextArea').val($('.detail_area').text());
@@ -87,8 +89,8 @@
 
                             <div class="select-box">
                                 <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
+                                    <label for="sel_code_my"></label>
+                                    <select name="code" id="sel_code_my">
                                         <option value="yoncha" selected>연차신청서</option>
                                     </select>
                                 </div>
@@ -110,16 +112,24 @@
 
                                 <div class="search-box-all">
                                     <div class="search-box">
-                                        <button class="search-btn-appr">
+                                        <button type="button" class="input-search-btn search-btn-appr">
                                             <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                         </button>
-                                        <input type="text" placeholder="결재라인" class="search-box-text" value="">
+                                        <input type="hidden" id="save_line" name="saveLine" placeholder="결재라인" class="search-box-text" value="">
+                                        <div class="search-box-text search-box-text-div" id="search_line"></div>
                                     </div>
+                                    
                                     <div class="search-box">
-                                        <button class="search-btn-appr">
+                                        <button type="button" class="input-search-btn search-btn-appr">
                                             <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+                                            
                                         </button>
-                                        <input type="text" placeholder="결재자" class="search-box-text" value="">
+                                        <input type="hidden" id="save_appr" name="lineE" placeholder="결재자" class="search-box-text" value="">
+                                        <input type="hidden" id="approver_1" name="approver_1" value="">
+                                        <input type="hidden" id="approver_2" name="approver_2" value="">
+                                        <input type="hidden" id="approver_3" name="approver_3" value="">
+                                        <input type="hidden" id="approver_4" name="approver_4" value="">
+                                        <div class="search-box-text search-box-text-div" id="search_approver"></div>
                                     </div>
                                     <!--
                                     <div class="search-box">
@@ -159,6 +169,7 @@
                                     <tr>
                                         <td>성명</td>
                                         <td colspan="5" class="approval-td emphtext">${ employee.empName }</td>
+                                        <input type="hidden" id="hiddenEmpId" name="empId" value="${ empId }">
                                     </tr>
                                     <tr>
                                         <td>직위</td>

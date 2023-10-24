@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLEncoder;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -445,11 +446,13 @@ public class ApprovalController {
 	@RequestMapping(value = "apinsert.do", method = RequestMethod.POST)
 	public String insertApprovalMethod(
 			Approval approval,
-			@RequestParam(name="detail") String detail,
+			@RequestParam(name = "approval_1", required = false) String approval_1, 
+			@RequestParam(name = "approval_2", required = false) String approval_2, 
+			@RequestParam(name = "approval_3", required = false) String approval_3, 
+			@RequestParam(name = "approval_4", required = false) String approval_4, 
 			@RequestParam(name = "upfile", required = false) MultipartFile mfile, 
 			HttpServletRequest request, Model model) {
 		logger.info("apinsert.do - mfile : " + mfile);
-		logger.info("apinsert.do - detail : " + detail);
 		logger.info("apinsert.do - approval : " + approval);
 		String savePath = request.getSession().getServletContext().getRealPath(
 				"resources/appr_upfiles");
@@ -484,16 +487,50 @@ public class ApprovalController {
 				approval.setRenameFile(renameFileName);
 			}
 		}
+		/*
+		private int lineId;
+		private int lineDepth;
+		private int empId;
+		private int approverId;
+		private String approverName;
+		private String posName;
+		private String stampCheck;
+		private Date stampDate;
+		
+		int lineId = approvalLineService.selectApprovalLineId();
+		ApprovalLine apprLine = new ApprovalLine();
+		
+		
+		
+		
+		if(approval.getSavelineId() == 0) {
+			//결재라인이 없을 경우
+			for() {
+				
+			}
+			
+			apprLine.setLineId(lineId);
+			
+			approvalLine
+			if()
+		}else {
+			//결재라인이 있을경우 결재라인에 있는 아이디와 이름들을 사용함
+			ArrayList<ApprovalLine> lineList = approvalLineService.selectApprovalLineList(approval.getSavelineId());
+			
+		}
+		
+		*/
+		model.addAttribute("apType", "my");
+		model.addAttribute("empId", approval.getDrafter());
 		
 		if(approvalService.insertApproval(approval) > 0) {
-			model.addAttribute("apType", "my");
-			model.addAttribute("empId", approval.getDrafter());
-			return "redirect:aplist.do";
+			
 		}else {
 			model.addAttribute("message", "새 게시글 등록 실패!");
 			return "common/error";
 		}
 		
+		return "redirect:aplist.do";
 	}
 	
 }

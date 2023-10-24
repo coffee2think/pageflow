@@ -74,17 +74,18 @@ public class ApprovalLineController {
 		logger.info("coList : " + coList);
 		
 		model.addAttribute("apprLineSaveList", coList);
+		model.addAttribute("empId", empId);
 		return "approval/appr_line";
 	}
 	
 	@RequestMapping(value = "alinsert.do", method = RequestMethod.POST)
 	public String insertApprovalLineMethod(
 			HttpServletRequest request,
-			Model model) throws ParseException {
-		
+			Model model) throws Exception {
 		logger.info("alinsert.do -> myEmpId : " + request.getParameter("myEmpId"));
 		int savelineId = approvalLineService.selectApprovalSaveLineId();
 		int empId = Integer.parseInt(request.getParameter("myEmpId"));
+		String lineName = request.getParameter("lineName");
 		String[] approverIds = request.getParameterValues("empId");
 		String[] empNames = request.getParameterValues("empName");
 		String[] posNames = request.getParameterValues("posName");
@@ -100,8 +101,8 @@ public class ApprovalLineController {
 		ArrayList<Integer> countArr = new ArrayList<Integer>();
 		for(int i=0; i<approverIds.length; i++) {
 			logger.info("alinsert.do -> approverIds[i] : " + approverIds[i]);
-			if(approverIds[i] != null) {
-				countArr.add(Integer.parseInt(orders[i]));
+			if(approverIds[i] != null && approverIds[i] != "") {
+				countArr.add(i);
 			}
 		}
 		logger.info("alinsert.do -> countArr : " + countArr);
@@ -116,17 +117,33 @@ public class ApprovalLineController {
 			als.setApproverName(empNames[countArr.get(i)]);
 			als.setPosName(posNames[countArr.get(i)]);
 			als.setDepName(depNames[countArr.get(i)]);
+			als.setLineName(lineName);
 			logger.info("alinsert.do -> als : " + als);
 			if(approvalLineService.insertApprovalLineSave(als) > 0) {
 				count ++;
 			}
 		}
-		
+		model.addAttribute("empId", empId);
 		if(count < countArr.size()) {
 			model.addAttribute("message", "결재라인 저장 실패");
 			return "common/error";
 		}
 		
-		return "redirect:appr_line.do";
+		return "redirect:allinelist.do";
+	}
+	
+	//딜리트
+	@RequestMapping("aldelete.do")
+	public String deleteApprovalLineSaveMethod(
+			@RequestParam(name="empId") int empId,
+			@RequestParam(name="savelineId") int savelineId,
+			Model model) throws Exception {
+		
+		if(approvalLineService.deleteApprovalLine(savelineId) <= 0) {
+			model.addAttribute("message", "결재라인 삭제 실패");
+			return "common/error";
+		}
+		model.addAttribute("empId", empId);
+		return "redirect:allinelist.do";
 	}
 }

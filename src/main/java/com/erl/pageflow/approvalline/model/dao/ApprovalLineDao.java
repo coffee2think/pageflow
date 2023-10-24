@@ -32,8 +32,8 @@ public class ApprovalLineDao {
 		return sqlSessionTemplate.update("approvalLineMapper.updateApprovalLine", approvalLine);
 	}
 	
-	public int deleteApprovalLine(ApprovalLine approvalLine) {
-		return sqlSessionTemplate.delete("approvalLineMapper.deleteApprovalLine", approvalLine);
+	public int deleteApprovalLine(int savelineId) {
+		return sqlSessionTemplate.delete("approvalLineMapper.deleteApprovalLine", savelineId);
 	}
 
 	public ArrayList<ApprovalLineSave> selectMyApprovalSaveLineList(int lineId) {
@@ -60,7 +60,7 @@ public class ApprovalLineDao {
 	}
 
 	public int selectApprovalSaveLineId() {
-		return sqlSessionTemplate.insert("approvalLineMapper.selectApprovalSaveLineId");
+		return sqlSessionTemplate.selectOne("approvalLineMapper.selectApprovalSaveLineId");
 	}
 
 	

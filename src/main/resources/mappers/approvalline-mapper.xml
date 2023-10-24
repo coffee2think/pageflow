@@ -43,8 +43,19 @@
 	</select>
 	
 	<select id="selectApprovalSaveLineId" resultType="_int">
-		select max(SAVELINE_ID) from approvalline_save
+		select max(SAVELINE_ID)+1 from approvalline_save
 	</select>
+	
+	<select id="selectApprovalLineId" resultType="_int">
+		select max(LINE_ID)+1 from approvalline
+	</select>
+	
+	<insert id="insertApprovalLine" parameterType="ApprovalLine">
+		insert into approvalline
+		values(#{ lineId }, #{ lineDepth }, #{ empId }, #{ approverId }, 
+		#{ approverName }, #{ posName }, default, default)
+		
+	</insert>
 	
 	<insert id="insertApprovalLineSave" parameterType="ApprovalLineSave">
 		insert into approvalline_save
@@ -60,6 +71,9 @@
 		and   APPROVER_ID = #{ approverId }
 	</update>
 	
-	
+	<delete id="deleteApprovalLine">
+		delete from approvalline_save
+		where SAVELINE_ID = #{ savelineId }
+	</delete>
 	
 </mapper>
