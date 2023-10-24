@@ -88,13 +88,13 @@ public class InventoryServiceImpl implements InventoryService {
 	@Override
 	public ArrayList<Inventory> selectInventoryBybookId(Search search) {
 		return inventoryDao.selectInventoryBybookId(search);
-		
+
 	}
 
 	@Override
 	public ArrayList<Inventory> selectInventoryBybookName(Search search) {
 		return inventoryDao.selectInventoryBybookName(search);
-		
+
 	}
 
 	@Override

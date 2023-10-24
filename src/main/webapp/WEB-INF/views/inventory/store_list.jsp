@@ -325,6 +325,8 @@
 									</c:forEach>
 								</c:if>
 								<!--합계-->
+								<fmt:formatNumber var="totalStoreNum" value="${ totalStoreNum }" type="number"/>
+								<fmt:formatNumber var="totalStorePrice" value="${ totalStorePrice }" type="number"/>
 								<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
 									<td></td>
 									<td></td>

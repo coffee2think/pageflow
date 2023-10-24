@@ -82,7 +82,7 @@
 		WHERE BOOK_NAME LIKE '%' || #{ keyword } || '%'
 		ORDER BY INVEN_DATE
 	</select>
-	
+
 	<select id="selectInventoryCountBybookId" parameterType="Search" resultType="_int" >
 		SELECT COUNT(*)
 		FROM INVENTORY

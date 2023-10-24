@@ -99,7 +99,7 @@ function submitUpdate(id, url) {
         success: function(data){
             console.log("success : " + data);
             if(data == "success") {
-                alert(id + "번 정보 수정 성공");
+               
             } else {
                 alert("정보 수정 실패");
             }
