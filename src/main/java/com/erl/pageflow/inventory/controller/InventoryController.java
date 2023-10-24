@@ -98,12 +98,11 @@ public class InventoryController {
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
 
-			return "inventory/inven_list";
 		} else {
 			model.addAttribute("message", "날짜 검색 실패");
-			return "common/error";
-		}
 
+		}
+		return "inventory/inven_list";
 	}
 
 	// 재고 키워드로 검색
@@ -178,11 +177,10 @@ public class InventoryController {
 			model.addAttribute("limit", limit);
 			model.addAttribute("invenList", list);
 
-			return "inventory/inven_list";
 		} else {
 			model.addAttribute("message", "키워드 검색 실패");
-			return "common/error";
-		}
 
+		}
+		return "inventory/inven_list";
 	}
 }

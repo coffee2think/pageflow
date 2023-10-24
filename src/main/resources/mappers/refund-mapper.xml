@@ -8,8 +8,6 @@
 		<result property="refundId" column="REFUND_ID" />
 		<result property="bookId" column="BOOK_ID" />
 		<result property="clientId" column="CLIENT_ID" />
-		<result property="empId" column="EMP_ID" />
-		<result property="empName" column="EMP_NAME" />
 		<result property="refundNum" column="REFUND_NUM" />
 		<result property="refundDate" column="REFUND_DATE" />
 		<result property="refundAmount" column="REFUND_AMOUNT" />
@@ -17,18 +15,22 @@
 		<result property="remark" column="REMARK" />
 		<result property="bookName" column="BOOK_NAME" />
 		<result property="clientName" column="CLIENT_NAME" />
-		<result property="clientAddredd" column="CLIENT_ADDRESS" />
+		<result property="prevInvenId" column="PREV_INVEN_ID" />
+		<result property="currInven" column="CURR_INVEN" />
+		<result property="bookPrice" column="BOOK_PRICE" />
 	</resultMap>
-	
-	
+
+
 	<select id="selectGetListCount" resultType="_int">
-		select count(*) from refund
+		select count(*) from
+		refund
 	</select>
-	
-	<select id="selectRefundList" parameterType="Paging" resultMap="resultRefund">
+
+	<select id="selectRefundList" parameterType="Paging"
+		resultMap="resultRefund">
 		<![CDATA[
 			SELECT *
-			FROM (SELECT ROWNUM RNUM, REFUND_ID, BOOK_ID, CLIENT_ID, EMP_ID, EMP_NAME, REFUND_NUM, REFUND_DATE, REFUND_AMOUNT, REFUND_STATE, REMARK, book_name, client_name
+			FROM (SELECT ROWNUM RNUM, REFUND_ID, BOOK_ID, CLIENT_ID, REFUND_NUM, REFUND_DATE, REFUND_AMOUNT, REFUND_STATE, REMARK, book_name, client_name
 			            FROM (SELECT * FROM REFUND
 			            	  join book using (book_id)
 				 	  		  join client using (client_id)
@@ -36,34 +38,41 @@
 			WHERE RNUM BETWEEN #{ startRow } AND #{ endRow }
 		]]>
 	</select>
-	
-	<select id="selectRefundBookName" parameterType="_int" resultType="string">
+
+	<select id="selectRefundBookName" parameterType="_int"
+		resultType="string">
 		SELECT BOOK_NAME
-		FROM  BOOK
+		FROM BOOK
 		WHERE BOOK_ID= #{ bookId }
 	</select>
-	
-	<select id="selectRefundClientName" parameterType="_int"  resultType="string">
+
+	<select id="selectRefundClientName" parameterType="_int"
+		resultType="string">
 		SELECT CLIENT_NAME
 		FROM CLIENT
-		WHERE CLIENT_ID = #{ clientId }
+		WHERE CLIENT_ID = #{ clientId
+		}
 	</select>
-	
-	<select id="selectRefundBookPrice" parameterType="_int"  resultType="_int">
+
+	<select id="selectRefundBookPrice" parameterType="_int"
+		resultType="_int">
 		SELECT BOOK_PRICE
 		FROM BOOK
 		WHERE BOOK_ID = #{ bookId }
 	</select>
-	
-	<select id="selectRefundCountByDate" parameterType="Search" resultType="_int">
+
+	<select id="selectRefundCountByDate" parameterType="Search"
+		resultType="_int">
 		SELECT COUNT(*) FROM REFUND
-		WHERE REFUND_DATE BETWEEN #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+		WHERE REFUND_DATE BETWEEN #{
+		begin } and (to_date(#{ end }) + 1 - 1/86400)
 	</select>
-	
-	<select id="selectRefundByDate" parameterType="Search" resultMap="resultRefund">
+
+	<select id="selectRefundByDate" parameterType="Search"
+		resultMap="resultRefund">
 		<![CDATA[
 		SELECT *
-		FROM (SELECT ROWNUM RNUM, REFUND_ID, BOOK_ID,  CLIENT_ID, EMP_ID, EMP_NAME, REFUND_NUM, 
+		FROM (SELECT ROWNUM RNUM, REFUND_ID, BOOK_ID,  CLIENT_ID, REFUND_NUM, 
 		                            REFUND_DATE, REFUND_AMOUNT, REFUND_STATE, REMARK, BOOK_NAME, CLIENT_NAME
 		            FROM (SELECT *
 		                        FROM REFUND
@@ -74,33 +83,35 @@
 		ORDER BY REFUND_DATE DESC
 		]]>
 	</select>
-	
-	<select id="selectrefundCountByBookId" parameterType="Search" resultType="_int">
+
+	<select id="selectrefundCountByBookId" parameterType="Search"
+		resultType="_int">
 		SELECT COUNT(*)
 		FROM REFUND
-		WHERE BOOK_ID LIKE '%' || #{ keyword } || '%'
+		WHERE BOOK_ID LIKE '%' || #{
+		keyword } || '%'
 	</select>
-	
-	<select id="selectrefundCountByBookName" parameterType="Search" resultType="_int">
+
+	<select id="selectrefundCountByBookName" parameterType="Search"
+		resultType="_int">
 		SELECT COUNT(*)
 		FROM BOOK
 		JOIN REFUND ON (BOOK_ID)
-		WHERE BOOK_NAME LIKE '%' || #{ keyword } || '%'
+		WHERE
+		BOOK_NAME LIKE '%' || #{ keyword } || '%'
 	</select>
-	
-	<select id="selectrefundCountByEmpName" parameterType="Search" resultType="_int">
-		SELECT COUNT(*)
-		FROM REFUND
-		WHERE EMP_NAME LIKE '%' || #{ keyword } || '%'
-	</select>
-	
-	<select id="selectrefundCountByClientName" parameterType="Search" resultType="_int">
+
+
+	<select id="selectrefundCountByClientName"
+		parameterType="Search" resultType="_int">
 		SELECT COUNT(*)
 		FROM CLIENT
-		WHERE CLIENT_NAME LIKE '%' || #{ keyword } || '%'
+		WHERE
+		CLIENT_NAME LIKE '%' || #{ keyword } || '%'
 	</select>
-	
-	<select id="selectrefundBybookId" parameterType="Search" resultMap="resultRefund" >
+
+	<select id="selectrefundBybookId" parameterType="Search"
+		resultMap="resultRefund">
 		<![CDATA[
 			SELECT *
 			FROM(SELECT ROWNUM RUM, SUB.*
@@ -112,8 +123,9 @@
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow }
 		]]>
 	</select>
-	
-	<select id="selectrefundBybookName" parameterType="Search" resultMap="resultRefund" >
+
+	<select id="selectrefundBybookName" parameterType="Search"
+		resultMap="resultRefund">
 		<![CDATA[
 			SELECT *
 			FROM(SELECT ROWNUM RUM, SUB.*
@@ -125,22 +137,10 @@
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow }
 		]]>
 	</select>
-	
-	
-	<select id="selectrefundByEmpName" parameterType="Search" resultMap="resultRefund" >
-		<![CDATA[
-			SELECT *
-			FROM(SELECT ROWNUM RUM, SUB.*
-			            FROM(SELECT * FROM REFUND
-	                        WHERE EMP_NAME LIKE '%' || #{ keyword } || '%'
-	                        ORDER BY REFUND_DATE DESC) SUB)
-			LEFT JOIN BOOK USING (BOOK_ID)
-			LEFT JOIN CLIENT USING (CLIENT_ID)
-			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow }
-		]]>
-	</select>
-	
-	<select id="selectrefundByClientName" parameterType="Search" resultMap="resultRefund" >
+
+
+	<select id="selectrefundByClientName" parameterType="Search"
+		resultMap="resultRefund">
 		<![CDATA[
 			SELECT *
 			FROM(SELECT ROWNUM RUM, SUB.*
@@ -152,51 +152,65 @@
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow }
 		]]>
 	</select>
-	
+
 	<delete id="deleteRefund" parameterType="_int">
-		DELETE FROM REFUND WHERE REFUND_ID = #{ refundId }
+		DELETE FROM REFUND WHERE
+		REFUND_ID = #{ refundId }
 	</delete>
-			
+
 	<delete id="deleteInventory" parameterType="_int">
-		DELETE FROM INVENTORY WHERE REFUND_ID = #{ refundId }
+		DELETE FROM INVENTORY
+		WHERE REFUND_ID = #{ refundId }
 	</delete>
-	
+
 	<select id="selectMaxRefundId" resultType="_int">
-		SELECT nvl(MAX(REFUND_ID), 0) FROM REFUND
+		SELECT
+		nvl(MAX(REFUND_ID), 0) FROM REFUND
 	</select>
 
 	<select id="selectPreInvenId" resultType="_int">
 		SELECT INVEN_ID
 		FROM(SELECT ROWNUM RUM, INVEN_ID
 		FROM INVENTORY
-		WHERE ROWNUM = 1 AND CLASSIFY = '반품'
-		ORDER BY INVEN_ID, INVEN_DATE  DESC)
+		WHERE ROWNUM = 1 AND
+		CLASSIFY = '반품'
+		ORDER BY INVEN_ID, INVEN_DATE DESC)
 	</select>
-	
+
 	<select id="selectCurrInven" resultType="_int">
 		SELECT CURR_INVEN
 		FROM(SELECT ROWNUM RUM, CURR_INVEN
-            FROM INVENTORY
-            WHERE ROWNUM = 1 AND CLASSIFY = '반품'
-            ORDER BY INVEN_ID, INVEN_DATE  DESC)
+		FROM INVENTORY
+		WHERE ROWNUM = 1 AND CLASSIFY = '반품'
+		ORDER BY INVEN_ID, INVEN_DATE DESC)
 	</select>
-	
+
 	<insert id="insertInventory" parameterType="Refund">
 	<![CDATA[
-		INSERT INTO inventory 
-		VALUES ((SELECT MAX(inven_id) + 1 FROM inventory), #{ bookId }, #{ clientId }, NULL, #{ refundId },(select max(inven_id) from inventory), #{ refundNum },
-	                (nvl((SELECT curr_inven FROM inventory WHERE refund_id = #{ refundId } AND book_id = #{ bookId }), 0)),
-	                TO_DATE('${ refundDate }', 'YYYY/MM/DD'), 
-	                '반품', 
-	                #{ remark }
-	)	
+		insert into inventory values ((SELECT MAX(inven_id) + 1 FROM inventory), #{ bookId }, #{ clientId },NULL,#{ refundId }, (select max(inven_id) from inventory), ${ refundNum }, 
+		                (nvl((SELECT curr_inven FROM inventory WHERE refund_id = #{ refundId } AND book_id = #{ bookId }), 0)),
+		                TO_DATE('${ refundDate }', 'YYYY/MM/DD'),
+		                '반품',
+		                #{ remark })
 	]]>
 	</insert>
-	
+
 	<insert id="insertRefund" parameterType="Refund">
-		INSERT INTO REFUND VALUES ( 
-		#{ refundId }, #{ bookId }, #{ clientId }, #{ empId }, #{ empName }, 
-		#{ refundNum }, #{ refundDate },#{ refundAmount },#{ refundState }, #{ remark })
+		INSERT INTO REFUND
+		VALUES (
+		#{ refundId }, #{ bookId }, #{ clientId },
+		#{ refundNum }, TO_DATE('${
+		refundDate }', 'YYYY/MM/DD'),#{ refundAmount },#{ refundState }, #{
+		remark })
 	</insert>
-	
+
+	<update id="updateRefund" parameterType="Refund">
+		UPDATE REFUND
+		SET
+		REFUND_NUM = #{ refundNum }, REFUND_AMOUNT = #{ refundAmount }, REMARK
+		= #{ remark } , REFUND_STATE = #{ refundState }
+		WHERE REFUND_ID = #{
+		refundId } AND BOOK_ID = #{ bookId } AND CLIENT_ID = #{ clientId }
+	</update>
+
 </mapper>

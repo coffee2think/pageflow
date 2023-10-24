@@ -277,7 +277,6 @@
 													<input type="hidden" name="clientId" value="${ sto.clientId }">
 													<input type="hidden" name="empId" value="${ sto.empId }">
 													<input type="hidden" name="empName" value="${ sto.empName }">
-													<input type="hidden" name="storeId" value="${ sto.storeId }">
 												</div>
 											</td>
 											<td class="td-250">
