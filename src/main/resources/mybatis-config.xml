@@ -33,6 +33,7 @@
 		<typeAlias type="com.erl.pageflow.sales.model.vo.BookOrder" alias="BookOrder" />
 		<typeAlias type="com.erl.pageflow.sales.model.vo.Sales" alias="Sales" />
 		<typeAlias type="com.erl.pageflow.sales.model.vo.SalesStatistics" alias="SalesStatistics" />
+		<typeAlias type="com.erl.pageflow.sales.model.vo.Rank" alias="Rank" />
 		
 		<!-- 거래처 -->
 		<typeAlias type="com.erl.pageflow.sales.model.vo.Client" alias="Client" />
