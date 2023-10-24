@@ -126,5 +126,11 @@ public class RefundServiceImpl implements RefundService {
 	public int insertInventory(Refund refund) {
 		return refundDao.insertInventory(refund);
 	}
+	
+	@Override
+	public int updateRefund(Refund refund) {
+		return refundDao.updateRefund(refund);
+	}
+
 
 }
