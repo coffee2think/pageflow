@@ -416,7 +416,7 @@
 	
 	<insert id="insertBook" parameterType="Book">
 		insert into Book 
-		values (#{ bookId }, #{ writerId }, #{ bookName }, (select writer_name from writer where writer_id = #{ writerId }), 
+		values (#{ bookId }, (select writer_id from writer where writer_name = #{ writerName }), #{ bookName }, #{ writerName }, 
 		        null, null, #{ bookPrice }, #{ category }, #{ isbn },
 		        #{ bookState }, #{ engraving }, default, default)
 	</insert>

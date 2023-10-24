@@ -2,6 +2,7 @@ package com.erl.pageflow.common.popup.model.service;
 
 import java.util.ArrayList;
 
+import com.erl.pageflow.approvalline.model.vo.ApprovalLineSave;
 import com.erl.pageflow.book.model.vo.BookWithStock;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.employee.model.vo.Employee;
@@ -64,5 +65,13 @@ public interface PopupService {
 	int selectWriterCountByName(String writerName);
 
 	ArrayList<Writer> selectWriterByName(Search search);
+
+	ArrayList<ApprovalLineSave> selectApprovalLineSaveByName(Search search);
+
+	ArrayList<ApprovalLineSave> selectApprovalLineSaveById(Search search);
+
+	int selectApprovalLineSaveCountById(Search search);
+
+	int selectApprovalLineSaveCountByName(Search search);
 
 }

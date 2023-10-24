@@ -24,8 +24,17 @@ public class PrintCalcDao {
 		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcListCount");
 	}
 	
-	public ArrayList<PrintCalc> selectPrintCalcByDate(Search search){
-		List<PrintCalc> list = sqlSessionTemplate.selectList("printMapper.selectPrintCalcByDate", search);
+	public int selectPrintCalcCountByDate(Search search) {
+		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcCountByDate", search);
+	}
+	
+	public ArrayList<PrintCalc> selectPrintCalcBySDate(Search search){
+		List<PrintCalc> list = sqlSessionTemplate.selectList("printMapper.selectPrintCalcBySDate", search);
+		return (ArrayList<PrintCalc>) list;
+	}
+	
+	public ArrayList<PrintCalc> selectPrintCalcByEDate(Search search){
+		List<PrintCalc> list = sqlSessionTemplate.selectList("printMapper.selectPrintCalcByEDate", search);
 		return (ArrayList<PrintCalc>) list;
 	}
 	
@@ -54,12 +63,12 @@ public class PrintCalcDao {
 		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcCountByPrintName", search);
 	}
 	
-	public int selectPrintCalcCountBookId(int search) {
-		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcCountBookId", search);
+	public int selectPrintCalcCountByBookId(int search) {
+		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcCountByBookId", search);
 	}
 	
-	public int selectPrintCalcCountBookName(Search search) {
-		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcCountBookName", search);
+	public int selectPrintCalcCountByBookName(Search search) {
+		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcCountByBookName", search);
 	}
 	
 	public ArrayList<PrintCalc> selectPrintCalcByOrderId(int search){

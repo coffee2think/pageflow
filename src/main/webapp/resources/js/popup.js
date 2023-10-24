@@ -85,7 +85,9 @@ Popup.prototype = {
 			'storage': '창고검색',
 			'employee': '직원검색',
             'writer': '작가검색',
-			'book_order': '주문검색'
+			'book_order': '주문검색',
+            'saveLine' : '결재라인검색',
+            'lineE': '직원검색'
 		};
 		
 		popup_thead = {
@@ -95,7 +97,9 @@ Popup.prototype = {
 			'storage': ['', '거래처코드', '창고명', '담당자', '연락처'],
 			'employee': ['', '직원번호', '담당부서', '직원명', '직책'],
             'writer': ['', '작가번호', '작가명', '연락처', '이메일'],
-			'book_order': ['', '주문번호', '서점명', '도서명', '주문수량']
+			'book_order': ['', '주문번호', '서점명', '도서명', '주문수량'],
+            'saveLine' : ['', '결재라인번호', '결재라인이름', '결재자1', '결재자2', '결재자3', '결재자4'],
+            'lineE': ['', '직원번호', '담당부서', '직원명', '직책']
 		};
 		
 		popup_selectbox = {
@@ -105,7 +109,10 @@ Popup.prototype = {
 			'storage': {'clientName': '창고명', 'clientId': '거래처코드'},
 			'employee': {'empName': '직원명', 'depName': '부서'},
             'writer': {'writerName': '작가명'},
-			'book_order': {'clientName': '서점명', 'orderDate': '주문일'}
+			'book_order': {'clientName': '서점명', 'orderDate': '주문일'},
+            'saveLine': {'savelineId': '결재라인번호', 'savelineName': '결재라인이름'},
+            'lineE': {'empName': '직원명', 'depName': '부서'}
+
 		};
 		
 		// 검색바 초기화
@@ -147,19 +154,107 @@ Popup.prototype = {
 		tr.append('<td><input type="radio" name="radio" value=""></td>');
 		tr.append('<td></td>');
 		tr.append('<td></td>');
-		tr.append('<td></td>');
-		tr.append('<td></td>');
+        tr.append('<td></td>');
+        tr.append('<td></td>');
+
+        $('.modal-pop-search').css('visibility', 'visible');
+
+
+        //-----결재라인 검색만 예외-----
+        if(popup_type == 'saveLine') {
+            var sendData = {};
+		    tr.append('<td></td>');
+		    tr.append('<td></td>');
+            $('.modal-pop-search').css('visibility', 'hidden');
+
+            sendData['empId'] = $('#hiddenEmpId').val();
+            sendData['searchType'] = 'savelineId';
+            sendData['keyword'] = '';
+
+            $.ajax({
+                url: 'popuplinesearch.do',
+                type: 'post',
+                data: sendData,
+                dataType: 'json',
+                success: function(result) {
+                    // object => string
+                    var jsonStr = JSON.stringify(result);
+                    // string => parsing : json object
+                    var json = JSON.parse(jsonStr);
+                    json_global = json;
+                    
+                    console.log(json);
+                    
+                    // json 객체 안의 list를 하나씩 꺼내서 새로운 행으로 추가 처리
+                    // 기존 행 정보 삭제
+                    const trList = $('#popup_table').find('tr');
+                    trList.each(function(index) {
+                        if(index > 0) {
+                            trList[index].remove();
+                        }
+                    });
+        
+                    const table = $('#popup_table');
+                    const tbody = table.find('tbody');
+                    approval_global = {
+                        idArr : []
+                        ,approver : []
+                    }
+                    //결재라인 검색은 이중포문
+                    for(var i in json.list) {
+                        approval_global.approver[i] = []
+                        approval_global.idArr.push(json.list[i][0].savelineId)
+                        var jdata = [];
+                        for(var j in json.list[i]) {
+                            console.log('json.list[i][j].approverName : ' + json.list[i][j].approverName)
+                            jdata.push(json.list[i][j].approverName);
+                            if(json.list[i][j].approverName != undefined){
+                                approval_global.approver[i].push(json.list[i][j].approverName);
+                            }
+                        }
+                        //console.log('i : ' + i)
+                        tbody.append('<tr onclick=""  class="cursor-pointer">');
+                        const tr = tbody.find('tr:last');
+                        
+                        tr.append('<td><input type="radio" name="radio" onchange="selectIndex(' + i + ');"></td>');
+                        
+                        const list = json.list[i];
+                        
+                        tr.append('<td>' + decodeURIComponent(list[0].savelineId).replace(/\+/gi, ' ') + '</td>');
+                        tr.append('<td>' + decodeURIComponent((list[0].lineName == null) ? '' : list[0].lineName).replace(/\+/gi, ' ') + '</td>');
+                        tr.append('<td>' + decodeURIComponent(setTextUndefined(jdata[0])).replace(/\+/gi, ' ') + '</td>');
+                        tr.append('<td>' + decodeURIComponent(setTextUndefined(jdata[1])).replace(/\+/gi, ' ') + '</td>');
+                        tr.append('<td>' + decodeURIComponent(setTextUndefined(jdata[2])).replace(/\+/gi, ' ') + '</td>');
+                        tr.append('<td>' + decodeURIComponent(setTextUndefined(jdata[3])).replace(/\+/gi, ' ') + '</td>');
+                    }
+                    
+                    
+                    // 페이징 초기화
+                },
+                error: function(request, status, errorData) {
+                    console.log("error code : " + request.status);
+                    console.log("Message : " + request.responseText);
+                    console.log("Error : " + errorData);
+                }
+            });
+        }
+        //-----결재라인 검색만 예외 end------
 		
 		// 팝업창 제목 초기화
 		$('.modal-pop-title > span').text(popup_title[popup_type]);
 		
 		// select 박스 초기화
+        console.log('!!!!!!!!!!popup_type : ' + popup_type);
 		var selectbox = popup_selectbox[popup_type];
+        console.log('!!!!!!!!!!selectbox : ' + selectbox);
 		var keys = Object.keys(selectbox);
+        console.log('!!!!!!!!!!keys : ' + keys);
 		$('#sel_code').empty();
 		for(i = 0; i < keys.length; i++) {
+            console.log('!!!!!!!!!!selectbox[keys[i]] : ' + selectbox[keys[i]]);
 			$('#sel_code').append('<option value="' + keys[i] + '">' + selectbox[keys[i]] + '</option>');
 		}
+        
 	}
     ,
     append:function(data){

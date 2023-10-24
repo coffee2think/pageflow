@@ -151,6 +151,7 @@ function addRow(currentIndex) {
 		
 	initRowIndex();
 	initPopupBtn();
+	
 }
 
 function removeRow(currentIndex) {
@@ -178,11 +179,36 @@ function initRowIndex() {
             + '<img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">'
             + '</button>'
         	+ '</div>';
+        	
+		calculateAmount();
 	} //for
 	
 } //initRowIndex
 
 </script>
+
+<script>
+	$(function(){
+		calculateAmount();
+	});
+	
+	// 수량 * 단가 = 총액 계산
+	function calculateAmount() {
+	    var rows = $('#input_table').find('tr');
+	    rows.each(function() {
+	        var row = $(this);
+	        var quantity = row.find('input[name="quantity"]').val();
+	        var price = row.find('input[name="price"]').val();
+	        if (quantity !== undefined && price !== undefined) {
+	            var amount = quantity * price;
+	            if (!isNaN(amount)) {
+	                row.find('input[name="amount"]').val(amount);
+	            }
+	        }
+	    });
+	}
+</script>
+
 <title></title>
 </head>
 <body>
@@ -319,12 +345,12 @@ function initRowIndex() {
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="number" name="quantity" class="contents-input" value="">
+                                                <input type="number" name="quantity" class="contents-input" value="" oninput="calculateAmount()" >
                                             </div>
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div">
-                                                <input type="number" name="price" class="contents-input" value="">
+                                                <input type="number" name="price" class="contents-input" value="" oninput="calculateAmount()">
                                             </div>
                                         </td>
                                         <td class="td-100">

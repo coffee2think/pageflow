@@ -75,6 +75,8 @@ public class InventoryDao {
 	public int selectInventoryCountByrefund(Search search) {
 		return sqlSessionTemplate.selectOne("inventoryMapper.selectInventoryCountByrefund", search);
 	}
+	
+
 
 	public ArrayList<Inventory> selectInventoryBybookId(Search search) {
 		List<Inventory> list = sqlSessionTemplate.selectList("inventoryMapper.selectInventoryBybookId", search);
