@@ -22,8 +22,42 @@
     const SUBPAGE = 2;
     const LNKPAGE = 1;
     
+    
+    $(function(){
+        const boardDetail = '<c:out value="${ board.boardDetail }" />';
+        console.log('boardDetail : ' + boardDetail);
+        var decodStr = decodeURIComponent(boardDetail);
+        console.log('decodStr : ' + decodStr);
+        var decodedString = decodeHtmlEntities(String(decodStr));
+        $('#content_input').html(decodedString);
+
+    })
+
+    function decodeHtmlEntities(input) {
+        //var input = 'ㅁㄴㅇ&lt;div&gt;ㄴㅇ&lt;/div&gt;&lt;div&gt;ㄴ&lt;/div&gt;&lt;div&gt;ㅇ&lt;/div&gt;&lt;div&gt;ㄴㅇ&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;';
+        //var decodedString = input.replace(/&lt;/g, '<').replace(/&gt;/g, '>');
+        input = input.replace(/&lt;/g, '<');
+        input = input.replace(/&gt;/g, '>');
+        console.log('input : ' + input)
+        return input;
+    }
+
+    function convertTagsToNewlines(input) {
+        // 사용자 정의 정규 표현식을 사용하여 <div> 태그와 <br> 태그를 개행 문자 \n으로 변경
+        var regex = /<div>/gi;
+        input = input.replace(regex, '\n');
+        
+        regex = /<\/div>/gi;
+        input = input.replace(regex, '');
+        
+        regex = /<br>/gi;
+        input = input.replace(regex, '\n');
+
+        return input;
+    }
     function inputSubmit(){
-    	$('#appendTextArea').val($('.content-input').text());
+        let str = $('.content-input').html();
+    	$('#appendTextArea').val(str);
     }
     
 </script>
@@ -167,10 +201,8 @@
                                 </div>
 
                                 <div class="content-input-area height-long">
-                                    <div class="content-input" contenteditable="true">
-										<c:if test="${ !empty board and !empty board.boardDetail }">
-											${ board.boardDetail }
-										</c:if>
+                                    <div id="content_input" class="content-input" contenteditable="true">
+										
                                     </div>
                                 </div>
 								

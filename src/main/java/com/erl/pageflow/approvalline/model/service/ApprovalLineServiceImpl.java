@@ -57,6 +57,16 @@ public class ApprovalLineServiceImpl implements ApprovalLineService{
 	public int updateApprLineStampCheck(ApprovalLineKeyword approvalLineKeyword) {
 		return approvalLineDao.updateApprLineStampCheck(approvalLineKeyword);
 	}
+
+	@Override
+	public int insertApprovalLineSave(ApprovalLineSave als) {
+		return approvalLineDao.insertApprovalLineSave(als);
+	}
+
+	@Override
+	public int selectApprovalSaveLineId() {
+		return approvalLineDao.selectApprovalSaveLineId();
+	}
 	
 	
 	

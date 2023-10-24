@@ -26,4 +26,8 @@ public interface ApprovalLineService {
 
 	public int updateApprLineStampCheck(ApprovalLineKeyword approvalLineKeyword);
 
+	public int insertApprovalLineSave(ApprovalLineSave als);
+
+	public int selectApprovalSaveLineId();
+
 }
