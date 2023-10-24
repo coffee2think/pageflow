@@ -10,6 +10,7 @@ import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.printCalc.model.dao.PrintCalcDao;
 import com.erl.pageflow.printCalc.model.vo.PrintCalc;
+import com.erl.pageflow.printOrder.model.vo.PrintOrder;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 
 @Service("printCalcService")
@@ -45,5 +46,45 @@ public class PrintCalcServiceImpl implements PrintCalcService{
 	@Override
 	public int updatePrintCalc(PrintCalc printCalc) {
 		return printCalcDao.updatePrintCalc(printCalc);
+	}
+	
+	@Override
+	public int selectPrintCalcCountByOrderId(int search) {
+		return printCalcDao.selectPrintCalcCountByOrderId(search);
+	}
+	
+	@Override
+	public int selectPrintCalcCountByPrintName(Search search) {
+		return printCalcDao.selectPrintCalcCountByPrintName(search);
+	}
+	
+	@Override
+	public int selectPrintCalcCountBookId(int search) {
+		return printCalcDao.selectPrintCalcCountBookId(search);
+	}
+	
+	@Override
+	public int selectPrintCalcCountBookName(Search search) {
+		return printCalcDao.selectPrintCalcCountBookName(search);
+	}
+	
+	@Override
+	public ArrayList<PrintCalc> selectPrintCalcByOrderId(int search){
+		return printCalcDao.selectPrintCalcByOrderId(search);
+	}
+	
+	@Override
+	public ArrayList<PrintCalc> selectPrintCalcByPrintName(Search search){
+		return printCalcDao.selectPrintCalcByPrintName(search);
+	}
+	
+	@Override
+	public ArrayList<PrintCalc> selectPrintCalcByBookId(int search){
+		return printCalcDao.selectPrintCalcByBookId(search);
+	}
+	
+	@Override
+	public ArrayList<PrintCalc> selectPrintCalcByBookName(Search search){
+		return printCalcDao.selectPrintCalcByBookName(search);
 	}
 }

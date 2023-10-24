@@ -140,15 +140,13 @@ public class PrintOrderController {
 			return "common/error";
 		}
 	}
-	//키워드[인쇄코드,인쇄소명,도서코드,도서명]로 발주현황 검색		//도서명,서점명,지역
+	//키워드[인쇄코드,인쇄소명,도서코드,도서명]로 발주현황 검색
 	@RequestMapping(value="pokeyword.do", method= {RequestMethod.GET, RequestMethod.POST})
 	public String selectPrintOrderByKeyword(Search search,
-			@RequestParam(name="searchType") String searchType,
 			@RequestParam(name="page", required=false) String page,
 			@RequestParam(name="limit", required=false) String limitStr,
 			Model model) {
-		
-		logger.info("pokeyword.do : searchType" + searchType);
+		logger.info("pokeyword.do : search" + search);
 		logger.info("pokeyword.do : page" + page);
 		logger.info("pokeyword.do : limit" + limitStr);
 		
@@ -167,16 +165,16 @@ public class PrintOrderController {
 		}	
 		int listCount = 0;
 		
-		//스위치문을 쓰는 이유 : ?
-		switch(searchType) {
-		case "clientId":
-			listCount = printOrderService.selectPrintOrderCountByClientId(search);
+		
+		switch(search.getSearchType()) {
+		case "orderId":
+			listCount = printOrderService.selectPrintOrderCountByOrderId(Integer.parseInt(search.getKeyword()));
 			break;
 		case "printName":
 			listCount = printOrderService.selectPrintOrderCountByPrintName(search);
 			break;
 		case "bookId":
-			listCount = printOrderService.selectPrintOrderCountByBookId(search);
+			listCount = printOrderService.selectPrintOrderCountByBookId(Integer.parseInt(search.getKeyword()));
 			break;
 		case "bookName":
 			listCount = printOrderService.selectPrintOrderCountByBookName(search);
@@ -192,15 +190,15 @@ public class PrintOrderController {
 		
 		ArrayList<PrintOrder> list = null;
 		
-		switch(searchType) {
-		case "clientId":
-			list = printOrderService.selectPrintOrderByClientId(search);
+		switch(search.getSearchType()) {
+		case "orderId":
+			list = printOrderService.selectPrintOrderByOrderId(Integer.parseInt(search.getKeyword()));
 			break;
 		case "printName":
 			list = printOrderService.selectPrintOrderByPrintName(search);
 			break;
 		case "bookId":
-			list = printOrderService.selectPrintOrderByBookId(search);
+			list = printOrderService.selectPrintOrderByBookId(Integer.parseInt(search.getKeyword()));
 			break;
 		case "bookName":
 			list = printOrderService.selectPrintOrderByBookName(search);
@@ -323,21 +321,21 @@ public class PrintOrderController {
 	}
 	
 	//발주 삭제 요청 처리용
-	@RequestMapping(value= "podelete.do", method=RequestMethod.POST)
-	public String deletePrintOrderMethod(@RequestParam("IDs") int[] IDs, Model model) {
-		logger.info("podelete.do : " + IDs);
+	@RequestMapping(value="podelete.do", method= RequestMethod.POST)
+	public String deletePrintOrderMethod(@RequestParam("IDs") int[] orderIDs, Model model) {
+		logger.info("podelete.do : " + orderIDs);
 		
-		for(int orderId : IDs) {
-			
-			
-			
-		if (printOrderService.deletePrintOrder(orderId) == 0) {
-			model.addAttribute("message", orderId + "번 발주 정보 삭제 실패!");
-			return "common/error";
+		if(orderIDs != null) {
+			for(int orderId : orderIDs) {
+				
+				if (printOrderService.deletePrintOrder(orderId) == 0) {
+					model.addAttribute("message", orderId + "번 발주 정보 삭제 실패!");
+					return "common/error";
+				}
+		
+			}
 		}
-		
-	}
-	
+
 		return "redirect:podelete.do";
 	}
 }

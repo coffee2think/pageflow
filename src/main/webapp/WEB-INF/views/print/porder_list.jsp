@@ -17,7 +17,7 @@
     const SUBPAGE = 1;
     const LNKPAGE = 1;
 
- // 수량 변경 시 총액 계산
+ /* // 수량 변경 시 총액 계산
     $(function() {
     	$('#table_list').find('input[name=quantity]').each(function() {
     		$(this).change(function() { 
@@ -28,7 +28,7 @@
     			amount.val(bookPrice * quantity);
     		});
     	});
-    });
+    }); */
     
  
 </script>
@@ -49,26 +49,26 @@
 <script type="text/javascript">
 
 	//검색 키워드1
-	var searchKeyword = "";
+	/* var searchKeyword = "";
 	// 서치 버튼 클릭
 	$(function(){
 		$('.search-btn').on('click', function(){
-			searchKey();
+			searchKeyword('pokeyword.do');
 		});
 
 		// After Enter Key
 		$('.search-box-text').on('keypress', function(e){
 			if (e.which === 13) {
-				searchKey();
+				searchKeyword('pokeyword.do');
 			}
 		});
-	});
+	}); */
 
 </script>
 <title></title>
 <script type="text/javascript">
 	
-	//날짜 검색 버튼
+	/* //날짜 검색 버튼
 	function searchByDate() {
     	var begin = $('#begin').val();
     	var end = $('#end').val();
@@ -78,7 +78,7 @@
     	url += '&end=' + end;
     	
     	location.href = url;
-    }
+    } */
 
 </script>
 
@@ -133,18 +133,18 @@
 								<div class="select-box">
 									<div class="select-pan">
 										<label for="sel_code"></label> 
-										<select name="searchType" id="sel_code">
-											<option value="">발주코드</option>
-											<option value="">인쇄소명</option>
-											<option value="">도서코드</option>
-											<option value="">도서명</option>
+										<select name="searchType" id="search_type">
+											<option value="orderId">발주코드</option>
+											<option value="printName">인쇄소명</option>
+											<option value="bookId">도서코드</option>
+											<option value="bookName">도서명</option>
 										</select>
 									</div>
 								</div>
 
 								<div class="search-box">
 									<input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
-									<button class="search-btn" onclick="search('pokeyword.do'); return false; ">
+									<button class="search-btn" onclick="searchkeyword('pokeyword.do'); return false; ">
 										<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
 									</button>
 								</div>
@@ -393,7 +393,7 @@
 
 
 				<div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('podelete.do'); return false;">
+                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('bodelete.do'); return false;">
                 </div>
 
 			</div>
