@@ -168,3 +168,13 @@
 .contents-notice-down img, .contents-notice-down span{
     margin-left: 10px;
 }
+
+.appr-box {
+    line-height: 25px;
+}
+
+.appr-box-close {
+    background: #e6e6e6;
+    cursor: pointer;
+    vertical-align: middle;
+}

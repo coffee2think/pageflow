@@ -117,7 +117,7 @@
 			});
 		});
 	});
-	
+
 </script>
 
 </head>
@@ -332,6 +332,8 @@
 									</c:forEach>
 								</c:if>
                                 <!--합계-->
+                                <fmt:formatNumber var="totalRefundNum" value="${ totalRefundNum }" type="number"/>
+								<fmt:formatNumber var="totalRefundPrice" value="${ totalRefundPrice }" type="number"/>
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
                                     <td></td>
                                     <td></td>

@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.erl.pageflow.approvalline.model.vo.ApprovalLineSave;
 import com.erl.pageflow.book.model.vo.BookWithStock;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.employee.model.vo.Employee;
@@ -137,6 +138,24 @@ public class PopupDao {
 	public ArrayList<Writer> selectWriterByName(Search search) {
 		List<Writer> list = sqlSession.selectList("popupMapper.selectWriterByName", search);
 		return (ArrayList<Writer>) list;
+	}
+
+	public ArrayList<ApprovalLineSave> selectApprovalLineSaveByName(Search search) {
+		List<ApprovalLineSave> list = sqlSession.selectList("popupMapper.selectApprovalLineSaveByName", search);
+		return (ArrayList<ApprovalLineSave>) list;
+	}
+
+	public ArrayList<ApprovalLineSave> selectApprovalLineSaveById(Search search) {
+		List<ApprovalLineSave> list = sqlSession.selectList("popupMapper.selectApprovalLineSaveById", search);
+		return (ArrayList<ApprovalLineSave>) list;
+	}
+
+	public int selectApprovalLineSaveCountById(Search search) {
+		return sqlSession.selectOne("popupMapper.selectApprovalLineSaveCountById", search);
+	}
+
+	public int selectApprovalLineSaveCountByName(Search search) {
+		return sqlSession.selectOne("popupMapper.selectApprovalLineSaveCountByName", search);
 	}
 	
 }

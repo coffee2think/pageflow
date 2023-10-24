@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.erl.pageflow.approvalline.model.vo.ApprovalLineSave;
 import com.erl.pageflow.book.model.vo.BookWithStock;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.common.popup.model.dao.PopupDao;
@@ -151,4 +152,26 @@ public class PopupServiceImpl implements PopupService {
 		return popupDao.selectWriterByName(search);
 	}
 
+	@Override
+	public ArrayList<ApprovalLineSave> selectApprovalLineSaveByName(Search search) {
+		return popupDao.selectApprovalLineSaveByName(search);
+	}
+
+	@Override
+	public ArrayList<ApprovalLineSave> selectApprovalLineSaveById(Search search) {
+		return popupDao.selectApprovalLineSaveById(search);
+	}
+
+	@Override
+	public int selectApprovalLineSaveCountById(Search search) {
+		return popupDao.selectApprovalLineSaveCountById(search);
+	}
+
+	@Override
+	public int selectApprovalLineSaveCountByName(Search search) {
+		return popupDao.selectApprovalLineSaveCountByName(search);
+	}
+	
+	
+	
 }

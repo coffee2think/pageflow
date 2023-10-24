@@ -100,4 +100,8 @@ public class EmployeeDao {
 	public int myUpdateInfo(Employee employee) {
 		return sqlSessionTemplate.selectOne("employeeMapper.myUpdateInfo", employee);
 	}
+	
+	public int myUpdateInfo2(Employee employee) {
+		return sqlSessionTemplate.selectOne("employeeMapper.myUpdateInfo2", employee);
+	}
 }

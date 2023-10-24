@@ -2,8 +2,10 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="empId" value="-1"/>
+<c:set var="adminYN" value="N"/>
 <c:if test="${ !empty loginMember }">
     <c:set var="empId" value="${ loginMember.empId }"/>
+    <c:set var="adminYN" value="${ loginMember.adminYN }"/>
 </c:if>
 <!DOCTYPE html>
 <html>
@@ -23,6 +25,8 @@
 
         let empId = Number('<c:out value="${ empId }" />');
         let apType = Number('<c:out value="${ apType }" />');
+        let adminYN = '<c:out value="${ adminYN }" />';
+        console.log('adminYN : ' + adminYN);
         //로그인 안했을때 나의 결재페이지 안보이게
         
         if(empId != -1) {
@@ -38,6 +42,14 @@
                 $('#sideBtn_3').attr('href', 'apmoveinsert.do?empId='+empId);
                 $('#sideBtn_4').attr('href', 'allinelist.do?empId='+empId);
                 
+            }
+
+            if(NOWPAGE == 1) {
+                if(adminYN != 'Y') {
+                    $('#sideBtn_3').parent().hide();
+                    $('#sideSubBtn_3_1').parent().hide();
+                    $('#sideSubBtn_3_2').parent().hide();
+                }
             }
         }
     });
@@ -131,7 +143,7 @@
 </head>
 <body>
 	<div class="side-body-box">
-		
+        
 	</div>
 </body>
 </html>

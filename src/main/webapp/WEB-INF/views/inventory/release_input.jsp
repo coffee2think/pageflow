@@ -25,10 +25,10 @@
 	             
 	             <td class="td-50">
 	                 <div class="contents-check-div">
-	                     <button class="contents-input-plus" onclick="addRow(`+uniqueId+`);">
+	                     <button class="contents-input-plus" onclick="addRow('`+uniqueId+`'); return false;">
 	                         <img src="${ pageContext.servletContext.contextPath }/resources/images/plus.png">
 	                     </button>
-	                     <button class="contents-input-minus" onclick="minusRow(`+uniqueId+`);">
+	                     <button class="contents-input-minus" onclick="minusRow('`+uniqueId+`');">
 	                         <img src="${ pageContext.servletContext.contextPath }/resources/images/minus.png">
 	                     </button>
 	                 </div>
@@ -90,9 +90,14 @@
 	         </tr>`);
 		initPopupBtn();
 	}
-	function minusRow(rowId) {
-	    $("#" + rowId).remove();
-	    initPopupBtn();
+	function minusRow(uniqueId) {
+		console.log('Trying to remove row with uniqueId: ' + uniqueId);
+	    var rowToRemove = document.querySelector('#' + uniqueId);
+	    if (rowToRemove) {
+	        rowToRemove.remove();
+	    } else {
+	        alert('해당 ID를 가진 행을 찾을 수 없습니다.');
+	    }
 	}
 	
 	function calcTotalPrice(uniqueId) {

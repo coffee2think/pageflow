@@ -16,7 +16,7 @@ public interface ApprovalLineService {
 	
 	public int updateApprovalLine(ApprovalLine approvalLine);
 	
-	public int deleteApprovalLine(ApprovalLine approvalLine);
+	public int deleteApprovalLine(int savelineId);
 	
 	public ArrayList<ApprovalLineSave> selectMyApprovalSaveLineList(int lineId);
 

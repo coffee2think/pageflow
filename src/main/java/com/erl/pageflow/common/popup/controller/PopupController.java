@@ -1,6 +1,7 @@
 package com.erl.pageflow.common.popup.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.erl.pageflow.approvalline.model.vo.ApprovalLineSave;
 import com.erl.pageflow.book.model.vo.BookWithStock;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
@@ -512,4 +514,97 @@ public class PopupController {
 		sendJson.put("list", jarr);
 		return sendJson.toJSONString();
 	}
+	
+	// 팝업창 주문 정보 조회
+	@RequestMapping("popuplinesearch.do")
+	@ResponseBody // response body에 담아서 보냄
+	public String popupLineSearchMethod(Search search,
+			@RequestParam(name="page", required=false) String page,
+			HttpServletResponse response) throws IOException {
+		
+		logger.info("popuplinesearch.do search : " + search);
+		
+		// 타입에 따라 값 초기화
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = 10;
+		
+		// 페이징 처리를 위한 개수 조회
+		int listCount = 0;
+		switch(search.getSearchType()) {
+		case "savelineId":
+			listCount = popupService.selectApprovalLineSaveCountById(search);
+			break;
+		case "savelineName":
+			listCount = popupService.selectApprovalLineSaveCountByName(search);
+			break;
+		}
+		
+		// 페이징 처리
+		Paging paging = new Paging(listCount, currentPage, limit, "popuplinesearch.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		// 서비스로 목록 요청
+		ArrayList<ApprovalLineSave> apprLineSaveList = null;
+		switch(search.getSearchType()) {
+		case "savelineId":
+			apprLineSaveList = popupService.selectApprovalLineSaveById(search);
+			break;
+		case "savelineName":
+			apprLineSaveList = popupService.selectApprovalLineSaveByName(search);
+			break;
+		}
+		logger.info("apprLineSaveList : " + apprLineSaveList.toString());
+		
+		//이중배열 만들어 보내기
+		JSONArray coList = null;
+		//ArrayList<ArrayList<PartyCo>> coList = null;
+		int count = 0;
+		if(apprLineSaveList.size() > 0) {
+			
+			//coList = new ArrayList<ArrayList<PartyCo>>();
+			coList = new JSONArray();
+			//ArrayList<PartyCo> cList = new ArrayList<PartyCo>();
+			JSONArray cList = new JSONArray();
+			
+			for(int i=0; i<apprLineSaveList.size(); i++) {
+				//System.out.println("i : " + i);
+				int nextDepth = (i < apprLineSaveList.size()-1) ? apprLineSaveList.get(i+1).getLineDepth() : -1;//다음번 뎁스
+				
+				cList.add(returnApprLineSave(apprLineSaveList.get(i)));
+				
+				if(nextDepth == 1 || i == apprLineSaveList.size()-1) {//마지막이거나 다음 뎁스가 1일때
+					
+					JSONArray ctemp = (JSONArray) cList.clone();
+					coList.add(ctemp);
+					cList.clear();
+					count ++;
+				}
+			}
+		}
+		
+		// response에 내보낼 값에 대한 mimeType 설정
+		response.setContentType("application/json; charset=utf-8");
+		
+		// 리턴된 list 결과를 json 배열에 담아서 내보내기
+		JSONObject sendJson = new JSONObject();
+		sendJson.put("list", coList);
+		return sendJson.toJSONString();
+	}
+	
+	public JSONObject returnApprLineSave(ApprovalLineSave as) throws UnsupportedEncodingException {
+		JSONObject json = new JSONObject();
+		json.put("savelineId", as.getSavelineId());
+		json.put("lineDepth", as.getLineDepth());
+		json.put("empId", as.getEmpId());
+		json.put("approverId", as.getApproverId());
+		json.put("approverName", as.getApproverName());
+		json.put("posName", as.getPosName());
+		json.put("lineName", as.getLineName());
+		return json;
+	}
 }
+
+
