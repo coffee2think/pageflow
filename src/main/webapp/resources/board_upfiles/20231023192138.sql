@@ -422,33 +422,7 @@ ALTER TABLE message
 		ENABLE
 		VALIDATE;
 
-/* 새 테이블2 */
-CREATE TABLE alarm (
-	emp_id NUMBER NOT NULL, /* 직원 번호 */
-	alarm_notice_num NUMBER DEFAULT 0 NOT NULL, /* 공지알림 개수 */
-	alarm_message_num NUMBER DEFAULT 0 NOT NULL, /* 쪽지알림 개수 */
-	alarm_approval_num NUMBER DEFAULT 0 NOT NULL /* 전자결재 알림 개수 */
-);
 
-COMMENT ON TABLE alarm IS '새 테이블2';
-
-COMMENT ON COLUMN alarm.emp_id IS '직원 번호';
-
-COMMENT ON COLUMN alarm.alarm_notice_num IS '공지알림 개수';
-
-COMMENT ON COLUMN alarm.alarm_message_num IS '쪽지알림 개수';
-
-COMMENT ON COLUMN alarm.alarm_approval_num IS '전자결재 알림 개수';
-
-ALTER TABLE alarm
-	ADD
-		CONSTRAINT FK_employee_TO_alarm
-		FOREIGN KEY (
-			emp_id
-		)
-		REFERENCES employee (
-			emp_id
-		);
 
 
 /* 전자결재 라인 그룹 */
@@ -564,6 +538,29 @@ ALTER TABLE approvalline
 
 
 
+/* 전자결재 라인 그룹 */
+CREATE TABLE approvalline_group (
+	line_id NUMBER NOT NULL, /* 결재라인 번호 */
+	appr_id NUMBER /* 전자결재 번호 */
+);
+
+COMMENT ON TABLE approvalline_group IS '전자결재 라인 그룹';
+
+COMMENT ON COLUMN approvalline_group.line_id IS '결재라인 번호';
+
+COMMENT ON COLUMN approvalline_group.appr_id IS '전자결재 번호';
+
+CREATE UNIQUE INDEX PK_approvalline_group
+	ON approvalline_group (
+		line_id ASC
+	);
+
+ALTER TABLE approvalline_group
+	ADD
+		CONSTRAINT PK_approvalline_group
+		PRIMARY KEY (
+			line_id
+		);
 
 /* 전자결재 라인3 */
 CREATE TABLE approvalline_save (
@@ -603,6 +600,32 @@ ALTER TABLE approvalline_save
 			line_depth
 		);
 
+/* 새 테이블 */
+CREATE TABLE approvalline_save_group (
+	saveline_id NUMBER NOT NULL, /* 저장된 결재라인 번호 */
+	appr_id NUMBER, /* 전자결재 번호 */
+	saveline_name VARCHAR2(255) /* 저장된 결재라인 이름 */
+);
+
+COMMENT ON TABLE approvalline_save_group IS '새 테이블';
+
+COMMENT ON COLUMN approvalline_save_group.saveline_id IS '저장된 결재라인 번호';
+
+COMMENT ON COLUMN approvalline_save_group.appr_id IS '전자결재 번호';
+
+COMMENT ON COLUMN approvalline_save_group.saveline_name IS '저장된 결재라인 이름';
+
+CREATE UNIQUE INDEX PK_approvalline_save_group
+	ON approvalline_save_group (
+		saveline_id ASC
+	);
+
+ALTER TABLE approvalline_save_group
+	ADD
+		CONSTRAINT PK_approvalline_save_group
+		PRIMARY KEY (
+			saveline_id
+		);
 
 
 ALTER TABLE approval
@@ -1445,7 +1468,6 @@ CREATE TABLE reference_notice (
 	ref_id NUMBER NOT NULL, /* 참조 번호 */
 	emp_id NUMBER NOT NULL, /* 직원 번호 */
 	notice_id NUMBER NOT NULL, /* 공지사항 번호 */
-	dep_id NUMBER, /* 부서 번호 */
 	read_chk CHAR(1) DEFAULT 'N' NOT NULL /* 읽음여부 */
 );
 
@@ -1457,54 +1479,19 @@ COMMENT ON COLUMN reference_notice.emp_id IS '직원 번호';
 
 COMMENT ON COLUMN reference_notice.notice_id IS '공지사항 번호';
 
-COMMENT ON COLUMN reference_notice.dep_id IS '부서 번호';
-
 COMMENT ON COLUMN reference_notice.read_chk IS '읽음여부';
-
-CREATE UNIQUE INDEX PK_reference_notice
-	ON reference_notice (
-		ref_id ASC,
-		emp_id ASC,
-		notice_id ASC
-	);
 
 ALTER TABLE reference_notice
 	ADD
 		CONSTRAINT PK_reference_notice
 		PRIMARY KEY (
 			ref_id,
-			emp_id,
-			notice_id
-		);
-ALTER TABLE reference_notice
-	ADD
-		CONSTRAINT FK_employee_TO_reference_notice
-		FOREIGN KEY (
 			emp_id
 		)
-		REFERENCES employee (
-			emp_id
-		);
-
-ALTER TABLE reference_notice
-	ADD
-		CONSTRAINT FK_notice_TO_reference_notice
-		FOREIGN KEY (
-			notice_id
-		)
-		REFERENCES notice (
-			notice_id
-		);
-
-ALTER TABLE reference_notice
-	ADD
-		CONSTRAINT FK_department_TO_reference_notice
-		FOREIGN KEY (
-			dep_id
-		)
-		REFERENCES department (
-			dep_id
-		);
+		NOT DEFERRABLE
+		INITIALLY IMMEDIATE
+		ENABLE
+		VALIDATE;
 
 /* 권한 레벨 */
 CREATE TABLE authority_level (
@@ -2126,9 +2113,33 @@ ALTER TABLE reference_message
 		ENABLE
 		VALIDATE;
 
+ALTER TABLE reference_notice
+	ADD
+		CONSTRAINT FK_employee_TO_reference_notice
+		FOREIGN KEY (
+			emp_id
+		)
+		REFERENCES employee (
+			emp_id
+		)
+		NOT DEFERRABLE
+		INITIALLY IMMEDIATE
+		ENABLE
+		VALIDATE;
 
-        
-
+ALTER TABLE reference_notice
+	ADD
+		CONSTRAINT FK_notice_TO_reference_notice
+		FOREIGN KEY (
+			notice_id
+		)
+		REFERENCES notice (
+			notice_id
+		)
+		NOT DEFERRABLE
+		INITIALLY IMMEDIATE
+		ENABLE
+		VALIDATE;
 
 ALTER TABLE authority
 	ADD
@@ -2316,16 +2327,3 @@ MODIFY NOTICE_READCOUNT number not null;
 
 ALTER TABLE upload_reply
 DROP COLUMN board_id;
-
-
-
-alter table rank
-rename COLUMN PUBLISHER to isbn;
-
---ALTER TABLE refund
---DROP COLUMN emp_id;
-
---ALTER TABLE refund
---DROP COLUMN emp_name;
-
-

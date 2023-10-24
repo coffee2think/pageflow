@@ -192,10 +192,10 @@
 	</select>
 	
 	<select id="selectBoardId" resultType="_int">
-		select max(BOARD_ID) from board
+		select max(BOARD_ID)+1 from board
 	</select>
 	
-	<select id="selectBoardUpload" resultType="Board">
+	<select id="selectBoardUpload" parameterType="Board" resultType="_int">
 		select count(*) 
 		from UPLOAD_BOARD
 		where DEP_ID = #{ depId } and BOARD_ID = #{ boardId }
@@ -238,7 +238,7 @@
 	</update>
 	
 	<delete id="deleteBoardUpload" parameterType="Board">
-		delete from reply 
+		delete from upload_board
 		where board_id = #{ boardId }
 	</delete>	
 	

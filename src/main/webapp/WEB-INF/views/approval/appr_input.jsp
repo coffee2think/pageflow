@@ -23,15 +23,10 @@
             return false;
         })
     })
-    
     function inputSubmit(){
-        var content = $('#editableDiv').html();
-        //content = content.replace(/<br>/g, '\n');
-        //console.log('content : ' + content);
-    	$('#appendTextArea').val(content);
-        return false;
-
+    	$('#appendTextArea').val($('.detail_area').text());
     }
+    
 </script>
 <title></title>
 </head>
