@@ -5,18 +5,6 @@ import java.sql.Date;
 public class Notice implements java.io.Serializable{
 	
 	private static final long serialVersionUID = -3516767475878436110L;
-	
-	public String getNoticeDetail() {
-		return noticeDetail;
-	}
-
-	public void setNoticeDetail(String noticeDetail) {
-		this.noticeDetail = noticeDetail;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 
 	private int noticeId;
 	private int empId;
@@ -33,14 +21,16 @@ public class Notice implements java.io.Serializable{
 	private String noticeOriginalFileName;
 	private String noticeRenameFileName;
 	
+	private String refDepName;
+	
 	public Notice() {
 		super();
 	}
-
+	
 	public Notice(int noticeId, int empId, String empName, String noticeTitle, String noticeDetail,
 			Date noticeCreateDate, Date noticeModifyDate, Date noticeDeleteDate, String classify, String importance,
-			int noticeReadCount, String noticeOriginalFileName, String noticeRenameFileName) {
-		super();
+			Date importanceDate, int noticeReadCount, String noticeOriginalFileName, String noticeRenameFileName,
+			String refDepName) {
 		this.noticeId = noticeId;
 		this.empId = empId;
 		this.empName = empName;
@@ -51,27 +41,13 @@ public class Notice implements java.io.Serializable{
 		this.noticeDeleteDate = noticeDeleteDate;
 		this.classify = classify;
 		this.importance = importance;
+		this.importanceDate = importanceDate;
 		this.noticeReadCount = noticeReadCount;
 		this.noticeOriginalFileName = noticeOriginalFileName;
 		this.noticeRenameFileName = noticeRenameFileName;
-	}
-	
-	public int getEmpId() {
-		return empId;
+		this.refDepName = refDepName;
 	}
 
-	public void setEmpId(int empId) {
-		this.empId = empId;
-	}
-	
-	public String getEmpName() {
-		return empName;
-	}
-
-	public void setEmpName(String empName) {
-		this.empName = empName;
-	}
-	
 	public int getNoticeId() {
 		return noticeId;
 	}
@@ -80,8 +56,37 @@ public class Notice implements java.io.Serializable{
 		this.noticeId = noticeId;
 	}
 
-	
+	public int getEmpId() {
+		return empId;
+	}
 
+	public void setEmpId(int empId) {
+		this.empId = empId;
+	}
+
+	public String getEmpName() {
+		return empName;
+	}
+
+	public void setEmpName(String empName) {
+		this.empName = empName;
+	}
+
+	public String getNoticeTitle() {
+		return noticeTitle;
+	}
+
+	public void setNoticeTitle(String noticeTitle) {
+		this.noticeTitle = noticeTitle;
+	}
+
+	public String getNoticeDetail() {
+		return noticeDetail;
+	}
+
+	public void setNoticeDetail(String noticeDetail) {
+		this.noticeDetail = noticeDetail;
+	}
 
 	public Date getNoticeCreateDate() {
 		return noticeCreateDate;
@@ -123,6 +128,22 @@ public class Notice implements java.io.Serializable{
 		this.importance = importance;
 	}
 
+	public Date getImportanceDate() {
+		return importanceDate;
+	}
+
+	public void setImportanceDate(Date importanceDate) {
+		this.importanceDate = importanceDate;
+	}
+
+	public int getNoticeReadCount() {
+		return noticeReadCount;
+	}
+
+	public void setNoticeReadCount(int noticeReadCount) {
+		this.noticeReadCount = noticeReadCount;
+	}
+
 	public String getNoticeOriginalFileName() {
 		return noticeOriginalFileName;
 	}
@@ -139,20 +160,16 @@ public class Notice implements java.io.Serializable{
 		this.noticeRenameFileName = noticeRenameFileName;
 	}
 
-	public int getNoticeReadCount() {
-		return noticeReadCount;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
-	public void setNoticeReadCount(int noticeReadCount) {
-		this.noticeReadCount = noticeReadCount;
+	public String getRefDepName() {
+		return refDepName;
 	}
 
-	public String getNoticeTitle() {
-		return noticeTitle;
-	}
-
-	public void setNoticeTitle(String noticeTitle) {
-		this.noticeTitle = noticeTitle;
+	public void setRefDepName(String refDepName) {
+		this.refDepName = refDepName;
 	}
 
 	@Override
@@ -160,9 +177,18 @@ public class Notice implements java.io.Serializable{
 		return "Notice [noticeId=" + noticeId + ", empId=" + empId + ", empName=" + empName + ", noticeTitle="
 				+ noticeTitle + ", noticeDetail=" + noticeDetail + ", noticeCreateDate=" + noticeCreateDate
 				+ ", noticeModifyDate=" + noticeModifyDate + ", noticeDeleteDate=" + noticeDeleteDate + ", classify="
-				+ classify + ", importance=" + importance + ", noticeReadCount=" + noticeReadCount
-				+ ", noticeOriginalFileName=" + noticeOriginalFileName + ", noticeRenameFileName="
-				+ noticeRenameFileName + "]";
+				+ classify + ", importance=" + importance + ", importanceDate=" + importanceDate + ", noticeReadCount="
+				+ noticeReadCount + ", noticeOriginalFileName=" + noticeOriginalFileName + ", noticeRenameFileName="
+				+ noticeRenameFileName + ", refDepName=" + refDepName + ", getNoticeId()=" + getNoticeId()
+				+ ", getEmpId()=" + getEmpId() + ", getEmpName()=" + getEmpName() + ", getNoticeTitle()="
+				+ getNoticeTitle() + ", getNoticeDetail()=" + getNoticeDetail() + ", getNoticeCreateDate()="
+				+ getNoticeCreateDate() + ", getNoticeModifyDate()=" + getNoticeModifyDate()
+				+ ", getNoticeDeleteDate()=" + getNoticeDeleteDate() + ", getClassify()=" + getClassify()
+				+ ", getImportance()=" + getImportance() + ", getImportanceDate()=" + getImportanceDate()
+				+ ", getNoticeReadCount()=" + getNoticeReadCount() + ", getNoticeOriginalFileName()="
+				+ getNoticeOriginalFileName() + ", getNoticeRenameFileName()=" + getNoticeRenameFileName()
+				+ ", getRefDepName()=" + getRefDepName() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
+				+ ", toString()=" + super.toString() + "]";
 	}
 	
 }

@@ -13,7 +13,7 @@ import com.erl.pageflow.sales.model.vo.Client;
 
 
 public interface NoticeService {
-	ArrayList<Notice> selectList(Paging paging);
+	ArrayList<Notice> selectNoticeList(Paging paging);
 	int selectListCount();
 	int selectSearchTitleCount(String keyword);
 	int selectSearchWriterCount(String keyword);
@@ -26,6 +26,7 @@ public interface NoticeService {
     int selectNoticeCountByDate(Search search);
     public ArrayList<Notice> selectNoticeByDate(Search search);
     int updateReadCount(int noticeId);
+	ArrayList<Notice> selectImportantNoticeList(Paging paging);
 
 	
 	

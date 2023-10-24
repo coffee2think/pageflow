@@ -39,7 +39,7 @@ public class NoticeController {
 	}
 
 	// 공지글 수정페이지로 이동 처리용
-	@RequestMapping("ndmoveupdate.do")
+	@RequestMapping("nmoveup.do")
 	public ModelAndView moveUpdatePage(@RequestParam("noticeId") int noticeId, ModelAndView mv) {
 		// 수정페이지에 출력할 공지글 조회해 옴
 		Notice notice = noticeService.selectOne(noticeId);
@@ -57,12 +57,11 @@ public class NoticeController {
 
 	// 공지사항 전체 목록보기 요청 처리용
 	@RequestMapping("nlist.do")
-	public String noticeListMethod(Notice notice, @RequestParam(name = "page", required = false) String page,
+	public String noticeListMethod(Notice notice,
+			@RequestParam(name = "page", required = false) String page,
 			@RequestParam(name = "limit", required = false) String slimit, Model model) {
-		int currentPage = 1;
-		if (page != null) {
-			currentPage = Integer.parseInt(page);
-		}
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
 
 		// 한 페이지 공지 10개씩 출력되게 한다면
 		int limit = 10;
@@ -71,14 +70,14 @@ public class NoticeController {
 		}
 
 		// 총 페이지 수 계산을 위한 공지글 총갯수 조회
-		// int listCount = noticeService.selectListCount();
 		int listCount = noticeService.selectListCount();
 		// 페이지 관련 항목 계산 처리
 		Paging paging = new Paging(listCount, currentPage, limit, "nlist.do");
 		paging.calculator();
 
 		// 페이지에 출력할 목록 조회해 옴
-		ArrayList<Notice> list = noticeService.selectList(paging);
+		ArrayList<Notice> list = noticeService.selectNoticeList(paging);
+		ArrayList<Notice> importantList = noticeService.selectImportantNoticeList(paging);
 
 		if (list != null && list.size() > 0) {
 			model.addAttribute("list", list);
@@ -103,7 +102,6 @@ public class NoticeController {
 
 		// 첨부파일이 있을때
 		if (!mfile.isEmpty()) {
-
 			// 전송온 파일이름 추출함
 			String fileName = mfile.getOriginalFilename();
 			String renameFileName = null;
@@ -128,9 +126,8 @@ public class NoticeController {
 			notice.setNoticeOriginalFileName(fileName);
 			notice.setNoticeRenameFileName(renameFileName);
 		}
-
+		
 		if (noticeService.insertNotice(notice) > 0) {
-			model.addAttribute("empId", notice.getEmpId());
 			return "redirect:nlist.do";
 		} else {
 			model.addAttribute("message", "새 게시글 등록 실패!");
@@ -165,20 +162,19 @@ public class NoticeController {
 	}
 
 	// 공지글 상세보기 요청 처리용
-	@RequestMapping("nolist.do")
-	public ModelAndView noticeDetailMethod(@RequestParam("noticeId") int noticeId, ModelAndView mv,
-			HttpSession session) {
+	@RequestMapping("ndetail.do")
+	public ModelAndView noticeDetailMethod(@RequestParam("noticeId") int noticeId,
+			ModelAndView mv, HttpSession session) {
 
 		// 조회수 1증가 처리
 		noticeService.updateReadCount(noticeId);
-
+		
 		Notice notice = noticeService.selectOne(noticeId);
 
-		if (notice != null ) {
+		if (notice != null) {
 			mv.addObject("notice", notice);
-			mv.setViewName("work/notice_notice");
-
-		}else {
+			mv.setViewName("work/notice_detail");
+		} else {
 			mv.addObject("message", noticeId + "번 공지글 상세보기 조회 실패!");
 			mv.setViewName("common/error");
 		}
@@ -192,6 +188,7 @@ public class NoticeController {
 			@RequestParam(name = "deleteFlag", required = false) String delFlag,
 			@RequestParam(name = "upfile", required = false) MultipartFile mfile) {
 		logger.info("noupdate.do : " + notice);
+		logger.info("upfile : " + mfile);
 
 		// 공지사항 첨부파일 저장 폴더 경로 지정
 		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
@@ -199,7 +196,7 @@ public class NoticeController {
 		// 첨부파일이 변경된 경우의 처리 --------------------------------------------------------
 		// 1. 원래 첨부파일이 있는데 '파일삭제'를 선택한 경우
 		// 또는 원래 첨부파일이 있는데 새로운 첨부파일이 업로드된 경우
-		if (notice.getNoticeOriginalFileName() != null && (delFlag != null && delFlag.equals("yes"))
+		if (notice.getNoticeOriginalFileName() != null && (delFlag != null && delFlag.equals("Y"))
 				|| (mfile != null && !mfile.isEmpty())) {
 			// 저장 폴더에서 파일 삭제함
 
@@ -210,7 +207,7 @@ public class NoticeController {
 		}
 
 		// 2. 새로운 첨부파일이 있을 때 (공지글 첨부파일은 1개임)
-		if ((mfile != null) && !mfile.isEmpty()) {
+		if (mfile != null && !mfile.isEmpty()) {
 			// 전송온 파일이름 추출함
 			String fileName = mfile.getOriginalFilename();
 			String renameFileName = null;

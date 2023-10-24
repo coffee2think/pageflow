@@ -22,20 +22,21 @@
 	</resultMap>
 	
 	<select id="selectNoticeList" parameterType="Paging" resultMap="resultNotice">
-		
-			select * from (select rownum rnum, NOTICE_ID, EMP_ID, EMP_Name, NOTICE_TITLE, 
-				            NOTICE_DETAIL, CREATE_DATE  ,IMPORTANCE, NOTICE_READCOUNT , NOTICE_ORIGINAL_FILENAME, NOTICE_RENAME_FILENAME 
-				      		from (select * from notice 
-				      			join employee using (EMP_ID)
-				            order by importance desc, CREATE_DATE desc, NOTICE_ID desc)
-				     	   ) 
+		select *
+		from (select rownum rnum, sub.*
+	      	  from (select * from notice
+					join employee using (EMP_ID)
+					order by NOTICE_ID desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
-		
-		
 	</select>
 	
 	<select id="selectOne" parameterType="_int" resultMap="resultNotice">
-		select * from notice join employee using (EMP_ID) where NOTICE_ID = #{ noticeId}
+		select *
+		from notice
+		left join employee using (emp_id)
+		left join reference_notice r using (notice_id, emp_id)
+		left join department d on r.dep_id = d.dep_id
+		where notice_id = #{ noticeId }
 	</select>	
 	
 	<select id="selectListCount" resultType="_int">
@@ -46,15 +47,30 @@
 		insert into notice 
 		values ((select max(NOTICE_ID) + 1 from notice), 
 				#{empId}, #{noticeTitle}, #{noticeDetail}, 
-				sysdate, default, default , #{classify},  
-				#{importance},default,#{noticeOriginalFileName},#{noticeRenameFileName})
+				sysdate, default, default , #{classify},
+		
+		<choose>
+			<when test="importance != null">#{importance},</when>
+			<otherwise>default,</otherwise>
+		</choose>
+				
+				default, #{noticeOriginalFileName}, #{noticeRenameFileName},
+		
+		<choose>
+			<when test="importance != null">#{importanceDate}</when>
+			<otherwise>default</otherwise>
+		</choose>
+		)
 				
 	</insert>
 	
 	<update id="updateNotice" parameterType="Notice">
 		update notice 
 		set NOTICE_TITLE = #{noticeTitle},  
-			NOTICE_DETAIL = #{noticeDetail}
+			NOTICE_DETAIL = #{noticeDetail},
+			NOTICE_ORIGINAL_FILENAME = #{noticeOriginalFileName},
+			NOTICE_RENAME_FILENAME = #{noticeRenameFileName},
+			MODIFY_DATE = SYSDATE
 		where NOTICE_ID = #{noticeId}
 	</update>
 	
@@ -122,6 +138,18 @@
 					where create_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
 					order by create_date desc, notice_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectImportantNoticeList" parameterType="Paging" resultMap="resultNotice">
+		<![CDATA[
+		select *
+		from (select rownum rnum, sub.*
+	      	  from (select * from notice
+					join employee using (EMP_ID)
+					where IMPORTANCE = 'Y' and IMPORTANCE_DATE >= sysdate
+					order by NOTICE_ID desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+		]]>
 	</select>
 	
 	

@@ -45,12 +45,9 @@
 				</c:if>
 				
 				<!-- 키워드 검색 시 -->
-				<c:if test="${ !empty begin and !empty end }">
-					<c:param name="searchType" value="${ searchType }" />
-					<c:param name="keyword" value="${ keyword }" />
-				</c:if>
-				<c:if test="${ !empty searchType }">
+				<c:if test="${ !empty searchType and !empty keyword }">
 					<c:param name="searchType" value="${ searchType }"/>
+					<c:param name="keyword" value="${ keyword }"/>
 				</c:if>
 				
 				<!-- 날짜 검색 시 -->
@@ -78,12 +75,9 @@
 						</c:if>
 						
 						<!-- 키워드 검색 시 -->
-						<c:if test="${ !empty begin and !empty end }">
-							<c:param name="searchType" value="${ searchType }" />
-							<c:param name="keyword" value="${ keyword }" />
-						</c:if>
-						<c:if test="${ !empty searchType }">
+						<c:if test="${ !empty searchType and !empty keyword }">
 							<c:param name="searchType" value="${ searchType }"/>
+							<c:param name="keyword" value="${ keyword }"/>
 						</c:if>
 						
 						<!-- 날짜 검색 시 -->
@@ -125,12 +119,9 @@
 				</c:if>
 				
 				<!-- 키워드 검색 시 -->
-				<c:if test="${ !empty begin and !empty end }">
-					<c:param name="searchType" value="${ searchType }" />
-					<c:param name="keyword" value="${ keyword }" />
-				</c:if>
-				<c:if test="${ !empty searchType }">
+				<c:if test="${ !empty searchType and !empty keyword }">
 					<c:param name="searchType" value="${ searchType }"/>
+					<c:param name="keyword" value="${ keyword }"/>
 				</c:if>
 				
 				<!-- 날짜 검색 시 -->
@@ -166,12 +157,9 @@
 						</c:if>
 						
 						<!-- 키워드 검색 시 -->
-						<c:if test="${ !empty begin and !empty end }">
-							<c:param name="searchType" value="${ searchType }" />
-							<c:param name="keyword" value="${ keyword }" />
-						</c:if>
-						<c:if test="${ !empty searchType }">
+						<c:if test="${ !empty searchType and !empty keyword }">
 							<c:param name="searchType" value="${ searchType }"/>
+							<c:param name="keyword" value="${ keyword }" />
 						</c:if>
 						
 						<!-- 날짜 검색 시 -->
@@ -204,12 +192,9 @@
 						</c:if>
 						
 						<!-- 키워드 검색 시 -->
-						<c:if test="${ !empty begin and !empty end }">
-							<c:param name="searchType" value="${ searchType }" />
-							<c:param name="keyword" value="${ keyword }" />
-						</c:if>
-						<c:if test="${ !empty searchType }">
+						<c:if test="${ !empty searchType and !empty keyword }">
 							<c:param name="searchType" value="${ searchType }"/>
+							<c:param name="keyword" value="${ keyword }"/>
 						</c:if>
 						
 						<!-- 날짜 검색 시 -->
