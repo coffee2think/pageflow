@@ -21,4 +21,5 @@ public interface EmployeeService {
 	
 	// 내정보 수정
 	public int myUpdateInfo(Employee employee);
+	public int myUpdateInfo2(Employee employee);
 }

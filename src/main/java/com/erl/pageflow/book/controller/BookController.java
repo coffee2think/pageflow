@@ -79,7 +79,7 @@ public class BookController {
 	public String bkInsertMethod(HttpServletRequest request, Model model) {
 		String[] bookNames = request.getParameterValues("bookName");
 		String[] categorys = request.getParameterValues("category");
-		String[] writerIds = request.getParameterValues("writerId");
+		String[] writerNames = request.getParameterValues("writerName");
 		String[] isbns = request.getParameterValues("isbn");
 		String[] bookPrices = request.getParameterValues("bookPrice");
 		String[] engravings = request.getParameterValues("engraving");
@@ -95,7 +95,7 @@ public class BookController {
 			book.setBookId(bookId);
 			book.setBookName(bookNames[i]);
 			book.setCategory(categorys[i]);
-			book.setWriterId(Integer.parseInt(writerIds[i]));
+			book.setWriterName(writerNames[i]);
 			book.setIsbn(isbns[i]);
 			book.setBookPrice(Integer.parseInt(bookPrices[i]));
 			book.setEngraving(engravings[i]);

@@ -3,8 +3,6 @@ package com.erl.pageflow.employee.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -85,10 +83,19 @@ public class EmployeeController {
 	
 	//수정페이지로 이동
 	@RequestMapping("movemyupdate.do")
-	public String moveMyUpdatePage() {
-		return "member/myPageUpdate";
+	public ModelAndView moveMyUpdatePage(@RequestParam("empId") int empId, ModelAndView mv) {
+		Employee employee = employeeService.selectEmployee(empId);
+		
+		if(employee != null) {
+			mv.addObject("employee", employee);
+			mv.setViewName("member/myPageUpdate");
+		} else {
+			mv.addObject("message", "수정페이지로 이동 실패!");
+			mv.setViewName("common/error");
+		}
+		
+		return mv;
 	}
-	
 	
 	// 값---------------------------------------------------------------------
 
@@ -349,23 +356,31 @@ public class EmployeeController {
 		return mv;
 	}
   
-  // 내정보 수정
+	// 내정보 수정
 	@RequestMapping(value = "myupdate.do", method = RequestMethod.POST)
-	public void myUpdateMethod(Employee employee, HttpServletResponse response) throws IOException {
-    logger.info("myupdate.do : " + employee);
-
-    String returnStr = null;
-    if(employeeService.myUpdateInfo(employee) > 0) {
-      returnStr = "success";
-    } else {
-      returnStr = "fail";
-    }
-    
-    // response를 이용해서 클라이언트와 출력 스트림을 열어서 값 보냄
-    response.setContentType("text/html; charset=utf-8");
-    PrintWriter out = response.getWriter();
-    out.append(returnStr);
-    out.flush();
-    out.close();
-  }
+	public String myUpdateMethod(Employee employee, Model model, @RequestParam("origin_emppwd") String originEmpPwd) throws IOException {
+	    logger.info("myupdate.do : " + employee);
+	
+	    //새로운 암호가 전송이 왔다면 패스워드 암호화 처리함
+		String empPwd = employee.getEmpPwd().trim();
+		if(empPwd != null && empPwd.length() > 0) {
+			//암호화된 기존의 패스워드와 새로운 패스워드를 비교해서 다른 값이면
+			if(!this.bcryptPasswordEncoder.matches(empPwd, originEmpPwd)) {
+				//member 에 새로운 패스워드를 암호화해서 기록함
+				employee.setEmpPwd(this.bcryptPasswordEncoder.encode(empPwd));
+			} else {
+				//기존 패스워드면 원래 암호화된 패스워드가 적용됨
+				employee.setEmpPwd(originEmpPwd);
+			}
+		}
+		
+		if(employeeService.myUpdateInfo2(employee) > 0) {
+			//수정이 성공했다면 컨트롤러의 다른 메소드를 직접 호출할 수 있음
+			//필요시 값을 전달할 수도 있음 : 쿼리 스트링 사용함
+			return "redirect:movemypage.do?empId=" + employee.getEmpId();
+		} else {
+			model.addAttribute("message", employee.getEmpId() + " 회원정보 수정 실패!");
+			return "common/error";
+		}
+	}
 }
