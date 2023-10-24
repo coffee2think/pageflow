@@ -19,11 +19,6 @@ public class Employee implements java.io.Serializable {
 	private Date enrollDate;
 	private Date modifyDate;
 	private Date leaveDate;
-	
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	private Date lastDate;
 	private int jobId;
 	private int posId;
@@ -33,6 +28,12 @@ public class Employee implements java.io.Serializable {
 	private String jobName;
 	private String posName;
 	private String depName;
+	
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	
 	public Employee() {
 		super();

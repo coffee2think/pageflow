@@ -53,7 +53,7 @@ function dupIDCheck(){
             $('#userpwd').focus();
          }else{
             alert("이미 사용중인 아이디입니다.");
-            $('#userid').select();
+            $('#empid').select();
          }
       },
       error: function(jqXHR, textStatus, errorThrown){
@@ -111,14 +111,13 @@ window.onload = function(){
 	</div>
 	<!--main-side end-->
 
-	<h1 align="center">직원 상세 조회 및 수정 페이지</h1>
+	<h1 align="center">직원 정보 수정 페이지</h1>
 	<br>
 	<!-- 사진파일 첨부시 enctype="multipart/form-date" 속성 추가함 -->
 	<form action="empinsert.do" id="enrollForm" method="post"
 		onsubmit="return validate();">
 		<table id="outer" align="center" width="700" cellspacing="5"
 			cellpadding="0">
-
 
 			<tr>
 				<th colspan="3">직원 정보를 입력해 주세요. (* 표시는 필수입력 항목입니다.)</th>
@@ -134,46 +133,29 @@ window.onload = function(){
 				</td>
 				<td><div class="select-pan-nemo">파일첨부</div> <c:url var="ndown"
 						value="bfdown.do">
-						<c:param name="ofile" value="${ notice.noticeOriginalFileName }" />
-						<c:param name="rfile" value="${ notice.noticeRenameFileName }" />
 					</c:url> <input type="file" name="file" id="photofile"> <input
 					type="submit" value="Upload" name="submit"></td>
 			<tr>
-				<th width="120">*사번</th>
-				<td><input type="text" name="empId" id="empid" readonly>
+				<th width="120">사번</th>
+				<td><input type="text" name="empId" id="empid" value="${employee.empId }" readonly>
 			</tr>
 			<tr>
-				<th>*암호</th>
-				<td><input type="password" name="empPwd" id="userpwd" required></td>
+				<th>이름</th>
+				<td><input type="text" name="empName"  value="${employee.empName }" readonly></td>
 			</tr>
-			<tr>
-				<th>*암호확인</th>
-				<td><input type="password" id="emppwd2" required></td>
-			</tr>
-			<tr>
-				<th>*이름</th>
-				<td><input type="text" name="empName" value="${employee.empName }" readonly></td>
-			</tr>
-			<tr>
-				<th></th>
 			<tr>
 				<th>전화번호</th>
-				<td><input type="tel" name="phone" required></td>
-			<tr>
-				<th>생년월일</th>
-				<td><input type="date" name="empBirth" required></td>
-			<tr>
-				<th>입사일</th>
-				<td><input type="date" name="enrollDate" required></td>
-			<tr>
+				<td><input type="tel" name="phone" value="${employee.phone }"></td>
+			</tr>
+
 				<th>이메일</th>
-				<td><input type="email" name="email" required></td>
+				<td><input type="email" name="email" value="${employee.email }"></td>
 			<tr>
 				<th>주소</th>
-				<td><input type="address" name="address" required></td>
+				<td><input type="address" name="address" value="${employee.address}" required></td>
 			<tr>
 				<th>직급</th>
-				<td><select name="jobId">
+				<td><select name="jobId" value="${employee.jobId }">
 						<option value="1">사원</option>
 						<option value="2">대리</option>
 						<option value="3">과장</option>
@@ -182,14 +164,14 @@ window.onload = function(){
 				</select></td>
 			<tr>
 				<th>직책</th>
-				<td><select name="posId">
+				<td><select name="posId" value="${employee.posId }">
 						<option value="1">직원</option>
 						<option value="2">팀장</option>
 						<option value="3">차장</option>
 						<option value="4">실장</option></td>
 			<tr>
 				<th>부서</th>
-				<td><select name="depId">
+				<td><select name="depId" value="${employee.depId }">
 						<option value="2">기획</option>
 						<option value="3">디자인</option>
 						<option value="4">교정</option>

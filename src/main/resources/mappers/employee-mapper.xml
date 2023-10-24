@@ -54,14 +54,14 @@
 		<result property="posName" column="POS_NAME" />
 	</resultMap>
 	
-  <insert id="insertEmployee" parameterType="Employee">
+ 	<insert id="insertEmployee" parameterType="Employee">
   	insert into employee values(#{empId},
 				 #{empPwd}, sysdate, #{empName},
 				#{phone}, #{empBirth}, #{email} , #{address},#{salary},#{profile},  
 				#{enrollDate},null,null,sysdate,
 				#{jobId}, #{posId}, #{depId},  
 				default, default)
-	</insert> 
+	</insert>  
 
 	<select id="selectEmployee" parameterType="_int" resultMap="resultEmployee">
 		select * from employee 
@@ -87,14 +87,25 @@
 		select * 
 		from (select rownum rnum, EMP_ID, EMP_PWD, EMP_PWD_UPDATE, EMP_NAME, PHONE, 
 			  EMP_BIRTH, EMAIL, ADDRESS, SALARY , PROFILE, ENROLL_DATE ,MODIFY_DATE  , LEAVE_DATE, JOB_Name, POS_Name,dep_name, LOGIN_OK, ADMIN_YN
-		from (select * from employee join job using(job_id) join position using(pos_id) join department using(dep_id) where ADMIN_YN = 'N'))
+		from (select * from employee join job using(job_id) join position using(pos_id) join department using(dep_id)))
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
 	<select id="selectListCount" resultType="_int">
-		select count(*) from employee
+		select count(*) from employee 
 	</select>
+
+	<select id="selectCheckId" parameterType="_int" resultType="_int">
+		select count(EMP_ID) from employee where EMP_ID = #{ eid }
+	</select> 
 	
+	<update id="updateEmployee" parameterType="Employee">
+		update employee
+		set phone = #{ PHONE }, email= #{EMAIL}, address = #{ ADDRESS }, JOB_ID = #{ jobId }, 
+			POS_ID = #{ posId }, DEP_ID = {depId }
+		where EMP_ID = #{ empId }
+  </update>
+
 	<update id="myUpdateInfo" parameterType="Employee">
 		update employee
 		set emp_pwd = #{ empPwd }, emp_pwd_update = sysdate, phone = #{ phone },
@@ -102,5 +113,33 @@
 		where emp_id = #{ empId }
 	</update>
 	
+	<select id="selectSearchDeptCount" parameterType="string"  resultType="_int">
+		select count(*) from employee 
+		left join department using(dep_id)
+		where DEP_NAME like '%' || #{ keyword} || '%'
+	</select>
+	
+	<select id="selectSearchEmpCount" parameterType="string"  resultType="_int">
+		select count(*) from employee 
+		where EMP_NAME like '%' || #{ keyword} || '%'
+	</select>
+	
+	<select id="selectSearchEmp" parameterType="Search" resultMap="resultEmployee">
+		select * 
+		from (select rownum rnum, EMP_ID, EMP_PWD, EMP_PWD_UPDATE, EMP_NAME, PHONE, 
+			  EMP_BIRTH, EMAIL, ADDRESS, SALARY , PROFILE, ENROLL_DATE ,MODIFY_DATE  , LEAVE_DATE, JOB_Name, POS_Name,dep_name, LOGIN_OK, ADMIN_YN
+		from (select * from employee left join job using(job_id) left join position using(pos_id) left join department using(dep_id)
+			  where EMP_NAME like '%' || #{ keyword} || '%'))
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectSearchDept" parameterType="Search" resultMap="resultEmployee">
+		select * 
+		from (select rownum rnum, EMP_ID, EMP_PWD, EMP_PWD_UPDATE, EMP_NAME, PHONE, 
+			  EMP_BIRTH, EMAIL, ADDRESS, SALARY , PROFILE, ENROLL_DATE ,MODIFY_DATE  , LEAVE_DATE, JOB_Name, POS_Name,dep_name, LOGIN_OK, ADMIN_YN
+		from (select * from employee left join job using(job_id) left join position using(pos_id) left join department using(dep_id)
+			  where DEP_NAME like '%' || #{ keyword} || '%'))
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
 	
 </mapper>
