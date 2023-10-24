@@ -8,6 +8,7 @@ import com.erl.pageflow.sales.model.vo.BookForSales;
 import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.Client;
+import com.erl.pageflow.sales.model.vo.Rank;
 import com.erl.pageflow.sales.model.vo.Sales;
 import com.erl.pageflow.sales.model.vo.SalesStatistics;
 
@@ -42,5 +43,6 @@ public interface SalesService {
 	public int insertSales(Sales sales);
 	public int deleteSales(int salesId);
 	public ArrayList<Integer> selectYears();
+	public ArrayList<Rank> selectRank();
 
 }

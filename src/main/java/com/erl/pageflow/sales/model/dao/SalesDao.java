@@ -13,6 +13,7 @@ import com.erl.pageflow.sales.model.vo.BookForSales;
 import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
 import com.erl.pageflow.sales.model.vo.Client;
+import com.erl.pageflow.sales.model.vo.Rank;
 import com.erl.pageflow.sales.model.vo.Sales;
 import com.erl.pageflow.sales.model.vo.SalesStatistics;
 
@@ -153,6 +154,11 @@ public class SalesDao {
 	public ArrayList<Integer> selectYears() {
 		List<Integer> list = sqlSession.selectList("salesMapper.selectYears");
 		return (ArrayList<Integer>) list;
+	}
+
+	public ArrayList<Rank> selectRank() {
+		List<Rank> list = sqlSession.selectList("salesMapper.selectRank");
+		return (ArrayList<Rank>) list;
 	}
 
 }

@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,10 +24,9 @@ import com.erl.pageflow.common.Search;
 import com.erl.pageflow.sales.model.service.SalesService;
 import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.Client;
+import com.erl.pageflow.sales.model.vo.Rank;
 import com.erl.pageflow.sales.model.vo.Sales;
 import com.erl.pageflow.sales.model.vo.SalesStatistics;
-
-import oracle.sql.DATE;
 
 @Controller
 public class SalesController {
@@ -95,8 +95,13 @@ public class SalesController {
 	
 	// 매출현황 페이지 이동
 	@RequestMapping("movestats.do")
-	public String moveStatistics(Model model) {
+	public String moveStatistics() {
 		return "redirect:statslist.do";
+	}
+	
+	@RequestMapping("moverank.do")
+	public String moveBookRankingPage() {
+		return "redirect:runCrawling.do";
 	}
 	
 	
@@ -553,6 +558,28 @@ public class SalesController {
 			return "sales/sales_stats";
 		} else {
 			model.addAttribute("message", "매출통계 조회 실패");
+			return "common/error";
+		}
+	}
+	
+	// 매출통계 조회 요청 처리
+	@RequestMapping("showrank.do")
+	public String showRankMethod(Model model) {
+		
+		ArrayList<Rank> list = salesService.selectRank();
+		
+		HashMap<String, Integer> categories = new HashMap<>();
+		
+		for(Rank book : list) {
+			categories.put(book.getCategory(), categories.getOrDefault(book.getCategory(), 0) + 1);
+		}
+		
+		if(list != null && list.size() > 0) {
+			model.addAttribute("list", list);
+			model.addAttribute("map", categories);
+			return "sales/trend_list";
+		} else {
+			model.addAttribute("message", "거래처 조회 실패");
 			return "common/error";
 		}
 	}
