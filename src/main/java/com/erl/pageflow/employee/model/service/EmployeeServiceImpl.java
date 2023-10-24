@@ -78,11 +78,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return employeeDao.selectSearchDept(search);
 	}
 
-	
-
-	
-	
-	@OverrideS
+	@Override
 	public int myUpdateInfo(Employee employee) {
 		return employeeDao.myUpdateInfo(employee);
 	}
