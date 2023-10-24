@@ -127,7 +127,7 @@
     	location.href = url;
     }
 </script>
-<title></title>
+<title>판매 현황</title>
 </head>
 <body>
 	<div id="container">

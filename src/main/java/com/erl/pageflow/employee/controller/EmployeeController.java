@@ -89,6 +89,12 @@ public class EmployeeController {
 		return "member/myPageUpdate";
 	}
 	
+	// 쪽지함 페이지 이동
+	@RequestMapping("movemsgbox.do")
+	public String moveMsgBoxPage() {
+		return "member/message_box";
+	}
+	
 	
 	// 값---------------------------------------------------------------------
 
@@ -97,7 +103,7 @@ public class EmployeeController {
 	public String loginMethod(Employee employee, HttpSession session, SessionStatus status, Model model) {
 
 		Employee loginMember = employeeService.selectEmployee(employee.getEmpId());
-
+		
 		if (loginMember != null) {
 			session.setAttribute("loginMember", loginMember);
 			status.setComplete();
