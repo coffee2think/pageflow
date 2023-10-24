@@ -345,13 +345,13 @@
 	<update id="updateStore">
 		UPDATE STORE
 		SET STORE_NUM = #{ storeNum }, STORE_PRICE = #{ storePrice }
-		WHERE STORE_ID = #{ storeId } AND CLASSIFY = '입고'
+		WHERE STORE_ID = #{ storeId } AND CLASSIFY = '입고' and book_id = #{ bookId } and client_id = #{ clientId }
 	</update>
 		
 	<update id="updateRelease">
 		UPDATE STORE
 		SET STORE_NUM = #{ storeNum }, STORE_PRICE = #{ storePrice }
-		WHERE STORE_ID = #{ storeId } AND CLASSIFY = '출고'
+		WHERE STORE_ID = #{ storeId } AND CLASSIFY = '출고' and book_id = #{ bookId } and client_id = #{ clientId }
 	</update>
 
 	

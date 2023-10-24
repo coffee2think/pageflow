@@ -27,6 +27,40 @@
         
     	location.href = url;
     }
+    
+/*     function searchStatus(url) {
+        var selectedStatus = $('#search_type').val();
+        
+        // form 태그에 담아서 post 전송
+        const form = document.createElement('form'); // form 태그 생성
+        form.setAttribute('method', 'post'); // 전송 방식 결정 (get or post)
+        form.setAttribute('action', url); // 전송할 url 지정
+        
+        const data1 = document.createElement('input');
+        data1.setAttribute('type', 'hidden');
+        data1.setAttribute('name', 'status'); // 데이터의 name
+        data1.setAttribute('value', selectedStatus); // 데이터의 value
+        form.appendChild(data1);
+        
+        // body에 form 태그 추가하고 submit 전송
+        document.body.appendChild(form);
+        form.submit();
+    } */
+    
+    function changeTab() {h
+        var selectedTabId = selectElement.value;
+        var tabs = document.querySelectorAll(".nav-tabs li");
+
+        for (var i = 0; i < tabs.length; i++) {
+            var tab = tabs[i];
+            var tabId = tab.getAttribute("data-tabid");
+            if (tabId === selectedTabId) {
+                tab.classList.add("active");
+            } else {
+                tab.classList.remove("active");
+            }
+        }
+    }
 </script>
 <title>계약현황</title>
 </head>
@@ -96,18 +130,41 @@
                                     </button>
                                 </div>
                             </div>
-
-                            <div class="select-box">
+							
+							<!-- <div class="nav nav-tabs" style="width: 755px;">
+							    <label for="tabSelect" style="margin-right: 10px;">상태 선택:</label>
+							    <select id="tabSelect" onchange="changeTab()">
+							        <option value="tabAll">전체</option>
+							        <option value="ing">진행중</option>
+							        <option value="finish">계약완료</option>
+							    </select>
+							</div>
+							
+							<button class="search-btn" onclick="searchStatus('ctrliststs.do'); return false;">검색</button> -->
+							
+							<div class="select-box">
+							    <div class="select-pan">
+							        <label for="sel_code"></label>
+							        <select name="code" id="search_type">
+							            <option value="all" <c:if test="${searchType == 'all'}">selected</c:if>>전체</option>
+							            <option value="ing" <c:if test="${searchType == 'ing'}">selected</c:if>>진행중</option>
+							            <option value="finish" <c:if test="${searchType == 'finish'}">selected</c:if>>계약완료</option>
+							        </select>
+							    </div>
+							    <button class="search-btn" onclick="searchStatus('ctrliststs.do'); return false;">
+							    </button>
+							</div>
+							
+                           <%--  <div class="select-box">
                                 <div class="select-pan">
                                     <label for="sel_code"></label>
                                     <select name="code" id="sel_code">
-                                        <option value="all">진행상태</option>
-                                        <option value="">진행중</option>
-                                        <option value="">계약완료</option>
+                                        <option value="all" <c:if test="${ searchType == 'all' }">selected</c:if>>진행상태</option>
+                                        <option value="ing" <c:if test="${ searchType == 'ing' }">selected</c:if>>진행중</option>
+                                        <option value="finish" <c:if test="${ searchType == 'finish' }">selected</c:if>>계약완료</option>
                                     </select>
                                 </div>
-                                
-                            </div>
+                            </div> --%>
 
                             <div class="select-box">
                                 <div class="select-pan-nemo">

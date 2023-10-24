@@ -101,6 +101,50 @@ public class ContractDao {
 		return (ArrayList<Contract>) list;
 	}
 	
+	// 계약 상태별(all) 검색 개수
+	public int selectContractCountByStatus(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectContractCountByStatus", search);
+	}
+	
+	// 계약 상태별(all) 검색
+	public ArrayList<Contract> selectContractByStatus(Search search) {
+		List<Contract> list = sqlSessionTemplate.selectList("publishMapper.selectContractByStatus", search);
+		return (ArrayList<Contract>) list;
+	}
+	
+	// 계약 상태별(all) 검색 개수
+	public int selectContractCountByStatusAll(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectContractCountByStatusAll", search);
+	}
+	
+	// 계약 상태별(all) 검색
+	public ArrayList<Contract> selectContractByStatusAll(Search search) {
+		List<Contract> list = sqlSessionTemplate.selectList("publishMapper.selectContractByStatusAll", search);
+		return (ArrayList<Contract>) list;
+	}
+	
+	// 계약 상태별(ing) 검색 개수
+	public int selectContractCountByStatusIng(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectContractCountByStatusIng", search);
+	}
+	
+	// 계약 상태별(ing) 검색
+	public ArrayList<Contract> selectContractByStatusIng(Search search) {
+		List<Contract> list = sqlSessionTemplate.selectList("publishMapper.selectContractByStatusIng", search);
+		return (ArrayList<Contract>) list;
+	}
+	
+	// 계약 상태별(finish) 검색 개수
+	public int selectContractCountByStatusFinish(Search search) {
+		return sqlSessionTemplate.selectOne("publishMapper.selectContractCountByStatusFinish", search);
+	}
+	
+	// 계약 상태별(finish) 검색
+	public ArrayList<Contract> selectContractByStatusFinish(Search search) {
+		List<Contract> list = sqlSessionTemplate.selectList("publishMapper.selectContractByStatusFinish", search);
+		return (ArrayList<Contract>) list;
+	}
+	
 	// 계약 등록
 	public int insertContract(Contract contract) {
 		return sqlSessionTemplate.insert("publishMapper.insertContract", contract);

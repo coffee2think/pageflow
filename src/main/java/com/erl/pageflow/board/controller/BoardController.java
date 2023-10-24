@@ -462,19 +462,22 @@ public class BoardController {
 			Model model) {
 		logger.info("bdmoveupdate.do => board : " + board);
 		logger.info("bdmoveupdate.do => boardDetail : " + board.getBoardDetail());
-		
+		//String bs = board.getBoardDetail().replaceAll("\n", "<br>");
+		//board.setBoardDetail(bs);
 		//보드 첨부파일 찾기
 		BoardUpload boardUpload = boardService.selectBoardListFile(
 				new BoardKeyword(board.getEmpId(), board.getDepId(), board.getBoardId()));
 		
+		Board sendBoard = boardService.selectBoard(new BoardKeyword(board.getEmpId(), board.getDepId(), board.getBoardId()));
+		
 		if(boardUpload != null) {
-			board.setRenameFile(boardUpload.getRenameUrl());
-			board.setOriginFile(boardUpload.getUploadUrl());
+			sendBoard.setRenameFile(boardUpload.getRenameUrl());
+			sendBoard.setOriginFile(boardUpload.getUploadUrl());
 		}
 		
 		model.addAttribute("begin", begin);
 		model.addAttribute("end", end);
-		model.addAttribute("board", board);
+		model.addAttribute("board", sendBoard);
 		model.addAttribute("depId", board.getDepId());
 		return "work/work_input";
 	}
@@ -532,9 +535,6 @@ public class BoardController {
 						e.printStackTrace();
 					}
 					
-					
-					
-					
 				}
 				
 			}
@@ -558,17 +558,23 @@ public class BoardController {
 	
 	//업무게시판 게시글 삭제
 	@RequestMapping("bddelete.do")
-	public String deleteBoardMethod(Board board) {
-		logger.info("bdupdate.do => board : " + board);
+	public String deleteBoardMethod(Board board, Model model) {
+		logger.info("bddelete.do => board : " + board);
 		
+		if(boardService.selectBoardUpload(board) > 0) {
+			boardService.deleteBoardUpload(board);
+		}
 		
-		if(boardService.deleteBoardUpload(board) > 0) {
-			if(boardService.deleteBoard(board) > 0) {
-				
-			}
+		logger.info("bddelete.do => ============");
+		if(boardService.deleteBoard(board) > 0) {
+			logger.info("bddelete.do => deleteBoard : ");
+			return "redirect:bdlist.do";
+		}else {
+			model.addAttribute("message", "게시글 삭제 실패!");
+			return "common/error";
 		}
 			
-		return "redirect:bdlist.do";
+		
 	}
 	
 }

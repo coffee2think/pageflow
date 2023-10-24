@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +28,7 @@ import com.erl.pageflow.common.Search;
 import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.refund.model.service.RefundService;
 import com.erl.pageflow.refund.model.vo.Refund;
+import com.erl.pageflow.store.model.vo.Store;
 
 @Controller
 public class RefundController {
@@ -108,12 +110,11 @@ public class RefundController {
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
 
-			return "inventory/refund_list";
+			
 		} else {
 			model.addAttribute("message", "날짜 검색 실패");
-			return "common/error";
 		}
-
+		return "inventory/refund_list";
 	}
 
 	// 반품 삭제
@@ -215,31 +216,36 @@ public class RefundController {
 			model.addAttribute("limit", limit);
 			model.addAttribute("refundList", list);
 
-			return "inventory/refund_list";
 		} else {
 			model.addAttribute("message", "키워드 검색 실패");
-			return "common/error";
-		}
 
+		}
+		return "inventory/refund_list";
 	}
 
 	// 반품등록
-	@RequestMapping(value = "refundinput.do", method = RequestMethod.POST)
+	@RequestMapping(value = "reinput.do", method = RequestMethod.POST)
 	public String insertRefund(HttpServletRequest request, Model model) {
 		String[] bookIds = request.getParameterValues("bookId");
-		String[] bookNames = request.getParameterValues("bookName");
-		String[] empIds = request.getParameterValues("empId");
-		String[] empNames = request.getParameterValues("empName");
 		String[] clientIds = request.getParameterValues("clientId");
-		String[] clientNames = request.getParameterValues("clientName");
-		String[] refundNums = request.getParameterValues("refundNum");
-		String[] refundDates = request.getParameterValues("refundDate");
-		String[] refundAmounts = request.getParameterValues("refundAmount");
 		String[] refundStates = request.getParameterValues("refundState");
+		String[] refundDates = request.getParameterValues("refundDate");
+		String[] refundNums = request.getParameterValues("refundNum");
+		String[] refundAmounts = request.getParameterValues("refundAmount");
+		String[] bookPrices = request.getParameterValues("bookPrice");
 		String[] remarks = request.getParameterValues("remark");
 
+		logger.info("bookIds : " + Arrays.toString(bookIds));
+		logger.info("clientIds : " + Arrays.toString(clientIds));
+		logger.info("refundStates : " + Arrays.toString(refundStates));
+		logger.info("refundDates : " + Arrays.toString(refundDates));
+		logger.info("refundNums : " + Arrays.toString(refundNums));
+		logger.info("refundAmounts : " + Arrays.toString(refundAmounts));
+		logger.info("bookPrices : " + Arrays.toString(bookPrices));
+		logger.info("remarks : " + Arrays.toString(remarks));
+
 		int refundId = refundService.selectMaxRefundId() + 1;
-		logger.info("clientIds : " + clientIds);
+
 		ArrayList<Refund> refundList = new ArrayList<>();
 
 		for (int i = 0; i < bookIds.length; i++) {
@@ -248,26 +254,22 @@ public class RefundController {
 			refund.setRefundId(refundId);
 			refund.setBookId(Integer.parseInt(bookIds[i]));
 			refund.setClientId(Integer.parseInt(clientIds[i]));
-			refund.setEmpId(Integer.parseInt(empIds[i]));
-			refund.setEmpName(empNames[i]);
 			refund.setRefundNum(Integer.parseInt(refundNums[i]));
 			refund.setRefundDate(Date.valueOf(refundDates[i]));
 			refund.setRefundAmount(Integer.parseInt(refundAmounts[i]));
 			refund.setRefundState(refundStates[i]);
 			refund.setRemark(remarks[i]);
-			refund.setBookName(bookNames[i]);
-			refund.setClientName(clientNames[i]);
+			refund.setBookPrice(Integer.parseInt(bookPrices[i]));
 
-			logger.info("clientId : " + refund);
-			
 			refundList.add(refund);
+			logger.info("refundList : " + refundList);
 		}
 
 		for (Refund refund : refundList) {
-			if (refundService.insertRefund(refund) > 0) {
 
+			if (refundService.insertRefund(refund) > 0) {
 			} else {
-				model.addAttribute("message", "반품등록 실패! " + refund);
+				model.addAttribute("message", "반품등록 실패! ");
 				return "common/error";
 			}
 		}
@@ -276,19 +278,16 @@ public class RefundController {
 		for (Refund refund : refundList) {
 			Inventory inventory = new Inventory();
 			inventory.setBookId(refund.getBookId());
-			inventory.setBookName(refund.getBookName());
 			inventory.setClientId(refund.getClientId());
 			inventory.setRefundId(refundId);
 			inventory.setIncrease(refund.getRefundNum());
 			inventory.setInvenDate(refund.getRefundDate());
 			inventory.setRemark(refund.getRemark());
-			inventory.setClientName(refund.getClientName());
-			
 			// 이전재고, 현재고
 
 			temp.add(inventory);
-
-			if (refundService.insertRefund(refund) > 0) {
+			logger.info("temp : " + temp);
+			if (refundService.insertInventory(refund) > 0) {
 
 			} else {
 				model.addAttribute("message", "재고 등록 실패!!");
@@ -296,7 +295,40 @@ public class RefundController {
 			}
 
 		}
+
+//		return "";
 		return "redirect:refundlist.do";
-	
+
 	}
+
+	// 출고 수정
+	@RequestMapping(value = "refupdate.do", method = RequestMethod.POST)
+	public void updateRefund(Refund refund, HttpServletResponse response) throws IOException {
+		String returnStr = null;
+
+		if (refundService.updateRefund(refund) > 0) {
+			logger.info("refund 수정 성공 : " + refund);
+		} else {
+			returnStr = "fail";
+		}
+
+		if (refundService.deleteInventory(refund.getRefundId()) > 0) {
+			logger.info("refund 재고 삭제 성공 : " + refund);
+		} else {
+			returnStr = "fail";
+		}
+
+		if (refundService.insertInventory(refund) > 0) {
+			returnStr = "success";
+			logger.info("재고 등록 성공! " + refund);
+		}
+		logger.info("전부 수정 성공!!");
+		response.setContentType("text/html; charset-utf-8");
+		PrintWriter out = response.getWriter();
+		out.append(returnStr);
+		out.flush();
+		out.close();
+
+	}
+
 }

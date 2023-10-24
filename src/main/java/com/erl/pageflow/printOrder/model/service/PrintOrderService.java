@@ -28,19 +28,19 @@ public interface PrintOrderService {
 	
 	public int deletePrintOrder(int printOrder);
 	
-	public int selectPrintOrderCountByClientId(Search search);
+	public int selectPrintOrderCountByOrderId(int search);
 	
 	public int selectPrintOrderCountByPrintName(Search search);
 	
-	public int selectPrintOrderCountByBookId(Search search);
+	public int selectPrintOrderCountByBookId(int search);
 	
 	public int selectPrintOrderCountByBookName(Search search);
 	
-	public ArrayList<PrintOrder> selectPrintOrderByClientId(Search search);
+	public ArrayList<PrintOrder> selectPrintOrderByOrderId(int search);
 	
 	public ArrayList<PrintOrder> selectPrintOrderByPrintName(Search search);
 	
-	public ArrayList<PrintOrder> selectPrintOrderByBookId(Search search);
+	public ArrayList<PrintOrder> selectPrintOrderByBookId(int search);
 	
 	public ArrayList<PrintOrder> selectPrintOrderByBookName(Search search);
 }

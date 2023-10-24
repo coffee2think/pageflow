@@ -200,5 +200,19 @@ var MENU_INFO = [
                 ]
             }
         ]
+    },
+    {
+        title : '마이페이지'
+        ,link : 'movemypage.do'
+        ,branch : [
+            {
+                stitle : '마이페이지'
+                ,slink : 'movemypage.do'
+                ,sbranch : [
+                    {mtitle : '내정보 보기', mlink : 'movemypage.do'},
+                    {mtitle : '쪽지함', mlink : 'movemsgbox.do'}
+                ]
+            }
+        ]
     }
 ]

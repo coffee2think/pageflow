@@ -273,7 +273,6 @@
 		                                            <input type="hidden" name="clientId" value="${ rel.clientId }">
 													<input type="hidden" name="empId" value="${ rel.empId }">
 													<input type="hidden" name="empName" value="${ rel.empName }">
-													<input type="hidden" name="storeId" value="${ rel.storeId }">
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-250">

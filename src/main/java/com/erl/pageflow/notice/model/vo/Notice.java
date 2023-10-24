@@ -28,7 +28,7 @@ public class Notice implements java.io.Serializable{
 	private Date noticeDeleteDate;
 	private String classify;
 	private String importance;
-
+	private Date importanceDate;
 	private int noticeReadCount;
 	private String noticeOriginalFileName;
 	private String noticeRenameFileName;

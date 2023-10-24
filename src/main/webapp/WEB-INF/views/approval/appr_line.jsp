@@ -16,25 +16,12 @@
     const NOWPAGE = 6;
     const SUBPAGE = 4;
     const LNKPAGE = 1;
+    
     function inputSubmit(){
         //체크된 것만 넘기기
-    	e.preventDefault(); // Prevent the form from being submitted immediately
-
-        // Get an array of selected values
-        var checkedValues = $("input[name='check']:checked").map(function() {
-          return $(this).closest("tr").find("input").val();
-        }).get();
-
-        // Add the selected items as a hidden input to the form
-        var selectedItemsInput = $("<input>")
-          .attr("type", "hidden")
-          .attr("name", "selectedItems")
-          .val(selectedItems.join(','));
-
-        console.log('selectedItemsInput : ' + selectedItemsInput);
-
-        $('.input-form').append(selectedItemsInput);
-
+    	e.preventDefault();
+        
+        
         $('.input-form').submit();
     }
 </script>
@@ -53,7 +40,6 @@
             <!--header-container end-->
         </header>
         <!--헤더 end-->
-
         <main class="main-wrapper">
             
             <!--main-side-->
@@ -71,7 +57,7 @@
 
                 <!--!!!form!!!-->
                 <form class="input-form" action="alinsert.do" method="post" onsubmit="inputSubmit();">
-
+                    <input type="hidden" name="myEmpId" value="${ empId }">
                     <!--main-header-bar-->
                     <div class="main-header-bar">
                         <div class="main-title-box">
@@ -267,7 +253,7 @@
                                             </td>
                                             <td>
                                                 <div class="contents-input-div">
-                                                    <input type="input" name="order" class="contents-input" value="1">
+                                                    <input type="input" name="order" class="contents-input" value="1" readonly>
                                                 </div>
                                             </td>
                                         </tr>
@@ -326,7 +312,8 @@
                     <!--내용 end-->
 
                     <div class="submit-box">
-                        <input type="submit" class="contents-input-btn big2 noline" id="btn_save" value="나의결재라인 추가">
+                        <input type="submit" class="contents-input-btn big2 noline" id="btn_line_save" value="나의결재라인 추가">
+                        <input type="button" class="contents-input-btn big2 noline notclicked" id="btn_line_save_not" value="나의결재라인 추가">
                     </div>
 
                 </form>
