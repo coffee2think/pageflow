@@ -178,7 +178,7 @@
                                                 </td>
                                                 
                                                 <td class="td-100">
-                                                    <c:if test="${ empId == appr.drafter }">
+                                                    <c:if test="${ empId == appr.drafter and appr.apprState ne 'complete' }">
                                                         <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ appr.apprId }" onclick="onUpdate(${ appr.apprId }); return false;">
                                                         <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ appr.apprId }" onclick="submitUpdate(${ appr.apprId }, 'apupdate.do?apType='+appr_param); return false;" style="display: none;">
                                                         <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ appr.apprId }" onclick="cancelUpdate(${ appr.apprId }); return false;" style="display: none;">

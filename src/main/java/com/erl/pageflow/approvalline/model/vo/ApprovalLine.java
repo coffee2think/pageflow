@@ -15,6 +15,8 @@ public class ApprovalLine implements Serializable{
 	private String stampCheck;
 	private Date stampDate;
 	
+	public ApprovalLine() {}
+	
 	public ApprovalLine(int lineId, int lineDepth, int empId, int approverId, String approverName, String posName,
 			String stampCheck, Date stampDate) {
 		super();
