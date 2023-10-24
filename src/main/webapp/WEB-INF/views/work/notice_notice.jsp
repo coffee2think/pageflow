@@ -152,21 +152,24 @@
 							</div>
 							<div class="contents-notice-buttonbox">
 								<div class="button-box">
-									<a class="button-a button-list" style="width: 100px; height: 30px;" href="nlist.do?page=${ page }">
+									<c:url var="nlistUrl" value="nlist.do">
+										<c:if test="${ !empty page }">
+											<c:param name="page" value="${ page }" />
+										</c:if>
+									</c:url>
+									<a class="button-a button-list" style="width: 100px; height: 30px;" href="${ nlistUrl }">
 										목록으로
 									</a>
 									<c:if test="${ loginMember.empId == notice.empId }">
-										<a class="button-a button-update" href="nmoveup.do?noticeId=${ notice.noticeId }">수정</a>
+										<a class="button-a button-update">수정</a>
 									</c:if>
 									<c:if test="${ loginMember.empId == notice.empId || loginMember.adminYN == 'Y' }">
-										<a class="button-a button-delete" href="">삭제</a>
+										<a class="button-a button-delete">삭제</a>
 									</c:if>
 								</div>
 							</div>
 						</div>
 						<!--contents-notice end-->
-
-						
 
 					</div>
 				</div>

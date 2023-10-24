@@ -1,6 +1,7 @@
 package com.erl.pageflow.notice.controller;
 
 import java.io.File;
+import java.sql.Date;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
-import com.erl.pageflow.employee.model.vo.Employee;
 import com.erl.pageflow.notice.model.service.NoticeService;
 import com.erl.pageflow.notice.model.vo.Notice;
 
@@ -58,20 +58,14 @@ public class NoticeController {
 	// 공지사항 전체 목록보기 요청 처리용
 	@RequestMapping("nlist.do")
 	public String noticeListMethod(Notice notice,
-			@RequestParam(name = "page", required = false) String page,
-			@RequestParam(name = "limit", required = false) String slimit, Model model) {
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String slimit, Model model) {
 		
+		// 페이징
 		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
-
-		// 한 페이지 공지 10개씩 출력되게 한다면
-		int limit = 10;
-		if (slimit != null) {
-			limit = Integer.parseInt(slimit);
-		}
-
-		// 총 페이지 수 계산을 위한 공지글 총갯수 조회
+		int limit = (slimit != null) ? Integer.parseInt(slimit) : 10;
 		int listCount = noticeService.selectListCount();
-		// 페이지 관련 항목 계산 처리
+		
 		Paging paging = new Paging(listCount, currentPage, limit, "nlist.do");
 		paging.calculator();
 
@@ -81,28 +75,37 @@ public class NoticeController {
 
 		if (list != null && list.size() > 0) {
 			model.addAttribute("list", list);
-			model.addAttribute("paging", paging);
-			model.addAttribute("currentPage", currentPage);
-			model.addAttribute("limit", limit);
-
-			return "work/notice_list";
-		} else {
-			model.addAttribute("message", currentPage + "페이지 목록 조회 실패!");
-			return "common/error";
 		}
+		
+		model.addAttribute("paging", paging);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("limit", limit);
+		
+		return "work/notice_list";
 	}
 
 	// 공지 글 등록 (첨부파일 첨부)
-	@RequestMapping(value = "noinsert.do", method = RequestMethod.POST)
+	@RequestMapping(value="noinsert.do", method=RequestMethod.POST)
 	public String noticeInsertMethod(Notice notice, Model model, HttpServletRequest request,
 			@RequestParam(name = "nofile", required = false) MultipartFile mfile) {
 
-		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
-		logger.info("mfile : " + mfile);
-
+		logger.info("noinsert.do : mfile - " + mfile);
+		
+//		Notice notice = new Notice();
+//		notice.setNoticeTitle(request.getParameter("noticeTitle"));
+//		notice.setNoticeDetail(request.getParameter("noticeDetail"));
+//		notice.setClassify(request.getParameter("classify"));
+//		
+//		String importance = request.getParameter("importance");
+//		if(importance != null) {
+//			notice.setImportance(importance);
+//			notice.setImportanceDate(Date.valueOf(request.getParameter("importanceDate")));
+//		}
+		
 		// 첨부파일이 있을때
-		if (!mfile.isEmpty()) {
+		if (mfile != null && !mfile.isEmpty()) {
 			// 전송온 파일이름 추출함
+			String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
 			String fileName = mfile.getOriginalFilename();
 			String renameFileName = null;
 
@@ -116,13 +119,13 @@ public class NoticeController {
 				try {
 					// 저장폴더에 파일명 바꾸기 처리
 					mfile.transferTo(new File(savePath + "\\" + renameFileName));
-
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "파일명 바꾸기 또는 첨부파일 저장 실패");
 					return "common/error";
 				}
 			}
+			
 			notice.setNoticeOriginalFileName(fileName);
 			notice.setNoticeRenameFileName(renameFileName);
 		}
@@ -133,17 +136,17 @@ public class NoticeController {
 			model.addAttribute("message", "새 게시글 등록 실패!");
 			return "common/error";
 		}
-
 	}
 
 	// 첨부파일 다운로드 요청 처리용
-
 	@RequestMapping("nfdown.do")
 	public ModelAndView fileDownMethod(ModelAndView mv, HttpServletRequest request,
-			@RequestParam("ofile") String originalFileName, @RequestParam("rfile") String renameFileName) {
+			@RequestParam("ofile") String originalFileName,
+			@RequestParam("rfile") String renameFileName) {
 		// 파일 다운 메소드는 리턴 타입이 ModelAndView 로 정해져 있음
 
-		logger.info(renameFileName);
+		logger.info("nfdown.do : originalFileName - " + originalFileName);
+		logger.info("nfdown.do : renameFileName - " + renameFileName);
 
 		// 공지사항 첨부파일 저장 폴더 경로 지정
 		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
@@ -155,8 +158,8 @@ public class NoticeController {
 
 		// 파일 다운로드용 뷰로 전달할 정보 저장 처리
 		mv.setViewName("filedown"); // 등록된 파일다운로드용 뷰클래스의 id명
-		mv.addObject("renameFileName", renameFileName);
-		mv.addObject("originalFilName", originFile);
+		mv.addObject("originFile", originFile);
+		mv.addObject("renameFile", renameFile);
 
 		return mv;
 	}
@@ -173,7 +176,7 @@ public class NoticeController {
 
 		if (notice != null) {
 			mv.addObject("notice", notice);
-			mv.setViewName("work/notice_detail");
+			mv.setViewName("work/notice_notice");
 		} else {
 			mv.addObject("message", noticeId + "번 공지글 상세보기 조회 실패!");
 			mv.setViewName("common/error");
@@ -196,8 +199,8 @@ public class NoticeController {
 		// 첨부파일이 변경된 경우의 처리 --------------------------------------------------------
 		// 1. 원래 첨부파일이 있는데 '파일삭제'를 선택한 경우
 		// 또는 원래 첨부파일이 있는데 새로운 첨부파일이 업로드된 경우
-		if (notice.getNoticeOriginalFileName() != null && (delFlag != null && delFlag.equals("Y"))
-				|| (mfile != null && !mfile.isEmpty())) {
+		if (notice.getNoticeOriginalFileName() != null
+				&& ((delFlag != null && delFlag.equals("Y")) || (mfile != null && !mfile.isEmpty()))) {
 			// 저장 폴더에서 파일 삭제함
 
 			new File(savePath + "\\" + notice.getNoticeRenameFileName()).delete();

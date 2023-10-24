@@ -24,7 +24,8 @@
 		$('#btn_insert').click(function() {
 			$('#appendTextArea').val($('.content-input').text());
 
-			if($('#importance').val() == 'Y') {
+			// 필독을 체크 시 유효성 검사
+			if($('#importance').prop('checked') == true) {
 				var today = new Date();
 				var year = today.getFullYear();
 				var month = today.getMonth() + 1;
@@ -36,9 +37,9 @@
 					alert('필독기간을 확인해주세요.');
 					return false;
 				}
-			} else {
-				$('#importance_date').val() = '';
 			}
+
+			return true;
 		});
 	});
 	

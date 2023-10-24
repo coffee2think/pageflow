@@ -45,7 +45,7 @@
 	
 	<insert id="insertNotice" parameterType="Notice">
 		insert into notice 
-		values ((select max(NOTICE_ID) + 1 from notice), 
+		values ((select nvl(max(NOTICE_ID),0) + 1 from notice), 
 				#{empId}, #{noticeTitle}, #{noticeDetail}, 
 				sysdate, default, default , #{classify},
 		
@@ -76,8 +76,8 @@
 	
 	<update id="updateReadCount" parameterType="_int">
 		update notice
-		set NOTICE_READCOUNT = NOTICE_READCOUNT +1
-		where NOTICE_ID = #{noticeId}
+		set NOTICE_READCOUNT = NOTICE_READCOUNT + 1
+		where NOTICE_ID = #{ noticeId }
 	</update>
 	
 	<delete id="deleteNotice" parameterType="_int">

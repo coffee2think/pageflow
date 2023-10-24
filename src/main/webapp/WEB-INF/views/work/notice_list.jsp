@@ -117,7 +117,11 @@
 										<c:forEach items="${ importantList }">
 											<tr>
 												<td>!필독!</td>
-												<td>[${ notice.refDepName }]</td>
+												<td>
+													<c:if test="${ !empty notice.classify and classify == 'all' }">
+														[${ notice.refDepName }]
+													</c:if>
+												</td>
 												<td>
 													<c:url var="detailUrl" value="ndetail.do">
 														<c:param name="noticeId" value="${ notice.noticeId }" />

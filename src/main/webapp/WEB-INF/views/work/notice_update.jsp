@@ -115,12 +115,12 @@
                                                     <img class="down-img" src="${ pageContext.servletContext.contextPath }/resources/images/down.png">
                                                 </a>
                                             </div>
+                                            <div>
+												<input class="margin-left20px" type="checkbox" name="deleteFlag" value="Y"> 파일삭제
+											</div>
                                             <div class="select-pan margin-left20px">
                                                 <input type="file" name="upfile" class="select-file">
                                             </div>
-											<div>
-												<input type="checkbox" name="deleteFlag" value="Y">
-											</div>
                                         </c:when> 
                                         
                                         <c:otherwise>
