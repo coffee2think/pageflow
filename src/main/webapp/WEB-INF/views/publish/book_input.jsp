@@ -16,15 +16,6 @@
     
     let curinput;
 
-    document.addEventListener("DOMContentLoaded", function(){
-    	$('.input-search-btn').on('click', function() {
-    		var type = $(this).attr('class').split(' ')[1];
-    		popup.showPopup(type);
-    		curinput = $(this).parent('.input-search').find('input[type=input]');
-    		return false;
-    	})
-    }); 
-    
     function addRow(currentIndex) {
     	if($('#bkinsert_table').find('tr').length >= 10) {
     		return;
@@ -75,7 +66,7 @@
 						+ '<button class="input-search-btn">'
 						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 						+ ' </button>'
-						+ '<input type="input" name="writerId" class="contents-input" value="">'
+						+ '<input type="input" name="writerName" class="contents-input" value="">'
 						+ '</div>';
 
 		newCell5.innerHTML = '<div class="contents-input-div">'
@@ -180,7 +171,7 @@
                                         <th></th>
                                         <th>도서명</th>
                                         <th>카테고리</th>
-                                        <th>작가번호</th>
+                                        <th>작가명</th>
                                         <th>국제표준도서번호</th>
                                         <th>정가</th>
                                         <th>판쇄</th>
@@ -213,7 +204,7 @@
                                             	 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
-                                                <input type="input" name="writerId" class="contents-input" value="">
+                                                <input type="input" name="writerName" class="contents-input" value="">
                                             </div>
                                         </td>
                                         <td class="td-70">

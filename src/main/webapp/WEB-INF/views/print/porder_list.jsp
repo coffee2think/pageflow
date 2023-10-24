@@ -16,35 +16,16 @@
     const NOWPAGE = 2;
     const SUBPAGE = 1;
     const LNKPAGE = 1;
-
- /* // 수량 변경 시 총액 계산
-    $(function() {
-    	$('#table_list').find('input[name=quantity]').each(function() {
-    		$(this).change(function() { 
-    			var tr = $(this).parent().parent().parent();
-    			var bookPrice = tr.find('input[name=bookPrice]').val();
-    			var quantity = $(this).val();
-    			var totalPrice = tr.find('input[name=amount]');
-    			amount.val(bookPrice * quantity);
-    		});
-    	});
-    }); */
     
- 
+	$(function(){
+		calculateAmount();
+	});
+    
+	$(function(){
+		deleteConfirm();
+	});
 </script>
 
-
-<script>
-	//수량/단가 변경시 총액 자동계산
-    function calculateAmount() {
-      var quantity = document.getElementsByName('quantity')[0].value;
-      var price = document.getElementsByName('price')[0].value;
-      var amount = quantity * price;
-      if (!isNaN(amount)) {
-        document.getElementsByName('amount')[0].value = amount;
-      }
-    }
- </script>
 
 <script type="text/javascript">
 
@@ -64,22 +45,55 @@
 		});
 	}); */
 
+	// 삭제 확인 창 띄우기
+	function deleteConfirm(orderId) {
+	    if (confirm("정말 삭제하시겠습니까?")) {
+	        // AJAX를 이용한 삭제 작업 수행
+	        $.ajax({
+	            type: "POST",
+	            url: "podelete.do",
+	            data: { orderId: orderId },
+	            success: function(data) {
+	                // 성공 시 처리할 내용
+	                alert("삭제되었습니다.");
+	                // 페이지 새로고침 또는 필요한 동작 수행
+	            },
+	            error: function() {
+	                // 오류 발생 시 처리할 내용
+	                alert("삭제 실패. 다시 시도해주세요.");
+	            }
+	        });
+	    }
 </script>
 <title></title>
 <script type="text/javascript">
 	
-	/* //날짜 검색 버튼
-	function searchByDate() {
-    	var begin = $('#begin').val();
-    	var end = $('#end').val();
+	// 시작날짜 검색 버튼
+	function searchByDate(dateType) {
+    	var begin = $('#begin_' + dateType).val();
+    	var end = $('#end_' + dateType).val();
     	
     	var url = 'polistdate.do?';
     	url += 'begin=' + begin;
     	url += '&end=' + end;
+    	url += '&dateType=' + dateType
     	
     	location.href = url;
-    } */
+    }
 
+	// 마감날짜 검색 버튼
+	function searchByDate(dateType) {
+    	var begin = $('#begin_' + dateType).val();
+    	var end = $('#end_' + dateType).val();
+    	
+    	var url = 'polistdate.do?';
+    	url += 'begin=' + begin;
+    	url += '&end=' + end;
+    	url += '&dateType=' + dateType
+    	
+    	location.href = url;
+    }
+	
 </script>
 
 </head>
@@ -134,10 +148,10 @@
 									<div class="select-pan">
 										<label for="sel_code"></label> 
 										<select name="searchType" id="search_type">
-											<option value="orderId">발주코드</option>
-											<option value="printName">인쇄소명</option>
-											<option value="bookId">도서코드</option>
-											<option value="bookName">도서명</option>
+											<option value="orderId" <c:if test="${ searchType == 'orderId' }">seleted</c:if>>발주코드</option>
+											<option value="printName" <c:if test="${ searchType == 'printName' }">seleted</c:if>>인쇄소명</option>
+											<option value="bookId" <c:if test="${ searchType == 'bookId' }">seleted</c:if>>도서코드</option>
+											<option value="bookName" <c:if test="${ searchType == 'bookName' }">seleted</c:if>>도서명</option>
 										</select>
 									</div>
 								</div>
@@ -189,11 +203,13 @@
 								<c:url var="searchWeekUrl" value="polistdate.do">
 									<c:param name="begin" value="${ weekago }" />
 									<c:param name="end" value="${ today }" />
+									<c:param name="dateType" value="startDate" />
 								</c:url>
 
 								<c:url var="searchMonthUrl" value="polistdate.do">
 									<c:param name="begin" value="${ monthago }" />
 									<c:param name="end" value="${ today }" />
+									<c:param name="dateType" value="startDate" />
 								</c:url>
 
 								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
@@ -222,11 +238,13 @@
 								<c:url var="searchWeekUrl" value="polistdate.do">
 									<c:param name="begin" value="${ weekago }" />
 									<c:param name="end" value="${ today }" />
+									<c:param name="dateType" value="startDate" />
 								</c:url>
 
 								<c:url var="searchMonthUrl" value="polistdate.do">
 									<c:param name="begin" value="${ monthago }" />
 									<c:param name="end" value="${ today }" />
+									<c:param name="dateType" value="startDate" />
 								</c:url>
 
 								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
@@ -255,11 +273,13 @@
 								<c:url var="searchWeekUrl" value="polistdate.do">
 									<c:param name="begin" value="${ weekago }" />
 									<c:param name="end" value="${ today }" />
+									<c:param name="dateType" value="startDate" />
 								</c:url>
 
 								<c:url var="searchMonthUrl" value="polistdate.do">
 									<c:param name="begin" value="${ monthago }" />
 									<c:param name="end" value="${ today }" />
+									<c:param name="dateType" value="startDate" />
 								</c:url>
 
 								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
@@ -357,12 +377,14 @@
 											</td>
 											<td class="td-60">
 												<div class="contents-input-div">
-													<input type="text" name="quantity" class="contents-input noline changeable" oninput="calculateAmount()" value="${ printOrder.quantity }" readonly>
+													<input type="text" name="quantity" class="contents-input noline changeable" 
+													oninput="calculateAmount()" value="${ printOrder.quantity }" readonly>
 												</div>
 											</td>
 											<td class="td-50">
 												<div class="contents-input-div">
-													<input type="text" name="price" class="contents-input noline changeable" oninput="calculateAmount()" value="${ printOrder.price }" readonly>
+													<input type="text" name="price" class="contents-input noline changeable" 
+													oninput="calculateAmount()" value="${ printOrder.price }" readonly>
 												</div>
 											</td>
 											<td class="td-80">
@@ -393,7 +415,7 @@
 
 
 				<div class="submit-box">
-                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('bodelete.do'); return false;">
+                    <input type="button" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('podelete.do'); return false;">
                 </div>
 
 			</div>

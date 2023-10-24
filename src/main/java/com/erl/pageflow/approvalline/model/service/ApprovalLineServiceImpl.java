@@ -34,8 +34,8 @@ public class ApprovalLineServiceImpl implements ApprovalLineService{
 	}
 
 	@Override
-	public int deleteApprovalLine(ApprovalLine approvalLine) {
-		return 0;
+	public int deleteApprovalLine(int savelineId) {
+		return approvalLineDao.deleteApprovalLine(savelineId);
 	}
 
 	@Override

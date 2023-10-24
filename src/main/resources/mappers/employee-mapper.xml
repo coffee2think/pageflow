@@ -104,9 +104,16 @@
 		set phone = #{ PHONE }, email= #{EMAIL}, address = #{ ADDRESS }, JOB_ID = #{ jobId }, 
 			POS_ID = #{ posId }, DEP_ID = {depId }
 		where EMP_ID = #{ empId }
-  </update>
+  	</update>
 
 	<update id="myUpdateInfo" parameterType="Employee">
+		update employee
+		set phone = #{ phone },
+			address = #{ address }
+		where emp_id = #{ empId }
+	</update>
+	
+  	<update id="myUpdateInfo2" parameterType="Employee">
 		update employee
 		set emp_pwd = #{ empPwd }, emp_pwd_update = sysdate, phone = #{ phone },
 			address = #{ address }

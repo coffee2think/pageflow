@@ -82,4 +82,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public int myUpdateInfo(Employee employee) {
 		return employeeDao.myUpdateInfo(employee);
 	}
+	
+	@Override
+	public int myUpdateInfo2(Employee employee) {
+		return employeeDao.myUpdateInfo2(employee);
+	}
 }

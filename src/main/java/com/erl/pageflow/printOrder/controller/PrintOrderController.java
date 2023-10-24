@@ -332,10 +332,9 @@ public class PrintOrderController {
 					model.addAttribute("message", orderId + "번 발주 정보 삭제 실패!");
 					return "common/error";
 				}
-		
 			}
 		}
 
-		return "redirect:podelete.do";
+		return "redirect:polist.do";
 	}
 }
