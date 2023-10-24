@@ -170,10 +170,9 @@
 		where order_id = #{ orderId }
 	</update>
 	
-	<select id ="selectPrintOrderCountByClientId" parameterType="Search" resultType="_int">
+	<select id ="selectPrintOrderCountByOrderId" parameterType="_int" resultType="_int">
 		select count(*) from print_order
-		join client using (client_id)
-		where client_id like '%' || ${ keyword } || '%'     
+		where order_id = #{ orderId }
 	</select>
 	
 	<select id="selectPrintOrderCountByPrintName" parameterType="Search" resultType="_int">
@@ -182,10 +181,10 @@
 		where client_name like '%' || ${ keyword } || '%'
 	</select>
 	
-	<select id="selectPrintOrderCountByBookId" parameterType="Search" resultType="_int">
+	<select id="selectPrintOrderCountByBookId" parameterType="_int" resultType="_int">
 		select count(*) from print_order
 		join book using (book_id)
-		where book_id like '%' || ${ keyword } || '%'
+		where book_id = #{ bookId }
 	</select>
 	
 	<select id="selectPrintOrderCountByBookName" parameterType="Search" resultType="_int">
@@ -194,48 +193,48 @@
 		where book_name like '%' || ${ keyword } || '%'
 	</select>
 	
-	<select id="selectPrintOrderByClientId" parameterType="Search" resultMap="resultPrintOrder">
+	<select id="selectPrintOrderByOrderId" parameterType="Search" resultMap="resultPrintOrder">
 		select *
-		from (select rowrum rnum, sub.*
+		from (select rownum rnum, sub.*
 			  from (select * from print_order
 			  		join client using(client_id)
 			  		join book using(book_id)
-			  		where client_id like '%' || ${ keyword } || '%'
+			  		where order_id = to_number( #{ keyword } )
 			  		order by order_id desc, order_date desc ) sub)
-		where reum between #{ startRow } and #{ endRow }
+		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
 	<select id="selectPrintOrderByPrintName" parameterType="Search" resultMap="resultPrintOrder">
 		select *
-		from (select rowrum rnum, sub.*
+		from (select rownum rnum, sub.*
 			  from (select * from print_order
 			  		join client using (client_id) 
 			  		join book using(book_id)
 			  		where client_name like '%' || ${ keyword } || '%'
 			  		order by order_id desc, order_date desc ) sub)
-  		where reum between #{ startRow } and #{ endRow }
+  		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
 	<select id="selectPrintOrderByBookId" parameterType="Search" resultMap="resultPrintOrder">
 		select *
-		from (select rowrum rnum, sub.*
+		from (select rownum rnum, sub.*
 			  from (select * from print_order
 			  		join client using (client_id) 
 			  		join book using(book_id)
-			  		where book_id like '%' || ${ keyword } || '%'
+			  		where book_id = to_number( #{ keyword } )
 			  		order by order_id desc, order_date desc ) sub)
-  		where reum between #{ startRow } and #{ endRow }
+  		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
 	<select id="selectPrintOrderByBookName" parameterType="Search" resultMap="resultPrintOrder">
 		select *
-		from (select rowrum rnum, sub.*
+		from (select rownum rnum, sub.*
 			  from (select * from print_order
 			  		join client using (client_id) 
 			  		join book using(book_id)
 			  		where book_name like '%' || ${ keyword } || '%'
 			  		order by order_id desc, order_date desc ) sub)
-  		where reum between #{ startRow } and #{ endRow }
+  		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
 </mapper>

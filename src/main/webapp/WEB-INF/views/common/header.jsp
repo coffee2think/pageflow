@@ -31,6 +31,10 @@
             console.log('empId : ' + empId);
             $('#headerBtn_'+MENU_INFO.length).attr('href', 'aplist.do?apType=my&empId='+empId);
         }
+
+        if(NOWPAGE == 7) {
+
+        }
     });
 
     function Header(){
@@ -42,15 +46,17 @@
             
             var el = ``;
             for(var i=0; i<MENU_INFO.length; i++){
-                el += `
-                <div class="header-table-div" id="headerTable_`+(i+1)+`">
-                    <a class="header-btn" id="headerBtn_`+(i+1)+`" href="`+MENU_INFO[i].link+`">`
-                    +MENU_INFO[i].title+
-                    `</a>
-                </div>`;
-
                 if(i != MENU_INFO.length-1) {
-                    el += `<span class="header-sep" id="header_sep_`+(i+1)+`"></span>`;
+                    el += `
+                    <div class="header-table-div" id="headerTable_`+(i+1)+`">
+                        <a class="header-btn" id="headerBtn_`+(i+1)+`" href="`+MENU_INFO[i].link+`">`
+                        +MENU_INFO[i].title+
+                        `</a>
+                    </div>`;
+
+                    if(i != MENU_INFO.length-2) {
+                        el += `<span class="header-sep" id="header_sep_`+(i+1)+`"></span>`;
+                    }
                 }
             }
             console.log('===NOWPAGE : ' + NOWPAGE);
@@ -89,7 +95,7 @@
     <c:if test="${ !empty sessionScope.loginMember }">
     	${ loginMember.empName }님
     	<a href="logout.do">로그아웃</a>
-    	<a href="#">마이페이지</a>
+    	<a href="movemypage.do">마이페이지</a>
     </c:if>
    
     </div>

@@ -64,5 +64,7 @@ public class EmployeeDao {
 		return sqlSessionTemplate.selectOne("employeeMapper.selectSearchEmpCount", keyword);
 	}
 	
-	
+	public int myUpdateInfo(Employee employee) {
+		return sqlSessionTemplate.selectOne("employeeMapper.myUpdateInfo", employee);
+	}
 }

@@ -1,8 +1,82 @@
 //결재라인 
 $(function(){
-    
+    checkInput();
+    buttonEvent();
 })
 
+function buttonEvent(){
+    $('#btn_line_save').on('click', function(){
+        return;
+        var jarr = [];
+        
+        var count = 0;
+
+        // 선택된 체크박스를 찾아 데이터에 추가합니다.
+        $("input[name='check']:checked").each(function() {
+            
+            var json = {};
+            var tr = $(this).parent().parent().parent();
+            console.log('!!!!!!!!!!!!')
+
+            tr.find('input').each(function() {
+                json[$(this).attr('name')] = $(this).val();
+
+                console.log('$(this).val() : ' + $(this).val());
+            });
+            jarr[count] = json;
+        });
+
+        console.log('jarr : ' + jarr);
+        
+        // 폼을 서버로 제출합니다.
+        $.ajax({
+            url: 'alinsert.do',
+            method: 'POST',
+            data: {
+                val_arr : jarr
+            },
+            contentType: 'application/json; charset=utf-8',
+            success: function(response) {
+                // 서버 응답 처리
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+            }
+        });
+        
+    })
+}
+
+function checkInput(){
+    $("input[name='check']").each(function() {
+
+        $(this).off('click');
+
+        $(this).on('click', function(){
+            let checkboxValue = $(this).val();
+            console.log('checkboxValue : ' + checkboxValue);
+
+            let count = 0;
+
+            $("input[name='check']:checked").each(function() {
+                count ++;
+            })
+            
+            console.log('count : ' + count);
+
+            if(count > 0) {
+                $('#btn_line_save').show();
+                $('#btn_line_save_not').hide();
+                
+            }else{
+                $('#btn_line_save').hide();
+                $('#btn_line_save_not').show();
+            }
+        })
+
+    });
+
+}
 
 //체크 버튼 4개만 클릭 가능하게
 function checkBtnEvent(){
@@ -75,6 +149,7 @@ function makePlusSaveLine(){
     $('.my-line-body').append(el);
     checkBtnEvent();
     initPopupBtn();
+    checkInput();
 }
 
 //나의 결재라인 추가

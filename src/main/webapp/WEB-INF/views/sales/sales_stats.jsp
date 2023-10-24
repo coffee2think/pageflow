@@ -9,12 +9,12 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script src="${ pageContext.servletContext.contextPath }/resources/js/lib/chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const NOWPAGE = 5;
     const SUBPAGE = 4;
     const LNKPAGE = 1;
-
+    
     var monthly_sum = Array.from({length: 12}, () => 0);
 
     $(function() {
@@ -52,7 +52,7 @@
         makeChart();
 
         // 매출년도 콤보박스 변경 시 요청 전송
-        $('sel_year').change(function() {
+        $('#sel_year').change(function() {
             location.href = 'statslist.do?year=' + $('#sel_year').val();
         });
     }); // document ready
@@ -102,11 +102,6 @@
     	$('#table_list').show();
     	$('#btn_chart').show();
     	$('#btn_table').hide();
-    }
-
-    function searchStatsByDate() {
-        var year = $('#sel_code');
-        
     }
 </script>
 <title></title>
@@ -180,9 +175,10 @@
                                 <div class="select-pan">
                                     <label for="sel_code"></label>
                                     <select name="year" id="sel_year">
-                                        <option value="">매출년도</option>
+                                        <c:set var="thisYear" value="" />
+                                        <option value="${ years }">매출년도</option>
                                         <c:forEach items="${ years }" var="y">
-	                                        <option value="${ y }">${ y }년</option>
+	                                        <option value="${ y }" <c:if test="${ y == year }">selected</c:if>>${ y }년</option>
                                         </c:forEach>
                                     </select>
                                 </div>
@@ -389,12 +385,7 @@
                             <!-- 차트 그리기 영역 -->
                             <div class="mainbox-tablebox graph width-65vw" id="chart">
                                 <canvas id="myChart" width="300" height="200">
-                                
                                 </canvas>
-                                <script>
-                                    var make_graph = new Make_graph();
-                                    make_graph.init('graph', 'myGraph');
-                                </script>
                             </div>
                             <!-- 차트 그리기 영역 end -->
 

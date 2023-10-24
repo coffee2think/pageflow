@@ -64,7 +64,11 @@
 	</insert>  
 
 	<select id="selectEmployee" parameterType="_int" resultMap="resultEmployee">
-		select * from employee where emp_id = #{ empId } 
+		select * from employee 
+		left join job using(JOB_ID)
+  		left join position using(POS_ID)
+  		left join department using(DEP_ID)	
+		where emp_id = #{ empId }
 	</select>
 	
 	<select id="selectEmployeeApproval" parameterType="_int" resultMap="resultEmployeeJoin">
@@ -90,7 +94,7 @@
 	<select id="selectListCount" resultType="_int">
 		select count(*) from employee 
 	</select>
-	
+
 	<select id="selectCheckId" parameterType="_int" resultType="_int">
 		select count(EMP_ID) from employee where EMP_ID = #{ eid }
 	</select> 
@@ -100,6 +104,13 @@
 		set phone = #{ PHONE }, email= #{EMAIL}, address = #{ ADDRESS }, JOB_ID = #{ jobId }, 
 			POS_ID = #{ posId }, DEP_ID = {depId }
 		where EMP_ID = #{ empId }
+  </update>
+
+	<update id="myUpdateInfo" parameterType="Employee">
+		update employee
+		set emp_pwd = #{ empPwd }, emp_pwd_update = sysdate, phone = #{ phone },
+			address = #{ address }
+		where emp_id = #{ empId }
 	</update>
 	
 	<select id="selectSearchDeptCount" parameterType="string"  resultType="_int">

@@ -568,3 +568,17 @@ from (select rownum rnum, sub.*
 left join department using(dep_id)
 left join job using(JOB_ID)
 left join position using(pos_id);
+
+
+
+delete from upload_board
+where board_id = 1;
+
+delete from reply
+where board_id = 1;
+
+delete from board 
+where board_id = 1;
+
+commit;
+delete

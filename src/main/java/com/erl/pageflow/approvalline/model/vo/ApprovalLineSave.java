@@ -13,6 +13,8 @@ public class ApprovalLineSave implements Serializable{
 	private String posName;
 	private String lineName;
 	
+	private String depName;
+	
 	public ApprovalLineSave() {};
 	
 	public ApprovalLineSave(int savelineId, int lineDepth, int empId, int approverId, 
@@ -81,6 +83,14 @@ public class ApprovalLineSave implements Serializable{
 
 	public void setLineName(String lineName) {
 		this.lineName = lineName;
+	}
+	
+	public String getDepName() {
+		return depName;
+	}
+
+	public void setDepName(String depName) {
+		this.depName = depName;
 	}
 
 	@Override

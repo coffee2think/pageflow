@@ -99,6 +99,15 @@
 		<result property="salesMonth12" column="M12" />
 	</resultMap>
 	
+	<resultMap type="Rank" id="resultRank">
+		<result property="rank" column="RANK" />
+		<result property="bookName" column="BOOK_NAME" />
+		<result property="writer" column="WRITER" />
+		<result property="isbn" column="ISBN" />
+		<result property="category" column="CATEGORY" />
+		<result property="bookType" column="BOOK_TYPE" />
+	</resultMap>
+	
 	<select id="selectBookOrderCountByDate" parameterType="Search" resultType="_int">
 		select count(*) from book_order
 		where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
@@ -347,6 +356,11 @@
 		where collect_date is not null
 		group by to_char(collect_date, 'YYYY')
 		order by to_char(collect_date, 'YYYY') desc
+	</select>
+	
+	<select id="selectRank" resultMap="resultRank">
+		select * from rank
+		order by rank asc
 	</select>
 
 </mapper>

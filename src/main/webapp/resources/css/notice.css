@@ -286,6 +286,8 @@
     padding: 15px;
     border: 1px solid #e2e2e2;
     height: 427px;
+    width: calc(100% - 30px);
+    resize: none;
     overflow-x: hidden;
     overflow-y: auto;
 }

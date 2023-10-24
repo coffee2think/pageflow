@@ -18,6 +18,7 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/inventory_update.js"></script>
 <script>
     const NOWPAGE = 4;
     const SUBPAGE = 4;
@@ -97,6 +98,25 @@
 	        
 	    	location.href = url;
 	    }
+	
+
+	$(function(){
+		$('#table_list').find('input[name=refundNum]').each(function(){
+			$(this).change(function(){
+				var tr = $(this).parent().parent().parent();
+				var bookPrice = tr.find('input[name=bookPrice]').val();
+				var refundNum = tr.find('input[name=refundNum]').val();
+				var refundAmount = bookPrice * refundNum;
+				/* tr.find('input[name=storePrice]').addClass,('.changeable'); */
+				tr.find('input[name=refundAmount]').val(refundAmount);
+
+				console.log("bookPrice : " + bookPrice);
+				console.log("refundNum : " + refundNum);
+				console.log("refundAmount : " + refundAmount);
+				
+			});
+		});
+	});
 	
 </script>
 
@@ -231,7 +251,7 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <table class="contents-table">
+                            <table class="contents-table" id="table_list">
                                 <tr>
                                     <th>체크</th>
                                     <th>도서코드</th>
@@ -247,63 +267,70 @@
                                 </tr>
                                 <c:set var="totalRefundNum" value="0"/>
                                 <c:set var="totalRefundPrice" value="0"/>
-                    			<c:forEach var = "ref" items="${ refundList }">
-	                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-	                                    <td class="td-50">
-	                                         <input type="checkbox" class="selectedItems" name="selectedItems" value="${ ref.refundId }">
-	                                    </td>
-	                                    <td class="td-100">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="bookId" class="contents-input noline" value="${ ref.bookId }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-250">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="bookName" class="contents-input noline" value="${ ref.bookName }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-100">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="clientName" class="contents-input noline" value="${ ref.clientName }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-120">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="refundState" class="contents-input noline" value="${ ref.refundState }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-70">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="refundDate" class="contents-input noline" value="${ ref.refundDate }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-100">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ ref.bookPrice }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-70">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="refundNum" class="contents-input noline" value="${ ref.refundNum }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-120">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="refundAmount" class="contents-input noline" value="${ ref.refundAmount }">
-	                                        </div>
-	                                    </td>
-	                                       <td class="td-120">
-	                                        <div class="contents-input-div">
-	                                            <input type="input" name="remark" class="contents-input noline" value="${ ref.remark }">
-	                                        </div>
-	                                    </td>
-	                                    <td class="td-70">
-	                                        <input type="button" name="update" class="contents-input-btn noline" value="수정">
-	                                    </td>
-	                                </tr>
-	                            <c:set var="totalRefundNum" value="${ totalRefundNum + ref.refundNum }"/>
-	                             <c:set var="totalRefundPrice" value="${ totalRefundPrice + ref.refundAmount }"/>
-								</c:forEach>
+                                <c:if test="${ !empty refundList }">
+	                    			<c:forEach var = "ref" items="${ refundList }">
+		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ ref.refundId }">
+		                                    <td class="td-50">
+		                                         <input type="checkbox" class="selectedItems" name="refundId" value="${ ref.refundId }">       
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookId" class="contents-input noline" value="${ ref.bookId }" readonly>
+		                                       		<input type="hidden" name="clientId" value="${ ref.clientId }">
+													 <input type="hidden" name="empId" value="${ ref.empId }">
+													 <input type="hidden" name="empName" value="${ ref.empName }">
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-250">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookName" class="contents-input noline" value="${ ref.bookName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="clientName" class="contents-input noline" value="${ ref.clientName }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="refundState" class="contents-input noline changeable" value="${ ref.refundState }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="refundDate" class="contents-input noline" value="${ ref.refundDate }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-100">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="bookPrice" class="contents-input noline" value="${ ref.bookPrice }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="refundNum" class="contents-input noline changeable" value="${ ref.refundNum }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="refundAmount" class="contents-input noline" value="${ ref.refundAmount }" readonly>
+		                                        </div>
+		                                    </td>
+		                                       <td class="td-120">
+		                                        <div class="contents-input-div">
+		                                            <input type="input" name="remark" class="contents-input noline changeable" value="${ ref.remark }" readonly>
+		                                        </div>
+		                                    </td>
+		                                    <td class="td-70">
+		                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ ref.refundId }" onclick="onUpdate(${ ref.refundId }); return false;">
+												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ ref.refundId }" onclick="submitUpdate(${ ref.refundId }, 'refupdate.do'); return false;" style="display: none;"> 
+												<input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ ref.refundId }" onclick="cancelUpdate(${ ref.refundId }); return false;" style="display: none;">
+		                                    </td>
+		                                </tr>
+		                            <c:set var="totalRefundNum" value="${ totalRefundNum + ref.refundNum }"/>
+		                             <c:set var="totalRefundPrice" value="${ totalRefundPrice + ref.refundAmount }"/>
+									</c:forEach>
+								</c:if>
                                 <!--합계-->
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
                                     <td></td>
