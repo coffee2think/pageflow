@@ -1,6 +1,7 @@
 package com.erl.pageflow.contract.model.service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
@@ -51,6 +52,24 @@ public interface ContractService {
 	
 	// 계약 키워드 검색 (담당자명)
 	public ArrayList<Contract> selectContractByEmployee(Search search);
+	
+	// 계약 상태별(all) 검색 개수
+	public int selectContractCountByStatusAll(Search search);
+	
+	// 계약 상태별(all) 검색
+	public ArrayList<Contract> selectContractByStatusAll(Search search);
+	
+	// 계약 상태별(ing) 검색 개수
+	public int selectContractCountByStatusIng(Search search);
+	
+	// 계약 상태별(ing) 검색
+	public ArrayList<Contract> selectContractByStatusIng(Search search);
+	
+	// 계약 상태별(finish) 검색 개수
+	public int selectContractCountByStatusFinish(Search search);
+	
+	// 계약 상태별(finish) 검색
+	public ArrayList<Contract> selectContractByStatusFinish(Search search);
 	
 	// 계약 등록
 	public int insertContract(Contract contract);

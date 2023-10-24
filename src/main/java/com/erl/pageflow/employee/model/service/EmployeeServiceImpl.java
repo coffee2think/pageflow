@@ -54,5 +54,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 		return employeeDao.selectCheckId(empId);
 	}
 	
-	
+	@OverrideS
+	public int myUpdateInfo(Employee employee) {
+		return employeeDao.myUpdateInfo(employee);
+	}
 }

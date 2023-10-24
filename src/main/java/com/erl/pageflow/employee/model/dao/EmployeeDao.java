@@ -45,5 +45,7 @@ public class EmployeeDao {
 		return sqlSessionTemplate.selectOne("memberMapper.selectCheckId", empId);
 	}
 	
-	
+	public int myUpdateInfo(Employee employee) {
+		return sqlSessionTemplate.selectOne("employeeMapper.myUpdateInfo", employee);
+	}
 }

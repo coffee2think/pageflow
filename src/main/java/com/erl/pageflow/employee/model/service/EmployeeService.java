@@ -13,4 +13,7 @@ public interface EmployeeService {
 	public Employee selectEmployeeApproval(int empId);
 	int updateEmployee(Employee employee);
 	public int selectCheckId(int empId);
+	
+	// 내정보 수정
+	public int myUpdateInfo(Employee employee);
 }

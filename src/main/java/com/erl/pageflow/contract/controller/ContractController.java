@@ -238,4 +238,68 @@ public class ContractController {
 			return "common/error";
 		}
 	}
+	
+	// 상태별로 계약현황 검색
+	@RequestMapping(value="ctrliststs.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String contractListByStatus(Search search,
+			@RequestParam(name="searchType") String searchType,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+		
+		logger.info("ctrliststs.do : searchType=" + searchType);
+		logger.info("ctrliststs.do : " + search);
+		logger.info("ctrliststs.do : page=" + page + ", limit=" + limitStr);
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		int listCount = 0;
+		
+		switch(searchType) {
+		case "all":
+			listCount = contractService.selectContractCountByStatusAll(search);
+			break;
+		case "ing":
+			listCount = contractService.selectContractCountByStatusIng(search);
+			break;
+		case "finish":
+			listCount = contractService.selectContractCountByStatusFinish(search);
+			break;
+		}
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "ctrliststs.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<Contract> list = null;
+		
+		switch(searchType) {
+		case "all":
+			list = contractService.selectContractByStatusAll(search);
+			break;
+		case "ing":
+			list = contractService.selectContractByStatusIng(search);
+			break;
+		case "finish":
+			list = contractService.selectContractByStatusFinish(search);
+			break;
+		}
+		
+		if(list != null && list.size() > 0) {
+			
+			model.addAttribute("contractList", list);
+			model.addAttribute("searchType", searchType);
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "publish/contr_list";
+		} else {
+			model.addAttribute("message", "계약현황 " + searchType.getClass() + " 검색 실패");
+			return "common/error";
+		}
+	}
 }

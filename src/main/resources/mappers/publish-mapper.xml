@@ -175,6 +175,20 @@
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
+	<select id="selectContractCountByStatus" parameterType="Search" resultType="_int">
+		select count(*) from contract
+		where contr_state = #{ contrState }
+	</select>
+		
+	<select id="selectContractByStatus" parameterType="Search" resultMap="resultContract">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from contract
+					where contr_state = #{ contrState }
+					order by contr_date desc, contr_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
 	<insert id="insertContract" parameterType="Contract">
 		insert into Contract
 		values (#{ contrId },#{ empId }, #{ writerId }, #{ bookName },

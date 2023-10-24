@@ -93,6 +93,36 @@ public class ContractServiceImpl implements ContractService {
 	}
 	
 	@Override
+	public int selectContractCountByStatusAll(Search search) {
+		return contractDao.selectContractCountByStatus(search);
+	}
+	
+	@Override
+	public ArrayList<Contract> selectContractByStatusAll(Search search) {
+		return contractDao.selectContractByStatus(search);
+	}
+	
+	@Override
+	public int selectContractCountByStatusIng(Search search) {
+		return contractDao.selectContractCountByStatus(search);
+	}
+	
+	@Override
+	public ArrayList<Contract> selectContractByStatusIng(Search search) {
+		return contractDao.selectContractByStatus(search);
+	}
+	
+	@Override
+	public int selectContractCountByStatusFinish(Search search) {
+		return contractDao.selectContractCountByStatus(search);
+	}
+	
+	@Override
+	public ArrayList<Contract> selectContractByStatusFinish(Search search) {
+		return contractDao.selectContractByStatus(search);
+	}
+	
+	@Override
 	public int insertContract(Contract contract) {
 		return contractDao.insertContract(contract);
 	}
