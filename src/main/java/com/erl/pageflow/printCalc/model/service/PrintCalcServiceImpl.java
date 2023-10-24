@@ -23,9 +23,19 @@ public class PrintCalcServiceImpl implements PrintCalcService{
 	public int selectPrintCalcListCount() {
 		return printCalcDao.selectPrintCalcListCount();
 	}
+	
+	public int selectPrintCalcCountByDate(Search search) {
+		return printCalcDao.selectPrintCalcCountByDate(search);
+	}
+	
 	@Override
-	public ArrayList<PrintCalc> selectPrintCalcByDate(Search search){
-		return printCalcDao.selectPrintCalcByDate(search);
+	public ArrayList<PrintCalc> selectPrintCalcBySDate(Search search){
+		return printCalcDao.selectPrintCalcBySDate(search);
+	}
+	
+	@Override
+	public ArrayList<PrintCalc> selectPrintCalcByEDate(Search search){
+		return printCalcDao.selectPrintCalcByEDate(search);
 	}
 	
 	@Override
@@ -59,13 +69,13 @@ public class PrintCalcServiceImpl implements PrintCalcService{
 	}
 	
 	@Override
-	public int selectPrintCalcCountBookId(int search) {
-		return printCalcDao.selectPrintCalcCountBookId(search);
+	public int selectPrintCalcCountByBookId(int search) {
+		return printCalcDao.selectPrintCalcCountByBookId(search);
 	}
 	
 	@Override
-	public int selectPrintCalcCountBookName(Search search) {
-		return printCalcDao.selectPrintCalcCountBookName(search);
+	public int selectPrintCalcCountByBookName(Search search) {
+		return printCalcDao.selectPrintCalcCountByBookName(search);
 	}
 	
 	@Override

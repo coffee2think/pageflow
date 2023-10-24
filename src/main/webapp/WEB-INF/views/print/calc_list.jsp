@@ -18,59 +18,42 @@
     const SUBPAGE = 2;
     const LNKPAGE = 1;
     
+    $(function(){
+		calculateAmount();
+	});
     
 </script>
 <title></title>
-<script type="text/javascript">
 
-</script>
-
-<script>
-	//수량/단가 변경시 총액 자동계산
-    function calculateAmount() {
-      var quantity = document.getElementsByName('quantity')[0].value;
-      var price = document.getElementsByName('price')[0].value;
-      var amount = quantity * price;
-      if (!isNaN(amount)) {
-        document.getElementsByName('amount')[0].value = amount;
-      }
-    }
- </script>
 
 <script type="text/javascript">
-	
-	/* //검색 키워드
-	var searchkeyword = "";
-	
-	//검색 버튼 클릭
-	$(function(){
-		$('.search-btn').on('click', fucntion(){
-			searchkey();
-		});
-		
-		// After Enter key
-		$('.search-box-text').on('keypress', function(){
-			if(e.which === 13){
-				searchkey();
-			}
-		});
-	}); */
-</script>
 
-<script type="text/javascript">
+//시작날짜 검색
+function searchBySDate(dateType) {
+	var begin = $('#begin_' + dateType).val();
+	var end = $('#end_' + dateType).val();
 	
-	/* //날짜 검색 버튼
-	function searchByDate(){
-		var begin = $('#begin').val();
-		var end = $('#end').val();
-		
-		var url = 'pclistdate.do?';
-		url += 'begin' + begin;
-		url += '&end' + end;
-		
-		location.herf = url;
-	} */
+	var url = 'edlistSdate.do?';
+	url += 'begin=' + begin;
+	url += '&end=' + end;
+	url += '&dateType=' + dateType;
+    
+	location.href = url;
+}
+
+// 마감날짜 검색
+function searchByEDate(dateType) {
+	var begin = $('#begin_' + dateType).val();
+	var end = $('#end_' + dateType).val();
 	
+	var url = 'edlistEdate.do?';
+	url += 'begin=' + begin;
+	url += '&end=' + end;
+	url += '&dateType=' + dateType;
+    
+	location.href = url;
+}
+
 </script>
 
 </head>
@@ -213,7 +196,7 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <table class="contents-table">
+                            <table class="contents-table" id="table_list">
                                 <tr>
                                     <th>체크</th>
                                     <th>정산코드</th>
@@ -272,12 +255,14 @@
 		                                    </td>
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
-		                                            <input type="text" name="quantity" class="contents-input noline changeable" oninput="calculateAmount()" value="${ printCalc.quantity }" readonly>
+		                                            <input type="text" name="quantity" class="contents-input noline changeable" 
+		                                            oninput="calculateAmount()" value="${ printCalc.quantity }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="text" name="price" class="contents-input noline changeable" oninput="calculateAmount()" value="${ printCalc.price }" readonly>
+		                                            <input type="text" name="price" class="contents-input noline changeable" 
+		                                            oninput="calculateAmount()" value="${ printCalc.price }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-120">

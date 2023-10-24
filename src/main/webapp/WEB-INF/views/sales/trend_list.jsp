@@ -52,7 +52,7 @@
     	let ctx = document.getElementById('myChart').getContext('2d');
     	
     	window.pieChart = new Chart(ctx, {
-    		type: 'pie',
+    		type: 'doughnut',
     		data: chartData,
     		option: {
     			responsive: false
@@ -60,7 +60,7 @@
     	});
     }
 </script>
-<title></title>
+<title>도서 트렌드 분석</title>
 </head>
 <body>
 	<div id="container">

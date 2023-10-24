@@ -232,7 +232,7 @@
 							<div class="contents-box">
 								<table class="contents-table" id="tblist">
 									<tr>
-										<th>체크</th>
+										<th></th>
 										<th>도서코드</th>
 										<th>도서명</th>
 										<th>창고</th>
@@ -241,7 +241,6 @@
 										<th>증감</th>
 										<th>현재재고</th>
 										<th>비고</th>
-
 									</tr>
 									<c:set var="totalPrevCurrInven" value="0" />
 									<c:set var="totalIncrease" value="0" />
@@ -249,7 +248,7 @@
 									<c:forEach var="inv" items="${ invenList }">
 										<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
 											<td class="td-50">
-											<input type="checkbox" name="cheack">
+												
 											</td>
 											<td class="td-155">
 												<div class="contents-input-div">
@@ -339,6 +338,10 @@
 									<c:set var="totalCurrInven"
 										value="${ totalCurrInven + (totalPrevCurrInven + totalIncrease) }" />
 									<!--합계-->
+									<fmt:formatNumber var="totalPrevCurrInven" value="${ totalPrevCurrInven }" type="number"/>
+									<fmt:formatNumber var="totalIncrease" value="${ totalIncrease }" type="number"/>
+									<fmt:formatNumber var="totalCurrInven" value="${ totalCurrInven }" type="number"/>
+
 									<tr data-parent="1" data-num="1" data-depth="1"
 										class="table-td-depth1 sum">
 										<td></td>
@@ -361,9 +364,6 @@
 
 					</div>
 					<!--내용 end-->
-	 				<div class="submit-box">
-	                    <button class="contents-input-btn big noline" id="btn_delete">선택삭제</button>
-	                </div>
 				</div>
 				<!--main-container end-->
 

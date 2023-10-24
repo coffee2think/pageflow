@@ -16,7 +16,7 @@
     const NOWPAGE = 6;
     const SUBPAGE = 4;
     const LNKPAGE = 1;
-    
+    const myEmpId = '<c:out value="${ empId }" />';
     function inputSubmit(){
         //체크된 것만 넘기기
     	e.preventDefault();
@@ -113,7 +113,7 @@
                                                 <c:if test="${ !empty saveLine and saveLine.size() > 0 }">
                                                     <c:forEach items="${ saveLine }" var="line" begin="0" end="${ saveLine.size() }" step="1" varStatus="i" >
                                                         
-                                                        <input type="hidden" name="savelineId" value="${ line.savelineId }">
+                                                        <input type="hidden" name="savelineId" class="saveline-id" value="${ line.savelineId }">
                                                         <c:if test="${ i.index eq 0 }">
                                                             <c:set var="approver_1" value="${ line.approverName }"/>
                                                             <c:set var="lineName" value="${ line.lineName }"/>
@@ -149,7 +149,7 @@
                                                     ${ approver_4 }
                                                 </td>
                                                 <td class="td-100">
-                                                    <input type="button" name="delete" class="contents-input-btn noline" value="삭제">
+                                                    <input type="button" name="delete" class="contents-input-btn noline delete-btn" value="삭제">
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -169,7 +169,7 @@
                                         결재라인명칭
                                     </div>
 
-                                    <input type="text" class="input-box-input noline">
+                                    <input type="text" name="lineName" class="input-box-input noline">
                                 </div>
                                 <!--
                                 <div class="input-box">

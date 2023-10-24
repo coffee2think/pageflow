@@ -158,7 +158,7 @@
 		totalPrice.children[0].children[0].value = bookPrice * orderQuantity;
 	}
 </script>
-<title></title>
+<title>주문 등록</title>
 </head>
 <body>
 	<form>

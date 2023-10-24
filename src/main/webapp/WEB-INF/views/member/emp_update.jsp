@@ -17,6 +17,10 @@
 	src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title>Insert title here</title>
 <script type="text/javascript">
+const NOWPAGE = 1;
+const SUBPAGE = 3;
+const LNKPAGE = 1;
+
 function validate(){
    
    //암호와 암호확인이 일치하지 않는지 확인
@@ -29,15 +33,16 @@ function validate(){
    if(pwdValue !== pwdValue2){
       alert("암호와 암호확인이 일치하지 않습니다. 다시 입력하세요.");
       document.getElementById("emppwd").value = "";
-      document.getElementById("emppwd2").select();
-      return false;  //전송 취소함
+      document.getElementById("emppwd2").value = "";
+      document.getElementById("emppwd").focus();
+      //return false;  //전송 취소함
    }
    
    //아이디의 값 형식이 요구한 대로 작성되었는지 검사
    //암호의 값 형식이 요구한 대로 작성되었는지 검사
    //정규표현식(Regular Expression) 사용함
    
-   return true;  //전송보냄
+   //return true;  //전송보냄
 }
 function dupIDCheck(){
    //사용 가능한 아이디인지 확인하는 함수 : ajax 기술 사용해야 함
@@ -113,9 +118,10 @@ window.onload = function(){
 
 	<h1 align="center">직원 정보 수정 페이지</h1>
 	<br>
-	<!-- 사진파일 첨부시 enctype="multipart/form-date" 속성 추가함 -->
-	<form action="empinsert.do" id="enrollForm" method="post"
-		onsubmit="return validate();">
+	<!-- 사진파일 첨부시 enctype="multipart/form-data" 속성 추가함 -->
+	<form action="empupdate.do" id="enrollForm" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="empPwd" value="${employee.empPwd }">
+		<input type="hidden" name="profile" value="${employee.profile }">
 		<table id="outer" align="center" width="700" cellspacing="5"
 			cellpadding="0">
 
@@ -124,17 +130,18 @@ window.onload = function(){
 				<td rowspan="7" width="100" align="center" valign="middle">
 					<div id="myphoto"
 						style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
-						<img src="/pageflow/resources/images/employeeprofile.png"
+						<img src="/pageflow/resources/member_upfiles/${employee.profile }"
 							id="photo"
 							style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;"
 							alt="사진을 드래그 드롭하세요."><br>
 					</div>
 
 				</td>
-				<td><div class="select-pan-nemo">파일첨부</div> <c:url var="ndown"
-						value="bfdown.do">
-					</c:url> <input type="file" name="file" id="photofile"> <input
-					type="submit" value="Upload" name="submit"></td>
+				<td><div class="select-pan-nemo">파일첨부</div> 
+				
+				<input type="file" name="upfile" id="photofile"> 
+				
+				</td>
 			<tr>
 				<th width="120">사번</th>
 				<td><input type="text" name="empId" id="empid" value="${employee.empId }" readonly>
@@ -142,6 +149,14 @@ window.onload = function(){
 			<tr>
 				<th>이름</th>
 				<td><input type="text" name="empName"  value="${employee.empName }" readonly></td>
+			</tr>
+			<tr>
+				<th>암호</th>
+				<td><input type="password" name="newempPwd"  id="emppwd"></td>
+			</tr>
+			<tr>
+				<th>암호확인</th>
+				<td><input type="password" id="emppwd2"  onblur="validate(); return false;"></td>
 			</tr>
 			<tr>
 				<th>전화번호</th>
@@ -178,7 +193,6 @@ window.onload = function(){
 						<option value="1">개발</option></td>
 			</tr>
 
-			</tr>
 			<tr>
 				<th colspan="3"><input type="submit" value="수정하기">
 					&nbsp; <input type="reset" value="수정취소"> &nbsp; <a

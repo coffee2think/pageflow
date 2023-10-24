@@ -30,7 +30,7 @@
     }); // document ready
     
 </script>
-<title></title>
+<title>주문 현황</title>
 </head>
 <body>
 	<div id="container">

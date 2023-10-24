@@ -10,10 +10,14 @@ import com.erl.pageflow.printOrder.model.vo.PrintOrder;
 import com.erl.pageflow.sales.model.vo.PrintOffice;
 
 public interface PrintCalcService {
-
+	
 	public int selectPrintCalcListCount();
 	
-	public ArrayList<PrintCalc> selectPrintCalcByDate(Search search);
+	public ArrayList<PrintCalc> selectPrintCalcBySDate(Search search);
+	
+	public ArrayList<PrintCalc> selectPrintCalcByEDate(Search search);
+	
+	public int selectPrintCalcCountByDate(Search search);
 	
 	public PrintOffice selectPrintOffice(int clientId);
 	
@@ -27,9 +31,9 @@ public interface PrintCalcService {
 	
 	public int selectPrintCalcCountByPrintName(Search search);
 	
-	public int selectPrintCalcCountBookId(int search);
+	public int selectPrintCalcCountByBookId(int search);
 	
-	public int selectPrintCalcCountBookName(Search search);
+	public int selectPrintCalcCountByBookName(Search search);
 	
 	public ArrayList<PrintCalc> selectPrintCalcByOrderId(int search);
 	
