@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.employee.model.vo.Employee;
 
 @Repository("employeeDao")
@@ -38,11 +39,29 @@ public class EmployeeDao {
 	}
 	
 	public int updateEmployee(Employee employee) {
-		return sqlSessionTemplate.update("employeeMapper.updateEmployee, employee");
+		return sqlSessionTemplate.update("employeeMapper.updateEmployee", employee);
 	}
 	
-	public int selectCheckId( int empId) {
-		return sqlSessionTemplate.selectOne("memberMapper.selectCheckId", empId);
+	public int selectCheckId( int empid) {
+		return sqlSessionTemplate.selectOne("employeeMapper.selectCheckId", empid);
+	}
+
+	public ArrayList<Employee> selectSearchDept(Search search) {
+		List<Employee> list = sqlSessionTemplate.selectList("employeeMapper.selectSearchDept", search);
+		return (ArrayList<Employee>)list;
+	}
+
+	public ArrayList<Employee> selectSearchEmp(Search search) {
+		List<Employee> list = sqlSessionTemplate.selectList("employeeMapper.selectSearchEmp", search);
+		return (ArrayList<Employee>)list;
+	}
+
+	public int selectSearchDeptCount(String keyword) {
+		return sqlSessionTemplate.selectOne("employeeMapper.selectSearchDeptCount", keyword);
+	}
+
+	public int selectSearchEmpCount(String keyword) {
+		return sqlSessionTemplate.selectOne("employeeMapper.selectSearchEmpCount", keyword);
 	}
 	
 	

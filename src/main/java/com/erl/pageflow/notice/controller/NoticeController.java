@@ -20,7 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
-
+import com.erl.pageflow.employee.model.vo.Employee;
 import com.erl.pageflow.notice.model.service.NoticeService;
 import com.erl.pageflow.notice.model.vo.Notice;
 
@@ -167,20 +167,20 @@ public class NoticeController {
 	// 공지글 상세보기 요청 처리용
 	@RequestMapping("nolist.do")
 	public ModelAndView noticeDetailMethod(@RequestParam("noticeId") int noticeId, ModelAndView mv,
-			HttpSession sessio) {
-		
+			HttpSession session) {
+
 		// 조회수 1증가 처리
 		noticeService.updateReadCount(noticeId);
-		
+
 		Notice notice = noticeService.selectOne(noticeId);
 
-		if (notice != null) {
+		if (notice != null ) {
 			mv.addObject("notice", notice);
 			mv.setViewName("work/notice_notice");
-		} else {
-			mv.addObject("message", notice.getNoticeId() + "번 공지글 상세보기 조회 실패!");
-			mv.setViewName("common/error");
 
+		}else {
+			mv.addObject("message", noticeId + "번 공지글 상세보기 조회 실패!");
+			mv.setViewName("common/error");
 		}
 
 		return mv;

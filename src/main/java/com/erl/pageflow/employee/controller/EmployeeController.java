@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
+import com.erl.pageflow.common.Search;
 import com.erl.pageflow.employee.model.service.EmployeeService;
 import com.erl.pageflow.employee.model.vo.Employee;
 
@@ -33,6 +35,9 @@ public class EmployeeController {
 
 	@Autowired
 	private EmployeeService employeeService;
+
+	@Autowired
+	private BCryptPasswordEncoder bcryptPasswordEncoder;
 
 	// 뷰
 	// ---------------------------------------------------------------------------------
@@ -48,15 +53,26 @@ public class EmployeeController {
 		return "member/emp_input";
 	}
 
-	@RequestMapping("idck.do")
-	public String idck() {
-		return "member/emp_input";
-	}
+	/*
+	 * @RequestMapping("idchk.do") public String idck() { return "member/emp_input";
+	 * }
+	 */
 
 	@RequestMapping("empmoveupdate.do")
-	public String moveempUpdatePage(Employee employee, Model model) {
-		model.addAttribute("employee", employee);
-		return "member/emp_update";
+	public ModelAndView moveUpdatePage(@RequestParam("empId") int empId, ModelAndView mv) {
+
+		Employee employee = employeeService.selectEmployee(empId);
+
+		if (employee != null) {
+			mv.addObject("employee", employee);
+			mv.setViewName("member/emp_update");
+		} else {
+			mv.addObject("message", "수정페이지로 이동 실패");
+			mv.setViewName("common/error");
+		}
+
+		return mv;
+
 	}
 
 	// 값---------------------------------------------------------------------
@@ -122,30 +138,6 @@ public class EmployeeController {
 
 	}
 
-	// ajax 통신으로 아이디 중복 확인 요청 처리용 메소드
-	@RequestMapping(value = "idchk.do", method = RequestMethod.POST)
-	public void dupCheckIdMethod(@RequestParam("empid") int empid, HttpServletResponse response) throws IOException {
-		// @RequestParam("전송온이름") 자료형 값저장변수명
-		// 메소드의 매개변수에 사용하는 어노테이션임 아래의 코드와 같은 기능을 수행
-		// String userid = request.getParameter("userid");
-
-		int idCount = employeeService.selectCheckId(empid);
-
-		String returnStr = null;
-		if (idCount == 0) {
-			returnStr = "ok";
-		} else {
-			returnStr = "dup";
-		}
-
-		// response 를 이용해서 클라이언트와 출력스트림을 열어서 값 보냄
-		response.setContentType("text/html; charset=utf-8");
-		PrintWriter out = response.getWriter();
-		out.append(returnStr);
-		out.flush();
-		out.close();
-	}
-
 	// 직원 등록
 	@RequestMapping(value = "empinsert.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String employeeInsertMethod(@RequestParam(name = "file", required = false) MultipartFile file,
@@ -153,9 +145,9 @@ public class EmployeeController {
 		logger.info("empinsert.do" + employee.getDepId());
 		logger.info("empinsert.do" + employee);
 		logger.info("empinsert.do" + file);
-		
-		//비밀번호 암호화처리
-		
+
+		// 비밀번호 암호화처리
+		employee.setEmpPwd(bcryptPasswordEncoder.encode(employee.getEmpPwd()));
 
 		String savePath = request.getSession().getServletContext().getRealPath("resources/member_upfiles");
 
@@ -191,6 +183,30 @@ public class EmployeeController {
 		}
 	}
 
+	// ajax 통신으로 아이디 중복 확인 요청 처리용 메소드
+	@RequestMapping(value = "idchk.do", method = RequestMethod.POST)
+	public void dupCheckIdMethod(@RequestParam("empid") int empid, HttpServletResponse response) throws IOException {
+		// @RequestParam("전송온이름") 자료형 값저장변수명
+		// 메소드의 매개변수에 사용하는 어노테이션임 아래의 코드와 같은 기능을 수행
+		// String userid = request.getParameter("userid");
+
+		int idCount = employeeService.selectCheckId(empid);
+
+		String returnStr = null;
+		if (idCount == 0) {
+			returnStr = "ok";
+		} else {
+			returnStr = "dup";
+		}
+
+		// response 를 이용해서 클라이언트와 출력스트림을 열어서 값 보냄
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.append(returnStr);
+		out.flush();
+		out.close();
+	}
+
 	// 직원 수정
 	@RequestMapping(value = "empupdate.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String employeeUpdateMethod(@RequestParam(name = "deleteFlag", required = false) String delFlag,
@@ -209,7 +225,7 @@ public class EmployeeController {
 			new File(savePath + "\\" + employee.getProfile()).delete();
 			// notice 안의 파일정보도 제거함
 			employee.setProfile(savePath);
-		
+
 		}
 
 		// 2. 새로운 첨부파일이 있을 때
@@ -236,17 +252,87 @@ public class EmployeeController {
 			} // 파일명 바꾸기
 				// notice 객체에 첨부파일 정보 저장 처리
 			employee.setProfile(fileName);
-			
+
 		} // 첨부파일 있을 때
 
 		if (employeeService.updateEmployee(employee) > 0) {
 			// 수정이 성공했다면, 컨트롤러의 다른 메소드를 직접 호출할 수 있음
 			// 필요시 값을 전달할 수도 있음 : 쿼리 스트링 사용함
-			return "redirect:myinfo.do?empId=" + employee.getEmpId();
+			return "redirect:mnlist.do?empId=" + employee.getEmpId();
 		} else {
 			model.addAttribute("message", employee.getEmpId() + "직원 정보 수정 실패!");
 			return "common/error";
 		}
+
+	}
+
+	@RequestMapping(value = "msearch.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public ModelAndView memberSearch(@RequestParam("searchType") String searchType, @RequestParam("keyword") String keyword,
+			@RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String slimit, ModelAndView mv) {
+		// 검색결과에 대한 페이징 처리
+		// 출력할 페이지 지정
+		int currentPage = 1;
+		// 전송온 페이지 값이 있다면 추출함
+		if (page != null) {
+			currentPage = Integer.parseInt(page);
+		}
+
+		// 한 페이지당 출력할 목록 갯수 지정
+		int limit = 10;
+		// 전송 온 limit 값이 있다면
+		if (slimit != null) {
+			limit = Integer.parseInt(slimit);
+		}
+
+		// 총 페이지수 계산을 위한 검색 결과 적용된 총 목록 갯수 조회
+		int listCount = 0;
+		switch (searchType) {
+		case "emp":
+			listCount = employeeService.selectSearchEmpCount(keyword);
+			break;
+		case "dept":
+			listCount = employeeService.selectSearchDeptCount(keyword);
+			break;
+		}
+
+		// 뷰 페이지에 사용할 페이징 관련 값 계산 처리
+		Paging paging = new Paging(listCount, currentPage, limit, "msearch.do");
+		paging.calculator();
+
+		// 서비스 메소드 호출하고 리턴결과 받기
+		ArrayList<Employee> list = null;
+		Search search = new Search();
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+
+		switch (searchType) {
+		case "emp":
+			search.setKeyword(keyword);
+			list = employeeService.selectSearchEmp(search);
+			break;
+		case "dept":
+			search.setKeyword(keyword);
+			list = employeeService.selectSearchDept(search);
+			break;
+		}
+
+		// 받은 결과에 따라 성공/실패 페이지 내보내기
+		if (list != null && list.size() > 0) {
+			mv.addObject("list", list);
+			mv.addObject("paging", paging);
+			mv.addObject("currnetPage", currentPage);
+			mv.addObject("limit", limit);
+			mv.addObject("searchType", searchType);
+			mv.addObject("keyword", keyword);
+			
+			mv.setViewName("member/admin");
+		} else {
+			mv.addObject("message", searchType + "에 대한 " + keyword + "검색 결과가 존재하지 않습니다.");
+			mv.setViewName("common/error");
+		}
+
+		return mv;
 
 	}
 
