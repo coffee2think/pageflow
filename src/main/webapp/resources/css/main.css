@@ -805,3 +805,17 @@ body {
     right: 50000px;
     z-index: -9999999999;
 }
+
+#btn_line_save {
+    display: none;
+}
+
+.notclicked {
+    background: #d2d2d2;
+    border: 1px solid #d3d3d3;
+    cursor: default;
+}
+
+.refundState-value {
+    border: 1px solid #9fc7ff;
+}

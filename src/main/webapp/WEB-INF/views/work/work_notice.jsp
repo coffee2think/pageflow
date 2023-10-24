@@ -24,6 +24,18 @@
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title></title>
+<c:url var="bdmove" value="bdmoveupdate.do">
+    <c:param name="boardId" value="${ board.boardId }" />
+    <c:param name="depId" value="${ board.depId }" />
+    <c:param name="empId" value="${ board.empId }" />
+    <c:param name="boardTitle" value="${ board.boardTitle }" />
+    <c:param name="boardDetail" value="${ board.boardDetail }" />
+    <c:param name="originFile" value="${ board.originFile }" />
+    <c:param name="renameFile" value="${ board.renameFile }" />
+    <c:param name="begin" value="${ begin }" />
+    <c:param name="end" value="${ end }" />
+</c:url>
+
 
 <script type="text/javascript">
     const NOWPAGE = 1;
@@ -46,16 +58,19 @@
         	$('.button-update').on('click', function(){
                 if(confirm('수정 화면으로 이동하시겠습니까?')) {
                     let boardDetail = '<c:out value="${ board.boardDetail }" />';
-                    
-                    location.href = 
-                    'bdmoveupdate.do?boardId=${ board.boardId }&depId=${ board.depId }&empId=${ board.empId }&boardTitle=${ board.boardTitle }&boardDetail='+boardDetail+'&originFile=${ board.originFile }&renameFile=${ board.renameFile }&begin=${begin}&end=${end}';
+                    boardDetail.replace(/\n|\r|\s*/g, "");//개행문자 삭제
+                    var boardDetailEncode = encodeURIComponent(boardDetail);
+                    console.log('boardDetail : ' + boardDetail);
+                    //location.href = '<c:out value="${bdmove}" />';
+                    location.href = 'bdmoveupdate.do?boardId=${ board.boardId }&depId=${ board.depId }&empId=${ board.empId }&begin=${begin}&end=${end}'
+                    //&boardTitle=${ board.boardTitle }&boardDetail='+boardDetailEncode+'&originFile=${ board.originFile }&renameFile=${ board.renameFile }';
                 }
         	})
         	
         	//보드 삭제
         	$('.button-delete').on('click', function(){
         		if(confirm('정말 삭제하시겠습니까?')) {
-                    location.href = 'bddelete.do?boardId=${ board.boardId }';//&depId=${ board.depId }&empId=${ board.empId }&boardTitle=${ board.boardTitle }&boardDetail=${ board.boardDetail }&originFile=${ board.originFile }&renameFile=${ board.renameFile }';
+                    location.href = 'bddelete.do?boardId=${ board.boardId }&depId=${ board.depId }';//&depId=${ board.depId }&empId=${ board.empId }&boardTitle=${ board.boardTitle }&boardDetail=${ board.boardDetail }&originFile=${ board.originFile }&renameFile=${ board.renameFile }';
                 }
         	})
         	

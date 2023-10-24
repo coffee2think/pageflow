@@ -42,6 +42,16 @@
 		order by SAVELINE_ID desc, LINE_DEPTH asc
 	</select>
 	
+	<select id="selectApprovalSaveLineId" resultType="_int">
+		select max(SAVELINE_ID) from approvalline_save
+	</select>
+	
+	<insert id="insertApprovalLineSave" parameterType="ApprovalLineSave">
+		insert into approvalline_save
+		values(#{ savelineId }, #{ lineDepth }, #{ empId }, #{ approverId }, 
+		#{ approverName }, #{ posName }, #{ lineName })
+	</insert>
+	
 	<update id="updateApprLineStampCheck" parameterType="ApprovalLineKeyword">
 		update approvalLine
 		set STAMP_CHECK = #{ stampCheck },
@@ -49,5 +59,7 @@
 		where LINE_ID = #{ lineId }
 		and   APPROVER_ID = #{ approverId }
 	</update>
+	
+	
 	
 </mapper>

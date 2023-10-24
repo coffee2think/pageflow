@@ -74,7 +74,20 @@ public class EmployeeController {
 		return mv;
 
 	}
-
+	
+	//마이페이지로 이동
+	@RequestMapping("movemypage.do")
+	public String moveMyPage() {
+		return "member/myPage";
+	}
+	
+	//수정페이지로 이동
+	@RequestMapping("movemyupdate.do")
+	public String moveMyUpdatePage() {
+		return "member/myPageUpdate";
+	}
+	
+	
 	// 값---------------------------------------------------------------------
 
 	// 로그인 값전송
@@ -271,7 +284,6 @@ public class EmployeeController {
 			model.addAttribute("message", employee.getEmpId() + "직원 정보 수정 실패!");
 			return "common/error";
 		}
-
 	}
 
 	@RequestMapping(value = "enamesearch.do", method = { RequestMethod.GET, RequestMethod.POST })
@@ -324,9 +336,8 @@ public class EmployeeController {
 		}
 
 		return mv;
-
 	}
-
+  
 	// 관리자 권한 부여 페이지로 이동 처리
 	@RequestMapping("mnauthority.do")
 	public ModelAndView moveauthorPage(@RequestParam(name = "page", required = false) String page, ModelAndView mv) {
@@ -515,8 +526,25 @@ public class EmployeeController {
 		}
 
 		return mv;
-
 	}
 	
-	
+	// 내정보 수정
+	@RequestMapping(value = "myupdate.do", method = RequestMethod.POST)
+	public void myUpdateMethod(Employee employee, HttpServletResponse response) throws IOException {
+		logger.info("myupdate.do : " + employee);
+
+		String returnStr = null;
+	    if(employeeService.myUpdateInfo(employee) > 0) {
+	      returnStr = "success";
+	    } else {
+	      returnStr = "fail";
+	    }
+	    
+	    // response를 이용해서 클라이언트와 출력 스트림을 열어서 값 보냄
+	    response.setContentType("text/html; charset=utf-8");
+	    PrintWriter out = response.getWriter();
+	    out.append(returnStr);
+	    out.flush();
+	    out.close();
+	}
 }

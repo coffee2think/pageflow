@@ -171,19 +171,6 @@
 									</c:if>
 								</div>
 							</div>
-							<div class="select-box">
-								<div class="select-pan">
-									<label for="sel_code"></label> <select name="code" id="sel_code">
-											<button class="search-button">
-												<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-											</button>
-										<option value="store">입고</option>
-										<option value="release">출고</option>
-										<option value="refund">반품</option>
-									</select>
-								</div>
-							</div>
-
 						<div class="select-box">
 						   <div class="select-pan-nemo">날짜 </div>
 						        <c:choose> 

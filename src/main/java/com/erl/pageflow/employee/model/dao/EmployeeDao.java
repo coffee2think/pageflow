@@ -97,5 +97,7 @@ public class EmployeeDao {
 		return (ArrayList<Employee>)list;
 	}
 	
-	
+	public int myUpdateInfo(Employee employee) {
+		return sqlSessionTemplate.selectOne("employeeMapper.myUpdateInfo", employee);
+	}
 }

@@ -111,5 +111,9 @@ public class RefundDao {
 	public int insertInventory(Refund refund) {
 		return sqlSessionTemplate.insert("refundMapper.insertInventory", refund);
 	}
+	
+	public int updateRefund(Refund refund) {
+		return sqlSessionTemplate.update("refundMapper.updateRefund", refund);
+	}
 
 }

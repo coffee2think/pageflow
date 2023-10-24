@@ -8,7 +8,7 @@ import com.erl.pageflow.employee.model.vo.Employee;
 import com.erl.pageflow.employee.model.vo.SearchEmp;
 
 public interface EmployeeService {
-	public Employee selectEmployee(int empId);
+  public Employee selectEmployee(int empId);
 	ArrayList<Employee> selectEmployeeList(Paging paging);
 	public int selectEmployeeListCount();
 	int insertEmployee(Employee employee);
@@ -27,5 +27,6 @@ public interface EmployeeService {
 	public ArrayList<Employee> selectSearchDeptPos(SearchEmp searchEmp);
 	public ArrayList<Employee> selectSearchPos(Search search);
 	
-	
+	// 내정보 수정
+	public int myUpdateInfo(Employee employee);
 }

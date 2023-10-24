@@ -55,5 +55,13 @@ public class ApprovalLineDao {
 		return sqlSessionTemplate.update("approvalLineMapper.updateApprLineStampCheck", approvalLineKeyword);
 	}
 
+	public int insertApprovalLineSave(ApprovalLineSave als) {
+		return sqlSessionTemplate.insert("approvalLineMapper.insertApprovalLineSave", als);
+	}
+
+	public int selectApprovalSaveLineId() {
+		return sqlSessionTemplate.insert("approvalLineMapper.selectApprovalSaveLineId");
+	}
+
 	
 }

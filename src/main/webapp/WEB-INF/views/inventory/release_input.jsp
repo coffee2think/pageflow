@@ -13,6 +13,7 @@
     const NOWPAGE = 4;
     const SUBPAGE = 3;
     const LNKPAGE = 2;
+    let client_type = 'bookstore';
 </script>
 <title></title>
 <script type="text/javascript">

@@ -65,15 +65,15 @@ public class PrintOrderDao {
 		return sqlSessionTemplate.delete("printMapper.deletePrintOrder", printOrder);
 	}
 	
-	public int selectPrintOrderCountByClientId(Search search) {
-		return sqlSessionTemplate.selectOne("printMapper.selectPrintOrderCountByClientId", search);
+	public int selectPrintOrderCountByOrderId(int search) {
+		return sqlSessionTemplate.selectOne("printMapper.selectPrintOrderCountByOrderId", search);
 	}
 	
 	public int selectPrintOrderCountByPrintName(Search search) {
 		return sqlSessionTemplate.selectOne("printMapper.selectPrintOrderCountByPrintName", search);
 	}
 	
-	public int selectPrintOrderCountByBookId(Search search) {
+	public int selectPrintOrderCountByBookId(int search) {
 		return sqlSessionTemplate.selectOne("printMapper.selectPrintOrderCountByBookId", search);
 	}
 	
@@ -81,8 +81,8 @@ public class PrintOrderDao {
 		return sqlSessionTemplate.selectOne("printMapper.selectPrintOrderCountByBookName", search);
 	}
 	
-	public ArrayList<PrintOrder> selectPrintOrderByClientId(Search search){
-		List<PrintOrder> list = sqlSessionTemplate.selectList("printMapper.selectPrintOrderByClientId", search);
+	public ArrayList<PrintOrder> selectPrintOrderByOrderId(int search){
+		List<PrintOrder> list = sqlSessionTemplate.selectList("printMapper.selectPrintOrderByOrderId", search);
 		return (ArrayList<PrintOrder>) list;
 	}
 	
@@ -91,7 +91,7 @@ public class PrintOrderDao {
 		return (ArrayList<PrintOrder>) list;
 	}
 	
-	public ArrayList<PrintOrder> selectPrintOrderByBookId(Search search){
+	public ArrayList<PrintOrder> selectPrintOrderByBookId(int search){
 		List<PrintOrder> list = sqlSessionTemplate.selectList("printMapper.selectPrintOrderByBookId", search);
 		return (ArrayList<PrintOrder>) list;
 	}

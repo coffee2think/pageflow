@@ -3,7 +3,6 @@ package com.erl.pageflow.store.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -157,12 +156,12 @@ public class StoreController {
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
 
-			return "inventory/store_list";
+			
 		} else {
 			model.addAttribute("message", "날짜 검색 실패");
-			return "common/error";
-		}
 
+		}
+		return "inventory/store_list";
 	}
 
 	// 출고 날짜로 조회
@@ -192,12 +191,12 @@ public class StoreController {
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
 
-			return "inventory/release_list";
+			
 		} else {
 			model.addAttribute("message", "날짜 검색 실패");
-			return "common/error";
-		}
 
+		}
+		return "inventory/release_list";
 	}
 
 	// 입고 삭제

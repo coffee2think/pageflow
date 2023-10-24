@@ -52,4 +52,6 @@ public interface RefundService {
 	public int insertRefund(Refund refund);
 
 	public int insertInventory(Refund refund);
+	
+	public int updateRefund(Refund refund);
 }

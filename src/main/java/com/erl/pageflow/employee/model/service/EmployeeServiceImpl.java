@@ -111,10 +111,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 	public ArrayList<Employee> selectSearchPos(Search search) {
 		return employeeDao.selectSearchPos(search);
 	}
-
 	
-
-	
-	
-	
+	@Override
+	public int myUpdateInfo(Employee employee) {
+		return employeeDao.myUpdateInfo(employee);
+	}
 }
