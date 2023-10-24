@@ -20,9 +20,6 @@ public class Employee implements java.io.Serializable {
 	private Date modifyDate;
 	private Date leaveDate;
 	
-	
-	
-
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}

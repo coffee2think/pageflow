@@ -3,6 +3,8 @@ package com.erl.pageflow.employee.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,7 +60,20 @@ public class EmployeeController {
 		model.addAttribute("employee", employee);
 		return "member/emp_update";
 	}
-
+	
+	//마이페이지로 이동
+	@RequestMapping("movemypage.do")
+	public String moveMyPage() {
+		return "member/myPage";
+	}
+	
+	//수정페이지로 이동
+	@RequestMapping("movemyupdate.do")
+	public String moveMyUpdatePage() {
+		return "member/myPageUpdate";
+	}
+	
+	
 	// 값---------------------------------------------------------------------
 
 	// 로그인 값전송
@@ -249,5 +264,24 @@ public class EmployeeController {
 		}
 
 	}
+	
+	// 내정보 수정
+	@RequestMapping(value = "myupdate.do", method = RequestMethod.POST)
+	public void myUpdateMethod(Employee employee, HttpServletResponse response) throws IOException {
+	    logger.info("myupdate.do : " + employee);
 
+	    String returnStr = null;
+	    if(employeeService.myUpdateInfo(employee) > 0) {
+			returnStr = "success";
+		} else {
+			returnStr = "fail";
+		}
+
+	    // response를 이용해서 클라이언트와 출력 스트림을 열어서 값 보냄
+	    response.setContentType("text/html; charset=utf-8");
+	    PrintWriter out = response.getWriter();
+	    out.append(returnStr);
+	    out.flush();
+	    out.close();
+	}
 }

@@ -64,7 +64,11 @@
 	</insert> 
 
 	<select id="selectEmployee" parameterType="_int" resultMap="resultEmployee">
-		select * from employee where emp_id = #{ empId } 
+		select * from employee 
+		left join job using(JOB_ID)
+  		left join position using(POS_ID)
+  		left join department using(DEP_ID)	
+		where emp_id = #{ empId }
 	</select>
 	
 	<select id="selectEmployeeApproval" parameterType="_int" resultMap="resultEmployeeJoin">
@@ -91,7 +95,12 @@
 		select count(*) from employee
 	</select>
 	
-	
+	<update id="myUpdateInfo" parameterType="Employee">
+		update employee
+		set emp_pwd = #{ empPwd }, emp_pwd_update = sysdate, phone = #{ phone },
+			address = #{ address }
+		where emp_id = #{ empId }
+	</update>
 	
 	
 </mapper>
