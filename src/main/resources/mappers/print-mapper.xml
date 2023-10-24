@@ -237,5 +237,72 @@
   		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
+	<select id ="selectPrintCalcCountByOrderId" parameterType="_int" resultType="_int">
+		select count(*) from print_order
+		where order_id = #{ orderId }
+	</select>
+	
+	<select id="selectPrintCalcCountByPrintName" parameterType="Search" resultType="_int">
+		select count(*) from print_order
+		join client using (client_id)
+		where client_name like '%' || ${ keyword } || '%'
+	</select>
+	
+	<select id="selectPrintCalcCountBookId" parameterType="_int" resultType="_int">
+		select count(*) from print_order
+		join book using (book_id)
+		where book_id = #{ bookId }
+	</select>
+	
+	<select id="selectPrintCalcCountBookName" parameterType="Search" resultType="_int">
+		select count(*) from print_order
+		join book using (book_id)
+		where book_name like '%' || ${ keyword } || '%'
+	</select>
+	
+	<select id="selectPrintCalcByOrderId" parameterType="Search" resultMap="resultPrintOrder">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from print_order
+			  		join client using(client_id)
+			  		join book using(book_id)
+			  		where order_id = to_number( #{ keyword } )
+			  		order by order_id desc, order_date desc ) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectPrintCalcByPrintName" parameterType="Search" resultMap="resultPrintOrder">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from print_order
+			  		join client using (client_id) 
+			  		join book using(book_id)
+			  		where client_name like '%' || ${ keyword } || '%'
+			  		order by order_id desc, order_date desc ) sub)
+  		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectPrintCalcByBookId" parameterType="Search" resultMap="resultPrintOrder">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from print_order
+			  		join client using (client_id) 
+			  		join book using(book_id)
+			  		where book_id = to_number( #{ keyword } )
+			  		order by order_id desc, order_date desc ) sub)
+  		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectPrintCalcByBookName" parameterType="Search" resultMap="resultPrintOrder">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from print_order
+			  		join client using (client_id) 
+			  		join book using(book_id)
+			  		where book_name like '%' || ${ keyword } || '%'
+			  		order by order_id desc, order_date desc ) sub)
+  		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
 </mapper>
 
