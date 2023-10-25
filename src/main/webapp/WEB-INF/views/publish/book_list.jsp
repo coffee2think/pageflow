@@ -98,18 +98,6 @@
                             </div>
 
                             <div class="select-box">
-                                <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
-                                        <option value="all">도서상태</option>
-                                        <option value="">정상</option>
-                                        <option value="">품절</option>
-                                        <option value="">절판</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="select-box">
                                 <div class="select-pan-nemo">
                                     등록일자
                                 </div>
