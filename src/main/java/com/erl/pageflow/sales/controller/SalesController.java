@@ -518,7 +518,7 @@ public class SalesController {
 		}
 	}
 	
-	// 날짜로 주문현황 검색
+	// 날짜로 거래처 검색
 	@RequestMapping("cllistdate.do")
 	public String clientListByDate(Search search,
 			@RequestParam(name="page", required=false) String page,
@@ -563,6 +563,68 @@ public class SalesController {
 			return "sales/client_list";
 		} else {
 			model.addAttribute("message", "주문현황 조회 실패");
+			return "common/error";
+		}
+	}
+	
+	// 키워드로 주문현황 검색
+	@RequestMapping(value="cllistkw.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String clientListByKeyword(Search search,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+		
+		logger.info("cllistkw.do : " + search);
+		logger.info("cllistkw.do : page=" + page + ", limit=" + limitStr);
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		int listCount = 0;
+		
+		switch(search.getSearchType()) {
+		case "clientName":
+			listCount = salesService.selectClientCountByName(search);
+			break;
+		case "clientAddress":
+			listCount = salesService.selectClientCountByAddress(search);
+			break;
+		case "clientType":
+			listCount = salesService.selectClientCountByType(search);
+			break;
+		}
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "cllistkw.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<Client> list = null;
+		
+		switch(search.getSearchType()) {
+		case "clientName":
+			list = salesService.selectClientByName(search);
+			break;
+		case "clientAddress":
+			list = salesService.selectClientByAddress(search);
+			break;
+		case "clientType":
+			list = salesService.selectClientByType(search);
+			break;
+		}
+		
+		if(list != null && list.size() > 0) {
+			model.addAttribute("list", list);
+			model.addAttribute("searchType", search.getSearchType());
+			model.addAttribute("keyword", search.getKeyword());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "sales/client_list";
+		} else {
+			model.addAttribute("message", "거래처 현황 " + search.getKeyword() + " 검색 실패");
 			return "common/error";
 		}
 	}

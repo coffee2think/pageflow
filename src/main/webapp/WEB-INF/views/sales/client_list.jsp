@@ -17,9 +17,7 @@
     const LNKPAGE = 1;
     
     $(function() {
-    	$('select.').change(function() {
-    		$(this).parent().find('input[name=state]').val($(this).val());
-    	});
+    	requestListByClientType();
     });
     
     function requestListByClientType() {
@@ -105,7 +103,7 @@
                                     </button>
                                     
                                     <c:choose>
-                                		<c:when test="${ !empty searchType && searchType != 'state' }">
+                                		<c:when test="${ !empty searchType && searchType != 'clientType' }">
                                 			<input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
                                 		</c:when>
                                 		<c:otherwise>
@@ -120,9 +118,9 @@
                                     <label for="client_type"></label>
                                     <select name="clientType" id="client_type">
                                         <option value="all">분류별</option>
-                                        <option value="서점">서점</option>
-                                        <option value="인쇄소">인쇄소</option>
-                                        <option value="창고">창고</option>
+                                        <option value="서점" <c:if test="${ !empty searchType && searchType == 'clientType' && keyword == '서점' }">selected</c:if>>서점</option>
+                                        <option value="인쇄소" <c:if test="${ !empty searchType && searchType == 'clientType' && keyword == '인쇄소' }">selected</c:if>>인쇄소</option>
+                                        <option value="창고" <c:if test="${ !empty searchType && searchType == 'clientType' && keyword == '창고' }">selected</c:if>>창고</option>
                                     </select>
                                 </div>
                             </div>
@@ -130,11 +128,6 @@
                             <div class="select-box">
                                 <div class="select-pan-nemo">
                                 	거래시작일
-                                    <!-- <label for="date_type"></label>
-                                    <select name="date_type" id="date_type">
-                                        <option value="startDate">거래시작일</option>
-                                        <option value="endDate">거래종료일</option>
-                                    </select> -->
                                 </div>
 
                                 <input type="date" class="select-date select-date-first" id="begin_startDate" value="${ begin_startDate }">

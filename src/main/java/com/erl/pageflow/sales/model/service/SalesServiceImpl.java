@@ -222,4 +222,34 @@ public class SalesServiceImpl implements SalesService {
 		return salesDao.selectSalesByLocation(search);
 	}
 
+	@Override
+	public int selectClientCountByName(Search search) {
+		return salesDao.selectClientCountByName(search);
+	}
+
+	@Override
+	public int selectClientCountByAddress(Search search) {
+		return salesDao.selectClientCountByAddress(search);
+	}
+
+	@Override
+	public int selectClientCountByType(Search search) {
+		return salesDao.selectClientCountByType(search);
+	}
+
+	@Override
+	public ArrayList<Client> selectClientByName(Search search) {
+		return salesDao.selectClientByName(search);
+	}
+
+	@Override
+	public ArrayList<Client> selectClientByAddress(Search search) {
+		return salesDao.selectClientByAddress(search);
+	}
+
+	@Override
+	public ArrayList<Client> selectClientByType(Search search) {
+		return salesDao.selectClientByType(search);
+	}
+
 }

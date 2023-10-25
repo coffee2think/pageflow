@@ -178,7 +178,7 @@
 		select *
 		from (select rownum rnum, sub.*
 			  from (select * from client
-					order by start_date desc, client_id desc) sub) 
+					order by client_id asc) sub) 
 		where rnum between #{ startRow } and #{ endRow } 
 	</select>
 	
@@ -448,6 +448,52 @@
 			  		join client  using (client_id)
 					where client_address like '%' || #{ keyword } || '%'
 					order by order_date desc, order_id desc, book_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectClientCountByName" parameterType="Search" resultType="_int">
+		select count(*) from client
+		where client_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectClientCountByAddress" parameterType="Search" resultType="_int">
+		select count(*) from client
+		where client_address like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectClientCountByType" parameterType="Search" resultType="_int">
+		select count(*) from client
+		<if test="searchType != 'all'">
+			where category = #{ keyword }
+		</if>
+	</select>
+	
+	<select id="selectClientByName" parameterType="Search" resultMap="resultClient">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from client
+					where client_name like '%' || #{ keyword } || '%'
+					order by client_id asc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectClientByAddress" parameterType="Search" resultMap="resultClient">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from client
+					where client_address like '%' || #{ keyword } || '%'
+					order by client_id asc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectClientByType" parameterType="Search" resultMap="resultClient">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from client
+					<if test="searchType != 'all'">
+						where category = #{ keyword }
+					</if>
+					order by client_id asc) sub)
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 

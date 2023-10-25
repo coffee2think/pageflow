@@ -87,7 +87,8 @@ Popup.prototype = {
             'writer': '작가검색',
 			'book_order': '주문검색',
             'saveLine' : '결재라인검색',
-            'lineE': '직원검색'
+            'lineE': '직원검색',
+            'department': '부서검색'
 		};
 		
 		popup_thead = {
@@ -99,7 +100,8 @@ Popup.prototype = {
             'writer': ['', '작가번호', '작가명', '연락처', '이메일'],
 			'book_order': ['', '주문번호', '서점명', '도서명', '주문수량'],
             'saveLine' : ['', '결재라인번호', '결재라인이름', '결재자1', '결재자2', '결재자3', '결재자4'],
-            'lineE': ['', '직원번호', '담당부서', '직원명', '직책']
+            'lineE': ['', '직원번호', '담당부서', '직원명', '직책'],
+            'department': ['', '부서코드', '부서명', '', '']
 		};
 		
 		popup_selectbox = {
@@ -111,8 +113,8 @@ Popup.prototype = {
             'writer': {'writerName': '작가명'},
 			'book_order': {'clientName': '서점명', 'orderDate': '주문일'},
             'saveLine': {'savelineId': '결재라인번호', 'savelineName': '결재라인이름'},
-            'lineE': {'empName': '직원명', 'depName': '부서'}
-
+            'lineE': {'empName': '직원명', 'depName': '부서'},
+			'department': {'depName': '부서명'}
 		};
 		
 		// 검색바 초기화

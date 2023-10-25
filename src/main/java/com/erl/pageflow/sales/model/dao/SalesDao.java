@@ -202,4 +202,31 @@ public class SalesDao {
 		return (ArrayList<Sales>) list;
 	}
 
+	public int selectClientCountByName(Search search) {
+		return sqlSession.selectOne("salesMapper.selectClientCountByName", search);
+	}
+
+	public int selectClientCountByAddress(Search search) {
+		return sqlSession.selectOne("salesMapper.selectClientCountByAddress", search);
+	}
+
+	public int selectClientCountByType(Search search) {
+		return sqlSession.selectOne("salesMapper.selectClientCountByType", search);
+	}
+
+	public ArrayList<Client> selectClientByName(Search search) {
+		List<Client> list = sqlSession.selectList("salesMapper.selectClientByName", search);
+		return (ArrayList<Client>) list;
+	}
+
+	public ArrayList<Client> selectClientByAddress(Search search) {
+		List<Client> list = sqlSession.selectList("salesMapper.selectClientByAddress", search);
+		return (ArrayList<Client>) list;
+	}
+
+	public ArrayList<Client> selectClientByType(Search search) {
+		List<Client> list = sqlSession.selectList("salesMapper.selectClientByType", search);
+		return (ArrayList<Client>) list;
+	}
+
 }
