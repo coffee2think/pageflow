@@ -1,16 +1,12 @@
 package com.erl.pageflow;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.DateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erl.pageflow.sales.model.service.SalesService;
-import com.erl.pageflow.sales.model.vo.Rank;
-import com.erl.pageflow.sales.model.vo.SalesStatistics;
 
 /**
  * Handles requests for the application home page.
@@ -85,7 +78,15 @@ public class HomeController {
 //		return sendJson.toJSONString();
 //	}
 	@RequestMapping("main.do")
-	public String forwardMainView(){
-		return "member/login";
+	public String forwardMainView(HttpServletRequest request) {
+	    HttpSession session = request.getSession();
+	    Object loginMember = session.getAttribute("loginMember");
+
+	    if (loginMember == null) {
+	        return "member/login";
+	    } else {
+	        return "common/main";
+	    }
 	}
+
 }
