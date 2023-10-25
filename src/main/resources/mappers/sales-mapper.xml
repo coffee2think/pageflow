@@ -201,7 +201,7 @@
 	
 	<insert id="insertBookOrder" parameterType="BookOrder">
 		insert into book_order
-		values (#{ orderId }, #{ bookId }, #{ clientId }, #{ empId }, #{ orderQuantity }, sysdate, default, #{ state })
+		values (#{ orderId }, #{ bookId }, #{ clientId }, #{ empId }, #{ orderQuantity }, sysdate, default, default)
 	</insert>
 	
 	<update id="updateBookOrder" parameterType="BookOrder">
@@ -361,6 +361,82 @@
 	<select id="selectRank" resultMap="resultRank">
 		select * from rank
 		order by rank asc
+	</select>
+	
+	<select id="selectBookOrderCountByState" parameterType="Search" resultType="_int">
+		select count(*) from book_order
+		<if test="keyword != 'all'">
+			where state = #{ keyword }
+		</if>
+	</select>
+	
+	<select id="selectBookOrderByState" parameterType="Search" resultMap="resultBookOrder">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from book_order
+			  		join book using (book_id)
+			  		join client using (client_id)
+				<if test="keyword != 'all'">
+					where state = #{ keyword }
+				</if>
+					order by order_date desc, order_id desc, book_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow } 
+	</select>
+	
+	<select id="selectSalesCountByBook" parameterType="Search" resultType="_int">
+		select count(*) from sales
+		join book using (book_id)
+		where book_name like '%' || #{ keyword } || '%' 
+	</select>
+	
+	<select id="selectSalesCountByBookStore" parameterType="Search" resultType="_int">
+		select count(*) from sales
+		join book_order using (order_id, book_id)
+		join client using (client_id)
+		where client_name like '%' || #{ keyword } || '%' 
+	</select>
+	
+	<select id="selectSalesCountByLocation" parameterType="Search" resultType="_int">
+		select count(*) from sales
+		join book_order using (order_id, book_id)
+		join client using (client_id)
+		where client_address like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectSalesByBook" parameterType="Search" resultMap="resultSales">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from sales
+			  		join book_order using (order_id, book_id)
+			  		join book using (book_id)
+			  		join client using (client_id)
+					where book_name like '%' || #{ keyword } || '%'
+					order by order_date desc, order_id desc, book_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectSalesByBookStore" parameterType="Search" resultMap="resultSales">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from sales
+			  		join book_order using (order_id, book_id)
+			  		join book using (book_id)
+			  		join client using (client_id)
+					where client_name like '%' || #{ keyword } || '%'
+					order by order_date desc, order_id desc, book_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectSalesByLocation" parameterType="Search" resultMap="resultSales">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from sales
+			  		join book_order using (order_id, book_id)
+			  		join book using (book_id)
+			  		join client  using (client_id)
+					where client_address like '%' || #{ keyword } || '%'
+					order by order_date desc, order_id desc, book_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
 	</select>
 
 </mapper>

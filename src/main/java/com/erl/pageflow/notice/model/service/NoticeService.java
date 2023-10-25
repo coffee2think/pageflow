@@ -1,19 +1,16 @@
 package com.erl.pageflow.notice.model.service;
 
 import java.util.ArrayList;
-
-import org.apache.ibatis.javassist.compiler.ast.Keyword;
+import java.util.List;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
-import com.erl.pageflow.inventory.model.vo.Inventory;
 import com.erl.pageflow.notice.model.vo.Notice;
-import com.erl.pageflow.sales.model.vo.Client;
 
 
 
 public interface NoticeService {
-	ArrayList<Notice> selectList(Paging paging);
+	ArrayList<Notice> selectNoticeList(Paging paging);
 	int selectListCount();
 	int selectSearchTitleCount(String keyword);
 	int selectSearchWriterCount(String keyword);
@@ -26,7 +23,13 @@ public interface NoticeService {
     int selectNoticeCountByDate(Search search);
     public ArrayList<Notice> selectNoticeByDate(Search search);
     int updateReadCount(int noticeId);
-
-	
-	
+	ArrayList<Notice> selectImportantNoticeList(Paging paging);
+	int updateNoticeAlarmAll();
+	int updateNoticeAlarmDept(int depId);
+	int updateNoticeAlarmEmp(List<Integer> empIdList);
+	int insertReferenceNotice(Notice notice);
+	int updateMinusNoticeAlarm(int loginMemberId);
+	int selectReferenceNotice(Notice notice);
+	int deleteReferenceNotice(int noticeId);
+	int selectReadEmpCount(int noticeId);
 }

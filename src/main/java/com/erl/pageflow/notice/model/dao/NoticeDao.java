@@ -16,10 +16,11 @@ import com.erl.pageflow.sales.model.vo.Client;
 
 @Repository("noticeDao")
 public class NoticeDao {
+	
 	@Autowired //root-context.xml 에서 생성한 객체를 자동 연결함
 	private SqlSessionTemplate sqlSessionTemplate;
 	
-	public ArrayList<Notice> selectList( Paging paging){
+	public ArrayList<Notice> selectNoticeList(Paging paging){
 		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectNoticeList", paging);
 		return (ArrayList<Notice>)list;
 	}
@@ -32,7 +33,7 @@ public class NoticeDao {
 		return sqlSessionTemplate.insert("noticeMapper.insertNotice", notice);
 	}
 	
-	public Notice selectOne( int noticeId) {
+	public Notice selectOne(int noticeId) {
 		return sqlSessionTemplate.selectOne("noticeMapper.selectOne", noticeId);
 	}
 	
@@ -72,13 +73,44 @@ public class NoticeDao {
 	}
 	
 	public int updateReadCount(int noiceId) {
-		return sqlSessionTemplate.update("noticeMapper.updateReadCount", noiceId );
+		return sqlSessionTemplate.update("noticeMapper.updateReadCount", noiceId);
 	}
 
-	
-	
-	
-	
-	
+	public ArrayList<Notice> selectImportantNoticeList(Paging paging) {
+		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectImportantNoticeList", paging);
+		return (ArrayList<Notice>) list;
+	}
+
+	public int updateNoticeAlarmAll() {
+		return sqlSessionTemplate.update("noticeMapper.updateNoticeAlarmAll");
+	}
+
+	public int updateNoticeAlarmDept(int depId) {
+		return sqlSessionTemplate.update("noticeMapper.updateNoticeAlarmDept", depId);
+	}
+
+	public int updateNoticeAlarmEmp(List<Integer> empIdList) {
+		return sqlSessionTemplate.update("noticeMapper.updateNoticeAlarmEmp", empIdList);
+	}
+
+	public int insertReferenceNotice(Notice notice) {
+		return sqlSessionTemplate.insert("noticeMapper.insertReferenceNotice", notice);
+	}
+
+	public int updateMinusNoticeAlarm(int loginMemberId) {
+		return sqlSessionTemplate.update("noticeMapper.updateMinusNoticeAlarm", loginMemberId);
+	}
+
+	public int selectReferenceNotice(Notice notice) {
+		return sqlSessionTemplate.selectOne("noticeMapper.selectReferenceNotice", notice);
+	}
+
+	public int deleteReferenceNotice(int noticeId) {
+		return sqlSessionTemplate.delete("noticeMapper.deleteReferenceNotice", noticeId);
+	}
+
+	public int selectReadEmpCount(int noticeId) {
+		return sqlSessionTemplate.selectOne("noticeMapper.selectReadEmpCount", noticeId);
+	}
 	
 }

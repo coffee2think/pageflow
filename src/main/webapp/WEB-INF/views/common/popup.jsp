@@ -95,7 +95,7 @@ function register() {
 			'storage': ['clientId', 'clientName'],
 			'employee': ['empId', 'empName', 'depName', 'posName', 'phone', 'email'],
 			'writer': ['writerId', 'writerName', 'phone', 'email'],
-			'book_order': ['orderId', 'bookId', 'bookName', 'clientId', 'clientName', 'orderDate', 'bookPrice', 'orderQuantity'],
+			'book_order': ['orderId', 'bookId', 'bookName', 'clientId', 'clientName', 'orderDate', 'bookPrice', 'orderQuantity', 'totalPrice'],
 			'saveLine' : ['savelineId', 'savelineName', 'approver_1', 'approver_2', 'approver_3', 'approver_4'],
 			'lineE': ['empId', 'empName', 'depName', 'posName', 'phone', 'email'],
 			

@@ -174,6 +174,9 @@ public class SalesController {
 		case "location":
 			listCount = salesService.selectBookOrderCountByLocation(search);
 			break;
+		case "state":
+			listCount = salesService.selectBookOrderCountByState(search);
+			break;
 		}
 		
 		Paging paging = new Paging(listCount, currentPage, limit, "bolistkw.do");
@@ -193,6 +196,9 @@ public class SalesController {
 			break;
 		case "location":
 			list = salesService.selectBookOrderByLocation(search);
+			break;
+		case "state":
+			list = salesService.selectBookOrderByState(search);
 			break;
 		}
 		
@@ -252,6 +258,74 @@ public class SalesController {
 			return "sales/sales_list";
 		} else {
 			model.addAttribute("message", "판매현황 조회 실패");
+			return "common/error";
+		}
+	}
+	
+	// 키워드로 주문현황 검색
+	@RequestMapping(value="sslistkw.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String salesListByKeyword(Search search,
+			@RequestParam(name="searchType") String searchType,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+		
+		logger.info("sslistkw.do : searchType=" + searchType);
+		logger.info("sslistkw.do : " + search);
+		logger.info("sslistkw.do : page=" + page + ", limit=" + limitStr);
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		int listCount = 0;
+		
+		switch(searchType) {
+		case "book":
+			listCount = salesService.selectSalesCountByBook(search);
+			break;
+		case "bookStore":
+			listCount = salesService.selectSalesCountByBookStore(search);
+			break;
+		case "location":
+			listCount = salesService.selectSalesCountByLocation(search);
+			break;
+		}
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "sslistkw.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<Sales> list = null;
+		
+		switch(searchType) {
+		case "book":
+			list = salesService.selectSalesByBook(search);
+			break;
+		case "bookStore":
+			list = salesService.selectSalesByBookStore(search);
+			break;
+		case "location":
+			list = salesService.selectSalesByLocation(search);
+			break;
+		}
+		
+		if(list != null && list.size() > 0) {
+			for(Sales sales : list) {
+				sales.calcTotalPrice();
+			}
+	
+			model.addAttribute("list", list);
+			model.addAttribute("searchType", searchType);
+			model.addAttribute("keyword", search.getKeyword());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "sales/sales_list";
+		} else {
+			model.addAttribute("message", "판매현황 " + search.getKeyword() + " 검색 실패");
 			return "common/error";
 		}
 	}
@@ -332,14 +406,12 @@ public class SalesController {
 		String[] clientIds = request.getParameterValues("clientId");
 		String[] empIds = request.getParameterValues("empId");
 		String[] orderQuantities = request.getParameterValues("orderQuantity");
-		String[] states = request.getParameterValues("state");
 		
 		logger.info("boinsert.do ---------------------------- START");
 		logger.info("bookIds : " + Arrays.toString(bookIds));
 		logger.info("clientIds : " +  Arrays.toString(clientIds));
 		logger.info("empIds : " + Arrays.toString(empIds));
 		logger.info("orderQuantities : " + Arrays.toString(orderQuantities));
-		logger.info("states : " + Arrays.toString(states));
 		logger.info("boinsert.do ---------------------------- END");
 		
 		// 주문번호 생성
@@ -355,7 +427,6 @@ public class SalesController {
 			bookOrder.setClientId(Integer.parseInt(clientIds[i]));
 			bookOrder.setEmpId(Integer.parseInt(empIds[i]));
 			bookOrder.setOrderQuantity(Integer.parseInt(orderQuantities[i]));
-			bookOrder.setState(states[i]);
 			
 			bookOrders.add(bookOrder);
 		}
