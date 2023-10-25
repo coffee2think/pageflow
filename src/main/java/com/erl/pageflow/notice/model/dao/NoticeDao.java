@@ -76,7 +76,10 @@ public class NoticeDao {
 	}
 
 	
-	
+	public ArrayList<Notice> selectNewTop(){
+		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectNewTop");
+		return (ArrayList<Notice>)list;
+	}
 	
 	
 	

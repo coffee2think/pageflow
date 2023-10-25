@@ -301,7 +301,7 @@ public class RefundController {
 
 	}
 
-	// 출고 수정
+	// 반품 수정
 	@RequestMapping(value = "refupdate.do", method = RequestMethod.POST)
 	public void updateRefund(Refund refund, HttpServletResponse response) throws IOException {
 		String returnStr = null;

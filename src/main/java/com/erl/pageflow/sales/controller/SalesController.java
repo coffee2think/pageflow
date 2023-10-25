@@ -2,6 +2,8 @@ package com.erl.pageflow.sales.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +12,8 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
@@ -584,4 +589,30 @@ public class SalesController {
 		}
 	}
 	
+	// 메인페이지 ajax 통신 ******************************************************************
+	
+	@RequestMapping(value="booktop3.do", method=RequestMethod.POST)
+	@ResponseBody
+	public String bookOrderNewTop3Method() throws UnsupportedEncodingException {
+		ArrayList<BookOrder> list = salesService.selectNewTop3();
+		
+		JSONObject sendJson = new JSONObject();
+		
+		JSONArray jarr = new JSONArray();
+		
+		for (BookOrder bookOrder : list) {
+			JSONObject job = new JSONObject();
+			
+			job.put("bdate", bookOrder.getOrderDate().toString());
+			job.put("orderId", bookOrder.getOrderId());
+			job.put("bookName", URLEncoder.encode(bookOrder.getBookName(), "utf-8"));
+			job.put("clientName", URLEncoder.encode(bookOrder.getClientName(), "utf-8"));
+			
+			jarr.add(job);
+		}
+		
+		sendJson.put("list", jarr);
+
+		return sendJson.toJSONString();
+	}
 }

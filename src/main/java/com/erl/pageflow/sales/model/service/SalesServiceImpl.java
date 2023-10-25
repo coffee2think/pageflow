@@ -177,4 +177,9 @@ public class SalesServiceImpl implements SalesService {
 		return salesDao.selectRank();
 	}
 
+	@Override
+	public ArrayList<BookOrder> selectNewTop3() {
+		return salesDao.selectNewTop3();
+	}
+
 }

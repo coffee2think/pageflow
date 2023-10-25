@@ -44,5 +44,5 @@ public interface SalesService {
 	public int deleteSales(int salesId);
 	public ArrayList<Integer> selectYears();
 	public ArrayList<Rank> selectRank();
-
+	public ArrayList<BookOrder> selectNewTop3();
 }

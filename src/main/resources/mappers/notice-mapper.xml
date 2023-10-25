@@ -125,11 +125,14 @@
 	</select>
 	
 	
+	<select id="selectNewTop" resultMap="resultNotice">
+		<![CDATA[
+			select *
+			from (select rownum rnum, notice_title, create_date
+			        from(select * from notice order by create_date desc))
+			where rnum >= 1 and rnum <= 3
+		]]>
+	</select>
+	
 	
 </mapper>
-
-
-
-
-
-

@@ -8,6 +8,7 @@
 		<result property="orderId" column="order_ID" />
 		<result property="bookId" column="BOOK_ID" />
 		<result property="clientId" column="CLIENT_ID" />
+		<result property="clientName" column="CLIENT_NAME" />
 		<result property="empId" column="EMP_ID" />
 		<result property="empName" column="EMP_NAME" />
 		<result property="orderQuantity" column="ORDER_QUANTITY" />
@@ -361,6 +362,17 @@
 	<select id="selectRank" resultMap="resultRank">
 		select * from rank
 		order by rank asc
+	</select>
+	
+	<select id="selectNewTop3" resultMap="resultBookOrder">
+		<![CDATA[
+		select *
+		from (select rownum rnum, order_id, order_date, book_name, client_name
+	          from (select * from book_order order by order_date desc)
+	          join book using (book_id)
+	          join client using(client_id))
+		where rnum >= 1 and rnum <= 3
+		]]>
 	</select>
 
 </mapper>

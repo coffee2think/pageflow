@@ -20,7 +20,7 @@
     $(function() {
     	// 차트 숨기기
     	$('#chart').hide();
-    	
+    
     	const table = $('#table_list');
         // var monthly_sum = Array.from({length: 12}, () => 0);
 
