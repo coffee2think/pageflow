@@ -53,8 +53,6 @@
 		newCell6.setAttribute('class', 'td-70');
 		const newCell7 = newRow.insertCell(6);
 		newCell7.setAttribute('class', 'td-120');
-		const newCell8 = newRow.insertCell(7);
-		newCell8.setAttribute('class', 'td-120');
 
 		// Cell에 텍스트 추가
 		newCell1.innerHTML = `
@@ -93,12 +91,12 @@
 					</div>`;
 		newCell5.innerHTML = `
 					<div class="contents-input-div">
-						<input type="number" name="bookPrice" class="contents-input">
+						<input type="number" name="bookPrice" class="contents-input" onkeyup="calcTotalPrice(this); return false;">
 					</div>`;
 		
 		newCell6.innerHTML = `
 					<div class="contents-input-div">
-						<input type="number" name="orderQuantity" class="contents-input">
+						<input type="number" name="orderQuantity" class="contents-input" onkeyup="calcTotalPrice(this); return false;">
 					</div>`;
 		
 		newCell7.innerHTML = `
@@ -106,11 +104,6 @@
 						<input type="number" name="totalPrice" class="contents-input" value="">
 					</div>`;
 
-		newCell8.innerHTML = `
-					<div class="contents-input-div">
-						<input type="input" name="state" class="contents-input" value="">
-					</div>`;
-		
 		initRowIndex();
 	}
     
@@ -145,28 +138,33 @@
 		// 팝업창 버튼 초기화 (함수 출처 : popup.jsp)
 		initPopupBtn();
 		
+		// totalPrice 계산용
+		$('input[name=bookPrice]').each(function(index) {
+			$(this).keyup(function() {
+				calcTotalPrice(index + 1);
+			});
+		});
+		
+		$('input[name=orderQuantity]').each(function(index) {
+			$(this).keyup(function() {
+				calcTotalPrice(index + 1);
+			});
+		});
+		
 	} //initRowIndex
 	 
-	function calcTotalPrice(currentIndex) {
-		const table = document.getElementById('input_table');
+	function calcTotalPrice(rowIndex) {
+		const bookPrice = $('input[name=bookPrice]').eq(rowIndex - 1).val();
+		const orderQuantity = $('input[name=orderQuantity]').eq(rowIndex - 1).val();
 		
-		var row = table.rows[currentIndex];
-		var bookPrice = row.cells[4].children[0].children[0].value;
-		var orderQuantity = row.cells[5].children[0].children[0].value;
-		
-		var totalPrice = row.cells[6];
-		totalPrice.children[0].children[0].value = bookPrice * orderQuantity;
+		if(bookPrice != '' && orderQuantity != '') {
+			$('input[name=totalPrice]').eq(rowIndex - 1).val(bookPrice * orderQuantity);
+		}
 	}
 </script>
 <title>주문 등록</title>
 </head>
 <body>
-	<form>
-		<table >
-		
-		</table>
-	</form>
-	
 	<div id="container">
         
         <!--헤더-->
@@ -229,7 +227,6 @@
                                         <th>정가</th>
                                         <th>주문수량</th>
                                         <th>금액</th>
-                                        <th>상태</th>
                                     </tr>
                                     <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
                                         <td class="td-50">
@@ -269,22 +266,17 @@
                                         </td>
                                         <td class="td-100">
                                             <div class="contents-input-div">
-                                                <input type="number" name="bookPrice" class="contents-input" value="" onchange="calcTotalPrice(1); return false;">
+                                                <input type="number" name="bookPrice" class="contents-input" value="" onkeyup="calcTotalPrice(1); return false;">
                                             </div>
                                         </td>
                                         <td class="td-70">
                                             <div class="contents-input-div">
-                                                <input type="number" name="orderQuantity" class="contents-input" value="" onchange="calcTotalPrice(1); return false;">
+                                                <input type="number" name="orderQuantity" class="contents-input" value="" onkeyup="calcTotalPrice(1); return false;">
                                             </div>
                                         </td>
                                         <td class="td-120">
                                             <div class="contents-input-div">
                                                 <input type="number" name="totalPrice" class="contents-input" value="" readonly>
-                                            </div>
-                                        </td>
-                                        <td class="td-120">
-                                            <div class="contents-input-div">
-                                                <input type="input" name="state" class="contents-input" value="">
                                             </div>
                                         </td>
                                     </tr>
@@ -309,7 +301,6 @@
             <!--modal-pop-area-->
             <div class="modal-pop-area">
                 <!-- 팝업 들어감 -->
-                <%-- <c:import url="../common/popup.jsp" /> --%>
                 <c:import url="../common/popup.jsp" />
             </div>
             <!--modal-pop-area end-->

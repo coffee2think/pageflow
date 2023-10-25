@@ -14,6 +14,11 @@
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title>공지사항</title>
+<style>
+.paging-box {
+	
+}
+</style>
 <script>
 	const NOWPAGE = 1;
 	const SUBPAGE = 1;
@@ -108,25 +113,24 @@
 								<table class="contents-table">
 									<tr>
 										<th>번호</th>
-										<th>부서</th>
 										<th>제목</th>
 										<th>조회수</th>
 										<th>날짜</th>
 									</tr>
 									<c:if test="${ !empty importantList }">
-										<c:forEach items="${ importantList }">
+										<c:forEach items="${ importantList }" var="notice">
 											<tr>
-												<td>!필독!</td>
-												<td>
-													<c:if test="${ !empty notice.classify and classify == 'all' }">
-														[${ notice.refDepName }]
-													</c:if>
-												</td>
+												<td>[필독]</td>
 												<td>
 													<c:url var="detailUrl" value="ndetail.do">
 														<c:param name="noticeId" value="${ notice.noticeId }" />
 													</c:url>
-													<a href="${ detailUrl }">${ notice.noticeTitle }</a>
+													<a href="${ detailUrl }">
+														<c:if test="${ !empty notice.refDepName }">
+															${ notice.refDepName }
+														</c:if>
+														${ notice.noticeTitle }
+													</a>
 													<c:if test="${ notice.noticeCreateDate == today }">
 														[New] <!-- 아이콘 처리 해야함 -->
 													</c:if>
@@ -143,12 +147,16 @@
 										<c:forEach items="${ list }" var="notice">
 											<tr>
 												<td>${ notice.noticeId }</td>
-												<td>[${ notice.refDepName }]</td>
 												<td>
 													<c:url var="detailUrl" value="ndetail.do">
 														<c:param name="noticeId" value="${ notice.noticeId }" />
 													</c:url>
-													<a href="${ detailUrl }">${ notice.noticeTitle }</a>
+													<a href="${ detailUrl }">
+														<c:if test="${ !empty notice.refDepName }">
+															${ notice.refDepName }
+														</c:if>
+														${ notice.noticeTitle }
+													</a>
 													<c:if test="${ notice.noticeCreateDate == today }">
 														[New] <!-- 아이콘 처리 해야함 -->
 													</c:if>

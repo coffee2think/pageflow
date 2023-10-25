@@ -28,12 +28,12 @@
 </head>
 <body>
 	
+	<!-- 맨왼쪽 -->
 	<c:if test="${ currentPage eq 1 }">
 		<span class="paging-list-btn prev greybtn">
 	        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/left-btn2.png"></span>
 	    </span>
 	</c:if>
-	<!-- 맨왼쪽 -->
 	<c:if test="${ currentPage > 1 }">
 			<c:url var="pUrl" value="${ urlMapping }">
 				<c:param name="page" value="1" />
@@ -63,33 +63,34 @@
 		<a href="${ pUrl }" class="paging-list-btn prev">
 	        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/left-btn2.png"></span>
 	    </a>
+	    
 	    <c:choose>
 			<c:when test="${ !((currentPage - 10) < startPage && (currentPage - 10) > 1) }">
-					<c:url var="pUrl" value="${ urlMapping }">
-						<c:param name="page" value="${ currentPage - 1 }" />
-						<c:if test="${ !empty limit }">
-							<c:param name="limit" value="${ limit }" />
-						</c:if>
-						<c:if test="${ !empty firstType }">
-							<c:param name="firstType" value="${ firstType }" />
-						</c:if>
-						
-						<!-- 키워드 검색 시 -->
-						<c:if test="${ !empty searchType and !empty keyword }">
-							<c:param name="searchType" value="${ searchType }"/>
-							<c:param name="keyword" value="${ keyword }"/>
-						</c:if>
-						
-						<!-- 날짜 검색 시 -->
-						<c:if test="${ !empty begin and !empty end }">
-							<c:param name="begin" value="${ begin }" />
-							<c:param name="end" value="${ end }" />
-						</c:if>
-						<!-- dateType이 있을 시 -->
-						<c:if test="${ !empty dateType }">
-							<c:param name="dateType" value="${ dateType }" />
-						</c:if>
-					</c:url>
+				<c:url var="pUrl" value="${ urlMapping }">
+					<c:param name="page" value="${ currentPage - 1 }" />
+					<c:if test="${ !empty limit }">
+						<c:param name="limit" value="${ limit }" />
+					</c:if>
+					<c:if test="${ !empty firstType }">
+						<c:param name="firstType" value="${ firstType }" />
+					</c:if>
+					
+					<!-- 키워드 검색 시 -->
+					<c:if test="${ !empty searchType and !empty keyword }">
+						<c:param name="searchType" value="${ searchType }"/>
+						<c:param name="keyword" value="${ keyword }"/>
+					</c:if>
+					
+					<!-- 날짜 검색 시 -->
+					<c:if test="${ !empty begin and !empty end }">
+						<c:param name="begin" value="${ begin }" />
+						<c:param name="end" value="${ end }" />
+					</c:if>
+					<!-- dateType이 있을 시 -->
+					<c:if test="${ !empty dateType }">
+						<c:param name="dateType" value="${ dateType }" />
+					</c:if>
+				</c:url>
 				<a href="${ pUrl }" class="paging-list-btn prev">
 			        <span><img src="${ pageContext.servletContext.contextPath }/resources/images/left-btn.png"></span>
 			    </a>

@@ -81,10 +81,36 @@ public class NoticeDao {
 		return (ArrayList<Notice>) list;
 	}
 
-	
-	
-	
-	
-	
+	public int updateNoticeAlarmAll() {
+		return sqlSessionTemplate.update("noticeMapper.updateNoticeAlarmAll");
+	}
+
+	public int updateNoticeAlarmDept(int depId) {
+		return sqlSessionTemplate.update("noticeMapper.updateNoticeAlarmDept", depId);
+	}
+
+	public int updateNoticeAlarmEmp(List<Integer> empIdList) {
+		return sqlSessionTemplate.update("noticeMapper.updateNoticeAlarmEmp", empIdList);
+	}
+
+	public int insertReferenceNotice(Notice notice) {
+		return sqlSessionTemplate.insert("noticeMapper.insertReferenceNotice", notice);
+	}
+
+	public int updateMinusNoticeAlarm(int loginMemberId) {
+		return sqlSessionTemplate.update("noticeMapper.updateMinusNoticeAlarm", loginMemberId);
+	}
+
+	public int selectReferenceNotice(Notice notice) {
+		return sqlSessionTemplate.selectOne("noticeMapper.selectReferenceNotice", notice);
+	}
+
+	public int deleteReferenceNotice(int noticeId) {
+		return sqlSessionTemplate.delete("noticeMapper.deleteReferenceNotice", noticeId);
+	}
+
+	public int selectReadEmpCount(int noticeId) {
+		return sqlSessionTemplate.selectOne("noticeMapper.selectReadEmpCount", noticeId);
+	}
 	
 }

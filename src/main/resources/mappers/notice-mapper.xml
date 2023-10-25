@@ -152,12 +152,51 @@
 		]]>
 	</select>
 	
+	<update id="updateNoticeAlarmAll">
+		update alarm
+		set alarm_notice_num = alarm_notice_num + 1 
+	</update>
 	
+	<update id="updateNoticeAlarmDept" parameterType="_int">
+		update alarm
+		set alarm_notice_num = alarm_notice_num + 1
+		where emp_id in (select emp_id from employee
+						 where dep_id = #{ depId })
+	</update>
+	
+	<update id="updateNoticeAlarmEmp" parameterType="java.util.List">
+		<foreach collection="list" item="item">
+			update alarm
+			set alarm_notice_num = alarm_notice_num + 1
+			where emp_id = #{ item }
+		</foreach>
+	</update>
+	
+	<insert id="insertReferenceNotice" parameterType="Notice">
+		insert into reference_notice values
+		((select nvl(max(ref_id),0)+1 from reference_notice),
+		#{ empId }, #{ noticeId }, default, 'Y')
+	</insert>
+	
+	<update id="updateMinusNoticeAlarm" parameterType="_int">
+		update alarm
+		set alarm_notice_num = alarm_notice_num - 1
+		where emp_id = #{ loginMemberId }
+	</update>
+	
+	<select id="selectReferenceNotice" parameterType="Notice" resultType="_int">
+		select count(*) from reference_notice
+		where notice_id = #{ noticeId } and emp_id = #{ empId }
+	</select>
+	
+	<delete id="deleteReferenceNotice" parameterType="_int">
+		delete from reference_notice
+		where notice_id = #{ noticeId }
+	</delete>
+	
+	<select id="selectReadEmpCount" parameterType="_int" resultType="_int">
+		select count(*) from reference_notice
+		where notice_id = #{ noticeId } and read_chk = 'Y'
+	</select>
 	
 </mapper>
-
-
-
-
-
-

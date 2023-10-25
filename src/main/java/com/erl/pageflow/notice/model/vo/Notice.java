@@ -22,15 +22,16 @@ public class Notice implements java.io.Serializable{
 	private String noticeRenameFileName;
 	
 	private String refDepName;
+	private String depType;
 	
 	public Notice() {
 		super();
 	}
-	
+
 	public Notice(int noticeId, int empId, String empName, String noticeTitle, String noticeDetail,
 			Date noticeCreateDate, Date noticeModifyDate, Date noticeDeleteDate, String classify, String importance,
 			Date importanceDate, int noticeReadCount, String noticeOriginalFileName, String noticeRenameFileName,
-			String refDepName) {
+			String refDepName, String depType) {
 		this.noticeId = noticeId;
 		this.empId = empId;
 		this.empName = empName;
@@ -46,6 +47,7 @@ public class Notice implements java.io.Serializable{
 		this.noticeOriginalFileName = noticeOriginalFileName;
 		this.noticeRenameFileName = noticeRenameFileName;
 		this.refDepName = refDepName;
+		this.depType = depType;
 	}
 
 	public int getNoticeId() {
@@ -172,6 +174,14 @@ public class Notice implements java.io.Serializable{
 		this.refDepName = refDepName;
 	}
 
+	public String getDepType() {
+		return depType;
+	}
+
+	public void setDepType(String depType) {
+		this.depType = depType;
+	}
+
 	@Override
 	public String toString() {
 		return "Notice [noticeId=" + noticeId + ", empId=" + empId + ", empName=" + empName + ", noticeTitle="
@@ -179,16 +189,7 @@ public class Notice implements java.io.Serializable{
 				+ ", noticeModifyDate=" + noticeModifyDate + ", noticeDeleteDate=" + noticeDeleteDate + ", classify="
 				+ classify + ", importance=" + importance + ", importanceDate=" + importanceDate + ", noticeReadCount="
 				+ noticeReadCount + ", noticeOriginalFileName=" + noticeOriginalFileName + ", noticeRenameFileName="
-				+ noticeRenameFileName + ", refDepName=" + refDepName + ", getNoticeId()=" + getNoticeId()
-				+ ", getEmpId()=" + getEmpId() + ", getEmpName()=" + getEmpName() + ", getNoticeTitle()="
-				+ getNoticeTitle() + ", getNoticeDetail()=" + getNoticeDetail() + ", getNoticeCreateDate()="
-				+ getNoticeCreateDate() + ", getNoticeModifyDate()=" + getNoticeModifyDate()
-				+ ", getNoticeDeleteDate()=" + getNoticeDeleteDate() + ", getClassify()=" + getClassify()
-				+ ", getImportance()=" + getImportance() + ", getImportanceDate()=" + getImportanceDate()
-				+ ", getNoticeReadCount()=" + getNoticeReadCount() + ", getNoticeOriginalFileName()="
-				+ getNoticeOriginalFileName() + ", getNoticeRenameFileName()=" + getNoticeRenameFileName()
-				+ ", getRefDepName()=" + getRefDepName() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode()
-				+ ", toString()=" + super.toString() + "]";
+				+ noticeRenameFileName + ", refDepName=" + refDepName + ", depType=" + depType + "]";
 	}
 	
 }

@@ -114,18 +114,6 @@
  		$('#td_sumCollectedAmount').text(sumCollectedAmount);
  		$('#td_sumBalance').text(sumBalance);
  	}
- 	
-    // 날짜 검색 버튼 클릭시
- 	function searchByDate() {
-    	var begin = $('#begin').val();
-    	var end = $('#end').val();
-    	
-    	var url = 'sslistdate.do?';
-    	url += 'begin=' + begin;
-    	url += '&end=' + end;
-    	
-    	location.href = url;
-    }
 </script>
 <title>판매 현황</title>
 </head>
@@ -188,24 +176,11 @@
                                 </div>
 
                                 <div class="search-box">
-                                    <button class="search-btn">
+                                    <button class="search-btn" onclick="searchKeyword('sslistkw.do'); return false;">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
                                     <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }">
                                 </div>
-                            </div>
-
-                            <div class="select-box">
-                                <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
-                                        <option value="all">지역</option>
-                                        <option value="">강남</option>
-                                        <option value="">서초</option>
-                                        <option value="">인천</option>
-                                    </select>
-                                </div>
-                                
                             </div>
 
                             <div class="select-box">
@@ -239,7 +214,7 @@
 								
                                 <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
                                 <input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
-                                <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
+                                <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate('sslistdate.do'); return false;">
                             </div>
 
                         </form>
@@ -266,7 +241,6 @@
                                     <th>주문번호</th>
                                     <th>도서코드</th>
                                     <th>도서명</th>
-                                    <th>지역</th>
                                     <th>서점명</th>
                                     <th>주문일시</th>
                                     <th>정가</th>
@@ -320,11 +294,6 @@
 		                                            <input type="input" name="bookName" class="contents-input noline" value="${ sales.bookName }" readonly>
 		                                        </div>
 		                                    </td>
-		                                    <td class="td-50">
-		                                        <div class="contents-input-div">
-		                                            <input type="input" name="location" class="contents-input noline" value="강남" readonly>
-		                                        </div>
-		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
 		                                            <input type="input" name="bookStoreName" class="contents-input noline" value="${ sales.bookStoreName }" readonly>
@@ -376,7 +345,6 @@
                                 <fmt:formatNumber var="sumBalance" value="${ sumBalance }" type="number" />
                                 
                                 <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
-                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

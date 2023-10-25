@@ -177,4 +177,44 @@ public class SalesServiceImpl implements SalesService {
 		return salesDao.selectRank();
 	}
 
+	@Override
+	public int selectBookOrderCountByState(Search search) {
+		return salesDao.selectBookOrderCountByState(search);
+	}
+
+	@Override
+	public ArrayList<BookOrder> selectBookOrderByState(Search search) {
+		return salesDao.selectBookOrderByState(search);
+	}
+
+	@Override
+	public int selectSalesCountByBook(Search search) {
+		return salesDao.selectSalesCountByBook(search);
+	}
+
+	@Override
+	public int selectSalesCountByBookStore(Search search) {
+		return salesDao.selectSalesCountByBookStore(search);
+	}
+
+	@Override
+	public int selectSalesCountByLocation(Search search) {
+		return salesDao.selectSalesCountByLocation(search);
+	}
+
+	@Override
+	public ArrayList<Sales> selectSalesByBook(Search search) {
+		return salesDao.selectSalesByBook(search);
+	}
+
+	@Override
+	public ArrayList<Sales> selectSalesByBookStore(Search search) {
+		return salesDao.selectSalesByBookStore(search);
+	}
+
+	@Override
+	public ArrayList<Sales> selectSalesByLocation(Search search) {
+		return salesDao.selectSalesByLocation(search);
+	}
+
 }

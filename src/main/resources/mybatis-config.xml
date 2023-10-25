@@ -14,6 +14,7 @@
 		
 		<!-- 직원 관리 -->
 		<typeAlias type="com.erl.pageflow.employee.model.vo.Employee" alias="Employee" />
+		<typeAlias type="com.erl.pageflow.employee.model.vo.Department" alias="Department" />
 		
 		<!-- 공지사항 -->
 		<typeAlias type="com.erl.pageflow.notice.model.vo.Notice" alias="Notice" />

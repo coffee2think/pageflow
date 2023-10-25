@@ -157,7 +157,50 @@
 		// 팝업창 버튼 초기화 (함수 출처 : popup.jsp)
 		initPopupBtn();
 		
+		// totalPrice 계산용
+		$('input[name=bookPrice]').each(function(index) {
+			$(this).keyup(function() {
+				calcTotalPrice(index + 1);
+			});
+		});
+		
+		$('input[name=orderQuantity]').each(function(index) {
+			$(this).keyup(function() {
+				calcTotalPrice(index + 1);
+			});
+		});
+		
+		$('input[name=totalPrice]').each(function(index) {
+			$(this).change(function() {
+				calcBalance(index + 1);
+			});
+		});
+		
+		$('input[name=balance]').each(function(index) {
+			$(this).keyup(function() {
+				calcBalance(index + 1);
+			});
+		});
+		
 	} //initRowIndex
+	
+	function calcTotalPrice(rowIndex) {
+		const bookPrice = $('input[name=bookPrice]').eq(rowIndex - 1).val();
+		const orderQuantity = $('input[name=orderQuantity]').eq(rowIndex - 1).val();
+		
+		if(bookPrice != '' && orderQuantity != '') {
+			$('input[name=totalPrice]').eq(rowIndex - 1).val(bookPrice * orderQuantity);
+		}
+	}
+	
+	function calcBalance(rowIndex) {
+		const totalPrice = $('input[name=totalPrice]').eq(rowIndex - 1).val();
+		const collectedAmount = $('input[name=collectedAmount]').eq(rowIndex - 1).val();
+		
+		if(totalPrice != '' && collectedAmount != '') {
+			$('input[name=balance]').eq(rowIndex - 1).val(totalPrice - collectedAmount);
+		}
+	}
     
 </script>
 <title>판매 입력</title>
@@ -277,22 +320,22 @@
                                         </td>
                                         <td>
                                             <div class="contents-input-div">
-                                                <input type="number" name="bookPrice" class="contents-input">
+                                                <input type="number" name="bookPrice" class="contents-input" onkeyup="calcTotalPrice(1); return false;">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="contents-input-div">
-                                                <input type="number" name="orderQuantity" class="contents-input">
+                                                <input type="number" name="orderQuantity" class="contents-input" onkeyup="calcTotalPrice(1); return false;">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="contents-input-div">
-                                                <input type="number" name="totalPrice" class="contents-input" value="">
+                                                <input type="number" name="totalPrice" class="contents-input" onchange="calcBalance(1); return false;" value="">
                                             </div>
                                         </td>
                                         <td>
                                             <div class="contents-input-div">
-                                                <input type="number" name="collectedAmount" class="contents-input" value="">
+                                                <input type="number" name="collectedAmount" class="contents-input" onkeyup="calcBalance(1); return false;" value="">
                                             </div>
                                         </td>
                                         <td>

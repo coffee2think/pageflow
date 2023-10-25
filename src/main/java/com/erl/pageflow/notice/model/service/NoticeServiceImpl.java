@@ -2,6 +2,7 @@ package com.erl.pageflow.notice.model.service;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.ibatis.javassist.compiler.ast.Keyword;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,14 +90,44 @@ public class NoticeServiceImpl implements NoticeService{
 		return noticeDao.selectImportantNoticeList(paging);
 	}
 
-	
+	@Override
+	public int updateNoticeAlarmAll() {
+		return noticeDao.updateNoticeAlarmAll();
+	}
 
-	
-	
-	
+	@Override
+	public int updateNoticeAlarmDept(int depId) {
+		return noticeDao.updateNoticeAlarmDept(depId);
+	}
 
-	
+	@Override
+	public int updateNoticeAlarmEmp(List<Integer> empIdList) {
+		return noticeDao.updateNoticeAlarmEmp(empIdList);
+	}
 
-	
+	@Override
+	public int insertReferenceNotice(Notice notice) {
+		return noticeDao.insertReferenceNotice(notice);
+	}
+
+	@Override
+	public int updateMinusNoticeAlarm(int loginMemberId) {
+		return noticeDao.updateMinusNoticeAlarm(loginMemberId);
+	}
+
+	@Override
+	public int selectReferenceNotice(Notice notice) {
+		return noticeDao.selectReferenceNotice(notice);
+	}
+
+	@Override
+	public int deleteReferenceNotice(int noticeId) {
+		return noticeDao.deleteReferenceNotice(noticeId);
+	}
+
+	@Override
+	public int selectReadEmpCount(int noticeId) {
+		return noticeDao.selectReadEmpCount(noticeId);
+	}
 
 }

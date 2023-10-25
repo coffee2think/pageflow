@@ -15,6 +15,38 @@
 <script type="text/javascript"
 	src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title></title>
+<style>
+	.search-div {
+		width: 100%;
+		height: 22px;
+	}
+	.search-div  tr{
+		position: relative;
+	}
+
+	.search-div .input-search-btn {
+		top: -3px;
+	}
+
+	.search-table {
+		width: 100%;
+	}
+
+	.search-div .input-search-box {
+		text-align: left;
+    	margin-left: 30px;
+	}
+
+	.close-search {
+		font-size: 10px;
+		background-color: #eee;
+	}
+
+	.select-box {
+		text-align: left;
+	}
+
+</style>
 <script type="text/javascript">
 	const NOWPAGE = 1;
 	const SUBPAGE = 1;
@@ -38,13 +70,41 @@
 					return false;
 				}
 			}
+			
+			// 만약 부서 공지이고, 부서가 선택되지 않았을 경우
+			if($('#classify').val() == 'dept' && $('#dep_type').val() == 'all') {
+				alert('부서를 선택해주세요.');
+				return false;
+			}
 
 			return true;
 		});
+		
+		// 공지유형이 부서공지로 바뀔 경우 부서 목록 보이기
+		$('.classify-sub').hide();
+		checkSelectBox();
 	});
 	
 	function inputSubmit(){
 		$('#btn_insert').click();
+	}
+	
+	function checkSelectBox() {
+		$('#classify').on('change', function() {
+			var classify = $('#classify').val();
+			
+			if(classify == 'dept') {
+				$('#dep_type').show();
+			} else {
+				$('#dep_type').hide();
+			}
+			
+			if(classify == 'emp') {
+				$('#emp_list').show();
+			} else {
+				$('#emp_list').hide();
+			}
+		});
 	}
 </script>
 </head>
@@ -135,20 +195,37 @@
 										<select name="classify" id="classify">
 											<option value="all" selected>전체 공지</option>
 											<option value="dept">부서 공지</option>
-											<option value="emp">직원 공지</option>
+											<!-- <option value="emp">직원 공지</option> -->
 										</select>
 									</div>
 
-									<div class="select-pan font-size13">
-										<label for="sel_code"></label>
-										<select name="code" id="sel_code">
-											<option value="">부서</option>
-											<option value="">작성자</option>
-											<option value="">제목</option>
-										</select>
+									<div class="select-pan font-size13 search-div">
+										<div>
+											<label for="sel_code"></label>
+											<select class="classify-sub" name="depType" id="dep_type">
+												<option value="all">부서</option>
+												<c:forEach items="${ depList }" var="dep">
+													<option value="${ dep.depId }">${ dep.depName }</option>
+												</c:forEach>
+											</select>
+										</div>
+										<%-- <table class="search-table">
+											<tr>
+												<td>
+													<div class="contents-input-div input-search classify-sub" id="emp_list">
+														<button type="button" class="input-search-btn">
+															<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+														</button>
+														<input type="text" name="empList" class="contents-input" value="">
+														<div class="input-search-box">
+															<span>홍길동<span class="close-search">x</span></span> 
+															<span>홍길동<span class="close-search">x</span></span>
+														</div>
+													</div>
+												</td>
+											</tr>
+										</table> --%>
 									</div>
-
-									<input type="button" class="notice-sel-btn" value="직원목록">
 								</div>
 
 								<div class="select-box">
@@ -178,7 +255,9 @@
 				<!--main-container end-->
 
 				<!--modal-pop-area-->
-				<div class="modal-pop-area"></div>
+	            <div class="modal-pop-area">
+	                <c:import url="../common/popup.jsp" />
+	            </div>
 				<!--modal-pop-area end-->
 		</main>
 

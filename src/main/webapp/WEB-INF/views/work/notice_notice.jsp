@@ -126,7 +126,9 @@
 											<div>
 												<span>${ notice.noticeCreateDate }</span>
 												<span>|</span>
-												<span class="bluetext">읽음 ${ notice.noticeReadCount }</span>
+												<span class="bluetext">조회수 ${ notice.noticeReadCount }</span>
+												<span>|</span>
+												<span class="bluetext">읽은이 ${ readEmpCount }</span>
 											</div>
 										</span>
 									</div>
