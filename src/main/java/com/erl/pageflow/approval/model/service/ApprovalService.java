@@ -86,5 +86,11 @@ public interface ApprovalService {
 
 	public int updateApprovalState(ApprovalKeyword approvalKeyword);
 
+	public int insertDraftAnnual(Approval approval);
+
+	public int selectApprovalMaxId();
+
+	public int updateDraftAnnual(Approval approval);
+
 
 }

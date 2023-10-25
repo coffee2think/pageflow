@@ -203,13 +203,13 @@ var MENU_INFO = [
     },
     {
         title : '마이페이지'
-        ,link : 'movemypage.do'
+        ,link : 'javascript:goMyPage()'
         ,branch : [
             {
                 stitle : '마이페이지'
-                ,slink : 'movemypage.do'
+                ,slink : 'javascript:goMyPage()'
                 ,sbranch : [
-                    {mtitle : '내정보 보기', mlink : 'movemypage.do'},
+                    {mtitle : '내정보 보기', mlink : 'javascript:goMyPage()'},
                     {mtitle : '쪽지함', mlink : 'movemsgbox.do'}
                 ]
             }

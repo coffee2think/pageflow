@@ -111,9 +111,9 @@
 					 contr_date, contr_doc, contr_state, category
 		      from (select *
                     from contract
-                    where contr_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)))
+                    where contr_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+                    order by contr_date desc))
 		where rnum between #{ startRow } AND #{ endRow }
-		order by contr_date desc
 		]]>
 	</select>
 
@@ -243,11 +243,12 @@
 		from (select rownum rnum, edit_id, dep_id, emp_id, emp_name, book_name, 
 		           edit_state, start_date, end_date
 		      from (select * from edit
-		        	where start_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400))
+		        	where start_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+		        	order by edit_id desc, start_date desc)
 			 ) e
 		left join department d on e.dep_id = d.dep_id
 		where rnum between #{ startRow } AND #{ endRow }
-		order by edit_id desc, start_date desc
+		
 	</select>
 	
 	<select id="selectEditCountByEDate" parameterType="Search" resultType="_int">
@@ -260,11 +261,11 @@
 		from (select rownum rnum, edit_id, dep_id, emp_id, emp_name, book_name, 
 		           edit_state, start_date, end_date
 		      from (select * from edit
-		        	where end_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400))
+		        	where end_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+		        	order by edit_id desc, end_date desc)
 			 ) e
 		left join department d on e.dep_id = d.dep_id
 		where rnum between #{ startRow } AND #{ endRow }
-		order by edit_id desc, end_date desc
 	</select>
 	
 	<select id="selectEditCountByDepartment" parameterType="Search" resultType="_int">
@@ -366,9 +367,9 @@
 					 book_price, category, isbn, book_state, engraving, pub_date, reg_date
 		      from (select *
                     from book
-                    where reg_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)))
+                    where reg_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+                    order by reg_date desc))
 		where rnum between #{ startRow } AND #{ endRow }
-		order by reg_date desc
 		]]>
 	</select>
 	

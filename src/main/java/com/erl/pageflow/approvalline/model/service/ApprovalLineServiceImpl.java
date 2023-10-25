@@ -20,17 +20,17 @@ public class ApprovalLineServiceImpl implements ApprovalLineService{
 
 	@Override
 	public ArrayList<ApprovalLine> selectApprovalLineList(Paging paging) {
-		return null;
+		return approvalLineDao.selectApprovalLineList(paging);
 	}
 
 	@Override
 	public int insertApprovalLine(ApprovalLine approvalLine) {
-		return 0;
+		return approvalLineDao.insertApprovalLine(approvalLine);
 	}
 
 	@Override
 	public int updateApprovalLine(ApprovalLine approvalLine) {
-		return 0;
+		return approvalLineDao.updateApprovalLine(approvalLine);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class ApprovalLineServiceImpl implements ApprovalLineService{
 
 	@Override
 	public ArrayList<ApprovalLine> selectMyApprovalLineList(int lineId) {
-		return approvalLineDao.selectApprovalLineList(lineId);
+		return approvalLineDao.selectMyApprovalLineList(lineId);
 	}
 
 	@Override
@@ -66,6 +66,11 @@ public class ApprovalLineServiceImpl implements ApprovalLineService{
 	@Override
 	public int selectApprovalSaveLineId() {
 		return approvalLineDao.selectApprovalSaveLineId();
+	}
+
+	@Override
+	public int selectApprovalLineId() {
+		return approvalLineDao.selectApprovalLineId();
 	}
 	
 	

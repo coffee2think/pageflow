@@ -253,7 +253,7 @@
 
 											<td class="td-100">
 												<div class="contents-input-div">
-													<c:if test="${emp.adminYN eq 'Y' }">
+										<c:if test="${emp.adminYN eq 'Y' }">
 											 <input type="checkbox" name="adminyn_${emp.empId }"
 														value="Y" onchange="changeAdmin(this);" checked> 
 										</c:if>

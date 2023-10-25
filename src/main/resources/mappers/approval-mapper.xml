@@ -31,11 +31,11 @@
 		<result property="apprDate" column="APPR_DATE" />
 		<result property="receiptDate" column="RECEIPT_DATE" />
 		<result property="rejectionDate" column="REJECTION_DATE" />
-		<result property="drafterName" column="DRAFTER_NAME" />
-		<result property="approverName" column="APPROVER_NAME" />
-		
 		<result property="originFile" column="ORIGIN_FILE" />
 		<result property="renameFile" column="RENAME_FILE" />
+		
+		<result property="drafterName" column="DRAFTER_NAME" />
+		<result property="approverName" column="APPROVER_NAME" />
 		
 		<result property="depName" column="DEP_NAME" />
 		<result property="jobName" column="JOB_NAME" />
@@ -78,7 +78,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID, 
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -100,7 +100,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -123,7 +123,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -147,7 +147,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -163,7 +163,6 @@
 		select * 
 		from draft_annual
 		where APPR_ID = #{ apprId }
-		and DRAFT_TYPE = #{ draftType }
 	</select>
 	
 	
@@ -179,7 +178,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -202,7 +201,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -225,7 +224,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -247,7 +246,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -275,7 +274,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -307,7 +306,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		      		APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		      		APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -332,7 +331,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		      		APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		      		APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -357,7 +356,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		      		APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		      		APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -382,7 +381,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		      		APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		      		APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -406,7 +405,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		      		APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		      		APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -422,7 +421,7 @@
 	<select id="selectApprSearchCountApprover" parameterType="Search" resultType="_int">
 		select count(*)
 		from approval A
-		where #{ empId } in (select APPROVER_ID
+		where #{ empId } in (select EMP_ID
 		           from approvalline
 		           where A.LINE_ID = LINE_ID
 		           and APPROVER_NAME like '%' || #{ keyword } || '%')
@@ -434,18 +433,18 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
 		            join employee ED on (A.DRAFTER = ED.emp_id)
 		            order by APPR_ID desc) sub
-		        where #{ empId } in (select APPROVER_ID
+		        where #{ empId } in (select EMP_ID
 				           from approvalline
 				           where sub.LINE_ID = LINE_ID
 				           and APPROVER_NAME like '%' || #{ keyword } || '%'))
 		where rnum >= #{ startRow } and rnum <= #{ endRow }
-		order by APPR_ID desc;
+		order by APPR_ID desc
 		]]>
 	</select>
 	
@@ -467,7 +466,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -498,7 +497,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -528,7 +527,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -558,7 +557,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -588,7 +587,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -619,7 +618,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -648,7 +647,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -691,7 +690,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		     		APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,
+		     		APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, 
 		            ED.emp_name AS drafter_name
 		            from approval A
 		            join draft using (DRAFT_TYPE)
@@ -714,7 +713,7 @@
 		select * 
 		from (select rownum rnum, sub.*
 		      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
-		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, DRAFT_NAME,
+		            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME,
 		            ED.EMP_ID AS EMP_ID, 
 		            ED.JOB_ID AS JOB_ID, 
 		            ED.POS_ID AS POS_ID,
@@ -730,14 +729,36 @@
 		left join position using(pos_id)
 	</select>
 	
-	<insert id="insertApproval">
-		
+	<select id="selectApprovalMaxId" resultType="_int">
+		select max(APPR_ID)+1 from approval
+	</select>
+	
+	<insert id="insertApproval" parameterType="Approval">
+		insert into approval
+		values(#{ apprId }, #{ drafter }, #{ draftType }, #{ lineId }, #{ savelineId }, 
+		#{ apprState }, default, null, null, null, #{ originFile }, #{ renameFile })
 	</insert>
 	
-	<update id="updateApproval">
-		
+	<insert id="insertDraftAnnual" parameterType="Approval">
+		insert into draft_annual
+		values(#{ apprId }, #{ draftType }, #{ detail }, #{ emergency }, #{ startDate }, 
+		#{ endDate }, #{ title }, #{ detailType })
+	</insert>
+	
+	<update id="updateApproval" parameterType="Approval">
+		update approval
+		set LINE_ID = #{ lineId }, SAVELINE_ID = #{ savelineId }, 
+		ORIGIN_FILE = #{ originFile }, RENAME_FILE = #{ renameFile }
+		where APPR_ID = #{ apprId }
 	</update>
 	
+	<update id="updateDraftAnnual" parameterType="Approval">
+		update draft_annual
+		set DETAIL = #{ detail }, EMERGENCY = #{ emergency }, 
+		START_DATE = #{ startDate }, END_DATE = #{ endDate },
+		TITLE = #{ title }, DETAIL_TYPE = #{ detailType }
+		where APPR_ID = #{ apprId }
+	</update>
 	<update id="updateApprovalState" parameterType="ApprovalKeyword">
 		update approval
 		set APPR_STATE = #{ apprState }

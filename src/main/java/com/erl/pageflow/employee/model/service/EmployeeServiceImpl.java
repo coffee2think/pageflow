@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.employee.model.dao.EmployeeDao;
+import com.erl.pageflow.employee.model.vo.Department;
 import com.erl.pageflow.employee.model.vo.Employee;
 import com.erl.pageflow.employee.model.vo.SearchEmp;
 
@@ -120,5 +121,10 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Override
 	public int myUpdateInfo2(Employee employee) {
 		return employeeDao.myUpdateInfo2(employee);
+	}
+
+	@Override
+	public ArrayList<Department> selectDepartmentList() {
+		return employeeDao.selectDepartmentList();
 	}
 }

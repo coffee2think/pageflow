@@ -83,9 +83,9 @@
         if(jdata.origin_file != undefined && jdata.origin_file != null && jdata.origin_file != '') {
             el =`
             <div class="contents-notice-down-box show">
-                <a class="contents-notice-down" href="apdown.do?ofile=`+jdata.originFile+`&rfile=`+jdata.renameFile+`">
+                <a class="contents-notice-down" href="apdown.do?ofile=`+jdata.origin_file+`&rfile=`+jdata.rename_file+`">
                     <img src="/pageflow/resources/images/side-icon-dep1-over.png">
-                    <span class="origin-file-name">`+jdata.originFile+`</span>
+                    <span class="origin-file-name">`+decodeURIComponent(jdata.origin_file)+`</span>
                     <img class="down-img" src="/pageflow/resources/images/down.png">
                 </a>
             </div>`
@@ -107,8 +107,12 @@
         $('.approval-emergency').text(jdata.emergency);
         $('.approval-date').text(jdata.appr_date);
 
-        let t1 = 'o', t2 = '', t3 = '', t4 = '', t5 = '';
+        let t1 = '', t2 = '', t3 = '', t4 = '', t5 = '';
         if(jdata.detailType == 'annual') t1 = 'o';
+        else if(jdata.detailType == 'month') t2 = 'o';
+        else if(jdata.detailType == 'health') t3 = 'o';
+        else if(jdata.detailType == 'special') t4 = 'o';
+        else if(jdata.detailType == 'official') t5 = 'o';
 
         el = `
             <td>종류</td>
@@ -299,7 +303,6 @@
             </div>
 
             <div class="modal-down">
-                
             </div>
             
             <div class="modal-aproval modal-line">

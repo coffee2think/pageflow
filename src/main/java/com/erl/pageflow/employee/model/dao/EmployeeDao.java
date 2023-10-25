@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
+import com.erl.pageflow.employee.model.vo.Department;
 import com.erl.pageflow.employee.model.vo.Employee;
 import com.erl.pageflow.employee.model.vo.SearchEmp;
 
@@ -98,10 +99,15 @@ public class EmployeeDao {
 	}
 	
 	public int myUpdateInfo(Employee employee) {
-		return sqlSessionTemplate.selectOne("employeeMapper.myUpdateInfo", employee);
+		return sqlSessionTemplate.update("employeeMapper.myUpdateInfo", employee);
 	}
 	
 	public int myUpdateInfo2(Employee employee) {
-		return sqlSessionTemplate.selectOne("employeeMapper.myUpdateInfo2", employee);
+		return sqlSessionTemplate.update("employeeMapper.myUpdateInfo2", employee);
+	}
+
+	public ArrayList<Department> selectDepartmentList() {
+		List<Department> list = sqlSessionTemplate.selectList("employeeMapper.selectDepartmentList");
+		return (ArrayList<Department>)list;
 	}
 }

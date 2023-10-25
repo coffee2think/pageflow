@@ -15,26 +15,26 @@
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/page_info.js"></script>
 <script type="text/javascript">
+
+    let empId = Number('<c:out value="${ empId }" />');
+
     document.addEventListener("DOMContentLoaded", function(){
         var header = new Header();
         header.init();
 
-        let empId = Number('<c:out value="${ empId }" />');
-
+        
+        console.log('header empId : ' + empId);
         //로그인 안했을때 나의 결재페이지 안보이게
         
         if(empId == -1) {
             //전자결재 로그인 안했을 시 링크 변경
-            $('#headerTable_'+MENU_INFO.length).hide();
-            $('#header_sep_'+(MENU_INFO.length-1)).hide();
+            $('#headerTable_'+MENU_INFO.length-1).hide();
+            $('#header_sep_'+(MENU_INFO.length-2)).hide();
         }else{
-            console.log('empId : ' + empId);
-            $('#headerBtn_'+MENU_INFO.length).attr('href', 'aplist.do?apType=my&empId='+empId);
+            console.log('=========empId : ' + empId);
+            $('#headerBtn_'+6).attr('href', 'aplist.do?apType=my&empId='+empId);
         }
 
-        if(NOWPAGE == 7) {
-
-        }
     });
 
     function Header(){
@@ -95,7 +95,7 @@
     <c:if test="${ !empty sessionScope.loginMember }">
     	${ loginMember.empName }님
     	<a href="logout.do">로그아웃</a>
-    	<a href="movemypage.do">마이페이지</a>
+    	<a href="movemypage.do?empId=${ employee.empId }">마이페이지</a>
     </c:if>
    
     </div>

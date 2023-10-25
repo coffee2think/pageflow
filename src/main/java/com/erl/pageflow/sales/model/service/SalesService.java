@@ -45,4 +45,13 @@ public interface SalesService {
 	public ArrayList<Integer> selectYears();
 	public ArrayList<Rank> selectRank();
 	public ArrayList<BookOrder> selectNewTop3();
+	public int selectBookOrderCountByState(Search search);
+	public ArrayList<BookOrder> selectBookOrderByState(Search search);
+	public int selectSalesCountByBook(Search search);
+	public int selectSalesCountByBookStore(Search search);
+	public int selectSalesCountByLocation(Search search);
+	public ArrayList<Sales> selectSalesByBook(Search search);
+	public ArrayList<Sales> selectSalesByBookStore(Search search);
+	public ArrayList<Sales> selectSalesByLocation(Search search);
+
 }

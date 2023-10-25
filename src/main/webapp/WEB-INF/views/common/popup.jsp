@@ -95,7 +95,7 @@ function register() {
 			'storage': ['clientId', 'clientName'],
 			'employee': ['empId', 'empName', 'depName', 'posName', 'phone', 'email'],
 			'writer': ['writerId', 'writerName', 'phone', 'email'],
-			'book_order': ['orderId', 'bookId', 'bookName', 'clientId', 'clientName', 'orderDate', 'bookPrice', 'orderQuantity'],
+			'book_order': ['orderId', 'bookId', 'bookName', 'clientId', 'clientName', 'orderDate', 'bookPrice', 'orderQuantity', 'totalPrice'],
 			'saveLine' : ['savelineId', 'savelineName', 'approver_1', 'approver_2', 'approver_3', 'approver_4'],
 			'lineE': ['empId', 'empName', 'depName', 'posName', 'phone', 'email'],
 			
@@ -123,6 +123,7 @@ function register() {
 		}
 		$('#search_approver').empty();
 		count_global = 0;
+		$('#approval_line').val('-1');
 		
 	}if(popup_type == 'lineE'){
 		//결재자 등록 시
@@ -152,10 +153,10 @@ function register() {
 
 			//결재라인 삭제
 			$('#search_line').empty();
-			$('#save_line').val('');
+			$('#save_line').val('-1');
 		}
 		
-		
+		$('#approval_line').val('-1');
 	}else{
 		
 		const list = json_global.list[index_global];

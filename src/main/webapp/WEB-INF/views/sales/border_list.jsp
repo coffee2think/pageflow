@@ -27,7 +27,45 @@
     			totalPrice.val(bookPrice * quantity);
     		});
     	});
+    	
+    	$('.state').hide();
+    	
+    	$('select.state').change(function() {
+    		$(this).parent().find('input[name=state]').val($(this).val());
+    	});
+    	
+    	requestListByState();
     }); // document ready
+    
+    function requestListByState() {
+    	$('#state_type').change(function() {
+    		location.href = 'bolistkw.do?searchType=state&keyword=' + $(this).val();
+    	});
+    }
+    
+    function showStateBox(btn) {
+    	const tr = $(btn).parent().parent();
+    	const stateBox = tr.find('select.state');
+    	const inputBox = stateBox.parent().find('input[name=state]');
+    	
+    	stateBox.find('option').each(function() {
+    		$(this).prop('selected', false);
+    	});
+    	
+    	stateBox.find('option[value=' + inputBox.val() + ']').prop('selected', true);
+    	
+    	inputBox.hide();
+    	stateBox.show();
+    }
+    
+    function hideStateBox(btn) {
+    	const tr = $(btn).parent().parent();
+    	const stateBox = tr.find('select.state');
+    	const inputBox = stateBox.parent().find('input[name=state]');
+    	
+    	inputBox.show();
+    	stateBox.hide();
+    }
     
 </script>
 <title>주문 현황</title>
@@ -81,7 +119,7 @@
                             <div class="select-search">
                                 <div class="select-box">
                                     <div class="select-pan">
-                                        <label for="sel_code"></label>
+                                        <label for="search_type"></label>
                                         <select name="searchType" id="search_type">
                                         	<option value="book" <c:if test="${ searchType == 'book' }">selected</c:if>>도서명</option>
                                           	<option value="bookStore" <c:if test="${ searchType == 'bookStore' }">selected</c:if>>서점명</option>
@@ -91,7 +129,15 @@
                                 </div>
 
                                 <div class="search-box">
-                                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
+                                	<c:choose>
+                                		<c:when test="${ !empty searchType && searchType != 'state' }">
+                                			<input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
+                                		</c:when>
+                                		<c:otherwise>
+                                			<input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="" name="keyword">
+                                		</c:otherwise>
+                                	</c:choose>
+                                    	
                                     <button class="search-btn" onclick="searchKeyword('bolistkw.do'); return false;">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
@@ -100,12 +146,12 @@
 
                             <div class="select-box">
                                 <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
+                                    <label for="state_type"></label>
+                                    <select name="stateType" id="state_type">
                                         <option value="all">상태</option>
-                                        <option value="">주문접수</option>
-                                        <option value="">입고요청</option>
-                                        <option value="">출고대기</option>
+                                        <option value="주문접수" <c:if test="${ !empty searchType && searchType == 'state' && keyword == '주문접수' }">selected</c:if>>주문접수</option>
+                                        <option value="배송중" <c:if test="${ !empty searchType && searchType == 'state' && keyword == '배송중' }">selected</c:if>>배송중</option>
+                                        <option value="배송완료" <c:if test="${ !empty searchType && searchType == 'state' && keyword == '배송완료' }">selected</c:if>>배송완료</option>
                                     </select>
                                 </div>
                             </div>
@@ -226,6 +272,11 @@
 		                                    <td class="td-70">
 		                                        <div class="contents-input-div">
 		                                            <input type="text" name="state" class="contents-input noline changeable" value="${ bookOrder.state }" readonly>
+		                                            <select name="state" class="contents-input state">
+			                                        	<option value="주문접수" <c:if test="${ bookOrder.state == 'accept' }">selected</c:if>>주문접수</option>
+			                                          	<option value="배송중" <c:if test="${ bookOrder.state == 'ing' }">selected</c:if>>배송중</option>
+			                                          	<option value="배송완료" <c:if test="${ bookOrder.state == 'complete' }">selected</c:if>>배송완료</option>
+			                                        </select>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
@@ -234,9 +285,9 @@
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-70">
-		                                        <input type="button" class="contents-input-btn noline update-btn" value="수정" id="updateBtn_${ bookOrder.orderId }" onclick="onUpdate(this); return false;">
-		                                        <input type="button" class="contents-input-btn noline complete-btn" value="완료" id="completeBtn_${ bookOrder.orderId }"  onclick="submitUpdate(this, 'boupdate.do'); return false;" style="display: none;">
-		                                        <input type="button" class="contents-input-btn noline cancel-btn" value="취소" id="cancelBtn_${ bookOrder.orderId }"  onclick="cancelUpdate(this); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline update-btn" value="수정" id="updateBtn_${ bookOrder.orderId }" onclick="onUpdate(this); showStateBox(this); return false;">
+		                                        <input type="button" class="contents-input-btn noline complete-btn" value="완료" id="completeBtn_${ bookOrder.orderId }"  onclick="submitUpdate(this, 'boupdate.do'); hideStateBox(this); return false;" style="display: none;">
+		                                        <input type="button" class="contents-input-btn noline cancel-btn" value="취소" id="cancelBtn_${ bookOrder.orderId }"  onclick="cancelUpdate(this); hideStateBox(this); return false;" style="display: none;">
 		                                    </td>
 		                                </tr>
 	                                </c:forEach>

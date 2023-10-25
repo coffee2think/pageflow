@@ -265,4 +265,16 @@ public class ApprovalDao {
 		return sqlSessionTemplate.update("approvalMapper.updateApprovalState", approvalKeyword);
 	}
 
+	public int insertDraftAnnual(Approval approval) {
+		return sqlSessionTemplate.insert("approvalMapper.insertDraftAnnual", approval);
+	}
+
+	public int selectApprovalMaxId() {
+		return sqlSessionTemplate.selectOne("approvalMapper.selectApprovalMaxId");
+	}
+
+	public int updateDraftAnnual(Approval approval) {
+		return sqlSessionTemplate.update("approvalMapper.updateDraftAnnual", approval);
+	}
+
 }

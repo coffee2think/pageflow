@@ -16,6 +16,18 @@
     const SUBPAGE = 3;
     const LNKPAGE = 1;
     
+    $(function() {
+    	$('select.').change(function() {
+    		$(this).parent().find('input[name=state]').val($(this).val());
+    	});
+    });
+    
+    function requestListByClientType() {
+    	$('#client_type').change(function() {
+    		location.href = 'cllistkw.do?searchType=clientType&keyword=' + $(this).val();
+    	});
+    }
+    
     function searchByDate(dateType) {
     	var begin = $('#begin_' + dateType).val();
     	var end = $('#end_' + dateType).val();
@@ -79,35 +91,38 @@
                             <div class="select-search">
                                 <div class="select-box">
                                     <div class="select-pan">
-                                        <label for="sel_code"></label>
+                                        <label for="search_type"></label>
                                         <select name="searchType" id="search_type">
-                                            <option value="">코드</option>
-                                            <option value="">거래처명</option>
-                                            <option value="">사업자등록번호</option>
-                                            <option value="">대표자</option>
-                                            <option value="">사업장주소</option>
-                                            <option value="">담당자</option>
-                                            <option value="">담당자연락처</option>
+                                            <option value="clientName" <c:if test="${ searchType == 'clientName' }">selected</c:if>>거래처명</option>
+                                            <option value="clientAddress" <c:if test="${ searchType == 'clientAddress' }">selected</c:if>>사업장주소</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="search-box">
-                                    <button class="search-btn">
+                                    <button class="search-btn"  onclick="searchKeyword('cllistkw.do'); return false;">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
-                                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }">
+                                    
+                                    <c:choose>
+                                		<c:when test="${ !empty searchType && searchType != 'state' }">
+                                			<input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
+                                		</c:when>
+                                		<c:otherwise>
+                                			<input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="" name="keyword">
+                                		</c:otherwise>
+                                	</c:choose>
                                 </div>
                             </div>
 
                             <div class="select-box">
                                 <div class="select-pan">
                                     <label for="client_type"></label>
-                                    <select name="code" id="client_type">
+                                    <select name="clientType" id="client_type">
                                         <option value="all">분류별</option>
-                                        <option value="bookStore">서점</option>
-                                        <option value="printOffice">인쇄소</option>
-                                        <option value="storage">창고</option>
+                                        <option value="서점">서점</option>
+                                        <option value="인쇄소">인쇄소</option>
+                                        <option value="창고">창고</option>
                                     </select>
                                 </div>
                             </div>

@@ -30,4 +30,6 @@ public interface ApprovalLineService {
 
 	public int selectApprovalSaveLineId();
 
+	public int selectApprovalLineId();
+
 }
