@@ -188,7 +188,7 @@
 	<insert id="insertInventory" parameterType="Refund">
 	<![CDATA[
 		insert into inventory values ((SELECT MAX(inven_id) + 1 FROM inventory), #{ bookId }, #{ clientId },NULL,#{ refundId }, (select max(inven_id) from inventory), ${ refundNum }, 
-		                (nvl((SELECT curr_inven FROM inventory WHERE refund_id = #{ refundId } AND book_id = #{ bookId }), 0)),
+		                (nvl((SELECT INCREASE FROM inventory WHERE refund_id = #{ refundId } AND book_id = #{ bookId }), 0)),
 		                TO_DATE('${ refundDate }', 'YYYY/MM/DD'),
 		                '반품',
 		                #{ remark })

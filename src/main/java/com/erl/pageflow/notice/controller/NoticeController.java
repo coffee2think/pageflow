@@ -1,7 +1,12 @@
 package com.erl.pageflow.notice.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+
+import java.net.URLEncoder;
+
 import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,6 +14,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +24,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
+
 import com.erl.pageflow.employee.model.service.EmployeeService;
 import com.erl.pageflow.employee.model.vo.Department;
 import com.erl.pageflow.employee.model.vo.Employee;
+
 import com.erl.pageflow.notice.model.service.NoticeService;
 import com.erl.pageflow.notice.model.vo.Notice;
 
@@ -235,7 +245,7 @@ public class NoticeController {
 
 		if (notice != null) {
 			int readEmpCount = noticeService.selectReadEmpCount(noticeId);
-			
+
 			mv.addObject("notice", notice);
 			mv.addObject("readEmpCount", readEmpCount);
 			mv.setViewName("work/notice_notice");
@@ -292,7 +302,7 @@ public class NoticeController {
 					return "common/error";
 				}
 			} // 파일명 바꾸기
-			// notice 객체에 첨부파일 정보 저장 처리
+				// notice 객체에 첨부파일 정보 저장 처리
 			notice.setNoticeOriginalFileName(fileName);
 			notice.setNoticeRenameFileName(renameFileName);
 		} // 첨부파일 있을 때
@@ -445,5 +455,29 @@ public class NoticeController {
 		}
 
 	}
+	// 메인페이지 ajax 통신
+	// ******************************************************************
 
+	@RequestMapping(value = "ntop.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String bookOrderNewTop3Method() throws UnsupportedEncodingException {
+		ArrayList<Notice> list = noticeService.selectNewTop();
+
+		JSONObject sendJson = new JSONObject();
+
+		JSONArray jarr = new JSONArray();
+
+		for (Notice notice : list) {
+			JSONObject job = new JSONObject();
+
+			job.put("ndate", notice.getNoticeCreateDate().toString());
+			job.put("noticeTitle", URLEncoder.encode(notice.getNoticeTitle(), "utf-8"));
+
+			jarr.add(job);
+
+		}
+		sendJson.put("nlist", jarr);
+
+		return sendJson.toJSONString();
+	}
 }

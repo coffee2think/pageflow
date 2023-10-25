@@ -44,6 +44,7 @@ public interface SalesService {
 	public int deleteSales(int salesId);
 	public ArrayList<Integer> selectYears();
 	public ArrayList<Rank> selectRank();
+	public ArrayList<BookOrder> selectNewTop3();
 	public int selectBookOrderCountByState(Search search);
 	public ArrayList<BookOrder> selectBookOrderByState(Search search);
 	public int selectSalesCountByBook(Search search);

@@ -152,6 +152,15 @@
 		]]>
 	</select>
 	
+	<select id="selectNewTop" resultMap="resultNotice">
+		<![CDATA[
+			select *
+			from (select rownum rnum, notice_title, create_date
+			        from(select * from notice order by create_date desc))
+			where rnum >= 1 and rnum <= 3
+		]]>
+	</select>
+	
 	<update id="updateNoticeAlarmAll">
 		update alarm
 		set alarm_notice_num = alarm_notice_num + 1 

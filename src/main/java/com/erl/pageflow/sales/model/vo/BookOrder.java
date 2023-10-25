@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.Date;
 
 public class BookOrder implements Serializable {
-	
+
 	private static final long serialVersionUID = -6450254897030418120L;
 
 	private int orderId;
@@ -15,13 +15,14 @@ public class BookOrder implements Serializable {
 	private Date orderDate;
 	private Date modifyDate;
 	private String state;
-	
+
+	private String clientName;
 	private String empName;
 	private String bookName;
 	private int bookPrice;
 	private int totalPrice;
 	private String bookStoreName;
-	
+
 	public BookOrder() {
 	}
 
@@ -36,9 +37,11 @@ public class BookOrder implements Serializable {
 		this.state = state;
 	}
 
+
 	public BookOrder(int orderId, int bookId, int clientId, int empId, int orderQuantity, Date orderDate,
-			Date modifyDate, String state, String empName, String bookName, int bookPrice, int totalPrice,
-			String bookStoreName) {
+			Date modifyDate, String state, String empName, String bookName, int bookPrice,
+			int totalPrice, String bookStoreName) {
+		super();
 		this.orderId = orderId;
 		this.bookId = bookId;
 		this.clientId = clientId;
@@ -54,6 +57,34 @@ public class BookOrder implements Serializable {
 		this.bookStoreName = bookStoreName;
 	}
 	
+	public BookOrder(int orderId, int bookId, int clientId, int empId, int orderQuantity, Date orderDate,
+			Date modifyDate, String state, String clientName, String empName, String bookName, int bookPrice,
+			int totalPrice, String bookStoreName) {
+		super();
+		this.orderId = orderId;
+		this.bookId = bookId;
+		this.clientId = clientId;
+		this.empId = empId;
+		this.orderQuantity = orderQuantity;
+		this.orderDate = orderDate;
+		this.modifyDate = modifyDate;
+		this.state = state;
+		this.clientName = clientName;
+		this.empName = empName;
+		this.bookName = bookName;
+		this.bookPrice = bookPrice;
+		this.totalPrice = totalPrice;
+		this.bookStoreName = bookStoreName;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+
 	public void calcTotalPrice() {
 		this.totalPrice = this.getBookPrice() * this.getOrderQuantity();
 	}
@@ -173,5 +204,5 @@ public class BookOrder implements Serializable {
 				+ ", state=" + state + ", empName=" + empName + ", bookName=" + bookName + ", bookPrice=" + bookPrice
 				+ ", totalPrice=" + totalPrice + ", bookStoreName=" + bookStoreName + "]";
 	}
-	
+
 }

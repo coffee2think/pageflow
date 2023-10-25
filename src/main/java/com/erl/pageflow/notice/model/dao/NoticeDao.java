@@ -76,6 +76,11 @@ public class NoticeDao {
 		return sqlSessionTemplate.update("noticeMapper.updateReadCount", noiceId);
 	}
 
+	public ArrayList<Notice> selectNewTop(){
+		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectNewTop");
+		return (ArrayList<Notice>)list;
+	}
+	
 	public ArrayList<Notice> selectImportantNoticeList(Paging paging) {
 		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectImportantNoticeList", paging);
 		return (ArrayList<Notice>) list;

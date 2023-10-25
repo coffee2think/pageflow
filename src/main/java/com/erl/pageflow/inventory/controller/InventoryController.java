@@ -60,8 +60,6 @@ public class InventoryController {
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
 
-//			logger.info("list" + list);
-
 			return "inventory/inven_list";
 		} else {
 			model.addAttribute("message", "재고 조회 실패!!");
@@ -106,6 +104,8 @@ public class InventoryController {
 	}
 
 	// 재고 키워드로 검색
+	
+	
 	@RequestMapping(value = "invselectkeyword.do", method = { RequestMethod.GET, RequestMethod.POST })
 	public String selectInvenSearchKeyword(Search search, @RequestParam(name = "searchType") String searchType,
 			@RequestParam(name = "page", required = false) String page,

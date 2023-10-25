@@ -160,6 +160,11 @@ public class SalesDao {
 		List<Rank> list = sqlSession.selectList("salesMapper.selectRank");
 		return (ArrayList<Rank>) list;
 	}
+	
+	public ArrayList<BookOrder> selectNewTop3(){
+		List<BookOrder> list = sqlSession.selectList("salesMapper.selectNewTop3");
+		return (ArrayList<BookOrder>)list;
+	}
 
 	public int selectBookOrderCountByState(Search search) {
 		return sqlSession.selectOne("salesMapper.selectBookOrderCountByState", search);

@@ -86,6 +86,11 @@ public class NoticeServiceImpl implements NoticeService{
 	}
 
 	@Override
+	public ArrayList<Notice> selectNewTop() {
+		return noticeDao.selectNewTop();
+  }
+
+  @Override
 	public ArrayList<Notice> selectImportantNoticeList(Paging paging) {
 		return noticeDao.selectImportantNoticeList(paging);
 	}

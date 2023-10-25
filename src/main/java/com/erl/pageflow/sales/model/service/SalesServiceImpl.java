@@ -178,6 +178,11 @@ public class SalesServiceImpl implements SalesService {
 	}
 
 	@Override
+	public ArrayList<BookOrder> selectNewTop3() {
+		return salesDao.selectNewTop3();
+  }
+
+  @Override
 	public int selectBookOrderCountByState(Search search) {
 		return salesDao.selectBookOrderCountByState(search);
 	}

@@ -247,7 +247,7 @@
 									<c:set var="totalCurrInven" value="0" />
 									<c:forEach var="inv" items="${ invenList }">
 										<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-											<td class="td-50">
+											<td class="td-50" style="background-color: red;">
 												
 											</td>
 											<td class="td-155">

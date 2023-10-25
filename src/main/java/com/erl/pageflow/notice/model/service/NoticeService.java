@@ -20,9 +20,10 @@ public interface NoticeService {
 	Notice selectOne(int noticeId);
 	int updateNotice(Notice notice);
 	int deleteNotice(int noticeId);
-    int selectNoticeCountByDate(Search search);
-    public ArrayList<Notice> selectNoticeByDate(Search search);
-    int updateReadCount(int noticeId);
+  int selectNoticeCountByDate(Search search);
+  public ArrayList<Notice> selectNoticeByDate(Search search);
+  int updateReadCount(int noticeId);
+  public ArrayList<Notice> selectNewTop();
 	ArrayList<Notice> selectImportantNoticeList(Paging paging);
 	int updateNoticeAlarmAll();
 	int updateNoticeAlarmDept(int depId);
@@ -32,4 +33,5 @@ public interface NoticeService {
 	int selectReferenceNotice(Notice notice);
 	int deleteReferenceNotice(int noticeId);
 	int selectReadEmpCount(int noticeId);
+
 }
