@@ -78,6 +78,10 @@ function submitUpdate(btn, url) {
     const id = tr.find('input[type=checkbox]').val();
     var json = {};
     
+    if(!confirm('수정하시겠습니까?')) {
+		return;
+	}
+    
     // 서버로 전송할 값 json에 담기
     tds.each(function(index) {
         // 양끝열(체크박스와 수정버튼 열)은 건너뜀
@@ -112,11 +116,6 @@ function submitUpdate(btn, url) {
         data: json,
         success: function(data){
             console.log("success : " + data);
-            if(data == "success") {
-                alert(id + "번 정보 수정 성공");
-            } else {
-                alert("정보 수정 실패");
-            }
             
             // 수정 이전 스타일로 되돌리기
             offUpdate(btn);
@@ -134,11 +133,16 @@ function deleteCheckedRow(url) {
     form.setAttribute('method', 'post'); // 전송 방식 결정 (get or post)
     form.setAttribute('action', url); // 전송할 url 지정
     
+    
+    
     var checked = $('#table_list').find('input[type="checkbox"]:checked');
     if(checked.length == 0) {
         alert('삭제할 행을 체크해주세요.');
         return false;
-    }
+    } else if(!confirm('정말 삭제하시겠습니까?')) {
+		return;
+	}
+	
     checked.each(function() {
         const id = $(this).val();
         
@@ -158,7 +162,6 @@ function deleteCheckedRow(url) {
 }
 
 function searchByDate(url) {
-	console.log('searchByDate 실행됨');
     var begin = $('#begin').val();
 	var end = $('#end').val();
 	

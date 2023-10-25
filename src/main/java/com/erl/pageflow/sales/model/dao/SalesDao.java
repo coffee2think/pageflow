@@ -160,5 +160,46 @@ public class SalesDao {
 		List<Rank> list = sqlSession.selectList("salesMapper.selectRank");
 		return (ArrayList<Rank>) list;
 	}
+	
+	public ArrayList<BookOrder> selectNewTop3(){
+		List<BookOrder> list = sqlSession.selectList("salesMapper.selectNewTop3");
+		return (ArrayList<BookOrder>)list;
+	}
+
+	public int selectBookOrderCountByState(Search search) {
+		return sqlSession.selectOne("salesMapper.selectBookOrderCountByState", search);
+	}
+
+	public ArrayList<BookOrder> selectBookOrderByState(Search search) {
+		List<BookOrder> list = sqlSession.selectList("salesMapper.selectBookOrderByState", search);
+		return (ArrayList<BookOrder>) list;
+	}
+
+	public int selectSalesCountByBook(Search search) {
+		return sqlSession.selectOne("salesMapper.selectSalesCountByBook", search);
+	}
+
+	public int selectSalesCountByBookStore(Search search) {
+		return sqlSession.selectOne("salesMapper.selectSalesCountByBookStore", search);
+	}
+
+	public int selectSalesCountByLocation(Search search) {
+		return sqlSession.selectOne("salesMapper.selectSalesCountByLocation", search);
+	}
+
+	public ArrayList<Sales> selectSalesByBook(Search search) {
+		List<Sales> list = sqlSession.selectList("salesMapper.selectSalesByBook", search);
+		return (ArrayList<Sales>) list;
+	}
+
+	public ArrayList<Sales> selectSalesByBookStore(Search search) {
+		List<Sales> list = sqlSession.selectList("salesMapper.selectSalesByBookStore", search);
+		return (ArrayList<Sales>) list;
+	}
+
+	public ArrayList<Sales> selectSalesByLocation(Search search) {
+		List<Sales> list = sqlSession.selectList("salesMapper.selectSalesByLocation", search);
+		return (ArrayList<Sales>) list;
+	}
 
 }

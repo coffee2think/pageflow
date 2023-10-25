@@ -581,4 +581,61 @@ delete from board
 where board_id = 1;
 
 commit;
-delete
+
+
+select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID,
+APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE, ORIGIN_FILE, RENAME_FILE, DRAFT_NAME
+ED.EMP_ID AS EMP_ID, 
+ED.JOB_ID AS JOB_ID, 
+ED.POS_ID AS POS_ID,
+ED.DEP_ID AS DEP_ID,
+ED.emp_name AS drafter_name
+from approval A
+join draft using (DRAFT_TYPE)
+join employee ED on (A.DRAFTER = ED.emp_id)
+where APPR_ID = ?;
+
+
+update draft_annual
+set DETAIL = '휴가간다메렁휴가간다메렁', EMERGENCY = '01012341234', 
+START_DATE = to_date('11/01/2023 00:00:00', 'mm/dd/yyyy hh24:mi:ss'), END_DATE = to_date('11/11/2023 00:00:00', 'mm/dd/yyyy hh24:mi:ss'),
+TITLE = '여름휴가', DETAIL_TYPE = 'health'
+where APPR_ID = 5;
+        
+select count(*)
+		from approval A
+		where 1 in (select emp_ID
+		           from approvalline
+		           where A.LINE_ID = LINE_ID
+		           and APPROVER_NAME like '%' || '장' || '%');
+
+
+
+
+
+APPR_ID
+DRAFTER
+DRAFT_TYPE
+LINE_ID
+SAVELINE_ID
+APPR_STATE
+APPR_DATE
+RECEIPT_DATE
+REJECTION_DATE
+LINE_NAME
+ORIGIN_FILE
+RENAME_FILE
+
+
+select * 
+from (select rownum rnum, sub.*
+      from (select APPR_ID, DRAFTER, DRAFT_TYPE, LINE_ID, SAVELINE_ID, 
+            APPR_STATE, APPR_DATE, RECEIPT_DATE, REJECTION_DATE,ORIGIN_FILE,RENAME_FILE, DRAFT_NAME
+            ED.emp_name AS drafter_name
+            from approval A
+            join draft using (DRAFT_TYPE)
+            join employee ED on (A.DRAFTER = ED.emp_id)
+            where drafter = 1
+            order by APPR_ID desc) sub)
+where rnum >= 1 and rnum <=10
+order by APPR_ID desc;

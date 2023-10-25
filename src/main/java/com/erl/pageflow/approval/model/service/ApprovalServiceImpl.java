@@ -52,17 +52,17 @@ public class ApprovalServiceImpl implements ApprovalService {
 
 	@Override
 	public int insertApproval(Approval approval) {
-		return 0;
+		return approvalDao.insertApproval(approval);
 	}
 
 	@Override
 	public int updateApproval(Approval approval) {
-		return 0;
+		return approvalDao.updateApproval(approval);
 	}
 
 	@Override
 	public int deleteApproval(Approval approval) {
-		return 0;
+		return approvalDao.deleteApproval(approval);
 	}
 
 	@Override
@@ -206,5 +206,21 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return approvalDao.updateApprovalState(approvalKeyword);
 	}
 
+	@Override
+	public int insertDraftAnnual(Approval approval) {
+		return approvalDao.insertDraftAnnual(approval);
+	}
+
+	@Override
+	public int selectApprovalMaxId() {
+		return approvalDao.selectApprovalMaxId();
+	}
+
+	@Override
+	public int updateDraftAnnual(Approval approval) {
+		return approvalDao.updateDraftAnnual(approval);
+	}
+	
+	
 	
 }

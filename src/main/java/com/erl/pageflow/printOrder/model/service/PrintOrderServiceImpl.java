@@ -44,11 +44,6 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	}
 	
 	@Override
-	public int updatePrintOrder(PrintOrder PrintOrder) {
-		return printOrderDao.updatePrintOrder(PrintOrder);
-	}
-	
-	@Override
 	public int selectMaxPrintOrderId() {
 		return printOrderDao.selectMaxPrintOrderId();
 	}
@@ -59,13 +54,13 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	}
 	
 	@Override
-	public int deletePrintOrder(int printOrder) {
-		return printOrderDao.deletePrintOrder(printOrder);
+	public int updatePrintOrder(PrintOrder PrintOrder) {
+		return printOrderDao.updatePrintOrder(PrintOrder);
 	}
 	
 	@Override
-	public int selectPrintOrderCountByOrderId(int search) {
-		return printOrderDao.selectPrintOrderCountByOrderId(search);
+	public int deletePrintOrder(int printOrder) {
+		return printOrderDao.deletePrintOrder(printOrder);
 	}
 	
 	@Override
@@ -74,8 +69,8 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	}
 	
 	@Override
-	public int selectPrintOrderCountByBookId(int search) {
-		return printOrderDao.selectPrintOrderCountByBookId(search);
+	public ArrayList<PrintOrder> selectPrintOrderByPrintName(Search search){
+		return printOrderDao.selectPrintOrderByPrintName(search);
 	}
 	
 	@Override
@@ -84,24 +79,53 @@ public class PrintOrderServiceImpl implements PrintOrderService {
 	}
 	
 	@Override
-	public ArrayList<PrintOrder> selectPrintOrderByOrderId(int search){
-		return printOrderDao.selectPrintOrderByOrderId(search);
-	}
-	
-	@Override
-	public ArrayList<PrintOrder> selectPrintOrderByPrintName(Search search){
-		return printOrderDao.selectPrintOrderByPrintName(search);
-	}
-	
-	@Override
-	public ArrayList<PrintOrder> selectPrintOrderByBookId(int search){
-		return printOrderDao.selectPrintOrderByBookId(search);
-	}
-	
-	@Override
 	public ArrayList<PrintOrder> selectPrintOrderByBookName(Search search){
 		return printOrderDao.selectPrintOrderByBookName(search);
 	}
+	
+	@Override
+	public int selectPrintOrderCountBySDate(Search search) {
+		return printOrderDao.selectPrintOrderCountBySDate(search);
+	}
+	
+	//시작날짜로 검색
+	@Override
+	public ArrayList<PrintOrder> selectPrintOrderBySDate(Search search) {
+		return printOrderDao.selectPrintOrderBySDate(search);
+	}
+	
+	@Override
+	public int selectPrintOrderCountByEDate(Search search) {
+		return printOrderDao.selectPrintOrderCountByEDate(search);
+	}
+	
+	//마감날짜로 검색
+	@Override
+	public ArrayList<PrintOrder> selectPrintOrderByEDate(Search search) {
+		return printOrderDao.selectPrintOrderByEDate(search);
+	}
+	
+	@Override
+	public int selectPrintOrderCountByPDate(Search search) {
+		return printOrderDao.selectPrintOrderCountByPDate(search);
+	}
+	
+	//출간날짜로 검색
+	@Override
+	public ArrayList<PrintOrder> selectPrintOrderByPDate(Search search) {
+		return printOrderDao.selectPrintOrderByPDate(search);
+	}
+	
+	@Override
+	public String selectPrintOrderClientName(int bookId) {
+		return printOrderDao.selectPrintOrderClientName(bookId);
+	}
+	
+	@Override
+	public String selectPrintOrderBookName(int bookId) {
+		return printOrderDao.selectPrintOrderBookName(bookId);
+	}
+	
 }
 
 

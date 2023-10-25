@@ -20,8 +20,78 @@
     document.addEventListener("DOMContentLoaded", function(){
     	$('.main-container').addClass('all');
     	$('.main-side').hide();
-    	
+
     });
+</script>
+<script type="text/javascript">
+$(function(){
+	// 주문 요청 ajax
+	$.ajax({
+		url: "booktop3.do",
+		type: "post",
+		dataType: "json",
+		success: function(data){
+			console.log("success : " + data);
+			
+			var str = JSON.stringify(data);
+			
+			var json = JSON.parse(str);
+			
+			values = "";
+			for(var i in json.list){
+				values += "<tr class='cursor-pointer'><a href='movebolist.do'>"
+				       + "<td class='td-70'>"
+				       + json.list[i].bdate
+				       + "</td>"
+				       + "<td class='td-50'>"
+				       + json.list[i].orderId
+				       + "</td>"
+				       + "<td class='td-150'>"
+				       + decodeURIComponent(json.list[i].bookName).replace(/\+/gi, " ") 
+				       + "</td>"
+				       + "<td class='td-70'>"
+				       + decodeURIComponent(json.list[i].clientName).replace(/\+/gi, " ") 
+				       + "</td>"
+				       + "</a>"
+				       + "</tr>";
+			}
+			$('#bookTopList').html($('#bookTopList').html() + values);
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+		}
+	}); // ajax
+	
+	// 공지사항
+	$.ajax({
+		url: "ntop.do",
+		type: "post",
+		dataType: "json",
+		success: function(data){
+			console.log("success : " + data);
+
+			var str = JSON.stringify(data);
+
+			var json = JSON.parse(str);
+
+			values = "";
+			for(var i in json.nlist){
+				values += "<li>"
+				       + decodeURIComponent(json.nlist[i].noticeTitle).replace(/\+/gi, " ")
+			           + "<span class='date'>"
+					   + json.nlist[i].ndate
+				 	   + "</span>"
+			    	   + "</li>";
+			}
+			$('#newnotice').html($('#newnotice').html() + values);
+
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+		}
+	});
+	
+}); // function
 </script>
 </head>
 <body>
@@ -65,15 +135,9 @@
                                     </div>
                                 </div>
                                 
-                                <div class="mainbox-tablebox graph">
-                                    <canvas id="myGraph" width="300" height="200">
-                                    
-                                    </canvas>
-                                    <script>
-                                        var make_graph = new Make_graph();
-                                        make_graph.init('graph', 'myGraph');
-                                    </script>
-                                </div>
+                                <div class="mainbox-tablebox graph width-65vw" id="myChart">
+								    <canvas id="myChart" width="300" height="200"></canvas>
+								</div>
                             </div>
 
                             <div class="mainbox-con height-auto">
@@ -85,19 +149,7 @@
                                 </div>
                                 
                                 <div class="mainbox-tablebox">
-                                    <ul class="mainbox-nlist">
-                                        <a href="">
-                                            <li>
-                                                요즘 날씨가 많이 요상합니다.
-                                                <span class="date">2023.09.01</span>
-                                            </li>
-                                        </a>
-                                        <a href="">
-                                            <li>
-                                                근태관리 철저히 하세요.
-                                                <span class="date">2023.09.11</span>
-                                            </li> 
-                                        </a>                                 
+                                    <ul class="mainbox-nlist" id="newnotice">
                                     </ul>
                                 </div>
                             </div>
@@ -115,11 +167,6 @@
                                 
                                 <div class="mainbox-tablebox chart">
                                     <canvas id="myChart" width="200" height="200">
-                                    
-                                    </canvas>
-                                    <script>
-                                        make_graph.init('chart', 'myChart');
-                                    </script>
                                 </div>
                             </div>
 
@@ -133,42 +180,12 @@
                                 
                                 <div class="mainbox-tablebox">
                                     <div class="mainbox-table">
-                                        <table class="contents-table">
+                                        <table class="contents-table" id="bookTopList">
                                             <tr>
                                                 <th>날짜</th>
                                                 <th>품번</th>
                                                 <th>품명</th>
                                                 <th>거래처</th>
-                                            </tr>
-                                            
-                                            <tr onclick="location.href='#'" class="cursor-pointer">
-                                                <td class="td-70">
-                                                    2023.09.11
-                                                </td>
-                                                <td class="td-50">
-                                                    330923-1
-                                                </td>
-                                                <td class="td-150">
-                                                    해리포터와 불
-                                                </td>
-                                                <td class="td-70">
-                                                    교보문고
-                                                </td>
-                                            </tr>
-
-                                            <tr onclick="location.href='#'" class="cursor-pointer">
-                                                <td class="td-70">
-                                                    2023.09.11
-                                                </td>
-                                                <td class="td-50">
-                                                    330923-1
-                                                </td>
-                                                <td class="td-150">
-                                                    간지의 제왕
-                                                </td>
-                                                <td class="td-70">
-                                                    교보문고
-                                                </td>
                                             </tr>
 
                                         </table>

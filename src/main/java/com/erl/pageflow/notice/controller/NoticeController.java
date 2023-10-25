@@ -1,11 +1,21 @@
 package com.erl.pageflow.notice.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+
+import java.net.URLEncoder;
+
+import java.sql.Date;
+
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +24,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.erl.pageflow.common.FileNameChange;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
+
+import com.erl.pageflow.employee.model.service.EmployeeService;
+import com.erl.pageflow.employee.model.vo.Department;
 import com.erl.pageflow.employee.model.vo.Employee;
+
 import com.erl.pageflow.notice.model.service.NoticeService;
 import com.erl.pageflow.notice.model.vo.Notice;
 
@@ -30,16 +45,25 @@ public class NoticeController {
 
 	@Autowired
 	private NoticeService noticeService;
+	
+	@Autowired
+	private EmployeeService employeeService;
 
 	// 뷰 페이지 내보내기용 --------------------------------------------------------
 	// 새 공지글 등록 페이지 이동 처리용
 	@RequestMapping("nemoveinsert.do")
-	public String moveWritePage() {
+	public String moveWritePage(Model model) {
+		ArrayList<Department> depList = employeeService.selectDepartmentList();
+		
+		if(depList != null && depList.size() > 0) {
+			model.addAttribute("depList", depList);
+		}
+		
 		return "work/notice_input";
 	}
 
 	// 공지글 수정페이지로 이동 처리용
-	@RequestMapping("ndmoveupdate.do")
+	@RequestMapping("nmoveup.do")
 	public ModelAndView moveUpdatePage(@RequestParam("noticeId") int noticeId, ModelAndView mv) {
 		// 수정페이지에 출력할 공지글 조회해 옴
 		Notice notice = noticeService.selectOne(noticeId);
@@ -57,54 +81,60 @@ public class NoticeController {
 
 	// 공지사항 전체 목록보기 요청 처리용
 	@RequestMapping("nlist.do")
-	public String noticeListMethod(Notice notice, @RequestParam(name = "page", required = false) String page,
-			@RequestParam(name = "limit", required = false) String slimit, Model model) {
-		int currentPage = 1;
-		if (page != null) {
-			currentPage = Integer.parseInt(page);
-		}
-
-		// 한 페이지 공지 10개씩 출력되게 한다면
-		int limit = 10;
-		if (slimit != null) {
-			limit = Integer.parseInt(slimit);
-		}
-
-		// 총 페이지 수 계산을 위한 공지글 총갯수 조회
-		// int listCount = noticeService.selectListCount();
+	public String noticeListMethod(Notice notice,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String slimit, Model model) {
+		
+		// 페이징
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (slimit != null) ? Integer.parseInt(slimit) : 10;
 		int listCount = noticeService.selectListCount();
-		// 페이지 관련 항목 계산 처리
+		
 		Paging paging = new Paging(listCount, currentPage, limit, "nlist.do");
 		paging.calculator();
 
 		// 페이지에 출력할 목록 조회해 옴
-		ArrayList<Notice> list = noticeService.selectList(paging);
+		ArrayList<Notice> list = noticeService.selectNoticeList(paging);
+		ArrayList<Notice> importantList = noticeService.selectImportantNoticeList(paging);
 
 		if (list != null && list.size() > 0) {
 			model.addAttribute("list", list);
-			model.addAttribute("paging", paging);
-			model.addAttribute("currentPage", currentPage);
-			model.addAttribute("limit", limit);
-
-			return "work/notice_list";
-		} else {
-			model.addAttribute("message", currentPage + "페이지 목록 조회 실패!");
-			return "common/error";
 		}
+		
+		if (importantList != null && importantList.size() > 0) {
+			model.addAttribute("importantList", importantList);
+		}
+		
+		model.addAttribute("paging", paging);
+		model.addAttribute("currentPage", currentPage);
+		model.addAttribute("limit", limit);
+		
+		return "work/notice_list";
 	}
 
 	// 공지 글 등록 (첨부파일 첨부)
-	@RequestMapping(value = "noinsert.do", method = RequestMethod.POST)
-	public String noticeInsertMethod(Notice notice, Model model, HttpServletRequest request,
+	@RequestMapping(value="noinsert.do", method=RequestMethod.POST)
+	public String noticeInsertMethod(Model model, HttpServletRequest request,
 			@RequestParam(name = "nofile", required = false) MultipartFile mfile) {
 
-		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
-		logger.info("mfile : " + mfile);
-
+		logger.info("noinsert.do : mfile - " + mfile);
+		
+		Notice notice = new Notice();
+		notice.setNoticeTitle(request.getParameter("noticeTitle"));
+		notice.setNoticeDetail(request.getParameter("noticeDetail"));
+		notice.setClassify(request.getParameter("classify"));
+		notice.setEmpId(Integer.parseInt(request.getParameter("empId")));
+		
+		String importance = request.getParameter("importance");
+		if(importance != null) {
+			notice.setImportance(importance);
+			notice.setImportanceDate(Date.valueOf(request.getParameter("importanceDate")));
+		}
+		
 		// 첨부파일이 있을때
-		if (!mfile.isEmpty()) {
-
+		if (mfile != null && !mfile.isEmpty()) {
 			// 전송온 파일이름 추출함
+			String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
 			String fileName = mfile.getOriginalFilename();
 			String renameFileName = null;
 
@@ -118,35 +148,59 @@ public class NoticeController {
 				try {
 					// 저장폴더에 파일명 바꾸기 처리
 					mfile.transferTo(new File(savePath + "\\" + renameFileName));
-
 				} catch (Exception e) {
 					e.printStackTrace();
 					model.addAttribute("message", "파일명 바꾸기 또는 첨부파일 저장 실패");
 					return "common/error";
 				}
 			}
+			
 			notice.setNoticeOriginalFileName(fileName);
 			notice.setNoticeRenameFileName(renameFileName);
 		}
-
+		
 		if (noticeService.insertNotice(notice) > 0) {
-			model.addAttribute("empId", notice.getEmpId());
-			return "redirect:nlist.do";
+			int result = 0;
+			
+			switch(notice.getClassify()) {
+			case "all":
+				result = noticeService.updateNoticeAlarmAll();
+				break;
+			case "dept":
+				result = noticeService.updateNoticeAlarmDept(Integer.parseInt(request.getParameter("depType")));
+				break;
+			case "emp":
+				String[] empListStr = request.getParameterValues("empList");
+				Integer[] empList = new Integer[empListStr.length];
+				for(int i = 0; i < empList.length; i++) {
+					empList[i] = Integer.parseInt(empListStr[i]);
+				}
+				List<Integer> empIdList = Arrays.asList(empList);
+				result = noticeService.updateNoticeAlarmEmp(empIdList);
+				break;
+			}
+			
+			if(result > 0) {
+				return "redirect:nlist.do";
+			} else {
+				model.addAttribute("message", "알람 업데이트 실패");
+				return "common/error";
+			}
 		} else {
 			model.addAttribute("message", "새 게시글 등록 실패!");
 			return "common/error";
 		}
-
 	}
 
 	// 첨부파일 다운로드 요청 처리용
-
 	@RequestMapping("nfdown.do")
 	public ModelAndView fileDownMethod(ModelAndView mv, HttpServletRequest request,
-			@RequestParam("ofile") String originalFileName, @RequestParam("rfile") String renameFileName) {
+			@RequestParam("ofile") String originalFileName,
+			@RequestParam("rfile") String renameFileName) {
 		// 파일 다운 메소드는 리턴 타입이 ModelAndView 로 정해져 있음
 
-		logger.info(renameFileName);
+		logger.info("nfdown.do : originalFileName - " + originalFileName);
+		logger.info("nfdown.do : renameFileName - " + renameFileName);
 
 		// 공지사항 첨부파일 저장 폴더 경로 지정
 		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
@@ -158,27 +212,44 @@ public class NoticeController {
 
 		// 파일 다운로드용 뷰로 전달할 정보 저장 처리
 		mv.setViewName("filedown"); // 등록된 파일다운로드용 뷰클래스의 id명
-		mv.addObject("renameFileName", renameFileName);
-		mv.addObject("originalFilName", originFile);
+		mv.addObject("originFile", originFile);
+		mv.addObject("renameFile", renameFile);
 
 		return mv;
 	}
 
 	// 공지글 상세보기 요청 처리용
-	@RequestMapping("nolist.do")
-	public ModelAndView noticeDetailMethod(@RequestParam("noticeId") int noticeId, ModelAndView mv,
-			HttpSession session) {
+	@RequestMapping("ndetail.do")
+	public ModelAndView noticeDetailMethod(
+			@RequestParam("noticeId") int noticeId,
+			ModelAndView mv, HttpSession session) {
 
-		// 조회수 1증가 처리
+		int loginMemberId = ((Employee) session.getAttribute("loginMember")).getEmpId();
+		
+		// 조회수 증가 처리
 		noticeService.updateReadCount(noticeId);
-
+		
+		// 읽음 처리 
+		Notice refNotice = new Notice();
+		refNotice.setNoticeId(noticeId);
+		refNotice.setEmpId(loginMemberId);
+		
+		// 읽은 기록이 없다면 읽은 기록을 추가하고 공지알림 개수를 -1함
+		if(noticeService.selectReferenceNotice(refNotice) == 0) {
+			noticeService.insertReferenceNotice(refNotice);
+			noticeService.updateMinusNoticeAlarm(loginMemberId);
+		}
+		
 		Notice notice = noticeService.selectOne(noticeId);
+		
 
-		if (notice != null ) {
+		if (notice != null) {
+			int readEmpCount = noticeService.selectReadEmpCount(noticeId);
+
 			mv.addObject("notice", notice);
+			mv.addObject("readEmpCount", readEmpCount);
 			mv.setViewName("work/notice_notice");
-
-		}else {
+		} else {
 			mv.addObject("message", noticeId + "번 공지글 상세보기 조회 실패!");
 			mv.setViewName("common/error");
 		}
@@ -192,6 +263,7 @@ public class NoticeController {
 			@RequestParam(name = "deleteFlag", required = false) String delFlag,
 			@RequestParam(name = "upfile", required = false) MultipartFile mfile) {
 		logger.info("noupdate.do : " + notice);
+		logger.info("upfile : " + mfile);
 
 		// 공지사항 첨부파일 저장 폴더 경로 지정
 		String savePath = request.getSession().getServletContext().getRealPath("resources/notice_upfiles");
@@ -199,8 +271,8 @@ public class NoticeController {
 		// 첨부파일이 변경된 경우의 처리 --------------------------------------------------------
 		// 1. 원래 첨부파일이 있는데 '파일삭제'를 선택한 경우
 		// 또는 원래 첨부파일이 있는데 새로운 첨부파일이 업로드된 경우
-		if (notice.getNoticeOriginalFileName() != null && (delFlag != null && delFlag.equals("yes"))
-				|| (mfile != null && !mfile.isEmpty())) {
+		if (notice.getNoticeOriginalFileName() != null
+				&& ((delFlag != null && delFlag.equals("Y")) || (mfile != null && !mfile.isEmpty()))) {
 			// 저장 폴더에서 파일 삭제함
 
 			new File(savePath + "\\" + notice.getNoticeRenameFileName()).delete();
@@ -210,7 +282,7 @@ public class NoticeController {
 		}
 
 		// 2. 새로운 첨부파일이 있을 때 (공지글 첨부파일은 1개임)
-		if ((mfile != null) && !mfile.isEmpty()) {
+		if (mfile != null && !mfile.isEmpty()) {
 			// 전송온 파일이름 추출함
 			String fileName = mfile.getOriginalFilename();
 			String renameFileName = null;
@@ -230,7 +302,7 @@ public class NoticeController {
 					return "common/error";
 				}
 			} // 파일명 바꾸기
-			// notice 객체에 첨부파일 정보 저장 처리
+				// notice 객체에 첨부파일 정보 저장 처리
 			notice.setNoticeOriginalFileName(fileName);
 			notice.setNoticeRenameFileName(renameFileName);
 		} // 첨부파일 있을 때
@@ -246,11 +318,16 @@ public class NoticeController {
 
 	// 공지글 삭제 요청 처리용
 	@RequestMapping("ndelete.do")
-	public String noticeDeleteMethod(@RequestParam("noticeId") int noticeid,
+	public String noticeDeleteMethod(@RequestParam("noticeId") int noticeId,
 			@RequestParam(name = "rfile", required = false) String renameFileName, HttpServletRequest request,
 			Model model) {
 
-		if (noticeService.deleteNotice(noticeid) > 0) {
+		if(noticeService.deleteReferenceNotice(noticeId) == 0) {
+			model.addAttribute("message", noticeId + "번 공지 삭제 실패!");
+			return "common/error";
+		}
+		
+		if (noticeService.deleteNotice(noticeId) > 0) {
 			// 공지글 삭제 성공시 저장 폴더에 있는 첨부파일도 삭제함
 			if (renameFileName != null) {
 				// 공지사항 첨부파일 저장 폴더 경로 지정
@@ -261,7 +338,7 @@ public class NoticeController {
 
 			return "redirect:nlist.do";
 		} else {
-			model.addAttribute("message", noticeid + "번 공지 삭제 실패!");
+			model.addAttribute("message", noticeId + "번 공지 삭제 실패!");
 			return "common/error";
 		}
 	}
@@ -378,5 +455,29 @@ public class NoticeController {
 		}
 
 	}
+	// 메인페이지 ajax 통신
+	// ******************************************************************
 
+	@RequestMapping(value = "ntop.do", method = RequestMethod.POST)
+	@ResponseBody
+	public String bookOrderNewTop3Method() throws UnsupportedEncodingException {
+		ArrayList<Notice> list = noticeService.selectNewTop();
+
+		JSONObject sendJson = new JSONObject();
+
+		JSONArray jarr = new JSONArray();
+
+		for (Notice notice : list) {
+			JSONObject job = new JSONObject();
+
+			job.put("ndate", notice.getNoticeCreateDate().toString());
+			job.put("noticeTitle", URLEncoder.encode(notice.getNoticeTitle(), "utf-8"));
+
+			jarr.add(job);
+
+		}
+		sendJson.put("nlist", jarr);
+
+		return sendJson.toJSONString();
+	}
 }

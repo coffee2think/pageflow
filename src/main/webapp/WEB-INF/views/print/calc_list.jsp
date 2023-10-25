@@ -2,8 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,25 +27,14 @@
 
 <script type="text/javascript">
 
-//시작날짜 검색
-function searchBySDate(dateType) {
-	var begin = $('#begin_' + dateType).val();
-	var end = $('#end_' + dateType).val();
-	
-	var url = 'edlistSdate.do?';
-	url += 'begin=' + begin;
-	url += '&end=' + end;
-	url += '&dateType=' + dateType;
-    
-	location.href = url;
-}
+
 
 // 마감날짜 검색
 function searchByEDate(dateType) {
 	var begin = $('#begin_' + dateType).val();
 	var end = $('#end_' + dateType).val();
 	
-	var url = 'edlistEdate.do?';
+	var url = 'pclistEdate.do?';
 	url += 'begin=' + begin;
 	url += '&end=' + end;
 	url += '&dateType=' + dateType;
@@ -107,18 +95,16 @@ function searchByEDate(dateType) {
                                 <div class="select-box">
                                     <div class="select-pan">
                                         <label for="sel_code"></label>
-                                        <select name="searchType" id="sel_code">
-                                            <option value="orderId">정산코드</option>
-                                            <option value="printName">인쇄소명</option>
-                                            <option value="bookId">도서코드</option>
-                                            <option value="bookName">도서명</option>
+                                        <select id="search_type" name="searchType">
+                                            <option value="printName" <c:if test="${ searchType == 'printName' }">selected</c:if>>인쇄소명</option>
+                                            <option value="bookName" <c:if test="${ searchType == 'bookName' }">selected</c:if>>도서명</option>
                                         </select>
                                     </div>
                                 </div>
 
                                 <div class="search-box">
-                                	<input type="text" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
-                                    <button class="search-btn" onclick="searchkeyword('pckeyword.do'); return false; ">
+                                	<input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
+                                    <button class="search-btn" onclick="searchKeyword('pckeyword.do'); return false; ">
                                         <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                     </button>
                                 </div>
@@ -147,9 +133,18 @@ function searchByEDate(dateType) {
                                 <div class="select-pan-nemo">
                                     마감일
                                 </div>
-
-                                <input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
-                                <input type="date" class="select-date select-date-second" name="end" value=${ end }>
+								
+								<c:choose>
+									<c:when test="${ !empty firstType and firstType eq 'first' }">
+										<input type="date" class="select-date select-date-first" id="begin_startDate">
+						                <input type="date" class="select-date select-date-second" id="end_startDate">
+									</c:when>
+									
+									<c:otherwise>
+						                <input type="date" class="select-date select-date-first" id="begin_startDate" value="${ begin }">
+						                <input type="date" class="select-date select-date-second" id="end_startDate" value="${ end }">
+						            </c:otherwise> 
+								</c:choose>
 
 								<c:set var="today_" value="<%=new java.util.Date()%>" />
 								<fmt:formatDate var="today" value="${ today_ }" 
@@ -163,19 +158,19 @@ function searchByEDate(dateType) {
 								<fmt:formatDate var="monthago" value="${ monthago_ }" 
 									pattern="yyyy-MM-dd" />
 									
-								<c:url var="searchWeekUrl" value="pclistdate.do">
+								<c:url var="searchWeekUrl" value="pclistEdate.do">
 									<c:param name="begin" value="${ weekago }" />
 									<c:param name="end" value="${ today }" />
 								</c:url>
 								
-								<c:url var="searchMonthUrl" value="pclistdate.do">
+								<c:url var="searchMonthUrl" value="pclistEdate.do">
 									<c:param name="begin" value="${ monthago }" />
 									<c:param name="end" value="${ today }" />
 								</c:url>
 
                                 <input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
 								<input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
-								<input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
+								<input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByEDate('startDate'); return false;">
                             </div>
                             
                         </form>
@@ -198,7 +193,7 @@ function searchByEDate(dateType) {
                         <div class="contents-box">
                             <table class="contents-table" id="table_list">
                                 <tr>
-                                    <th>체크</th>
+                                    <!-- <th>체크</th> -->
                                     <th>정산코드</th>
                                     <th>거래처코드</th>
                                     <th>인쇄소</th>
@@ -215,9 +210,9 @@ function searchByEDate(dateType) {
                                 <c:if test="${ !empty list }">
 	                                <c:forEach items="${ list }" var="printCalc" >
 		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ printCalc.orderId }">
-		                                    <td class="td-30">
+		                                    <%-- <td class="td-30">
 		                                        <input type="checkbox" class="selectcheckbox" name="selectcheckbox" value="${ printCalc.orderId }">
-		                                    </td>
+		                                    </td> --%>
 		                                    <td class="td-70">
 												<div class="contents-input-div">
 													<input type="text" name="orderId" class="contents-input noline" value="${ printCalc.orderId }" readonly>

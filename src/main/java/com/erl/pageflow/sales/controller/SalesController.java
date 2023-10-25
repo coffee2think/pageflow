@@ -2,6 +2,8 @@ package com.erl.pageflow.sales.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +12,8 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
@@ -174,6 +179,9 @@ public class SalesController {
 		case "location":
 			listCount = salesService.selectBookOrderCountByLocation(search);
 			break;
+		case "state":
+			listCount = salesService.selectBookOrderCountByState(search);
+			break;
 		}
 		
 		Paging paging = new Paging(listCount, currentPage, limit, "bolistkw.do");
@@ -193,6 +201,9 @@ public class SalesController {
 			break;
 		case "location":
 			list = salesService.selectBookOrderByLocation(search);
+			break;
+		case "state":
+			list = salesService.selectBookOrderByState(search);
 			break;
 		}
 		
@@ -252,6 +263,74 @@ public class SalesController {
 			return "sales/sales_list";
 		} else {
 			model.addAttribute("message", "판매현황 조회 실패");
+			return "common/error";
+		}
+	}
+	
+	// 키워드로 주문현황 검색
+	@RequestMapping(value="sslistkw.do", method={RequestMethod.GET, RequestMethod.POST})
+	public String salesListByKeyword(Search search,
+			@RequestParam(name="searchType") String searchType,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+		
+		logger.info("sslistkw.do : searchType=" + searchType);
+		logger.info("sslistkw.do : " + search);
+		logger.info("sslistkw.do : page=" + page + ", limit=" + limitStr);
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		int listCount = 0;
+		
+		switch(searchType) {
+		case "book":
+			listCount = salesService.selectSalesCountByBook(search);
+			break;
+		case "bookStore":
+			listCount = salesService.selectSalesCountByBookStore(search);
+			break;
+		case "location":
+			listCount = salesService.selectSalesCountByLocation(search);
+			break;
+		}
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "sslistkw.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<Sales> list = null;
+		
+		switch(searchType) {
+		case "book":
+			list = salesService.selectSalesByBook(search);
+			break;
+		case "bookStore":
+			list = salesService.selectSalesByBookStore(search);
+			break;
+		case "location":
+			list = salesService.selectSalesByLocation(search);
+			break;
+		}
+		
+		if(list != null && list.size() > 0) {
+			for(Sales sales : list) {
+				sales.calcTotalPrice();
+			}
+	
+			model.addAttribute("list", list);
+			model.addAttribute("searchType", searchType);
+			model.addAttribute("keyword", search.getKeyword());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "sales/sales_list";
+		} else {
+			model.addAttribute("message", "판매현황 " + search.getKeyword() + " 검색 실패");
 			return "common/error";
 		}
 	}
@@ -332,14 +411,12 @@ public class SalesController {
 		String[] clientIds = request.getParameterValues("clientId");
 		String[] empIds = request.getParameterValues("empId");
 		String[] orderQuantities = request.getParameterValues("orderQuantity");
-		String[] states = request.getParameterValues("state");
 		
 		logger.info("boinsert.do ---------------------------- START");
 		logger.info("bookIds : " + Arrays.toString(bookIds));
 		logger.info("clientIds : " +  Arrays.toString(clientIds));
 		logger.info("empIds : " + Arrays.toString(empIds));
 		logger.info("orderQuantities : " + Arrays.toString(orderQuantities));
-		logger.info("states : " + Arrays.toString(states));
 		logger.info("boinsert.do ---------------------------- END");
 		
 		// 주문번호 생성
@@ -355,7 +432,6 @@ public class SalesController {
 			bookOrder.setClientId(Integer.parseInt(clientIds[i]));
 			bookOrder.setEmpId(Integer.parseInt(empIds[i]));
 			bookOrder.setOrderQuantity(Integer.parseInt(orderQuantities[i]));
-			bookOrder.setState(states[i]);
 			
 			bookOrders.add(bookOrder);
 		}
@@ -584,4 +660,30 @@ public class SalesController {
 		}
 	}
 	
+	// 메인페이지 ajax 통신 ******************************************************************
+	
+	@RequestMapping(value="booktop3.do", method=RequestMethod.POST)
+	@ResponseBody
+	public String bookOrderNewTop3Method() throws UnsupportedEncodingException {
+		ArrayList<BookOrder> list = salesService.selectNewTop3();
+		
+		JSONObject sendJson = new JSONObject();
+		
+		JSONArray jarr = new JSONArray();
+		
+		for (BookOrder bookOrder : list) {
+			JSONObject job = new JSONObject();
+			
+			job.put("bdate", bookOrder.getOrderDate().toString());
+			job.put("orderId", bookOrder.getOrderId());
+			job.put("bookName", URLEncoder.encode(bookOrder.getBookName(), "utf-8"));
+			job.put("clientName", URLEncoder.encode(bookOrder.getClientName(), "utf-8"));
+			
+			jarr.add(job);
+		}
+		
+		sendJson.put("list", jarr);
+
+		return sendJson.toJSONString();
+	}
 }

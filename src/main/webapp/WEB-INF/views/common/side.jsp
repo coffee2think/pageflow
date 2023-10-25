@@ -43,15 +43,16 @@
                 $('#sideBtn_4').attr('href', 'allinelist.do?empId='+empId);
                 
             }
-
-            if(NOWPAGE == 1) {
-                if(adminYN != 'Y') {
-                    $('#sideBtn_3').parent().hide();
-                    $('#sideSubBtn_3_1').parent().hide();
-                    $('#sideSubBtn_3_2').parent().hide();
-                }
+        }
+        if(NOWPAGE == 1) {
+            if(adminYN != 'Y') {
+                console.log('adminYN != Y')
+                $('#sideBtn_3').parent().hide();
+                $('#sideSubBtn_3_1').parent().hide();
+                $('#sideSubBtn_3_2').parent().hide();
             }
         }
+        
     });
     function Side(){
         

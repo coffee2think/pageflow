@@ -7,6 +7,7 @@ import java.net.URLEncoder;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.erl.pageflow.approval.model.service.ApprovalService;
 import com.erl.pageflow.approval.model.vo.Approval;
@@ -63,7 +65,7 @@ public class ApprovalController {
 	public void setDraft(Approval appr) {
 		Draft draft = approvalService.selectDraft(
 		new ApprovalKeyword(appr.getApprId(), appr.getDraftType()));
-		
+		appr.setTitle(draft.getTitle());
 		appr.setDetail(draft.getDetail());
 		appr.setEmergency(draft.getEmergency());
 		appr.setStartDate(draft.getStartDate());
@@ -226,6 +228,8 @@ public class ApprovalController {
 				case "complete":
 				case "continue":
 				case "companion":
+					//내가 기안자일때
+					//내가 결재자일때
 					if(apType.equals("my")) listCount = approvalService.selectApprSearchCountKeyword(search);
 					else if(apType.equals("ap")) listCount = approvalService.selectApprSearchCountKeyword_A(search);
 					else listCount = approvalService.selectApprSearchAllCountKeyword(search);
@@ -377,6 +381,8 @@ public class ApprovalController {
 		return sendJson.toJSONString();
 		
 	}
+	
+	//결재라인 정보 보내기
 	@RequestMapping(value = "apsendapp.do", method = RequestMethod.POST)
 	public void updateSendApp(
 			ApprovalLineKeyword approvalLineKeyword,
@@ -446,14 +452,14 @@ public class ApprovalController {
 	@RequestMapping(value = "apinsert.do", method = RequestMethod.POST)
 	public String insertApprovalMethod(
 			Approval approval,
-			@RequestParam(name = "approval_1", required = false) String approval_1, 
-			@RequestParam(name = "approval_2", required = false) String approval_2, 
-			@RequestParam(name = "approval_3", required = false) String approval_3, 
-			@RequestParam(name = "approval_4", required = false) String approval_4, 
+			@RequestParam(name = "approver_1", required = false) String approver_1, 
+			@RequestParam(name = "approver_2", required = false) String approver_2, 
+			@RequestParam(name = "approver_3", required = false) String approver_3, 
+			@RequestParam(name = "approver_4", required = false) String approver_4, 
 			@RequestParam(name = "upfile", required = false) MultipartFile mfile, 
 			HttpServletRequest request, Model model) {
-		logger.info("apinsert.do - mfile : " + mfile);
-		logger.info("apinsert.do - approval : " + approval);
+		logger.info("apinsert.do -> mfile : " + mfile);
+		logger.info("apinsert.do -> approval1 : " + approval);
 		String savePath = request.getSession().getServletContext().getRealPath(
 				"resources/appr_upfiles");
 		
@@ -469,7 +475,7 @@ public class ApprovalController {
 				if(fileName != null && fileName.length() > 0) {
 					//바꿀 파일명에 대한 문자열 만들기
 					renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmss");
-					logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
+					logger.info("apinsert.do -> 첨부파일명 확인 : " + fileName + ", " + renameFileName);
 					
 					try {
 						//저장폴더에 파일명 바꾸기 처리
@@ -487,50 +493,289 @@ public class ApprovalController {
 				approval.setRenameFile(renameFileName);
 			}
 		}
-		/*
-		private int lineId;
-		private int lineDepth;
-		private int empId;
-		private int approverId;
-		private String approverName;
-		private String posName;
-		private String stampCheck;
-		private Date stampDate;
 		
+		//최신 라인번호 추출 select max+1
 		int lineId = approvalLineService.selectApprovalLineId();
-		ApprovalLine apprLine = new ApprovalLine();
 		
-		
-		
-		
-		if(approval.getSavelineId() == 0) {
+		if(approval.getSavelineId() == -1) {
 			//결재라인이 없을 경우
-			for() {
-				
+			String[] approvalArr = {approver_1, approver_2, approver_3, approver_4};
+			logger.info("apinsert.do -> approvalArr : " + Arrays.toString(approvalArr));
+			int l_count = 1;
+			for(int i=0; i<approvalArr.length; i++) {
+				if(approvalArr[i] != null && !approvalArr[i].equals("")) {
+					ApprovalLine apprLine = new ApprovalLine();
+					apprLine.setLineId(lineId);
+					apprLine.setLineDepth(l_count);
+					apprLine.setEmpId(approval.getDrafter());
+					
+					String[] strArr =  approvalArr[i].split("#%");
+					
+					apprLine.setApproverId(Integer.parseInt(strArr[0]));
+					apprLine.setApproverName(strArr[1]);
+					apprLine.setPosName(strArr[2]);
+					
+					l_count ++;
+					logger.info("apinsert.do -> apprLine : " + apprLine);
+					if(approvalLineService.insertApprovalLine(apprLine) > 0){
+						logger.info("apinsert.do -> insertApprovalLine 1 : 성공");
+					}
+				}
 			}
 			
-			apprLine.setLineId(lineId);
-			
-			approvalLine
-			if()
 		}else {
 			//결재라인이 있을경우 결재라인에 있는 아이디와 이름들을 사용함
-			ArrayList<ApprovalLine> lineList = approvalLineService.selectApprovalLineList(approval.getSavelineId());
+			ArrayList<ApprovalLineSave> lineListSave = approvalLineService.selectMyApprovalSaveLineList(approval.getSavelineId());
 			
+			for(ApprovalLineSave als : lineListSave) {
+
+				ApprovalLine apprLine2 = new ApprovalLine();
+				apprLine2.setLineId(lineId);
+				apprLine2.setLineDepth(als.getLineDepth());
+				apprLine2.setEmpId(als.getEmpId());
+				apprLine2.setApproverId(als.getApproverId());
+				apprLine2.setApproverName(als.getApproverName());
+				apprLine2.setPosName(als.getPosName());
+				logger.info("apinsert.do -> apprLine2 : " + apprLine2);
+				//logger.info("" + (approvalLineService.insertApprovalLine(apprLine2) > 0));
+				if(approvalLineService.insertApprovalLine(apprLine2) > 0){
+					logger.info("apinsert.do -> insertApprovalLine 2 : 성공");
+				}
+			}
 		}
 		
-		*/
+		approval.setApprId(approvalService.selectApprovalMaxId());
+		approval.setApprState("continue");
+		approval.setLineId(lineId);
 		model.addAttribute("apType", "my");
 		model.addAttribute("empId", approval.getDrafter());
 		
-		if(approvalService.insertApproval(approval) > 0) {
+		logger.info("apinsert.do -> approval2 : " + approval);
+		int result = approvalService.insertApproval(approval);
+		logger.info("apinsert.do -> result : " + result);
+		
+		//드래프트!! 
+		if(result > 0) {
+			switch(approval.getDraftType()) {
+				case "annual":
+					if(approvalService.insertDraftAnnual(approval) <= 0) {
+						model.addAttribute("message", "드래프트 등록 실패!");
+						return "common/error";
+					}
+					break;
+			}
 			
 		}else {
-			model.addAttribute("message", "새 게시글 등록 실패!");
+			model.addAttribute("message", "새 전자결재 게시글 등록 실패!");
 			return "common/error";
 		}
 		
 		return "redirect:aplist.do";
 	}
 	
+	//첨부파일 다운로드 요청 처리용 
+	@RequestMapping("apdown.do")
+	public ModelAndView fileDownMethod(
+			ModelAndView mv, HttpServletRequest request,
+			@RequestParam("ofile") String originalFileName, 
+			@RequestParam("rfile") String renameFileName) {
+		//파일다운 메소드는 ModelAndView로 리턴해야 함
+		
+		//게시글 첨부파일 저장 폴더 경로 지정
+		String savePath = request.getSession().getServletContext().getRealPath(
+				"resources/appr_upfiles"); 
+		
+		//저장 폴더에서 읽을 파일에 대한 파일객체를 생성함
+		File renameFile = new File(savePath + "\\" + renameFileName);
+		
+		//파일 다운 시 브라우저로 내보낼 원래 파일명에 대한 파일 객체 생성함
+		File originFile = new File(originalFileName);
+		
+		//파일 다운로드용 뷰로 전달할 정보 저장 처리
+		mv.setViewName("filedown");//등록된 파일다운로드용 뷰클래스의 id명
+		mv.addObject("renameFile", renameFile);
+		mv.addObject("originFile", originFile);
+		
+		return mv;
+	}
+	
+	@RequestMapping("apmoveupdate.do")
+	public String updateMoveApprovalMethod(@RequestParam("apprId") int apprId, Model model) {
+		
+		Approval approval = approvalService.selectMyApproval(apprId);
+		setDraft(approval);
+		logger.info("apmoveupdate.do -> approval : " + approval);
+		
+		model.addAttribute("pageType", "update");
+		model.addAttribute("approval", approval);
+		
+		model.addAttribute("empId", approval.getDrafter());
+		Employee employee = employeeService.selectEmployeeApproval(approval.getDrafter());
+		model.addAttribute("employee", employee);
+		
+		return "approval/appr_input";
+	}
+	
+	@RequestMapping(value = "allinemy.do", method = RequestMethod.POST)
+	@ResponseBody // response body에 담아서 보냄
+	public String selectApprovalLineMy(Approval approval,
+		HttpServletResponse response) throws IOException {
+		logger.info("allinemy.do -> getLineId : " + approval.getLineId());
+		
+		ArrayList<ApprovalLine> lineList = approvalLineService.selectMyApprovalLineList(approval.getLineId());
+		logger.info("allinemy.do -> lineList : " + lineList);
+		
+		JSONObject sendJson = new JSONObject();
+		JSONObject jobj = new JSONObject();
+		
+		JSONArray jarr =  new JSONArray();
+		if(lineList != null && lineList.size() > 0) {
+			
+			for(ApprovalLine line :lineList) {
+				JSONObject job = new JSONObject();
+				job.put("emp_id", line.getEmpId());
+				job.put("line_id", line.getLineId());
+				job.put("approver_id", line.getApproverId());
+				job.put("approver_name", line.getApproverName());
+				job.put("pos_name", line.getPosName());
+				job.put("stamp_check", line.getStampCheck());
+				job.put("stamp_date", (line.getStampDate() == null) ? "" : line.getStampDate().toString());
+				jarr.add(job);
+			}
+		}
+		response.setContentType("application/json; charset=utf-8");
+		sendJson.put("list", jarr);
+		return sendJson.toJSONString();
+	}
+	
+	//수정하기
+	@RequestMapping(value = "apupdate.do", method = RequestMethod.POST)
+	public String updateApprovalMethod(
+			Approval approval,
+			@RequestParam(name = "approver_1", required = false) String approver_1, 
+			@RequestParam(name = "approver_2", required = false) String approver_2, 
+			@RequestParam(name = "approver_3", required = false) String approver_3, 
+			@RequestParam(name = "approver_4", required = false) String approver_4, 
+			@RequestParam(name = "upfile", required = false) MultipartFile mfile, 
+			HttpServletRequest request, Model model) {
+		logger.info("apupdate.do -> mfile : " + mfile);
+		logger.info("apupdate.do -> approval1 : " + approval);
+		String savePath = request.getSession().getServletContext().getRealPath(
+				"resources/appr_upfiles");
+		
+		//첨부파일이 있을때 
+		if(mfile != null) {
+			if(!mfile.isEmpty()) {
+				new File(savePath + "\\" + approval.getRenameFile()).delete();
+				//만약 첨부된 업데이트 파일이 있다면
+				if(approval.getOriginFile() != null) {
+					approval.setOriginFile(null);
+					approval.setRenameFile(null);
+				}
+				
+				//전송온 파일이름 추출함
+				String fileName = mfile.getOriginalFilename();
+				String renameFileName = null;
+				
+				//저장폴더에는 변경된 이름을 저장 처리함
+				//파일 이름 바꾸기함 : 년월일시분초.확장자
+				if(fileName != null && fileName.length() > 0) {
+					//바꿀 파일명에 대한 문자열 만들기
+					renameFileName = FileNameChange.change(fileName, "yyyyMMddHHmmss");
+					logger.info("apupdate.do -> 첨부파일명 확인 : " + fileName + ", " + renameFileName);
+					
+					try {
+						//저장폴더에 파일명 바꾸기 처리
+						mfile.transferTo(new File(savePath + "\\" + renameFileName));
+						
+					} catch (Exception e) {
+						e.printStackTrace();
+						model.addAttribute("message", "파일명 바꾸기 또는 첨부파일 저장 실패");
+						return "common/error";
+					}
+				}
+				
+				//첨부파일 정보 저장 처리
+				approval.setOriginFile(fileName);
+				approval.setRenameFile(renameFileName);
+			}
+		}
+		
+		//최신 라인번호 추출 select max+1
+		int lineId = approvalLineService.selectApprovalLineId();
+		
+		if(approval.getSavelineId() == -1) {
+			//결재라인이 없을 경우
+			String[] approvalArr = {approver_1, approver_2, approver_3, approver_4};
+			logger.info("apupdate.do -> approvalArr : " + Arrays.toString(approvalArr));
+			int l_count = 1;
+			for(int i=0; i<approvalArr.length; i++) {
+				if(approvalArr[i] != null && !approvalArr[i].equals("")) {
+					ApprovalLine apprLine = new ApprovalLine();
+					apprLine.setLineId(lineId);
+					apprLine.setLineDepth(l_count);
+					apprLine.setEmpId(approval.getDrafter());
+					
+					String[] strArr =  approvalArr[i].split("#%");
+					
+					apprLine.setApproverId(Integer.parseInt(strArr[0]));
+					apprLine.setApproverName(strArr[1]);
+					apprLine.setPosName(strArr[2]);
+					
+					l_count ++;
+					logger.info("apupdate.do -> apprLine : " + apprLine);
+					if(approvalLineService.insertApprovalLine(apprLine) > 0){
+						logger.info("apupdate.do -> insertApprovalLine 1 : 성공");
+					}
+				}
+			}
+			
+		}else {
+			//결재라인이 있을경우 결재라인에 있는 아이디와 이름들을 사용함
+			ArrayList<ApprovalLineSave> lineListSave = approvalLineService.selectMyApprovalSaveLineList(approval.getSavelineId());
+			
+			for(ApprovalLineSave als : lineListSave) {
+				
+				ApprovalLine apprLine2 = new ApprovalLine();
+				apprLine2.setLineId(lineId);
+				apprLine2.setLineDepth(als.getLineDepth());
+				apprLine2.setEmpId(als.getEmpId());
+				apprLine2.setApproverId(als.getApproverId());
+				apprLine2.setApproverName(als.getApproverName());
+				apprLine2.setPosName(als.getPosName());
+				logger.info("apupdate.do -> apprLine2 : " + apprLine2);
+				//logger.info("" + (approvalLineService.insertApprovalLine(apprLine2) > 0));
+				if(approvalLineService.insertApprovalLine(apprLine2) > 0){
+					logger.info("apupdate.do -> insertApprovalLine 2 : 성공");
+				}
+			}
+		}
+		
+		approval.setApprState("continue");
+		approval.setLineId(lineId);
+		model.addAttribute("apType", "my");
+		model.addAttribute("empId", approval.getDrafter());
+		
+		logger.info("apupdate.do -> approval2 : " + approval);
+		int result = approvalService.updateApproval(approval);
+		logger.info("apupdate.do -> result : " + result);
+		
+		//드래프트!! 
+		if(result > 0) {
+			switch(approval.getDraftType()) {
+				case "annual":
+					if(approvalService.updateDraftAnnual(approval) <= 0) {
+						model.addAttribute("message", "드래프트 등록 실패!");
+						return "common/error";
+					}
+					break;
+			}
+			
+		}else {
+			model.addAttribute("message", "새 전자결재 게시글 등록 실패!");
+			return "common/error";
+		}
+		
+		return "redirect:aplist.do";
+	}
 }

@@ -22,20 +22,21 @@
 	</resultMap>
 	
 	<select id="selectNoticeList" parameterType="Paging" resultMap="resultNotice">
-		
-			select * from (select rownum rnum, NOTICE_ID, EMP_ID, EMP_Name, NOTICE_TITLE, 
-				            NOTICE_DETAIL, CREATE_DATE  ,IMPORTANCE, NOTICE_READCOUNT , NOTICE_ORIGINAL_FILENAME, NOTICE_RENAME_FILENAME 
-				      		from (select * from notice 
-				      			join employee using (EMP_ID)
-				            order by importance desc, CREATE_DATE desc, NOTICE_ID desc)
-				     	   ) 
+		select *
+		from (select rownum rnum, sub.*
+	      	  from (select * from notice
+					join employee using (EMP_ID)
+					order by NOTICE_ID desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
-		
-		
 	</select>
 	
 	<select id="selectOne" parameterType="_int" resultMap="resultNotice">
-		select * from notice join employee using (EMP_ID) where NOTICE_ID = #{ noticeId}
+		select *
+		from notice
+		left join employee using (emp_id)
+		left join reference_notice r using (notice_id, emp_id)
+		left join department d on r.dep_id = d.dep_id
+		where notice_id = #{ noticeId }
 	</select>	
 	
 	<select id="selectListCount" resultType="_int">
@@ -44,24 +45,39 @@
 	
 	<insert id="insertNotice" parameterType="Notice">
 		insert into notice 
-		values ((select max(NOTICE_ID) + 1 from notice), 
+		values ((select nvl(max(NOTICE_ID),0) + 1 from notice), 
 				#{empId}, #{noticeTitle}, #{noticeDetail}, 
-				sysdate, default, default , #{classify},  
-				#{importance},default,#{noticeOriginalFileName},#{noticeRenameFileName})
+				sysdate, default, default , #{classify},
+		
+		<choose>
+			<when test="importance != null">#{importance},</when>
+			<otherwise>default,</otherwise>
+		</choose>
+				
+				default, #{noticeOriginalFileName}, #{noticeRenameFileName},
+		
+		<choose>
+			<when test="importance != null">#{importanceDate}</when>
+			<otherwise>default</otherwise>
+		</choose>
+		)
 				
 	</insert>
 	
 	<update id="updateNotice" parameterType="Notice">
 		update notice 
 		set NOTICE_TITLE = #{noticeTitle},  
-			NOTICE_DETAIL = #{noticeDetail}
+			NOTICE_DETAIL = #{noticeDetail},
+			NOTICE_ORIGINAL_FILENAME = #{noticeOriginalFileName},
+			NOTICE_RENAME_FILENAME = #{noticeRenameFileName},
+			MODIFY_DATE = SYSDATE
 		where NOTICE_ID = #{noticeId}
 	</update>
 	
 	<update id="updateReadCount" parameterType="_int">
 		update notice
-		set NOTICE_READCOUNT = NOTICE_READCOUNT +1
-		where NOTICE_ID = #{noticeId}
+		set NOTICE_READCOUNT = NOTICE_READCOUNT + 1
+		where NOTICE_ID = #{ noticeId }
 	</update>
 	
 	<delete id="deleteNotice" parameterType="_int">
@@ -124,12 +140,72 @@
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
+	<select id="selectImportantNoticeList" parameterType="Paging" resultMap="resultNotice">
+		<![CDATA[
+		select *
+		from (select rownum rnum, sub.*
+	      	  from (select * from notice
+					join employee using (EMP_ID)
+					where IMPORTANCE = 'Y' and IMPORTANCE_DATE >= sysdate
+					order by NOTICE_ID desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+		]]>
+	</select>
 	
+	<select id="selectNewTop" resultMap="resultNotice">
+		<![CDATA[
+			select *
+			from (select rownum rnum, notice_title, create_date
+			        from(select * from notice order by create_date desc))
+			where rnum >= 1 and rnum <= 3
+		]]>
+	</select>
+	
+	<update id="updateNoticeAlarmAll">
+		update alarm
+		set alarm_notice_num = alarm_notice_num + 1 
+	</update>
+	
+	<update id="updateNoticeAlarmDept" parameterType="_int">
+		update alarm
+		set alarm_notice_num = alarm_notice_num + 1
+		where emp_id in (select emp_id from employee
+						 where dep_id = #{ depId })
+	</update>
+	
+	<update id="updateNoticeAlarmEmp" parameterType="java.util.List">
+		<foreach collection="list" item="item">
+			update alarm
+			set alarm_notice_num = alarm_notice_num + 1
+			where emp_id = #{ item }
+		</foreach>
+	</update>
+	
+	<insert id="insertReferenceNotice" parameterType="Notice">
+		insert into reference_notice values
+		((select nvl(max(ref_id),0)+1 from reference_notice),
+		#{ empId }, #{ noticeId }, default, 'Y')
+	</insert>
+	
+	<update id="updateMinusNoticeAlarm" parameterType="_int">
+		update alarm
+		set alarm_notice_num = alarm_notice_num - 1
+		where emp_id = #{ loginMemberId }
+	</update>
+	
+	<select id="selectReferenceNotice" parameterType="Notice" resultType="_int">
+		select count(*) from reference_notice
+		where notice_id = #{ noticeId } and emp_id = #{ empId }
+	</select>
+	
+	<delete id="deleteReferenceNotice" parameterType="_int">
+		delete from reference_notice
+		where notice_id = #{ noticeId }
+	</delete>
+	
+	<select id="selectReadEmpCount" parameterType="_int" resultType="_int">
+		select count(*) from reference_notice
+		where notice_id = #{ noticeId } and read_chk = 'Y'
+	</select>
 	
 </mapper>
-
-
-
-
-
-

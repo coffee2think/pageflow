@@ -438,6 +438,8 @@ public class PopupController {
 		JSONArray jarr = new JSONArray();
 		
 		for(BookOrder bookOrder : list) {
+			bookOrder.calcTotalPrice();
+			
 			JSONObject job = new JSONObject();
 			
 			job.put("orderId", bookOrder.getOrderId());
@@ -447,6 +449,7 @@ public class PopupController {
 			job.put("bookPrice", bookOrder.getBookPrice());
 			job.put("orderDate", bookOrder.getOrderDate().toString());
 			job.put("orderQuantity", bookOrder.getOrderQuantity());
+			job.put("totalPrice", bookOrder.getTotalPrice());
 			
 			jarr.add(job);
 		}

@@ -13,11 +13,9 @@ public interface PrintCalcService {
 	
 	public int selectPrintCalcListCount();
 	
-	public ArrayList<PrintCalc> selectPrintCalcBySDate(Search search);
-	
 	public ArrayList<PrintCalc> selectPrintCalcByEDate(Search search);
 	
-	public int selectPrintCalcCountByDate(Search search);
+	public int selectPrintCalcCountByEDate(Search search);
 	
 	public PrintOffice selectPrintOffice(int clientId);
 	
@@ -27,19 +25,12 @@ public interface PrintCalcService {
 	
 	public int updatePrintCalc(PrintCalc printCalc);
 	
-	public int selectPrintCalcCountByOrderId(int search);
-	
 	public int selectPrintCalcCountByPrintName(Search search);
-	
-	public int selectPrintCalcCountByBookId(int search);
-	
-	public int selectPrintCalcCountByBookName(Search search);
-	
-	public ArrayList<PrintCalc> selectPrintCalcByOrderId(int search);
 	
 	public ArrayList<PrintCalc> selectPrintCalcByPrintName(Search search);
 	
-	public ArrayList<PrintCalc> selectPrintCalcByBookId(int search);
+	public int selectPrintCalcCountByBookName(Search search);
 	
 	public ArrayList<PrintCalc> selectPrintCalcByBookName(Search search);
+	
 }
