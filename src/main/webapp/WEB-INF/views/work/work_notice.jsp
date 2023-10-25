@@ -379,7 +379,7 @@
         let empId = Number('<c:out value="${ board.empId }" />')
         formData.append('depId', '<c:out value="${ board.depId }" />');
         formData.append('boardId', '<c:out value="${ board.boardId }" />');
-        formData.append('empId', empId);
+        formData.append('empId', Number('<c:out value="${ loginMember.empId }" />'));
         formData.append('replyDetail', replyDetail);
         formData.append('depth', -1);
         formData.append('upfile', $('.reply-input-box.depth1').find('.file-btn')[0].files[0]);
@@ -510,7 +510,7 @@
             `
             <div class="contents-notice-line">
                 <div class="notice-profile">
-                    <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
+                    <img src="${ pageContext.servletContext.contextPath }/resources/member_upfiles/profile.png">
                     <span>
                         <div class="reply-ename">`+empName+`</div>
                         <div class="reply-date">
