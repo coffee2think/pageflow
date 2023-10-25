@@ -24,13 +24,8 @@ public class PrintCalcDao {
 		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcListCount");
 	}
 	
-	public int selectPrintCalcCountByDate(Search search) {
-		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcCountByDate", search);
-	}
-	
-	public ArrayList<PrintCalc> selectPrintCalcBySDate(Search search){
-		List<PrintCalc> list = sqlSessionTemplate.selectList("printMapper.selectPrintCalcBySDate", search);
-		return (ArrayList<PrintCalc>) list;
+	public int selectPrintCalcCountByEDate(Search search) {
+		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcCountByEDate", search);
 	}
 	
 	public ArrayList<PrintCalc> selectPrintCalcByEDate(Search search){
@@ -55,36 +50,26 @@ public class PrintCalcDao {
 		return sqlSessionTemplate.update("printMapper.updatePrintCalc", printCalc);
 	}
 	
-	public int selectPrintCalcCountByOrderId(int search) {
-		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcCountByOrderId", search);
-	}
+	
 	
 	public int selectPrintCalcCountByPrintName(Search search) {
 		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcCountByPrintName", search);
 	}
 	
-	public int selectPrintCalcCountByBookId(int search) {
-		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcCountByBookId", search);
-	}
+	
 	
 	public int selectPrintCalcCountByBookName(Search search) {
 		return sqlSessionTemplate.selectOne("printMapper.selectPrintCalcCountByBookName", search);
 	}
 	
-	public ArrayList<PrintCalc> selectPrintCalcByOrderId(int search){
-		List<PrintCalc> list = sqlSessionTemplate.selectList("printMapper.selectPrintCalcByOrderId", search);
-		return (ArrayList<PrintCalc>) list;
-	}
+	
 	
 	public ArrayList<PrintCalc> selectPrintCalcByPrintName(Search search){
 		List<PrintCalc> list = sqlSessionTemplate.selectList("printMapper.selectPrintCalcByPrintName", search);
 		return (ArrayList<PrintCalc>) list;
 	}
 	
-	public ArrayList<PrintCalc> selectPrintCalcByBookId(int search){
-		List<PrintCalc> list = sqlSessionTemplate.selectList("printMapper.selectPrintCalcByBookId", search);
-		return (ArrayList<PrintCalc>) list;
-	}
+	
 	
 	public ArrayList<PrintCalc> selectPrintCalcByBookName(Search search){
 		List<PrintCalc> list = sqlSessionTemplate.selectList("printMapper.selectPrintCalcByBookName", search);

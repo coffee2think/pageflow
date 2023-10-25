@@ -18,29 +18,37 @@ public interface PrintOrderService {
 	
 	public int selectPrintOrderListCount();
 	
-	public ArrayList<PrintOrder> selectPrintOrderList(Paging paging);
-	
-	public int updatePrintOrder(PrintOrder PrintOrder);
-	
 	public int selectMaxPrintOrderId();
+	
+	public ArrayList<PrintOrder> selectPrintOrderList(Paging paging);
 	
 	public int insertPrintOrder(PrintOrder printOrder);
 	
-	public int deletePrintOrder(int printOrder);
+	public int updatePrintOrder(PrintOrder PrintOrder);
 	
-	public int selectPrintOrderCountByOrderId(int search);
+	public int deletePrintOrder(int printOrder);
 	
 	public int selectPrintOrderCountByPrintName(Search search);
 	
-	public int selectPrintOrderCountByBookId(int search);
+	public ArrayList<PrintOrder> selectPrintOrderByPrintName(Search search);
 	
 	public int selectPrintOrderCountByBookName(Search search);
 	
-	public ArrayList<PrintOrder> selectPrintOrderByOrderId(int search);
-	
-	public ArrayList<PrintOrder> selectPrintOrderByPrintName(Search search);
-	
-	public ArrayList<PrintOrder> selectPrintOrderByBookId(int search);
-	
 	public ArrayList<PrintOrder> selectPrintOrderByBookName(Search search);
+	
+	public int selectPrintOrderCountBySDate(Search search);
+	
+	public ArrayList<PrintOrder> selectPrintOrderBySDate(Search search);
+	
+	public int selectPrintOrderCountByEDate(Search search);
+	
+	public ArrayList<PrintOrder> selectPrintOrderByEDate(Search search);
+	
+	public int selectPrintOrderCountByPDate(Search search);
+	
+	public ArrayList<PrintOrder> selectPrintOrderByPDate(Search search);
+	
+	public String selectPrintOrderClientName(int bookId);
+	
+	public String selectPrintOrderBookName(int bookId);
 }

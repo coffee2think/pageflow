@@ -3,34 +3,25 @@ package com.erl.pageflow.printOrder.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.erl.pageflow.book.model.vo.Book;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.printOrder.model.service.PrintOrderService;
 import com.erl.pageflow.printOrder.model.vo.PrintOrder;
-import com.erl.pageflow.sales.model.vo.BookOrder;
-import com.erl.pageflow.sales.model.vo.PrintOffice;
 
 @Controller
 public class PrintOrderController {
@@ -42,91 +33,30 @@ public class PrintOrderController {
 	
 	//*************************** 뷰 페이지 이동 *****************************
 	
-	//발주현황 페이지 이동 처리용
+	//발주현황 리스트 조회
 	@RequestMapping("polist.do")
-	
-	public String movePrintOrderPage(@RequestParam(name="page", required=false) String page,
-			@RequestParam(name="limit", required=false) String limitStr,
-			Model model) {
-		
-		
-		
-		// 첫 이동시 해당 기간 데이터 조회
-		LocalDate today = LocalDate.now();
-		model.addAttribute("begin", today.minusWeeks(1).plusDays(1));	//1주일 전부터
-		model.addAttribute("end", today);	//오늘까지
-		model.addAttribute("page", page);
-		model.addAttribute("limit", limitStr);
-		
-		return "redirect:polistdate.do";
-	}
-	
-	// 날짜로 주문현황 검색 처리용
-	@RequestMapping("polistdate.do")
-	public String printOrderList(Search search,
-			@RequestParam(name="page", required=false) String page,
-			@RequestParam(name="limit", required=false) String limitStr,
-			Model model) {
-		
-		int currentPage = 1;
-		if (page != null) {
-			currentPage = Integer.parseInt(page);
-		}
-		
-		int limit = 10;
-		if (limitStr != null) {
-			limit = Integer.parseInt(limitStr);
-		}
-		
-		int listCount = printOrderService.selectPrintOrderListCount();
-		
-		Paging paging = new Paging(listCount, currentPage, limit, "polistdate.do");
-		paging.calculator();
-		
-		search.setStartRow(paging.getStartRow());
-		search.setEndRow(paging.getEndRow());
-		
-		
-		ArrayList<PrintOrder> list = printOrderService.selectPrintOrderByDate(search);
-		
-		for(PrintOrder po : list) {
-			PrintOffice poffice  = printOrderService.selectPrintOffice(po.getClientId());
-			Book book = printOrderService.selectBook(po.getBookId());
-			
-			po.setClientName(poffice.getClientName());
-			po.setBookName(book.getBookName());
-		}
-		
-		model.addAttribute("list", list);
-		model.addAttribute("begin", search.getBegin().toString());
-		model.addAttribute("end", search.getEnd().toString());
-		
-		return "print/porder_list";
-	}
-	
-	//발주현황 조회 처리용
-	@RequestMapping("printOrderlist.do")
 	public String printOrderList(
 			@RequestParam(name="page", required=false) String page,
-			@RequestParam(name="limit", required=false) String limitStr,
-			Model model) {
+			@RequestParam(name="limit", required=false) String limitStr, Model model) {
 		
 		int currentPage = 1;
-		if (page != null) {
-			currentPage = Integer.parseInt(page);
+		
+		if(page != null) {
+			currentPage = Integer.parseInt(page); 
 		}
 		
 		int limit = 10;
-		if (limitStr != null) {
+		if(limitStr != null) {
 			limit = Integer.parseInt(limitStr);
 		}
 		
 		int listCount = printOrderService.selectPrintOrderListCount();
 		
-		Paging paging = new Paging(listCount, currentPage, limit, "printOrderlist.do");
+		Paging paging = new Paging(listCount, currentPage, limit, "polist.do");
 		paging.calculator();
 		
 		ArrayList<PrintOrder> list = printOrderService.selectPrintOrderList(paging);
+	
 		
 		if(list != null && list.size() > 0) {
 			model.addAttribute("list", list);
@@ -136,17 +66,151 @@ public class PrintOrderController {
 			
 			return "print/porder_list";
 		} else {
-			model.addAttribute("message", "발주 조회 실패 : 등록된 거래처가 없습니다");
+			model.addAttribute("message", "정산 목록 조회 실패!");
+			return "common/error";
+		}	
+		
+	}
+	
+	//시작날짜로 정산현황 검색 처리용
+	@RequestMapping("polistSdate.do")
+	public String selectPrintCalcBySDate(Search search,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+			
+		int currentPage = 1;
+		if (page != null) {
+			currentPage = Integer.parseInt(page);
+		}
+		
+		int limit = 10;
+		if (limitStr != null) {
+			limit = Integer.parseInt(limitStr);
+		} 
+		
+		int listCount = printOrderService.selectPrintOrderCountBySDate(search);
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "polistSdate.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<PrintOrder> list = printOrderService.selectPrintOrderBySDate(search);
+		logger.info("search : " + search);
+		
+		if (list != null && list.size() > 0) {
+			model.addAttribute("list", list);
+			model.addAttribute("begin", search.getBegin().toString());
+			model.addAttribute("end", search.getEnd().toString());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "print/porder_list";
+		} else {
+			model.addAttribute("message", "날짜 검색 실패");
 			return "common/error";
 		}
+		
+	}
+	
+	//마감날짜로 정산현황 검색 처리용
+	@RequestMapping("polistEdate.do")
+	public String selectPrintCalcByEDate(Search search,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+			
+		int currentPage = 1;
+		if (page != null) {
+			currentPage = Integer.parseInt(page);
+		}
+		
+		int limit = 10;
+		if (limitStr != null) {
+			limit = Integer.parseInt(limitStr);
+		} 
+		
+		int listCount = printOrderService.selectPrintOrderCountByEDate(search);
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "polistEdate.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<PrintOrder> list = printOrderService.selectPrintOrderByEDate(search);
+		logger.info("search : " + search);
+		
+		if (list != null && list.size() > 0) {
+			model.addAttribute("list", list);
+			model.addAttribute("begin", search.getBegin().toString());
+			model.addAttribute("end", search.getEnd().toString());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "print/porder_list";
+		} else {
+			model.addAttribute("message", "날짜 검색 실패");
+			return "common/error";
+		}
+	}
+	
+	//출간날짜로 정산현황 검색 처리용
+	@RequestMapping("polistPdate.do")
+	public String selectPrintCalcByPDate(Search search,
+			@RequestParam(name="page", required=false) String page,
+			@RequestParam(name="limit", required=false) String limitStr,
+			Model model) {
+			
+		int currentPage = 1;
+		if (page != null) {
+			currentPage = Integer.parseInt(page);
+		}
+		
+		int limit = 10;
+		if (limitStr != null) {
+			limit = Integer.parseInt(limitStr);
+		} 
+		
+		int listCount = printOrderService.selectPrintOrderCountByPDate(search);
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "polistPdate.do");
+		paging.calculator();
+		
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		ArrayList<PrintOrder> list = printOrderService.selectPrintOrderByPDate(search);
+		logger.info("search : " + search);
+		
+		if (list != null && list.size() > 0) {
+			model.addAttribute("list", list);
+			model.addAttribute("begin", search.getBegin().toString());
+			model.addAttribute("end", search.getEnd().toString());
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
+			return "print/porder_list";
+		} else {
+			model.addAttribute("message", "날짜 검색 실패");
+			return "common/error";
+		}
+		
 	}
 	//키워드[인쇄코드,인쇄소명,도서코드,도서명]로 발주현황 검색
 	@RequestMapping(value="pokeyword.do", method= {RequestMethod.GET, RequestMethod.POST})
 	public String selectPrintOrderByKeyword(Search search,
+			@RequestParam(name="searchType") String searchType,
 			@RequestParam(name="page", required=false) String page,
 			@RequestParam(name="limit", required=false) String limitStr,
 			Model model) {
-		logger.info("pokeyword.do : search" + search);
+		
+		logger.info("pokeyword.do : searchType" + searchType);
 		logger.info("pokeyword.do : page" + page);
 		logger.info("pokeyword.do : limit" + limitStr);
 		
@@ -166,15 +230,9 @@ public class PrintOrderController {
 		int listCount = 0;
 		
 		
-		switch(search.getSearchType()) {
-		case "orderId":
-			listCount = printOrderService.selectPrintOrderCountByOrderId(Integer.parseInt(search.getKeyword()));
-			break;
+		switch(searchType) {
 		case "printName":
 			listCount = printOrderService.selectPrintOrderCountByPrintName(search);
-			break;
-		case "bookId":
-			listCount = printOrderService.selectPrintOrderCountByBookId(Integer.parseInt(search.getKeyword()));
 			break;
 		case "bookName":
 			listCount = printOrderService.selectPrintOrderCountByBookName(search);
@@ -190,15 +248,9 @@ public class PrintOrderController {
 		
 		ArrayList<PrintOrder> list = null;
 		
-		switch(search.getSearchType()) {
-		case "orderId":
-			list = printOrderService.selectPrintOrderByOrderId(Integer.parseInt(search.getKeyword()));
-			break;
+		switch(searchType) {
 		case "printName":
 			list = printOrderService.selectPrintOrderByPrintName(search);
-			break;
-		case "bookId":
-			list = printOrderService.selectPrintOrderByBookId(Integer.parseInt(search.getKeyword()));
 			break;
 		case "bookName":
 			list = printOrderService.selectPrintOrderByBookName(search);
@@ -207,13 +259,15 @@ public class PrintOrderController {
 		
 		if(list != null && list.size() > 0) {
 			model.addAttribute("list", list);
+			model.addAttribute("searchType", searchType);
+			model.addAttribute("keyword", search.getKeyword());
 			model.addAttribute("paging", paging);
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
 			
 			return "print/porder_list";
 		} else {
-			model.addAttribute("message", "발주현황 조회 실패");
+			model.addAttribute("message", search.getKeyword() + "발주현황 검색 실패");
 			return "common/error";
 		}
 		
