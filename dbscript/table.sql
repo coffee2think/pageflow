@@ -2328,4 +2328,11 @@ rename COLUMN PUBLISHER to isbn;
 --ALTER TABLE refund
 --DROP COLUMN emp_name;
 
+alter table employee
+add (origin_file VARCHAR2(1000) NULL);
 
+alter table employee
+add (rename_file VARCHAR2(1000) NULL);
+
+--ALTER TABLE employee
+--DROP COLUMN rename_file;

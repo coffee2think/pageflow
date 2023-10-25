@@ -825,3 +825,11 @@ body {
 .refundState-value {
     border: 1px solid #9fc7ff;
 }
+
+.hidden-box {
+    display:none;
+}
+
+.height-up{
+    height: calc(100% - 160px);
+}
