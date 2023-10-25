@@ -19,6 +19,8 @@
 		<result property="orderDate" column="ORDER_DATE"/>
 		<result property="endDate" column="END_DATE"/>
 		<result property="pubDate" column="PUB_DATE"/>
+		<result property="bookName" column="BOOK_Name"/>
+		<result property="clientName" column="CLIENT_Name"/>
 	</resultMap>
 	
 	<resultMap type="PrintCalc" id="resultPrintCalc">
@@ -36,6 +38,8 @@
 		<result property="orderDate" column="ORDER_DATE"/>
 		<result property="endDate" column="END_DATE"/>
 		<result property="pubDate" column="PUB_DATE"/>
+		<result property="bookName" column="BOOK_Name"/>
+		<result property="clientName" column="CLIENT_Name"/>
 	</resultMap>
 
 	<resultMap type="PrintOffice" id="resultPrintOffice">
@@ -69,27 +73,33 @@
 		<result property="regDate" column="REG_DATE" />
 	</resultMap>
 	
-	
+	<!-- 발주 리스트 조회 -->
 	<select id="selectPrintOrderList" parameterType="Paging" resultMap="resultPrintOrder">
       <![CDATA[
       select * 
       from (select rownum rnum, sub.*
             from (select * from print_order 
+            join client using (client_id)
+			join book using (book_id)	
                 order by order_id desc, ORDER_DATE desc) sub) 
       where rnum >= #{ startRow } and rnum <= #{ endRow }
       ]]>
    </select>
    
+   <!-- 정산 리스트 조회 -->
    <select id="selectPrintCalcList" parameterType="Paging" resultMap="resultPrintCalc">
       <![CDATA[
       select * 
       from (select rownum rnum, sub.*
             from (select * from print_order 
+            join client using (client_id)
+			join book using (book_id)	
                 order by order_id desc, ORDER_DATE desc) sub) 
       where rnum >= #{ startRow } and rnum <= #{ endRow }
       ]]>
    </select>
    
+   <!-- 날짜로 발주 검색 -->
    <select id="selectPrintOrderByDate" parameterType="Search" resultMap="resultPrintOrder">
       <![CDATA[
       select * 
@@ -101,6 +111,7 @@
       ]]>
    </select>
 	
+	<!-- 날짜로 정산 검색 -->
 	<select id="selectPrintCalcByDate" parameterType="Search" resultMap="resultPrintCalc">
       <![CDATA[
       select * 
@@ -170,39 +181,23 @@
 		where order_id = #{ orderId }
 	</update>
 	
-	<select id ="selectPrintOrderCountByOrderId" parameterType="_int" resultType="_int">
-		select count(*) from print_order
-		where order_id = #{ orderId }
-	</select>
+	
 	
 	<select id="selectPrintOrderCountByPrintName" parameterType="Search" resultType="_int">
 		select count(*) from print_order
 		join client using (client_id)
-		where client_name like '%' || ${ keyword } || '%'
+		where client_name like '%' || #{ keyword } || '%'
 	</select>
 	
-	<select id="selectPrintOrderCountByBookId" parameterType="_int" resultType="_int">
-		select count(*) from print_order
-		join book using (book_id)
-		where book_id = #{ bookId }
-	</select>
+	
 	
 	<select id="selectPrintOrderCountByBookName" parameterType="Search" resultType="_int">
 		select count(*) from print_order
 		join book using (book_id)
-		where book_name like '%' || ${ keyword } || '%'
+		where book_name like '%' || #{ keyword } || '%'
 	</select>
 	
-	<select id="selectPrintOrderByOrderId" parameterType="Search" resultMap="resultPrintOrder">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from print_order
-			  		join client using(client_id)
-			  		join book using(book_id)
-			  		where order_id = to_number( #{ keyword } )
-			  		order by order_id desc, order_date desc ) sub)
-		where rnum between #{ startRow } and #{ endRow }
-	</select>
+	
 	
 	<select id="selectPrintOrderByPrintName" parameterType="Search" resultMap="resultPrintOrder">
 		select *
@@ -210,21 +205,12 @@
 			  from (select * from print_order
 			  		join client using (client_id) 
 			  		join book using(book_id)
-			  		where client_name like '%' || ${ keyword } || '%'
+			  		where client_name like '%' || #{ keyword } || '%'
 			  		order by order_id desc, order_date desc ) sub)
   		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
-	<select id="selectPrintOrderByBookId" parameterType="Search" resultMap="resultPrintOrder">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from print_order
-			  		join client using (client_id) 
-			  		join book using(book_id)
-			  		where book_id = to_number( #{ keyword } )
-			  		order by order_id desc, order_date desc ) sub)
-  		where rnum between #{ startRow } and #{ endRow }
-	</select>
+	
 	
 	<select id="selectPrintOrderByBookName" parameterType="Search" resultMap="resultPrintOrder">
 		select *
@@ -232,76 +218,123 @@
 			  from (select * from print_order
 			  		join client using (client_id) 
 			  		join book using(book_id)
-			  		where book_name like '%' || ${ keyword } || '%'
+			  		where book_name like '%' || #{ keyword } || '%'
 			  		order by order_id desc, order_date desc ) sub)
   		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
-	<select id ="selectPrintCalcCountByOrderId" parameterType="_int" resultType="_int">
-		select count(*) from print_order
-		where order_id = #{ orderId }
-	</select>
+	
 	
 	<select id="selectPrintCalcCountByPrintName" parameterType="Search" resultType="_int">
 		select count(*) from print_order
 		join client using (client_id)
-		where client_name like '%' || ${ keyword } || '%'
+		where client_name like '%' || #{ keyword } || '%'
 	</select>
 	
-	<select id="selectPrintCalcCountBookId" parameterType="_int" resultType="_int">
+	<select id="selectPrintCalcByPrintName" parameterType="Search" resultMap="resultPrintCalc">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from print_order
+			  		join client using (client_id) 
+			  		join book using(book_id)
+			  		where client_name like '%' || #{ keyword } || '%'
+			  		order by order_id desc, order_date desc ) sub)
+  		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	
+	
+	<select id="selectPrintCalcCountByBookName" parameterType="Search" resultType="_int">
 		select count(*) from print_order
 		join book using (book_id)
-		where book_id = #{ bookId }
+		where book_name like '%' || #{ keyword } || '%'
 	</select>
 	
-	<select id="selectPrintCalcCountBookName" parameterType="Search" resultType="_int">
+	<select id="selectPrintCalcByBookName" parameterType="Search" resultMap="resultPrintCalc">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from print_order
+			  		join client using (client_id) 
+			  		join book using(book_id)
+			  		where book_name like '%' || #{ keyword } || '%'
+			  		order by order_id desc, order_date desc ) sub)
+  		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectPrintCalcCountByEDate" parameterType="Search" resultType="_int">
 		select count(*) from print_order
-		join book using (book_id)
-		where book_name like '%' || ${ keyword } || '%'
+		where end_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
 	</select>
 	
-	<select id="selectPrintCalcByOrderId" parameterType="Search" resultMap="resultPrintOrder">
+	<select id="selectPrintCalcByEDate" parameterType="Search" resultMap="resultPrintCalc">
 		select *
 		from (select rownum rnum, sub.*
-			  from (select * from print_order
-			  		join client using(client_id)
-			  		join book using(book_id)
-			  		where order_id = to_number( #{ keyword } )
-			  		order by order_id desc, order_date desc ) sub)
-		where rnum between #{ startRow } and #{ endRow }
+			  from (select * from print_order p
+			  		join client using (client_id)
+			  		join book using (book_id)
+			  		where p.end_date between #{ begin } and #{ end } 
+			  		order by p.end_date desc, order_id desc ) sub)
+	    where rnum between #{ startRow } and #{ endRow } 
 	</select>
 	
-	<select id="selectPrintCalcByPrintName" parameterType="Search" resultMap="resultPrintOrder">
-		select *
-		from (select rownum rnum, sub.*
-			  from (select * from print_order
-			  		join client using (client_id) 
-			  		join book using(book_id)
-			  		where client_name like '%' || ${ keyword } || '%'
-			  		order by order_id desc, order_date desc ) sub)
-  		where rnum between #{ startRow } and #{ endRow }
+	<select id="selectPrintOrderCountBySDate" parameterType="Search" resultType="_int">
+		select count(*) from print_order
+		where order_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
 	</select>
 	
-	<select id="selectPrintCalcByBookId" parameterType="Search" resultMap="resultPrintOrder">
+	<select id="selectPrintOrderBySDate" parameterType="Search" resultMap="resultPrintOrder">
 		select *
 		from (select rownum rnum, sub.*
-			  from (select * from print_order
-			  		join client using (client_id) 
-			  		join book using(book_id)
-			  		where book_id = to_number( #{ keyword } )
-			  		order by order_id desc, order_date desc ) sub)
-  		where rnum between #{ startRow } and #{ endRow }
+			  from (select * from print_order p
+			  		join client using (client_id)
+			  		join book using (book_id)
+			  		where p.order_date between #{ begin } and #{ end } 
+			  		order by p.order_date desc, order_id desc ) sub)
+	    where rnum between #{ startRow } and #{ endRow } 
 	</select>
 	
-	<select id="selectPrintCalcByBookName" parameterType="Search" resultMap="resultPrintOrder">
+	<select id="selectPrintOrderCountByEDate" parameterType="Search" resultType="_int">
+		select count(*) from print_order
+		where end_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+	</select>
+	
+	<select id="selectPrintOrderByEDate" parameterType="Search" resultMap="resultPrintOrder">
 		select *
 		from (select rownum rnum, sub.*
-			  from (select * from print_order
-			  		join client using (client_id) 
-			  		join book using(book_id)
-			  		where book_name like '%' || ${ keyword } || '%'
-			  		order by order_id desc, order_date desc ) sub)
-  		where rnum between #{ startRow } and #{ endRow }
+			  from (select * from print_order p
+			  		join client using (client_id)
+			  		join book using (book_id)
+			  		where p.end_date between #{ begin } and #{ end } 
+			  		order by p.end_date desc, order_id desc ) sub)
+	    where rnum between #{ startRow } and #{ endRow } 
+	</select>
+	
+	<select id="selectPrintOrderCountByPDate" parameterType="Search" resultType="_int">
+		select count(*) from print_order
+		where PUB_DATE between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
+	</select>
+	
+	<select id="selectPrintOrderByPDate" parameterType="Search" resultMap="resultPrintOrder">
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from print_order p
+			  		join client using (client_id)
+			  		join book using (book_id)
+			  		where p.PUB_DATE between #{ begin } and #{ end } 
+			  		order by p.PUB_DATE desc, order_id desc ) sub)
+	    where rnum between #{ startRow } and #{ endRow } 
+	</select>
+	
+	<select id="selectPrintOrderClientName" parameterType="_int" resultType="string">
+		SELECT CLIENT_NAME
+		FROM CLIENT
+		WHERE CLIENT_ID = #{ clientId }
+	</select>
+	
+	<select id="selectPrintOrderBookName" parameterType="_int" resultType="string">
+		SELECT BOOK_NAME
+		FROM  BOOK
+		WHERE BOOK_ID= #{ bookId }
 	</select>
 	
 </mapper>
