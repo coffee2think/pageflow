@@ -1,66 +1,13 @@
 
-$(function() {
-    setBtnEvent();
-}); 
 
-function setBtnEvent(){
-
-    $('#sel_code').children('option').each(function() {
-        if($(this).val() == searchType) {
-            $(this).attr('selected', true);
-        }
-    });
-
-    $('.table-apprList').each(function(){
-        let id = $(this).attr('id');
-
-        $(this).find('.search-pop-draft').each(function(){
-            $(this).on('click', function(){
-                console.log('appr : ' +  $(this).attr('data-id') )
-                getApprovalData($(this).attr('data-id'))
-            })
-        })
-    })
-}
-
-function getApprovalData(id){
-    //ajax로 update 요청 보내기
-    $.ajax({
-        url: 'apapprovalpop.do',
-        type: 'post',
-        data: {
-            approvalId : id
-        },
-        dataType : 'json',
-        success: function(data){
-            var jsonStr = JSON.stringify(data);
-			var json = JSON.parse(jsonStr);
-            console.log('jsonStr : ' + jsonStr);
-            console.log('json.approval : ' + json.approval);
-            console.log('json.list : ' + json.list);
-            //lineData : {"emp_name4":null,"appr_date":2023-10-18,"draft_type":"annual","emp_name2":"장덩근","emp_name3":null,"approver_name":3,"dep_name":"개발팀","title":null,"line_id":1,"rejection_date":null,"appr_id":1,"job_name":"부장","pos_name":null,"drafter_name":1,"receipt_date":null,"line_name":"결재라인 1","detail":"연차를 신청합니다. 병원방문","emp_name1":"김태히","start_date":2023-10-19}
-            setApprovalPopup(json);
-
-
-            //팝업창 뜨기
-            $('#approval_pop_area').show();
-            $('#approval_pop_box').show();
-        },
-        error: function(jqXHR, textStatus, errorThrown){
-            console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
-            alert('결재 검색이 되지 않습니다.');
-        }
-    });
-}
 
 var temp = {};
 
 // 수정 버튼 클릭 시 수정 가능 상태로 변경
-function onUpdate(id) {
+function onUpdate(url) {
 
     if(confirm('수정 화면으로 이동하시겠습니까?')) {
-        location.href = 
-        'apmoveupdate.do?boardId=${ board.boardId }&depId=${ board.depId }&empId=${ board.empId }&boardTitle=${ board.boardTitle }&boardDetail=${ board.boardDetail }&originFile=${ board.originFile }&renameFile=${ board.renameFile }';
+        location.href = url;
     }
 
     return;

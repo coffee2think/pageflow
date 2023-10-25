@@ -63,5 +63,15 @@ public class ApprovalLineDao {
 		return sqlSessionTemplate.selectOne("approvalLineMapper.selectApprovalSaveLineId");
 	}
 
+	public int selectApprovalLineId() {
+		return sqlSessionTemplate.selectOne("approvalLineMapper.selectApprovalLineId");
+	}
+
+	public ArrayList<ApprovalLine> selectMyApprovalLineList(int lineId) {
+		List<ApprovalLine> list = sqlSessionTemplate.selectList("approvalLineMapper.selectMyApprovalLineList", lineId);
+		return (ArrayList<ApprovalLine>)list;
+	}
+	
+	
 	
 }

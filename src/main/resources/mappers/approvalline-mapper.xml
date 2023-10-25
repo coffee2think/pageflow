@@ -50,11 +50,16 @@
 		select max(LINE_ID)+1 from approvalline
 	</select>
 	
+	<select id="selectMyApprovalLineList" parameterType="_int" resultMap="resultApprovalLine">
+		select * from approvalline
+		where LINE_ID = #{ lineId }
+		order by LINE_DEPTH asc
+	</select>
+	
 	<insert id="insertApprovalLine" parameterType="ApprovalLine">
 		insert into approvalline
 		values(#{ lineId }, #{ lineDepth }, #{ empId }, #{ approverId }, 
 		#{ approverName }, #{ posName }, default, default)
-		
 	</insert>
 	
 	<insert id="insertApprovalLineSave" parameterType="ApprovalLineSave">

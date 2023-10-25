@@ -146,5 +146,7 @@ ALTER TABLE approvalline DROP CONSTRAINT FK_APPROVALLINE_GROUP_TO_APPROVALLINE;
 ALTER TABLE approvalline_save DROP CONSTRAINT FK_APPROVALLINE_SAVE_GROUP_TO_APPROVALLINE_SAVE;
 
 
-
+insert into approval
+values(3, 1, 'annual', 3, 3, 
+		'continue', default, null, null, null, null, null);
 commit;

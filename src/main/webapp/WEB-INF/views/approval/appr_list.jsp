@@ -17,7 +17,7 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/appr_list.js"></script>
+
 <script type="text/javascript">
     
     const appr_url = new URL(window.location.href);
@@ -31,6 +31,66 @@
     const LNKPAGE = (appr_param == 'my') ? 1 : 2;
     console.log('SUBPAGE : ' + SUBPAGE + ' LNKPAGE :  ' + LNKPAGE);
     const searchType = '<c:out value="${ searchKewordType }" />'
+
+    $(function() {
+        setBtnEvent();
+    }); 
+
+    function setBtnEvent(){
+
+        $('#sel_code').children('option').each(function() {
+            if($(this).val() == searchType) {
+                $(this).attr('selected', true);
+            }
+        });
+
+        $('.table-apprList').each(function(){
+            let id = $(this).attr('id');
+
+            $(this).find('.search-pop-draft').each(function(){
+                $(this).on('click', function(){
+                    console.log('appr : ' +  $(this).attr('data-id') )
+                    getApprovalData($(this).attr('data-id'))
+                })
+            })
+        })
+    }
+
+    function getApprovalData(id){
+        //ajax로 update 요청 보내기
+        $.ajax({
+            url: 'apapprovalpop.do',
+            type: 'post',
+            data: {
+                approvalId : id
+            },
+            dataType : 'json',
+            success: function(data){
+                var jsonStr = JSON.stringify(data);
+                var json = JSON.parse(jsonStr);
+                console.log('jsonStr : ' + jsonStr);
+                console.log('json.approval : ' + json.approval);
+                console.log('json.list : ' + json.list);
+                //lineData : {"emp_name4":null,"appr_date":2023-10-18,"draft_type":"annual","emp_name2":"장덩근","emp_name3":null,"approver_name":3,"dep_name":"개발팀","title":null,"line_id":1,"rejection_date":null,"appr_id":1,"job_name":"부장","pos_name":null,"drafter_name":1,"receipt_date":null,"line_name":"결재라인 1","detail":"연차를 신청합니다. 병원방문","emp_name1":"김태히","start_date":2023-10-19}
+                setApprovalPopup(json);
+
+
+                //팝업창 뜨기
+                $('#approval_pop_area').show();
+                $('#approval_pop_box').show();
+            },
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+                alert('결재 검색이 되지 않습니다.');
+            }
+        });
+    }
+    function onUpdate(url) {
+        if(confirm('수정 화면으로 이동하시겠습니까?')) {
+            location.href = url;
+        }
+    }
+    
 </script>
 <title></title>
 </head>
@@ -75,7 +135,7 @@
                 <!--main-header-bar end-->
 
                 <!--내용-->
-                <div class="main-contents-box">
+                <div class="main-contents-box height-up">
                     <div class="main-content">
                         
                         <!--서치영역-->
@@ -177,9 +237,26 @@
                                                     <input type="button" class="contents-input-link search-pop-draft" data-id="${ appr.apprId }" value="결재"/>
                                                 </td>
                                                 
+                                                <c:url var="updatemove" value="apmoveupdate.do">
+                                                    <c:param name="apprId" value="${ appr.apprId }" />
+                                                    <c:param name="drafter" value="${ appr.drafter }" />
+                                                    <c:param name="draftType" value="${ appr.draftType }" />
+                                                    <c:param name="lineId" value="${ appr.lineId }" />
+                                                    <c:param name="savelineId" value="${ appr.savelineId }" />
+                                                    <c:param name="apprState" value="${ appr.apprState }" />
+                                                    <c:param name="apprDate" value="${ appr.apprDate }" />
+                                                    <c:param name="originFile" value="${ appr.originFile }" />
+                                                    <c:param name="renameFile" value="${ appr.renameFile }" />
+                                                </c:url>
+
+                                                <c:url var="updatemove2" value="apmoveupdate.do">
+                                                    <c:param name="apprId" value="${ appr.apprId }" />
+                                                </c:url>
+
                                                 <td class="td-100">
                                                     <c:if test="${ empId == appr.drafter and appr.apprState ne 'complete' }">
-                                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ appr.apprId }" onclick="onUpdate(${ appr.apprId }); return false;">
+                                                        <input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ appr.apprId }" onclick="onUpdate('${ updatemove2 }'); return false;">
+                                                        <!--<a href="${ updatemove }" class="contents-input-btn noline">수정</a>-->
                                                         <input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ appr.apprId }" onclick="submitUpdate(${ appr.apprId }, 'apupdate.do?apType='+appr_param); return false;" style="display: none;">
                                                         <input type="button" class="contents-input-btn noline" value="취소" id="cancelBtn_${ appr.apprId }" onclick="cancelUpdate(${ appr.apprId }); return false;" style="display: none;">
                                                     </c:if>
@@ -194,7 +271,7 @@
                     </div>
                 </div>
                 <!--내용 end-->
-                <div class="submit-box">
+                <div class="submit-box hidden-box">
                     <input type="submit" class="contents-input-btn big noline" id="btn_delete" value="선택삭제" onclick="deleteCheckedRow('apdelete.do'); return false;">
                 </div>
 

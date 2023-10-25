@@ -151,6 +151,11 @@
     flex-direction: row-reverse;
 }
 
+.contents-update-down-box{
+    margin-right: 10px;
+    display: flex;
+}
+
 .contents-notice-down {
     position: relative;
     /* width: 250px; */
