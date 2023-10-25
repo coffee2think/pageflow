@@ -75,12 +75,27 @@ public class EmployeeController {
 
 	}
 
+//	// 사이드메뉴바에서 마이페이지로 이동
+//	@RequestMapping("movemypagebar.do")
+//	public String moveMyPage() {
+//		return "member/myPage";
+//	}
+	
 	// 마이페이지로 이동
 	@RequestMapping("movemypage.do")
-	public String moveMyPage() {
-		return "member/myPage";
+	public String moveMyPage(@RequestParam("empId") int empId, Model model) {
+		//서비스 메소드로 아이디 전달하고 해당 회원 정보 받기
+		Employee employee = employeeService.selectEmployee(empId);
+		
+		if(employee != null) {
+			model.addAttribute("employee", employee);
+			return "member/myPage";
+		} else {
+			model.addAttribute("message", empId + " 회원 정보 조회 실패!");
+			return "common/error";
+		}
 	}
-
+	
 	// 수정페이지로 이동
 	@RequestMapping("movemyupdate.do")
 	public ModelAndView moveMyUpdatePage(@RequestParam("empId") int empId, ModelAndView mv) {
@@ -544,26 +559,70 @@ public class EmployeeController {
 	}
 	
 	// 내정보 수정
-	@RequestMapping(value = "myupdate.do", method = RequestMethod.POST)
-	public String myUpdateMethod(Employee employee, Model model, @RequestParam("origin_emppwd") String originEmpPwd) throws IOException {
-	    logger.info("myupdate.do : " + employee);
-	
-	    //새로운 암호가 전송이 왔다면 패스워드 암호화 처리함
+	@RequestMapping(value = "myupdate.do", method = { RequestMethod.GET, RequestMethod.POST })
+	public String myUpdateMethod(Employee employee, Model model, HttpServletRequest request,
+			@RequestParam(name = "upfile", required = false) MultipartFile file,
+			@RequestParam("origin_emppwd") String originEmpPwd,
+			@RequestParam(name = "deleteFlag", required = false) String delFlag,
+			@RequestParam(name = "upfile", required = false) MultipartFile mfile) throws IOException {
+		logger.info("myupdate.do : " + employee);
+
+		// 새로운 암호가 전송이 왔다면 패스워드 암호화 처리함
 		String empPwd = employee.getEmpPwd().trim();
-		if(empPwd != null && empPwd.length() > 0) {
-			//암호화된 기존의 패스워드와 새로운 패스워드를 비교해서 다른 값이면
-			if(!this.bcryptPasswordEncoder.matches(empPwd, originEmpPwd)) {
-				//member 에 새로운 패스워드를 암호화해서 기록함
+
+		if (empPwd != null && empPwd.length() > 0) {
+			// 암호화된 기존의 패스워드와 새로운 패스워드를 비교해서 다른 값이면
+			if (!this.bcryptPasswordEncoder.matches(empPwd, originEmpPwd)) {
+				// member 에 새로운 패스워드를 암호화해서 기록함
 				employee.setEmpPwd(this.bcryptPasswordEncoder.encode(empPwd));
 			} else {
-				//기존 패스워드면 원래 암호화된 패스워드가 적용됨
+				// 기존 패스워드면 원래 암호화된 패스워드가 적용됨
 				employee.setEmpPwd(originEmpPwd);
 			}
+
+			String savePath = request.getSession().getServletContext().getRealPath("resources/member_upfiles");
+
+			// 첨부파일이 변경된 경우의 처리 --------------------------------------------------------
+			// 1. 원래 첨부파일이 있는데 '파일삭제'를 선택한 경우
+			// 또는 원래 첨부파일이 있는데 새로운 첨부파일이 업로드된 경우
+			if (employee.getProfile() != null && !file.isEmpty()) {
+				// 저장 폴더에서 파일 삭제함
+				new File(savePath + "\\" + employee.getProfile()).delete();
+				// notice 안의 파일정보도 제거함
+				employee.setProfile(null);
+			}
+
+			// 2. 새로운 첨부파일이 있을 때
+			if (!file.isEmpty()) {
+				// 전송온 파일이름 추출함
+				String fileName = file.getOriginalFilename();
+				String renameFileName = null;
+
+				// 저장폴더에는 변경된 이름을 저장 처리함
+
+				// 바꿀 파일명에 대한 문자열 만들기
+				if (fileName != null && fileName.length() > 0) { // 바꿀 파일명에 대한 문자열 만들기
+					renameFileName = String.valueOf(employee.getEmpId());
+					// 원본 파일의 확장자를 추출해서, 바꿀 파일명에 붙여줌
+					renameFileName += "." + fileName.substring(fileName.lastIndexOf(".") + 1);
+					logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
+					try { // 저장 폴더에 파일명 바꾸기 처리
+						file.transferTo(new File(savePath + "\\" + renameFileName));
+					} catch (Exception e) {
+						e.printStackTrace();
+						model.addAttribute("message", "첨부파일 저장 실패!");
+						return "common/error";
+					}
+				} // 파일명 바꾸기
+					// employee 객체에 첨부파일 정보 저장 처리
+				employee.setProfile(renameFileName);
+
+			} // 첨부파일 있을 때
 		}
-		
-		if(employeeService.myUpdateInfo2(employee) > 0) {
-			//수정이 성공했다면 컨트롤러의 다른 메소드를 직접 호출할 수 있음
-			//필요시 값을 전달할 수도 있음 : 쿼리 스트링 사용함
+
+		if (employeeService.myUpdateInfo2(employee) > 0) {
+			// 수정이 성공했다면 컨트롤러의 다른 메소드를 직접 호출할 수 있음
+			// 필요시 값을 전달할 수도 있음 : 쿼리 스트링 사용함
 			return "redirect:movemypage.do?empId=" + employee.getEmpId();
 		} else {
 			model.addAttribute("message", employee.getEmpId() + " 회원정보 수정 실패!");

@@ -130,41 +130,6 @@
                                     </button>
                                 </div>
                             </div>
-							
-							<!-- <div class="nav nav-tabs" style="width: 755px;">
-							    <label for="tabSelect" style="margin-right: 10px;">상태 선택:</label>
-							    <select id="tabSelect" onchange="changeTab()">
-							        <option value="tabAll">전체</option>
-							        <option value="ing">진행중</option>
-							        <option value="finish">계약완료</option>
-							    </select>
-							</div>
-							
-							<button class="search-btn" onclick="searchStatus('ctrliststs.do'); return false;">검색</button> -->
-							
-							<div class="select-box">
-							    <div class="select-pan">
-							        <label for="sel_code"></label>
-							        <select name="code" id="search_type">
-							            <option value="all" <c:if test="${searchType == 'all'}">selected</c:if>>전체</option>
-							            <option value="ing" <c:if test="${searchType == 'ing'}">selected</c:if>>진행중</option>
-							            <option value="finish" <c:if test="${searchType == 'finish'}">selected</c:if>>계약완료</option>
-							        </select>
-							    </div>
-							    <button class="search-btn" onclick="searchStatus('ctrliststs.do'); return false;">
-							    </button>
-							</div>
-							
-                           <%--  <div class="select-box">
-                                <div class="select-pan">
-                                    <label for="sel_code"></label>
-                                    <select name="code" id="sel_code">
-                                        <option value="all" <c:if test="${ searchType == 'all' }">selected</c:if>>진행상태</option>
-                                        <option value="ing" <c:if test="${ searchType == 'ing' }">selected</c:if>>진행중</option>
-                                        <option value="finish" <c:if test="${ searchType == 'finish' }">selected</c:if>>계약완료</option>
-                                    </select>
-                                </div>
-                            </div> --%>
 
                             <div class="select-box">
                                 <div class="select-pan-nemo">

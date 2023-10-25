@@ -104,7 +104,7 @@
 	
 	<update id="updateEmployee" parameterType="Employee">
 		update employee
-		set emp_Pwd = #{empPwd}, PROFILE = #{profile},
+		set emp_pwd = #{empPwd}, PROFILE = #{profile},
 			phone = #{ phone }, email= #{email}, address = #{ address }, JOB_ID = #{ jobId }, 
 			POS_ID = #{ posId }, DEP_ID = #{depId }
 		where EMP_ID = #{ empId }
@@ -119,8 +119,8 @@
 	
   	<update id="myUpdateInfo2" parameterType="Employee">
 		update employee
-		set emp_pwd = #{ empPwd }, emp_pwd_update = sysdate, phone = #{ phone },
-			address = #{ address }
+		set emp_pwd = #{ empPwd }, emp_pwd_update = sysdate, profile = #{ profile }, 
+			phone = #{ phone }, address = #{ address }
 		where emp_id = #{ empId }
 	</update>
 	

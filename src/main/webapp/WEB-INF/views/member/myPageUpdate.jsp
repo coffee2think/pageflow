@@ -9,7 +9,78 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
-<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
+<style>
+    /* Page Styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Content Styles */
+    h1 {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    /* Form Styles */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    /* Photo Styles */
+    #myphoto {
+        width: 150px;
+        height: 160px;
+        border: 2px solid navy;
+        text-align: center;
+        padding: 10px;
+        margin: 0 auto;
+    }
+
+    #photo {
+        width: 100%;
+        height: 100%;
+        border: 1px solid navy;
+        display: block;
+    }
+
+     /* Submit Button Styles */
+    input[type="submit"], input[type="reset"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+        display: inline-block;
+        margin: 0 10px;
+        padding: 10px 20px;
+    }
+    
+    /* Reset Button Styles */
+    input[type="reset"] {
+        background-color: #f2f2f2;
+        color: black;
+        border: 1px solid black;
+        cursor: pointer;
+    }
+</style>
+</head>
+</style>
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 7;
@@ -17,22 +88,23 @@
     const LNKPAGE = 1;
     
     function validate(){
- 	   
- 	   //암호와 암호확인이 일치하지 않는지 확인
- 	   //var pwdValue = document.getElementById("userpwd").value;
- 	   //var pwdValue2 = document.getElementById("userpwd2").value;
- 	   //jQuery 선택자 사용으로 바꾼다면
- 	   var pwdValue = $('#empPwd').val();
- 	   var pwdValue2 = $('#empPwd2').val();
- 	   
- 	   if(pwdValue !== pwdValue2){
- 	      alert("암호와 암호확인이 일치하지 않습니다. 다시 입력하세요.");
- 	      document.getElementById("empPwd").value = "";
- 	      document.getElementById("empPwd2").select();
- 	      return false;  //전송 취소함
- 	   }
- 	   return true;  //전송보냄
- 	}
+    	//암호확인의 포커스가 사라질 때 암호와 암호확인 값 일치하는지 체크
+    	var pwd1 = document.getElementById("empPwd").value;
+    	var pwd2 = document.getElementById("empPwd2").value;
+    	
+    	if (pwd1 === "" || pwd2 === "") {
+    		alert("비밀번호를 입력하지 않으셨습니다.\n다시 수정하세요.");
+    		return false;
+    	}
+    	
+    	if(pwd1 !== pwd2) {
+    		alert("암호와 암호 확인이 일치하지 않습니다.\n다시 수정하세요.");
+    		document.getElementById("empPwd2").value = "";		//암호확인의 값 지움
+    		document.getElementById("empPwd2").focus();
+    		return false;
+    	}
+    	
+    }
  	
  	window.onload = function(){
  		
@@ -68,12 +140,6 @@
 	<!--main-side-->
 	<div class="main-side">
 		<div class="side-container">
-			<div class="side-title"></div>
-			<div class="side-icon-box">
-				<%-- <a
-					href="${ pageContext.servletContext.contextPath }/views/work/notice_input.jsp"
-					class="side-write-btn margin-bottom-0">글쓰기</a> --%>
-			</div>
 
 			<!-- 리스트 들어감 -->
 			<c:import url="../common/side.jsp" />
@@ -84,60 +150,51 @@
 	<h1 align="center">수정페이지</h1>
 	<br>
 	<!-- 사진파일 첨부시 enctype="multipart/form-date" 속성 추가함 -->
-	<form action="myupdate.do" id="enrollForm" method="post"
-		onsubmit="return validate();">
-		<table id="outer" align="center" width="700" cellspacing="5"
-			cellpadding="0">
-		<input type="hidden" name="origin_emppwd" value="${ loginMember.empPwd }">
+	<form action="myupdate.do?empId=${ employee.empId }" id="enrollForm" method="post" enctype="multipart/form-data" onsubmit="return validate();">
+		<input type="hidden" name="origin_emppwd" value="${ employee.empPwd }">
+		<input type="hidden" name="profile" value="${employee.profile }">
+		<table id="outer" align="center" width="700" cellspacing="5" cellpadding="0">
 			<tr>
 				<th colspan="3">내 정보</th>
 				<td rowspan="7" width="100" align="center" valign="middle">
-					<div id="myphoto"
-						style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
-						<img src="/pageflow/resources/images/employeeprofile.png"
-							id="photo"
-							style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;"
-							alt="사진을 드래그 드롭하세요."><br>
+					<div id="myphoto" style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
+						<img src="/pageflow/resources/member_upfiles/${employee.profile }" id="photo" style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;" alt="사진을 드래그 드롭하세요."><br>
+						<div class="select-pan-nemo" style="width: 150px;">파일첨부</div>
+						<input type="file" name="upfile" id="photofile" style="width: 150px;">
 					</div>
-
 				</td>
-				<td><div class="select-pan-nemo">파일첨부</div> <c:url var="ndown"
-						value="bfdown.do">
-						<c:param name="ofile" value="${ notice.noticeOriginalFileName }" />
-						<c:param name="rfile" value="${ notice.noticeRenameFileName }" />
-					</c:url> <input type="file" name="file" id="photofile"> <input
-					type="submit" value="Upload" name="submit"></td>
+			</tr>
 			<tr>
 				<th width="120">사번</th>
-				<td><input type="input" name="empId" id="empid" value="${ employee.empId }" readonly>
+				<td>${employee.empId}</td>
+				<%-- <td><input type="text" name="empId" id="empid" value="${ employee.empId }" readonly> --%>
 			</tr>
 			<tr>
 				<th>이름</th>
-				<td><input type="input" name="empName" value="${ employee.empName }" readonly></td>
+				<td>${employee.empName}</td>
+				<%-- <td><input type="text" name="empName" value="${ employee.empName }" readonly></td> --%>
 			</tr>
 			<tr>
 				<th>*암호</th>
-				<td><input type="password" name="empPwd" id="empPwd" value="" required></td>
+				<td><input type="password" name="empPwd" id="empPwd"></td>
 			</tr>
 			<tr>
 				<th>*암호확인</th>
-				<td><input type="password" name="empPwd2" id="empPwd2" value="" required></td>
-			</tr>
-			<tr>
-				<td><input type="hidden" name="empPwdUpdate" id="empPwdUpdate" value="${ employee.empPwdUpdate }" readonly></td>
+				<td><input type="password" name="empPwd2" id="empPwd2"></td>
 			</tr>
 			<tr>
 				<th>*전화번호</th>
-				<td><input type="input" name="phone" value="${ employee.phone }" required></td>
+				<td><input type="text" name="phone" value="${ employee.phone }"></td>
 			</tr>
 			<tr>
 				<th>*주소</th>
-				<td><input type="input" name="address" value="${ employee.address }" required></td>
+				<td><input type="text" name="address"
+					value="${ employee.address }" style="width: 250px;"></td>
 			</tr>
 			<tr>
-				<th colspan="3"><input type="submit" value="수정하기">
-					&nbsp; <input type="reset" value="수정취소"> &nbsp; <a
-					href="main.do">시작페이지로 이동</a></th>
+				<th colspan="3"><input type="submit" value="수정하기"> <input
+					type="reset" value="수정취소"> <br> <a href="main.do">시작페이지로
+						이동</a></th>
 			</tr>
 		</table>
 	</form>

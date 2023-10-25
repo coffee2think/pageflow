@@ -9,13 +9,82 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
-<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
+<style>
+    /* Page Styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Content Styles */
+    h1 {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    /* Form Styles */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    /* Photo Styles */
+    #myphoto {
+        width: 150px;
+        height: 160px;
+        border: 2px solid navy;
+        text-align: center;
+        padding: 10px;
+        margin: 0 auto;
+    }
+
+    #photo {
+        width: 100%;
+        height: 100%;
+        border: 1px solid navy;
+        display: block;
+    }
+
+    /* Submit Button Styles */
+    input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+        display: block;
+        margin: 0 auto;
+    }
+</style>
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 7;
     const SUBPAGE = 1;
     const LNKPAGE = 1;
-  
+    
+    function goMyPage() {
+        var empId = ${employee.empId};
+
+        var myPageUrl = 'movemypage.do?empId=' + empId;
+        
+    	window.location.href = myPageUrl;
+    }
+    
 </script>
 <title>마이페이지</title>
 </head>
@@ -33,11 +102,6 @@
 	<div class="main-side">
 		<div class="side-container">
 			<div class="side-title"></div>
-			<div class="side-icon-box">
-				<%-- <a
-					href="${ pageContext.servletContext.contextPath }/views/work/notice_input.jsp"
-					class="side-write-btn margin-bottom-0">글쓰기</a> --%>
-			</div>
 
 			<!-- 리스트 들어감 -->
 			<c:import url="../common/side.jsp" />
@@ -48,78 +112,60 @@
 	<h1 align="center">마이페이지</h1>
 	<br>
 	<!-- 사진파일 첨부시 enctype="multipart/form-date" 속성 추가함 -->
-	<form action="movemyupdate.do" id="enrollForm" method="post"
-		onsubmit="return validate();">
-		<table id="outer" align="center" width="700" cellspacing="5"
-			cellpadding="0">
-
+	<form action="movemyupdate.do?empId=${ employee.empId }" id="enrollForm" method="post" onsubmit="return validate();">
+		<table id="outer" align="center" width="700" cellspacing="5" cellpadding="0">
 			<tr>
-				<th colspan="3">내 정보</th>
-				<td rowspan="7" width="100" align="center" valign="middle">
-					<div id="myphoto"
-						style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
-						<img src="/pageflow/resources/images/employeeprofile.png"
-							id="photo"
-							style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;"
-							alt="사진을 드래그 드롭하세요."><br>
-					</div>
-				</td>
+                <th colspan="3">내 정보</th>
+                <td rowspan="7" width="100" align="center" valign="middle">
+                    <div id="myphoto" style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
+                        <img src="/pageflow/resources/member_upfiles/${employee.profile }" id="photo" style="width: 150px; height: 160px; border: 1px solid navy; color: blue; display: block;"><br>
+                    </div>
+                </td>
+            </tr>
 			<tr>
-				<th width="120">사번</th>
-				<td><input type="input" name="empId" id="empid" value="${ loginMember.empId }" readonly>
-			</tr>
-			<%-- <tr>
-				<th>암호</th>
-				<td><input type="password" name="empPwd" id="empPwd" value="${ loginMember.empPwd }" readonly></td>
-			</tr>
-			<tr>
-				<th>암호확인</th>
-				<td><input type="password" name="empPwd2" id="empPwd2" value="${ loginMember.empPwd }" readonly></td>
-			</tr> --%>
-			<tr>
-				<th>변경일</th>
-				<td><input type="date" id="empPwdUpdate" value="${ loginMember.empPwdUpdate }" readonly></td>
-			</tr>
-			<tr>
-				<th>이름</th>
-				<td><input type="input" name="empName" value="${ loginMember.empName }" readonly></td>
-			</tr>
-			<tr>
-				<th>전화번호</th>
-				<td><input type="input" name="phone" value="${ loginMember.phone }" readonly></td>
-			</tr>
-			<tr>
-				<th>생년월일</th>
-				<td><input type="input" name="empBirth" value="${ loginMember.empBirth }" readonly></td>
-			</tr>
-			<tr>
-				<th>이메일</th>
-				<td><input type="input" name="email" value="${ loginMember.email }" readonly></td>
-			</tr>
-			<tr>
-				<th>주소</th>
-				<td><input type="input" name="address" value="${ loginMember.address }" readonly></td>
-			</tr>
-			<tr>
-				<th>직급</th>
-				<td><input type="input" name="jobName" value="${ loginMember.jobName }" readonly></td>
-			</tr>
-			<tr>
-				<th>직책</th>
-				<td><input name="input" name="posName" value="${ loginMember.posName }" readonly></td>
-			</tr>
-			<tr>
-				<th>부서</th>
-				<td><input type="input" name="depName" value="${ loginMember.depName }" readonly></td>
-			</tr>
-			<tr>
-				<th>입사일</th>
-				<td><input type="date" name="enrollDate" value="${ loginMember.enrollDate }" readonly></td>
-			</tr>
-
-			<tr>
-				<th colspan="3"><input type="submit" value="수정페이지로 이동">
-		</table>
-	</form>
+                <th width="120">사번</th>
+                <td>${employee.empId}</td>
+            </tr>
+            <tr>
+                <th>이름</th>
+                <td>${employee.empName}</td>
+            </tr>
+            <tr>
+                <th>전화번호</th>
+                <td>${employee.phone}</td>
+            </tr>
+            <tr>
+                <th>생년월일</th>
+                <td>${employee.empBirth}</td>
+            </tr>
+            <tr>
+                <th>이메일</th>
+                <td>${employee.email}</td>
+            </tr>
+            <tr>
+                <th>주소</th>
+                <td>${employee.address}</td>
+            </tr>
+            <tr>
+                <th>직급</th>
+                <td>${employee.jobName}</td>
+            </tr>
+            <tr>
+                <th>직책</th>
+                <td>${employee.posName}</td>
+            </tr>
+            <tr>
+                <th>부서</th>
+                <td>${employee.depName}</td>
+            </tr>
+            <tr>
+                <th>입사일</th>
+                <td>${employee.enrollDate}</td>
+            </tr>
+            <tr>
+                <th colspan="3"><input type="submit" value="수정페이지로 이동"></th>
+            </tr>
+        </table>
+    </form>
 </body>
 </html>
