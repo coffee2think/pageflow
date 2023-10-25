@@ -18,7 +18,6 @@
     const SUBPAGE = 3;
     const LNKPAGE = 1;
     
-    
     function resiterPage() {
     	if(confirm('직원등록 페이지로 이동하시겠습니까?')) {
         window.location.href = 'empmoveinsert.do'; 
@@ -92,7 +91,7 @@
 
 
 
-<title>직원 등록 모달 창</title>
+<title>직원 조회</title>
 
 
 </head>
@@ -148,8 +147,6 @@
 					<form class="search-form" action="enamesearch.do" method="post">
 						<input type="hidden" name="searchType" value="emp">
 						<div class="select-search">
-
-
 							<div class="search-box">
 								<button class="search-btn">
 									<img class="search-image"
@@ -168,9 +165,8 @@
 
 				<!--내용-->
 				<div class="main-contents-box">
-
-					<h2 align="center">현재 직원 수 : ${requestScope.listCount } 명</h2>
-
+					<h2 align="center"> 직원 수 : ${requestScope.paging.listCount } 명</h2>
+					
 					<div class="contents-container sort-row">
 						<div class="contents-box">
 							<table class="contents-table">
@@ -195,7 +191,7 @@
 										<tr data-parent="1" data-num="1" data-depth="1"
 											class="table-td-depth1" id="tr_${ emp.empId }">
 
-											<td class="td-250"><input type="input" name="empId"
+											<td class="td-100"><input type="input" name="empId"
 												class="contents-input noline" value="${ emp.empId }">
 											</td>
 											<td class="td-100"><input type="input" name="empName"
@@ -207,10 +203,10 @@
 											<td class="td-100"><input type="input" name="empBirth"
 												class="contents-input noline" value="${ emp.empBirth }">
 											</td>
-											<td class="td-100"><input type="input" name="email"
+											<td class="td-200"><input type="input" name="email"
 												class="contents-input noline" value="${ emp.email }">
 											</td>
-											<td class="td-100">
+											<td class="td-200">
 												<div class="contents-input-div">
 													<input type="input" name="address"
 														class="contents-input noline" value="${ emp.address }">
@@ -255,7 +251,7 @@
 
 										</tr>
 									</c:forEach>
-								</c:if>
+							</c:if>
 
 							</table>
 							<!-- 페이징 -->
