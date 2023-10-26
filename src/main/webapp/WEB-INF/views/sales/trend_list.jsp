@@ -54,8 +54,11 @@
     	window.pieChart = new Chart(ctx, {
     		type: 'doughnut',
     		data: chartData,
-    		option: {
-    			responsive: false
+    		options: {
+    			responsive: false,
+    			legend: {
+    				position: 'bottom' 
+    			}
     		}
     	});
     }
@@ -118,22 +121,20 @@
 								
 								
                             </div>
-
-                            <div class="graph trend-chart-box" id="chart">
-                            <!-- <canvas id="myChart" style="height:60vh; width:100vw;">
-                                </canvas> -->
-                                <canvas id="myChart">
-                                </canvas>
-                            </div>
-                            <!-- 카테고리별 원형 차트 end -->
-
-                            <!-- 랭킹 테이블 -->
-								<div>
+							<div style="display: flex; ">
+	                            <div class="" id="chart">
+	                                <canvas id="myChart" width="500" height="500" style="margin: 50px;">
+	                                </canvas>
+	                            </div>
+	                            <!-- 카테고리별 원형 차트 end -->
+	
+	                            <!-- 랭킹 테이블 -->
+								<div>	
 									<table class="contents-table sales" id="table_list">
 										<tr>
 											<th>순위</th>
 											<th>도서명</th>
-											<th>ISBN</th>
+											<!-- <th>ISBN</th> -->
 											<th>카테고리</th>
 											<th>책 타입</th>
 										</tr>
@@ -142,7 +143,7 @@
 												<tr>
 													<td>${ book.rank }</td>
 													<td>${ book.bookName }</td>
-													<td>${ book.isbn }</td>
+													<%-- <td>${ book.isbn }</td> --%>
 													<td>${ book.category }</td>
 													<td>${ book.bookType }</td>
 												</tr>
@@ -151,6 +152,7 @@
 									</table>
 								</div>
 								<!-- 랭킹 테이블 end -->
+							</div>
                         </div>
                     </div>
                     <!--컨텐츠영역 end-->

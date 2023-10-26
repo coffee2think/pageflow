@@ -286,6 +286,7 @@
 		
 	<select id="selectEditCountByEmployee" parameterType="Search" resultType="_int">
 		select count(*) from edit
+		join department using (dep_id)
 		where emp_name like '%' || #{ keyword } || '%'
 	</select>
 		
@@ -293,6 +294,7 @@
 		select *
 		from (select rownum rnum, sub.*
 			  from (select * from edit
+			  		join department using (dep_id)
 					where emp_name like '%' || #{ keyword } || '%'
 					order by start_date desc, edit_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
@@ -300,6 +302,7 @@
 	
 	<select id="selectEditCountByBook" parameterType="Search" resultType="_int">
 		select count(*) from edit
+		join department using (dep_id)
 		where book_name like '%' || #{ keyword } || '%'
 	</select>
 		
@@ -307,6 +310,7 @@
 		select *
 		from (select rownum rnum, sub.*
 			  from (select * from edit
+			  		join department using (dep_id)
 					where book_name like '%' || #{ keyword } || '%'
 					order by start_date desc, edit_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
@@ -314,8 +318,8 @@
 	
 	<insert id="insertEdit" parameterType="Edit">
 		insert into Edit 
-		values (#{ editId }, #{ depId }, #{ empId }, 
-			   (select emp_name from employee where emp_id = #{ empId }),
+		values (#{ editId }, (select dep_id from department where dep_name = #{ depName }),
+			   (select emp_id from employee where emp_name = #{ empName }), #{ empName },
 		        #{ bookName }, #{ editState }, default, default, (select contr_id from contract where book_name = #{ bookName }))
 	</insert>
 	

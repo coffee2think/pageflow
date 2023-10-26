@@ -87,4 +87,8 @@ public interface StoreService {
 	
 	public int updateRelease(Store store);
 
+	public int selectCurrBookId(Store store);
+
+	public int selectInvenCurrValue(int invenCurrId);
+
 }

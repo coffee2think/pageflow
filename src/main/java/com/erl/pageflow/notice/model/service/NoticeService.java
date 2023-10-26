@@ -10,7 +10,7 @@ import com.erl.pageflow.notice.model.vo.Notice;
 
 
 public interface NoticeService {
-	ArrayList<Notice> selectNoticeList(Paging paging);
+	ArrayList<Notice> selectNoticeList(Search search);
 	int selectListCount();
 	int selectSearchTitleCount(String keyword);
 	int selectSearchWriterCount(String keyword);
@@ -24,7 +24,7 @@ public interface NoticeService {
   public ArrayList<Notice> selectNoticeByDate(Search search);
   int updateReadCount(int noticeId);
   public ArrayList<Notice> selectNewTop();
-	ArrayList<Notice> selectImportantNoticeList(Paging paging);
+	ArrayList<Notice> selectImportantNoticeList(Search search);
 	int updateNoticeAlarmAll();
 	int updateNoticeAlarmDept(int depId);
 	int updateNoticeAlarmEmp(List<Integer> empIdList);

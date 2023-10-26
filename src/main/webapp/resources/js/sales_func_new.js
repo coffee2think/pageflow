@@ -91,12 +91,7 @@ function submitUpdate(btn, url) {
 
         $(this).find('input').each(function() {
             // startDate에 값이 들어있지 않다면 담지 않고 건너뜀
-            if($(this).attr('name') == 'startDate' && $(this).val() == '') {
-                return;
-            }
-            
-            // endDate에 값이 들어있지 않다면 담지 않고 건너뜀
-            if($(this).attr('name') == 'endDate' && $(this).val() == '') {
+            if($(this).attr('name').includes("Date") && $(this).val() == '') {
                 return;
             }
             
@@ -132,8 +127,6 @@ function deleteCheckedRow(url) {
     const form = document.createElement('form'); // form 태그 생성
     form.setAttribute('method', 'post'); // 전송 방식 결정 (get or post)
     form.setAttribute('action', url); // 전송할 url 지정
-    
-    
     
     var checked = $('#table_list').find('input[type="checkbox"]:checked');
     if(checked.length == 0) {

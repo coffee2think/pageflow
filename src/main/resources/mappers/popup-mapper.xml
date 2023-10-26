@@ -18,7 +18,7 @@
 		<result property="engraving" column="ENGRAVING" />
 		<result property="pubDate" column="PUB_DATE" />
 		<result property="regDate" column="REG_DATE" />
-		<result property="stock" column="CURR_INVEN" />
+		<result property="stock" column="STOCK" />
 	</resultMap>
 	
 	<resultMap type="PrintOffice" id="resultPrintOffice">
@@ -143,15 +143,28 @@
 	</select>
 	
 	<select id="selectBookById" parameterType="Search" resultMap="resultBookWithStock">
-		select * from book
-		where book_id = to_number( #{ keyword } )
-		order by book_id asc
+		select b.*,
+			   nvl((select curr_inven
+					from (select rownum rnum, sub.*
+						  from (select curr_inven from inventory
+								where book_id = to_number(#{ keyword })
+								order by inven_date desc, inven_id desc) sub)
+					where rnum = 1), 0) stock
+		from book b
+		where book_id = to_number(#{ keyword })
 	</select>
 	
 	<select id="selectBookByName" parameterType="Search" resultMap="resultBookWithStock">
-		select * from book
+		select b.*,
+			   nvl((select curr_inven
+					from (select rownum rnum, sub.*
+						  from (select curr_inven from inventory
+								where book_id = b.book_id
+								order by inven_date desc, inven_id desc) sub)
+					where rnum = 1), 0) stock
+		from book b
 		where book_name like '%' || #{ keyword } || '%'
-		order by book_id asc
+		order by book_id
 	</select>
 	
 	<select id="selectPrintOfficeCountById" parameterType="_int" resultType="_int">

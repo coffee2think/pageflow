@@ -250,7 +250,7 @@
 		                                    </td>
 		                                    <td class="td-100">
 		                                        <div class="contents-input-div">
-		                                            <input type="date" name="contrDate" class="contents-input noline changeable" value="${ contract.contrDate }" readonly>
+		                                            <input type="input" name="contrDate" class="contents-input noline changeable" value="${ contract.contrDate }" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">

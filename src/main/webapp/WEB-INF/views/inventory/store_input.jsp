@@ -13,7 +13,7 @@
     const NOWPAGE = 4;
     const SUBPAGE = 2;
     const LNKPAGE = 2;
-    let client_type = 'bookstore';
+    let client_type = 'storage';
 </script>
 <title></title>
 <script type="text/javascript">
@@ -97,7 +97,7 @@
 	    if (rowToRemove) {
 	        rowToRemove.remove();
 	    } else {
-	        alert('해당 ID를 가진 행을 찾을 수 없습니다.');
+	        alert('마지막 줄은 삭제 불가능합니다.');
 	    }
 	}
 	

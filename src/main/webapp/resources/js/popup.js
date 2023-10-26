@@ -42,18 +42,13 @@ Popup.prototype = {
         $('.modal-pop-close').on('click', function(){
 			$(this).parent().parent('.modal-pop-box').hide();
 			$(this).parent().parent().parent('.modal-pop-area').hide();
-			
-			
-		})
+		});
 		
 		$('.search-btn-pop').each(function(){
 			$(this).on('click', function(){
 				_this.insertVal();
 			})
-		})
-		
-		
-		
+		});
     }
     ,
     insertVal : function(){
@@ -69,10 +64,6 @@ Popup.prototype = {
 		
 		// 팝업창 보이기 설정
 		$('.modal-pop-area').show();
-    	/*$('.modal-pop-box').each(function(){
-			$(this).hide();
-		})*/
-		
     	$('.modal-pop-box').show();
 	}
 	,
@@ -229,9 +220,6 @@ Popup.prototype = {
                         tr.append('<td>' + decodeURIComponent(setTextUndefined(jdata[2])).replace(/\+/gi, ' ') + '</td>');
                         tr.append('<td>' + decodeURIComponent(setTextUndefined(jdata[3])).replace(/\+/gi, ' ') + '</td>');
                     }
-                    
-                    
-                    // 페이징 초기화
                 },
                 error: function(request, status, errorData) {
                     console.log("error code : " + request.status);

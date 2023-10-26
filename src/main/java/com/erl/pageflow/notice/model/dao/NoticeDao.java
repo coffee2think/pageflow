@@ -20,8 +20,8 @@ public class NoticeDao {
 	@Autowired //root-context.xml 에서 생성한 객체를 자동 연결함
 	private SqlSessionTemplate sqlSessionTemplate;
 	
-	public ArrayList<Notice> selectNoticeList(Paging paging){
-		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectNoticeList", paging);
+	public ArrayList<Notice> selectNoticeList(Search search){
+		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectNoticeList", search);
 		return (ArrayList<Notice>)list;
 	}
 
@@ -81,8 +81,8 @@ public class NoticeDao {
 		return (ArrayList<Notice>)list;
 	}
 	
-	public ArrayList<Notice> selectImportantNoticeList(Paging paging) {
-		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectImportantNoticeList", paging);
+	public ArrayList<Notice> selectImportantNoticeList(Search search) {
+		List<Notice> list = sqlSessionTemplate.selectList("noticeMapper.selectImportantNoticeList", search);
 		return (ArrayList<Notice>) list;
 	}
 

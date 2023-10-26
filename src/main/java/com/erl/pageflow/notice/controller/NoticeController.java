@@ -81,9 +81,12 @@ public class NoticeController {
 
 	// 공지사항 전체 목록보기 요청 처리용
 	@RequestMapping("nlist.do")
-	public String noticeListMethod(Notice notice,
+	public String noticeListMethod(Notice notice, HttpServletRequest request,
 			@RequestParam(name="page", required=false) String page,
 			@RequestParam(name="limit", required=false) String slimit, Model model) {
+		
+		HttpSession session = request.getSession();
+	    Employee loginMember = (Employee) session.getAttribute("loginMember");
 		
 		// 페이징
 		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
@@ -92,10 +95,19 @@ public class NoticeController {
 		
 		Paging paging = new Paging(listCount, currentPage, limit, "nlist.do");
 		paging.calculator();
-
+		
+		Search search = new Search();
+		
+		search.setKeyword(loginMember.getAdminYN());
+		search.setEmpId(loginMember.getEmpId());
+		search.setStartRow(paging.getStartRow());
+		search.setEndRow(paging.getEndRow());
+		
+		logger.info("nlist.do : " + search);
+		
 		// 페이지에 출력할 목록 조회해 옴
-		ArrayList<Notice> list = noticeService.selectNoticeList(paging);
-		ArrayList<Notice> importantList = noticeService.selectImportantNoticeList(paging);
+		ArrayList<Notice> list = noticeService.selectNoticeList(search);
+		ArrayList<Notice> importantList = noticeService.selectImportantNoticeList(search);
 
 		if (list != null && list.size() > 0) {
 			model.addAttribute("list", list);
@@ -122,7 +134,14 @@ public class NoticeController {
 		Notice notice = new Notice();
 		notice.setNoticeTitle(request.getParameter("noticeTitle"));
 		notice.setNoticeDetail(request.getParameter("noticeDetail"));
-		notice.setClassify(request.getParameter("classify"));
+		
+		String classify = request.getParameter("classify");
+		if(classify.equals("dept")) {
+			classify += request.getParameter("depType");
+		}
+		notice.setClassify(classify);
+		logger.info("classify : " + notice.getClassify());
+		
 		notice.setEmpId(Integer.parseInt(request.getParameter("empId")));
 		
 		String importance = request.getParameter("importance");
@@ -162,7 +181,7 @@ public class NoticeController {
 		if (noticeService.insertNotice(notice) > 0) {
 			int result = 0;
 			
-			switch(notice.getClassify()) {
+			switch(request.getParameter("classify")) {
 			case "all":
 				result = noticeService.updateNoticeAlarmAll();
 				break;
@@ -346,60 +365,39 @@ public class NoticeController {
 	// ----------------서치-----------------
 
 	@RequestMapping(value = "nsearch.do", method = { RequestMethod.GET, RequestMethod.POST })
-	public ModelAndView noticeSearchContentMethod(@RequestParam("action") String action,
-			@RequestParam("keyword") String keyword, @RequestParam(name = "limit", required = false) String slimit,
+	public ModelAndView noticeSearchContentMethod(Search search,
+			@RequestParam(name = "limit", required = false) String slimit,
 			@RequestParam(name = "page", required = false) String page, ModelAndView mv) {
-		logger.info("nsearh.do : " + action);
-		logger.info("nsearh.do : " + keyword);
-		// 검색결과에 대한 페이징 처리
-		// 출력할 페이지 지정
-		int currentPage = 1;
-		// 전송온 페이지 값이 있다면 추출함
-		if (page != null) {
-			currentPage = Integer.parseInt(page);
-		}
-
-		// 한 페이지당 출력할 목록 갯수 지정
-		int limit = 10;
-		// 전송 온 limit 값이 있다면
-		if (slimit != null) {
-			limit = Integer.parseInt(slimit);
-		}
-
+		
+		logger.info("nsearh.do : " + search);
+		
+		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
+		int limit = (slimit != null) ? Integer.parseInt(slimit) : 10;
+		
 		int listCount = 0;
-
-		switch (action) {
+		switch(search.getSearchType()) {
 		case "title":
-			listCount = noticeService.selectSearchTitleCount(keyword);
+			listCount = noticeService.selectSearchTitleCount(search.getKeyword());
 			break;
 		case "writer":
-			listCount = noticeService.selectSearchWriterCount(keyword);
+			listCount = noticeService.selectSearchWriterCount(search.getKeyword());
 			break;
-
 		}
 
-		// 총 페이지수 계산을 위한 검색 결과 적용된 총 목록 갯수 조회
-
-		// 뷰 페이지에 사용할 페이징 관련 값 계산 처리
 		Paging paging = new Paging(listCount, currentPage, limit, "nsearch.do");
 		paging.calculator();
 
-		// 서비스 메소드 호출하고 리턴결과 받기
-		Search search = new Search();
 		search.setStartRow(paging.getStartRow());
 		search.setEndRow(paging.getEndRow());
-		search.setKeyword(keyword);
 
 		ArrayList<Notice> list = null;
-		switch (action) {
+		switch (search.getSearchType()) {
 		case "title":
 			list = noticeService.selectSearchTitle(search);
 			break;
-
 		case "writer":
 			list = noticeService.selectSearchWriter(search);
 			break;
-
 		}
 
 		// 받은 결과에 따라 성공/실패 페이지 내보내기
@@ -409,12 +407,12 @@ public class NoticeController {
 			mv.addObject("paging", paging);
 			mv.addObject("currentPage", currentPage);
 			mv.addObject("limit", limit);
-			mv.addObject("action", action);
-			mv.addObject("keyword", keyword);
+			mv.addObject("searchType", search.getSearchType());
+			mv.addObject("keyword", search.getKeyword());
 
 			mv.setViewName("work/notice_list");
 		} else {
-			mv.addObject("message", action + "에 대한 " + keyword + " 검색 결과가 존재하지 않습니다.");
+			mv.addObject("message", search.getSearchType() + "에 대한 " + search.getKeyword() + " 검색 결과가 존재하지 않습니다.");
 			mv.setViewName("common/error");
 		}
 

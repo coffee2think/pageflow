@@ -54,7 +54,9 @@
 
 	$(function(){
 		$('#btn_insert').click(function() {
-			$('#appendTextArea').val($('.content-input').text());
+			var sendText = $('.content-input').text();
+			sendText = sendText.replace(/(?:\r\n|\r|\n)/g, '<br>');
+			$('#appendTextArea').val(sendText);
 
 			// 필독을 체크 시 유효성 검사
 			if($('#importance').prop('checked') == true) {
@@ -129,9 +131,7 @@
 				<div class="side-container">
 					<div class="side-title"></div>
 					<div class="side-icon-box">
-						<a
-							href="${ pageContext.servletContext.contextPath }/views/work/notice_input.jsp"
-							class="side-write-btn margin-bottom-0">글쓰기</a>
+						<a href="nemoveinsert.do" class="side-write-btn margin-bottom-0">공지글쓰기</a>
 					</div>
 
 					<!-- 리스트 들어감 -->

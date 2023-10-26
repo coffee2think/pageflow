@@ -173,7 +173,6 @@
                                         <select name="code" id="sel_code">
                                             <option value="bookId">도서코드</option>
                                             <option value="bookName">도서명</option>
-                                            <option value="empName">인수자</option>
                                             <option value="clientName">서점명</option>
                                         </select>
                                     </div>

@@ -20,8 +20,8 @@ public class NoticeServiceImpl implements NoticeService{
 	private NoticeDao noticeDao;
 	
 	@Override
-	public ArrayList<Notice> selectNoticeList(Paging paging){
-		return noticeDao.selectNoticeList(paging);
+	public ArrayList<Notice> selectNoticeList(Search search){
+		return noticeDao.selectNoticeList(search);
 	}
 
 	@Override
@@ -91,8 +91,8 @@ public class NoticeServiceImpl implements NoticeService{
   }
 
   @Override
-	public ArrayList<Notice> selectImportantNoticeList(Paging paging) {
-		return noticeDao.selectImportantNoticeList(paging);
+	public ArrayList<Notice> selectImportantNoticeList(Search search) {
+		return noticeDao.selectImportantNoticeList(search);
 	}
 
 	@Override
