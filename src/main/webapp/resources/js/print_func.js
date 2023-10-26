@@ -123,7 +123,9 @@ function deleteCheckedRow(url) {
     if(checked.length == 0) {
         alert('삭제할 행을 체크해주세요.');
         return false;
-    }
+    } else if(!confirm('삭제하시겠습니까?')) {
+		return false;
+	}
     checked.each(function() {
         const id = $(this).val();
         
