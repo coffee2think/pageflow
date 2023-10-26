@@ -149,13 +149,11 @@ function searchByEDate(dateType) {
 								<c:set var="today_" value="<%=new java.util.Date()%>" />
 								<fmt:formatDate var="today" value="${ today_ }" 
 									pattern="yyyy-MM-dd" />
-								<c:set var="weekago_" 
-									value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 6)%>" />
-								<fmt:formatDate var="weekago" value="${ weekago_ }" 
+								<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }"
 									pattern="yyyy-MM-dd" />
-								<c:set var="monthago_" 
-									value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 30)%>" />
-								<fmt:formatDate var="monthago" value="${ monthago_ }" 
+								<c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }"
 									pattern="yyyy-MM-dd" />
 									
 								<c:url var="searchWeekUrl" value="pclistEdate.do">
@@ -193,7 +191,7 @@ function searchByEDate(dateType) {
                         <div class="contents-box">
                             <table class="contents-table" id="table_list">
                                 <tr>
-                                    <!-- <th>체크</th> -->
+                                    <!-- <th></th> -->
                                     <th>정산코드</th>
                                     <th>거래처코드</th>
                                     <th>인쇄소</th>
@@ -211,11 +209,14 @@ function searchByEDate(dateType) {
 	                                <c:forEach items="${ list }" var="printCalc" >
 		                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1" id="tr_${ printCalc.orderId }">
 		                                    <%-- <td class="td-30">
-		                                        <input type="checkbox" class="selectcheckbox" name="selectcheckbox" value="${ printCalc.orderId }">
+		                                       <input type="checkbox" class="selectcheckbox" name="selectcheckbox" value="${ printCalc.orderId }" style="display:none">
 		                                    </td> --%>
 		                                    <td class="td-70">
 												<div class="contents-input-div">
+													<input type="checkbox" class="selectcheckbox" name="selectcheckbox" value="${ printCalc.orderId }" style="display:none">
 													<input type="text" name="orderId" class="contents-input noline" value="${ printCalc.orderId }" readonly>
+													
+		                                    
 												</div>
 											</td>
 		                                    <td class="td-100">
