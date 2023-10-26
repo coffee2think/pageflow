@@ -1,81 +1,83 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
-<link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
+<meta name="viewport"
+	content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
+<link rel="stylesheet" type="text/css"
+	href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <style>
-    /* Page Styles */
+/* Content Styles */
+h1 {
+	text-align: center;
+	margin-top: 20px;
+}
 
-    /* Content Styles */
-    h1 {
-        text-align: center;
-        margin-top: 20px;
-    }
+/* Form Styles */
+table {
+	border-collapse: collapse;
+	width: 100%;
+	max-width: 700px;
+	margin: 0 auto;
+}
 
-    /* Form Styles */
-    table {
-        border-collapse: collapse;
-        width: 100%;
-        max-width: 700px;
-        margin: 0 auto;
-    }
+th {
+	border: 1px solid #ccc;
+	padding: 10px;
+	text-align: center;
+	background-color: #f2f2f2;
+}
 
-    th, td {
-        border: 1px solid #ccc;
-        padding: 10px;
-        text-align: center;
-    }
+td {
+	border: 1px solid #ccc;
+	padding: 10px;
+	text-align: left;
+}
 
-    th {
-        background-color: #f2f2f2;
-    }
+/* Photo Styles */
+#myphoto {
+	width: 150px;
+	height: 160px;
+	border: 2px solid navy;
+	text-align: center;
+	padding: 10px;
+	margin: 0 auto;
+}
 
-    /* Photo Styles */
-    #myphoto {
-        width: 150px;
-        height: 160px;
-        border: 2px solid navy;
-        text-align: center;
-        padding: 10px;
-        margin: 0 auto;
-    }
+#photo {
+	width: 100%;
+	height: 100%;
+	border: 1px solid navy;
+	display: block;
+}
 
-    #photo {
-        width: 100%;
-        height: 100%;
-        border: 1px solid navy;
-        display: block;
-    }
+/* Submit Button Styles */
+input[type="submit"], input[type="reset"] {
+	background-color: #007bff;
+	color: white;
+	border: none;
+	cursor: pointer;
+	margin-top: 10px;
+	display: inline-block;
+	margin: 0 10px;
+	padding: 10px 20px;
+}
 
-     /* Submit Button Styles */
-    input[type="submit"], input[type="reset"] {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        cursor: pointer;
-        margin-top: 10px;
-        display: inline-block;
-        margin: 0 10px;
-        padding: 10px 20px;
-    }
-    
-    /* Reset Button Styles */
-    input[type="reset"] {
-        background-color: #f2f2f2;
-        color: black;
-        border: 1px solid black;
-        cursor: pointer;
-    }
+/* Reset Button Styles */
+input[type="reset"] {
+	background-color: #f2f2f2;
+	color: black;
+	border: 1px solid black;
+	cursor: pointer;
+}
 </style>
-</head>
-</style>
-<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript"
+	src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <script>
     const NOWPAGE = 7;
     const SUBPAGE = 1;

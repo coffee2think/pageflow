@@ -56,7 +56,6 @@ function initPopupBtn() {
 
 		if(popup_type.includes('lineE')) {
 			popup_type = 'lineE';
-			
 		}
 
 		if(popup_type.includes('save')) {
@@ -68,6 +67,10 @@ function initPopupBtn() {
 					if(index == 5 || index == 6) $(this).hide();
 				})
 			})
+		}
+		
+		if(popup_type.includes('dep')) {
+			popup_type = 'department';
 		}
 		
 		console.log('popup_type : ' + popup_type);
@@ -98,7 +101,7 @@ function register() {
 			'book_order': ['orderId', 'bookId', 'bookName', 'clientId', 'clientName', 'orderDate', 'bookPrice', 'orderQuantity', 'totalPrice'],
 			'saveLine' : ['savelineId', 'savelineName', 'approver_1', 'approver_2', 'approver_3', 'approver_4'],
 			'lineE': ['empId', 'empName', 'depName', 'posName', 'phone', 'email'],
-			
+			'department': ['depId', 'depName']
 	};
 	$('.modal-pop-close').parent().parent('.modal-pop-box').hide();
 	$('.modal-pop-close').parent().parent().parent('.modal-pop-area').hide();
@@ -168,8 +171,6 @@ function register() {
 		}
 	}
 	
-	
-	
 	//$('input[name=bookId]').eq(rowIndex_popup).val(json_global.list[index_global].bookId);
 	//$('input[name=bookName]').eq(rowIndex_popup).val(decodeURIComponent(json_global.list[index_global].bookName).replace(/\+/gi, ' '));
 	//$('input[name=bookPrice]').eq(rowIndex_popup).val(json_global.list[index_global].bookPrice);
@@ -202,7 +203,8 @@ function searchPopup() {
 			'writer': 'popupWriter.do',
 			'book_order': 'popupBookOrder.do',
 			'saveLine' : 'popuplinesearch.do',
-			'lineE': 'popupEmployee.do'
+			'lineE': 'popupEmployee.do',
+			'department': 'popupDepartment.do'
 	};
 	
 	var table_column = {
@@ -214,7 +216,8 @@ function searchPopup() {
 			'writer': ['', 'writerId', 'writerName', 'phone', 'email'],
 			'book_order': ['', 'orderId', 'clientName', 'bookName', 'orderQuantity'],
 			'saveLine' : ['', 'savelineId', 'savelineName', 'approver_1', 'approver_2', 'approver_3', 'approver_4'],
-			'lineE': ['', 'empId', 'depName', 'empName', 'posName']
+			'lineE': ['', 'empId', 'depName', 'empName', 'posName'],
+			'department': ['', 'depId', 'depName', 'depName', 'depName']
 	};
 	
 	// 전송할 데이터 담기

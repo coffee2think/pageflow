@@ -103,7 +103,7 @@
     <c:if test="${ !empty sessionScope.loginMember }">
     	${ loginMember.empName }님
     	<a href="logout.do">로그아웃</a>
-    	<a href="movemypage.do?empId=${ empId }">마이페이지</a>
+    	<a href="movemypage.do?empId=${ loginMember.empId }">마이페이지</a>
     </c:if>
    
     </div>

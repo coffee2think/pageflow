@@ -9,6 +9,8 @@
 <meta name="viewport" content="initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0,width=device-width,minimal-ui">
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/print_func.js"></script>
+
 <script type="text/javascript">
 const NOWPAGE = 2;
 const SUBPAGE = 2;
@@ -130,12 +132,12 @@ function addRow(currentIndex) {
 		
 		
 	newCell10.innerHTML =  '<div class="contents-input-div">'
-			        + '<input type="number" name="quantity" class="contents-input" value="">'
+			        + '<input type="number" name="quantity" class="contents-input" value="" oninput="calculateAmount()">'
 			        + '</div>';
 		
 		
 	newCell11.innerHTML =  '<div class="contents-input-div">'
-			        +'<input type="number" name="price" class="contents-input" value="">'
+			        +'<input type="number" name="price" class="contents-input" value="" oninput="calculateAmount()">'
 			        + '</div>';
 		
 		

@@ -91,6 +91,68 @@ window.onload = function(){
 	   });
 	}
 </script>
+<style>
+    /* Page Styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Content Styles */
+    h1 {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    /* Form Styles */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 20px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    /* Photo Styles */
+    #myphoto {
+        width: 150px;
+        height: 160px;
+        border: 2px solid navy;
+        text-align: center;
+        padding: 10px;
+        margin: 0 auto;
+    }
+
+    #photo {
+        width: 100%;
+        height: 100%;
+        border: 1px solid navy;
+        display: block;
+    }
+
+    /* Submit Button Styles */
+    input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+        display: block;
+        margin: 0 auto;
+    }
+</style>
 </head>
 <body>
 
@@ -119,14 +181,15 @@ window.onload = function(){
 			</div>
 		</div>
 		<!--main-side end-->
-
-		<h1 align="center">직원 등록 페이지</h1>
-		<br>
+	
+			
+		
 		<!-- 사진파일 첨부시 enctype="multipart/form-data" 속성 추가함 -->
+			
 		<form action="empinsert.do" id="enrollForm" method="post" enctype="multipart/form-data" >
 			<table id="outer" align="center" width="700" cellspacing="5"
 				cellpadding="0">
-
+					<h1 >직원 등록</h1>
 				<tr>
 					<th colspan="3">직원 정보를 입력해 주세요. (* 표시는 필수입력 항목입니다.)</th>
 					<td rowspan="7" width="100" align="center" valign="middle">
@@ -161,9 +224,7 @@ window.onload = function(){
 				<tr>
 					<th>*이름</th>
 					<td><input type="text" name="empName" required></td>
-				</tr>
-				<tr>
-					<th></th>
+			   </tr>
 				<tr>
 					<th>*전화번호</th>
 					<td><input type="tel" name="phone" required></td>
