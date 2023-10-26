@@ -247,9 +247,18 @@
 									<c:set var="totalCurrInven" value="0" />
 									<c:forEach var="inv" items="${ invenList }">
 										<tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-											<td class="td-50" style="background-color: red;">
-												
-											</td>
+											<c:if test="${ inv.classify eq '반품' }">
+												<td class="td-50" style="background-color: #ff4500;">
+												</td>
+											</c:if>
+											<c:if test="${ inv.classify eq '출고' }">
+												<td class="td-50" style="background-color: #3cb371;">
+												</td>
+											</c:if>
+											<c:if test="${ inv.classify eq '입고' }">
+												<td class="td-50" style="background-color: #1a70d3;">
+												</td>
+											</c:if>
 											<td class="td-155">
 												<div class="contents-input-div">
 													<input type="input" name="bookId" class="contents-input noline" value="${ inv.bookId }">
