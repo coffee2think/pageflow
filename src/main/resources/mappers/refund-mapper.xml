@@ -96,9 +96,8 @@
 		resultType="_int">
 		SELECT COUNT(*)
 		FROM BOOK
-		JOIN REFUND ON (BOOK_ID)
-		WHERE
-		BOOK_NAME LIKE '%' || #{ keyword } || '%'
+		JOIN REFUND USING (BOOK_ID)
+		WHERE BOOK_NAME LIKE '%' || #{ keyword } || '%'
 	</select>
 
 
@@ -130,10 +129,10 @@
 			SELECT *
 			FROM(SELECT ROWNUM RUM, SUB.*
 			            FROM(SELECT * FROM REFUND
+				            LEFT JOIN BOOK USING (BOOK_ID)
+							LEFT JOIN CLIENT USING (CLIENT_ID)
 	                        WHERE BOOK_NAME LIKE '%' || #{ keyword } || '%'
 	                        ORDER BY REFUND_DATE DESC) SUB)
-			LEFT JOIN BOOK USING (BOOK_ID)
-			LEFT JOIN CLIENT USING (CLIENT_ID)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow }
 		]]>
 	</select>
