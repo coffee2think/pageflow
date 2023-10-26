@@ -90,8 +90,117 @@ $(function(){
 			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
 		}
 	});
+
+    //그래프!!
+    $.ajax({
+		url: "maingraph.do",
+		type: "post",
+		dataType: "json",
+		success: function(data){
+			
+			var str = JSON.stringify(data);
+			var json = JSON.parse(str);
+            var prevStatsList = json.prevStatsList;
+            var currStatsList = json.currStatsList;
+            
+            var numData = [];
+            console.log("data : " + data);
+            console.log("str : " + str);
+           
+            var ndata_prev = {};
+
+            for(var i=0; i<12; i++) {
+                ndata_prev['num_' + (i+1)] = 0;
+
+                for(var j=0; j<prevStatsList.length; j++) {
+                    ndata_prev['num_' + (i+1)] += Number(prevStatsList[j]['salesMonth' + digit(i+1)]);
+                }
+            }
+
+            var ndata_curr = {};
+
+            for(var i=0; i<12; i++) {
+                ndata_curr['num_' + (i+1)] = 0;
+
+                for(var j=0; j<currStatsList.length; j++) {
+                    ndata_curr['num_' + (i+1)] += Number(currStatsList[j]['salesMonth' + digit(i+1)]);
+                }
+            }
+            
+            var dataArray_prev = [];
+            for (var i = 1; i <= 12; i++) {
+                var key = 'num_' + i;
+                dataArray_prev.push(ndata_prev[key]);                
+            }
+            console.log('dataArray_prev : ' + dataArray_prev);
+
+            var dataArray_curr = [];
+            for (var i = 1; i <= 12; i++) {
+                var key = 'num_' + i;
+                dataArray_curr.push(ndata_curr[key]);
+            }
+            console.log('dataArray_curr : ' + dataArray_curr);
+
+            var make_graph1 = new Make_graph();
+            make_graph1.init('graph', 'myGraph', dataArray_prev, dataArray_curr);
+
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+		}
+	});
+
+    //차트
+    $.ajax({
+		url: "mainchart.do",
+		type: "post",
+		dataType: "json",
+		success: function(data){
+			
+			var str = JSON.stringify(data);
+			var json = JSON.parse(str);
+            
+            console.log('rankList : ' + json.rankList);
+            
+            var labelArr = [];
+            var rankArr = [];
+            var background = [];
+
+           
+            for(var i=0; i<json.rankList.length; i++) {
+                labelArr.push(json.rankList[i].label);
+                rankArr.push(json.rankList[i].rank);
+
+                var RGB_1 = Math.floor(Math.random() * (255 + 1))
+                var RGB_2 = Math.floor(Math.random() * (255 + 1))
+                var RGB_3 = Math.floor(Math.random() * (255 + 1))
+                var strRGBA = 'rgba(' + RGB_1 + ',' + RGB_2 + ',' + RGB_3 + ',0.5)'
+                background.push(strRGBA);
+            }
+
+            var make_graph2 = new Make_graph();
+            make_graph2.init('chart', 'myChart', {
+                label : labelArr, 
+                rank: rankArr,
+                background : background
+
+            });
+
+		},
+		error: function(jqXHR, textStatus, errorThrown){
+			console.log("error : " + jqXHR + ", " + textStatus + ", " + errorThrown);
+		}
+	});
+
 	
 }); // function
+
+function digit(c) {
+    var str = '';
+    if(c < 10) str = '0' + c;
+    else str = c;
+    return str;
+}
 </script>
 </head>
 <body>
@@ -135,8 +244,8 @@ $(function(){
                                     </div>
                                 </div>
                                 
-                                <div class="mainbox-tablebox graph width-65vw" id="myChart">
-								    <canvas id="myChart" width="300" height="200"></canvas>
+                                <div class="mainbox-tablebox graph">
+								    <canvas id="myGraph" width="300" height="200"></canvas>
 								</div>
                             </div>
 
@@ -149,8 +258,10 @@ $(function(){
                                 </div>
                                 
                                 <div class="mainbox-tablebox">
-                                    <ul class="mainbox-nlist" id="newnotice">
-                                    </ul>
+                                    <a href="nlist.do" class="mainbox-table-a">
+                                        <ul class="mainbox-nlist" id="newnotice">
+                                        </ul>
+                                    </a>
                                 </div>
                             </div>
 
@@ -166,7 +277,7 @@ $(function(){
                                 </div>
                                 
                                 <div class="mainbox-tablebox chart">
-                                    <canvas id="myChart" width="200" height="200">
+                                    <canvas id="myChart" width="200" height="200"></canvas>
                                 </div>
                             </div>
 
@@ -180,15 +291,17 @@ $(function(){
                                 
                                 <div class="mainbox-tablebox">
                                     <div class="mainbox-table">
-                                        <table class="contents-table" id="bookTopList">
-                                            <tr>
-                                                <th>날짜</th>
-                                                <th>품번</th>
-                                                <th>품명</th>
-                                                <th>거래처</th>
-                                            </tr>
+                                        <a href="movebolist.do" class="mainbox-table-a">
+                                            <table class="contents-table" id="bookTopList">
+                                                <tr>
+                                                    <th>날짜</th>
+                                                    <th>품번</th>
+                                                    <th>품명</th>
+                                                    <th>거래처</th>
+                                                </tr>
 
-                                        </table>
+                                            </table>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

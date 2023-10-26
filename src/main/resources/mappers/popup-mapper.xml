@@ -127,6 +127,11 @@
 		<result property="lineName" column="LINE_NAME" />
 	</resultMap>
 	
+	<resultMap type="Department" id="resultDepartment">
+		<result property="depId" column="DEP_ID" />
+		<result property="depName" column="DEP_NAME" />
+	</resultMap>
+	
 	<select id="selectBookCountById" parameterType="_int" resultType="_int">
 		select count(*) from book
 		where book_id = #{ bookId }
@@ -309,6 +314,16 @@
 		from approvalline_save
 		where LINE_NAME like '%' || #{ keyword } || '%'
 		and emp_id = #{ empId }
+	</select>
+	
+	<select id="selectDepartmentCountByName" parameterType="Search" resultType="_int">
+		select count(*) from department
+		where dep_name like '%' || #{ keyword } || '%'
+	</select>
+	
+	<select id="selectDepartmentByName" parameterType="Search" resultMap="resultDepartment">
+		select * from department
+		where dep_name like '%' || #{ keyword } || '%'
 	</select>
 	
 </mapper>

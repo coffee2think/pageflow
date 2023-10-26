@@ -22,6 +22,7 @@ import com.erl.pageflow.book.model.vo.BookWithStock;
 import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.common.popup.model.service.PopupService;
+import com.erl.pageflow.employee.model.vo.Department;
 import com.erl.pageflow.employee.model.vo.Employee;
 import com.erl.pageflow.sales.controller.SalesController;
 import com.erl.pageflow.sales.model.vo.BookOrder;
@@ -574,11 +575,11 @@ public class PopupController {
 			
 			for(int i=0; i<apprLineSaveList.size(); i++) {
 				//System.out.println("i : " + i);
-				int nextDepth = (i < apprLineSaveList.size()-1) ? apprLineSaveList.get(i+1).getLineDepth() : -1;//다음번 뎁스
+				int nextDepth = (i < apprLineSaveList.size()-1) ? apprLineSaveList.get(i+1).getSavelineId() : -1;//다음번 뎁스
 				
 				cList.add(returnApprLineSave(apprLineSaveList.get(i)));
 				
-				if(nextDepth == 1 || i == apprLineSaveList.size()-1) {//마지막이거나 다음 뎁스가 1일때
+				if(nextDepth != apprLineSaveList.get(i).getSavelineId() || i == apprLineSaveList.size()-1) {//마지막이거나 다음 뎁스가 1일때
 					
 					JSONArray ctemp = (JSONArray) cList.clone();
 					coList.add(ctemp);
@@ -608,6 +609,42 @@ public class PopupController {
 		json.put("lineName", as.getLineName());
 		return json;
 	}
+	
+	// 팝업창 부서 정보 조회
+	@RequestMapping("popupDepartment.do")
+	@ResponseBody // response body에 담아서 보냄
+	public String popupDepartmentMethod(Search search, HttpServletResponse response) throws IOException {
+		
+		logger.info("popupDepartment.do : " + search);
+		
+		// 페이징 처리를 위한 개수 조회
+		int listCount = popupService.selectDepartmentCountByName(search);
+		
+		// 서비스로 목록 요청
+		ArrayList<Department> list = popupService.selectDepartmentByName(search);
+		
+		logger.info("list : " + list.toString());
+		
+		// response에 내보낼 값에 대한 mimeType 설정
+		response.setContentType("application/json; charset=utf-8");
+		
+		// 리턴된 list 결과를 json 배열에 담아서 내보내기
+		JSONObject sendJson = new JSONObject();
+		JSONArray jarr = new JSONArray();
+		
+		for(Department department : list) {
+			JSONObject job = new JSONObject();
+			
+			job.put("depId", department.getDepId());
+			job.put("depName", URLEncoder.encode(department.getDepName(), "utf-8"));
+			
+			jarr.add(job);
+		}
+		
+		sendJson.put("list", jarr);
+		return sendJson.toJSONString();
+	}
+	
 }
 
 

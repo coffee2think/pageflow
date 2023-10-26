@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,29 +23,49 @@
 	});
     
 	$(function(){
-		deleteConfirm();
+		
 	});
 </script>
 
 
 <script type="text/javascript">
 
-	//검색 키워드1
-	/* var searchKeyword = "";
-	// 서치 버튼 클릭
-	$(function(){
-		$('.search-btn').on('click', function(){
-			searchKeyword('pokeyword.do');
-		});
+	//시작날짜 검색
+	function searchBySDate() {
+		var begin = $('#begin_startDate').val();
+		var end = $('#end_startDate').val();
+		
+		var url = 'polistSdate.do?';
+		url += 'begin=' + begin;
+		url += '&end=' + end;
+	    
+		location.href = url;
+	} 
 
-		// After Enter Key
-		$('.search-box-text').on('keypress', function(e){
-			if (e.which === 13) {
-				searchKeyword('pokeyword.do');
-			}
-		});
-	}); */
-
+	// 마감날짜 검색
+	function searchByEDate() {
+		var begin = $('#begin_endDate').val();
+		var end = $('#end_endDate').val();
+		
+		var url = 'polistEdate.do?';
+		url += 'begin=' + begin;
+		url += '&end=' + end;
+	    
+		location.href = url;
+	}
+	
+	// 출간날짜 검색
+	function searchByPDate() {
+		var begin = $('#begin_pubDate').val();
+		var end = $('#end_pubDate').val();
+		
+		var url = 'polistPdate.do?';
+		url += 'begin=' + begin;
+		url += '&end=' + end;
+		
+		location.href = url;
+	}
+	
 	// 삭제 확인 창 띄우기
 	function deleteConfirm(orderId) {
 	    if (confirm("정말 삭제하시겠습니까?")) {
@@ -64,37 +85,9 @@
 	            }
 	        });
 	    }
+	}
 </script>
 <title></title>
-<script type="text/javascript">
-	
-	// 시작날짜 검색 버튼
-	function searchByDate(dateType) {
-    	var begin = $('#begin_' + dateType).val();
-    	var end = $('#end_' + dateType).val();
-    	
-    	var url = 'polistdate.do?';
-    	url += 'begin=' + begin;
-    	url += '&end=' + end;
-    	url += '&dateType=' + dateType
-    	
-    	location.href = url;
-    }
-
-	// 마감날짜 검색 버튼
-	function searchByDate(dateType) {
-    	var begin = $('#begin_' + dateType).val();
-    	var end = $('#end_' + dateType).val();
-    	
-    	var url = 'polistdate.do?';
-    	url += 'begin=' + begin;
-    	url += '&end=' + end;
-    	url += '&dateType=' + dateType
-    	
-    	location.href = url;
-    }
-	
-</script>
 
 </head>
 <body>
@@ -147,10 +140,8 @@
 								<div class="select-box">
 									<div class="select-pan">
 										<label for="sel_code"></label> 
-										<select name="searchType" id="search_type">
-											<option value="orderId" <c:if test="${ searchType == 'orderId' }">seleted</c:if>>발주코드</option>
+										<select id="search_type" name="searchType">
 											<option value="printName" <c:if test="${ searchType == 'printName' }">seleted</c:if>>인쇄소명</option>
-											<option value="bookId" <c:if test="${ searchType == 'bookId' }">seleted</c:if>>도서코드</option>
 											<option value="bookName" <c:if test="${ searchType == 'bookName' }">seleted</c:if>>도서명</option>
 										</select>
 									</div>
@@ -158,7 +149,7 @@
 
 								<div class="search-box">
 									<input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="${ keyword }" name="keyword">
-									<button class="search-btn" onclick="searchkeyword('pokeyword.do'); return false; ">
+									<button class="search-btn" onclick="searchKeyword('pokeyword.do'); return false; ">
 										<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
 									</button>
 								</div>
@@ -185,106 +176,121 @@
 							<div class="select-box">
 								<div class="select-pan-nemo">발주일</div>
 
-								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
-								<input type="date" class="select-date select-date-second" name="end" value=${ end }>
+								<c:choose>
+									<c:when test="${ !empty firstType and firstType eq 'first' }">
+										<input type="date" class="select-date select-date-first" id="begin_startDate2">
+						                <input type="date" class="select-date select-date-second" id="end_startDate2">
+									</c:when>
+									
+									<c:otherwise>
+						                <input type="date" class="select-date select-date-first" id="begin_startDate" value="${ begin }">
+						                <input type="date" class="select-date select-date-second" id="end_startDate" value="${ end }">
+						            </c:otherwise> 
+								</c:choose>
 
 								<c:set var="today_" value="<%=new java.util.Date()%>" />
 								<fmt:formatDate var="today" value="${ today_ }" 
 									pattern="yyyy-MM-dd" />
-								<c:set var="weekago_" 
-									value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 6)%>" />
-								<fmt:formatDate var="weekago" value="${ weekago_ }" 
+								<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+								<fmt:formatDate var="weekago" value="${ weekago_ }"
 									pattern="yyyy-MM-dd" />
-								<c:set var="monthago_" 
-									value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 30)%>" />
-								<fmt:formatDate var="monthago" value="${ monthago_ }" 
+								<c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
+								<fmt:formatDate var="monthago" value="${ monthago_ }"
 									pattern="yyyy-MM-dd" />
 
-								<c:url var="searchWeekUrl" value="polistdate.do">
+								<c:url var="searchWeekUrl" value="polistSdate.do">
 									<c:param name="begin" value="${ weekago }" />
 									<c:param name="end" value="${ today }" />
-									<c:param name="dateType" value="startDate" />
 								</c:url>
 
-								<c:url var="searchMonthUrl" value="polistdate.do">
+								<c:url var="searchMonthUrl" value="polistSdate.do">
 									<c:param name="begin" value="${ monthago }" />
 									<c:param name="end" value="${ today }" />
-									<c:param name="dateType" value="startDate" />
 								</c:url>
 
 								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
 								<input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
-								 <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
+								 <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchBySDate(); return false;">
 							</div>
 
 							<div class="select-box">
 								<div class="select-pan-nemo">마감일</div>
 
-								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
-								<input type="date" class="select-date select-date-second" name="end" value=${ end }>
+								<c:choose>
+									<c:when test="${ !empty firstType and firstType eq 'first' }">
+										<input type="date" class="select-date select-date-first" id="begin_endDate">
+						                <input type="date" class="select-date select-date-second" id="end_endDate">
+									</c:when>
+									
+									<c:otherwise>
+						                <input type="date" class="select-date select-date-first" id="begin_endDate" value="${ begin }">
+						                <input type="date" class="select-date select-date-second" id="end_endDate" value="${ end }">
+						            </c:otherwise> 
+								</c:choose>
 
 								<c:set var="today_" value="<%=new java.util.Date()%>" />
 								<fmt:formatDate var="today" value="${ today_ }"
 									pattern="yyyy-MM-dd" />
-								<c:set var="weekago_"
-									value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 6)%>" />
+								<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
 								<fmt:formatDate var="weekago" value="${ weekago_ }"
 									pattern="yyyy-MM-dd" />
-								<c:set var="monthago_"
-									value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 30)%>" />
+								<c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
 								<fmt:formatDate var="monthago" value="${ monthago_ }"
 									pattern="yyyy-MM-dd" />
 
-								<c:url var="searchWeekUrl" value="polistdate.do">
+								<c:url var="searchWeekUrl" value="polistEdate.do">
 									<c:param name="begin" value="${ weekago }" />
 									<c:param name="end" value="${ today }" />
-									<c:param name="dateType" value="startDate" />
 								</c:url>
 
-								<c:url var="searchMonthUrl" value="polistdate.do">
+								<c:url var="searchMonthUrl" value="polistEdate.do">
 									<c:param name="begin" value="${ monthago }" />
 									<c:param name="end" value="${ today }" />
-									<c:param name="dateType" value="startDate" />
 								</c:url>
 
 								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
 								<input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
-								 <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
+								 <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByEDate(); return false;">
 							</div>
 
 							<div class="select-box">
 								<div class="select-pan-nemo">출간일</div>
 
-								<input type="date" class="select-date select-date-first" name="begin" value=${ begin }>
-								<input type="date" class="select-date select-date-second" name="end" value=${ end }>
+								<c:choose>
+									<c:when test="${ !empty firstType and firstType eq 'first' }">
+										<input type="date" class="select-date select-date-first" id="begin_pubDate">
+						                <input type="date" class="select-date select-date-second" id="end_pubDate">
+									</c:when>
+									
+									<c:otherwise>
+						                <input type="date" class="select-date select-date-first" id="begin_pubDate" value="${ begin }">
+						                <input type="date" class="select-date select-date-second" id="end_pubDate" value="${ end }">
+						            </c:otherwise> 
+								</c:choose>
 
 								<c:set var="today_" value="<%=new java.util.Date()%>" />
 								<fmt:formatDate var="today" value="${ today_ }"
 									pattern="yyyy-MM-dd" />
-								<c:set var="weekago_"
-									value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 6)%>" />
+								<c:set var="weekago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusWeeks(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
 								<fmt:formatDate var="weekago" value="${ weekago_ }"
 									pattern="yyyy-MM-dd" />
-								<c:set var="monthago_"
-									value="<%=new java.util.Date(new java.util.Date().getTime() - 60 * 60 * 24 * 1000 * 30)%>" />
+								<c:set var="monthago_" value="<%= java.util.Date.from(java.time.LocalDate.now().minusMonths(1).plusDays(1).atStartOfDay(java.time.ZoneId.systemDefault()).toInstant()) %>" />
 								<fmt:formatDate var="monthago" value="${ monthago_ }"
 									pattern="yyyy-MM-dd" />
 
-								<c:url var="searchWeekUrl" value="polistdate.do">
+								<c:url var="searchWeekUrl" value="polistPdate.do">
 									<c:param name="begin" value="${ weekago }" />
 									<c:param name="end" value="${ today }" />
-									<c:param name="dateType" value="startDate" />
 								</c:url>
 
-								<c:url var="searchMonthUrl" value="polistdate.do">
+								<c:url var="searchMonthUrl" value="polistPdate.do">
 									<c:param name="begin" value="${ monthago }" />
 									<c:param name="end" value="${ today }" />
-									<c:param name="dateType" value="startDate" />
 								</c:url>
 
 								<input type="button" name="week" class="select-pan-btn" value="일주일" onclick="javascript: location.href='${ searchWeekUrl }'">
 								<input type="button" name="month" class="select-pan-btn" value="한달" onclick="javascript: location.href='${ searchMonthUrl }'">
-								 <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByDate(); return false;">
+								 <input type="button" name="searchBtn" class="select-pan-btn" value="검색" onclick="searchByPDate(); return false;">
 									
 							</div>
 
@@ -321,7 +327,6 @@
 									<th>수량</th>
 									<th>단가</th>
 									<th>합계</th>
-									<th>상태</th>
 									<th>수정</th>  
 								</tr>
 								<c:if test="${ !empty list }">
@@ -365,7 +370,7 @@
 													<input type="text" name="bookId" class="contents-input noline" value="${ printOrder.bookId }" readonly>
 												</div>
 											</td>
-											<td class="td-250">
+											<td class="td-230">
 												<div class="contents-input-div">
 													<input type="text" name="bookName" class="contents-input noline" value="${ printOrder.bookName }" readonly>
 												</div>
@@ -375,13 +380,13 @@
 													<input type="text" name="unit" class="contents-input noline" value="${ printOrder.unit }" readonly>
 												</div>
 											</td>
-											<td class="td-60">
+											<td class="td-50">
 												<div class="contents-input-div">
 													<input type="text" name="quantity" class="contents-input noline changeable" 
 													oninput="calculateAmount()" value="${ printOrder.quantity }" readonly>
 												</div>
 											</td>
-											<td class="td-50">
+											<td class="td-60">
 												<div class="contents-input-div">
 													<input type="text" name="price" class="contents-input noline changeable" 
 													oninput="calculateAmount()" value="${ printOrder.price }" readonly>
@@ -392,11 +397,11 @@
 													<input type="text" name="amount" class="contents-input noline" value="${ printOrder.amount }" readonly>
 												</div>
 											</td>
-											<td class="td-50">
+											<%-- <td class="td-50">
 												<div class="contents-input-div">
 													<input type="text" name="state" class="contents-input noline changeable" value="${ printOrder.state }" readonly>
 												</div>
-											</td>
+											</td> --%>
 											<td class="td-50">
 												<input type="button" class="contents-input-btn noline" value="수정" id="updateBtn_${ printOrder.orderId }" onclick="onUpdate(${ printOrder.orderId }); return false;">
 												<input type="button" class="contents-input-btn noline" value="완료" id="completeBtn_${ printOrder.orderId }" onclick="submitUpdate(${ printOrder.orderId }, 'poupdate.do'); return false;" style="display: none;">

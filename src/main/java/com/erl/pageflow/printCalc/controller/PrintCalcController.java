@@ -192,7 +192,6 @@ public class PrintCalcController {
 	public void printCalcUpdateMethod(HttpServletResponse response, PrintCalc printCalc) throws IOException {
 		logger.info("pcupdate.do : " + printCalc);
 		
-		int resutl = printCalcService.updatePrintCalc(printCalc);
 		
 		String returnStr = null;
 		if(printCalcService.updatePrintCalc(printCalc) > 0) {

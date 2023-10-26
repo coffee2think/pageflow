@@ -88,6 +88,76 @@ window.onload = function(){
 	   });
 	}
 </script>
+<style>
+    /* Page Styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Content Styles */
+    h1 {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    /* Form Styles */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 20px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    /* Photo Styles */
+    #myphoto {
+        width: 150px;
+        height: 160px;
+        border: 2px solid navy;
+        text-align: center;
+        padding: 10px;
+        margin: 0 auto;
+    }
+
+    #photo {
+        width: 100%;
+        height: 100%;
+        border: 1px solid navy;
+        display: block;
+    }
+
+     /* Submit Button Styles */
+    input[type="submit"], input[type="reset"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+        display: inline-block;
+        margin: 0 10px;
+        padding: 10px 20px;
+    }
+    
+    /* Reset Button Styles */
+    input[type="reset"] {
+        background-color: #f2f2f2;
+        color: black;
+        border: 1px solid black;
+        cursor: pointer;
+    }
+</style>
 </head>
 <body>
 
@@ -135,7 +205,6 @@ window.onload = function(){
 							style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;"
 							alt="사진을 드래그 드롭하세요."><br>
 					</div>
-
 				</td>
 				<td><div class="select-pan-nemo">파일첨부</div> 
 				
@@ -162,10 +231,10 @@ window.onload = function(){
 				<th>전화번호</th>
 				<td><input type="tel" name="phone" value="${employee.phone }"></td>
 			</tr>
-
+			<tr>
 				<th>이메일</th>
 				<td><input type="email" name="email" value="${employee.email }"></td>
-			<tr>
+			</tr>
 				<th>주소</th>
 				<td><input type="address" name="address" value="${employee.address}" required></td>
 			<tr>

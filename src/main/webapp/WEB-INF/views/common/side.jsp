@@ -30,6 +30,16 @@
         //로그인 안했을때 나의 결재페이지 안보이게
         
         if(empId != -1) {
+
+            //로그인 했을때 마이 페이지
+            if(NOWPAGE == 7) {
+                $('#sideBtn_1').attr('href', 'movemypage.do?empId='+empId);
+                $('#sideSubBtn_1_1').attr('href', 'movemypage.do?empId='+empId);
+
+                $('#sideSubBtn_1_2').attr('href', 'movemsgbox.do?empId='+empId);
+            }
+
+            //로그인 했을때 전자결재
             if(NOWPAGE == 6) {
                 console.log('empId : ' + empId);
                 console.log('apType : ' + apType);
@@ -44,6 +54,9 @@
                 
             }
         }
+
+
+
         if(NOWPAGE == 1) {
             if(adminYN != 'Y') {
                 console.log('adminYN != Y')

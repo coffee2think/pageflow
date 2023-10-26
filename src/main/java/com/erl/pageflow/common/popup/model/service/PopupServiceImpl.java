@@ -9,6 +9,7 @@ import com.erl.pageflow.approvalline.model.vo.ApprovalLineSave;
 import com.erl.pageflow.book.model.vo.BookWithStock;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.common.popup.model.dao.PopupDao;
+import com.erl.pageflow.employee.model.vo.Department;
 import com.erl.pageflow.employee.model.vo.Employee;
 import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
@@ -170,6 +171,16 @@ public class PopupServiceImpl implements PopupService {
 	@Override
 	public int selectApprovalLineSaveCountByName(Search search) {
 		return popupDao.selectApprovalLineSaveCountByName(search);
+	}
+
+	@Override
+	public int selectDepartmentCountByName(Search search) {
+		return popupDao.selectDepartmentCountByName(search);
+	}
+
+	@Override
+	public ArrayList<Department> selectDepartmentByName(Search search) {
+		return popupDao.selectDepartmentByName(search);
 	}
 	
 	

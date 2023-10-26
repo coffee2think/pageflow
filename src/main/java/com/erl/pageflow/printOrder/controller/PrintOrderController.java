@@ -352,7 +352,6 @@ public class PrintOrderController {
 	public void printOrderUpdateMethod(HttpServletResponse response, PrintOrder printOrder) throws IOException {
 		logger.info("poupdate.do : " + printOrder);
 		
-		int result = printOrderService.updatePrintOrder(printOrder);
 		
 		String returnStr = null;
 		if(printOrderService.updatePrintOrder(printOrder) > 0) {

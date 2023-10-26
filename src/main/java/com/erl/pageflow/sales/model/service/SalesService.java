@@ -53,5 +53,11 @@ public interface SalesService {
 	public ArrayList<Sales> selectSalesByBook(Search search);
 	public ArrayList<Sales> selectSalesByBookStore(Search search);
 	public ArrayList<Sales> selectSalesByLocation(Search search);
+	public int selectClientCountByName(Search search);
+	public int selectClientCountByAddress(Search search);
+	public int selectClientCountByType(Search search);
+	public ArrayList<Client> selectClientByName(Search search);
+	public ArrayList<Client> selectClientByAddress(Search search);
+	public ArrayList<Client> selectClientByType(Search search);
 
 }

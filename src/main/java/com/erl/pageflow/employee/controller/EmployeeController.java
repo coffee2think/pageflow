@@ -53,11 +53,6 @@ public class EmployeeController {
 		return "member/emp_input";
 	}
 
-	/*
-	 * @RequestMapping("idchk.do") public String idck() { return "member/emp_input";
-	 * }
-	 */
-
 	@RequestMapping("empmoveupdate.do")
 	public ModelAndView moveUpdatePage(@RequestParam("empId") int empId, ModelAndView mv) {
 
@@ -126,11 +121,8 @@ public class EmployeeController {
 
 		Employee loginMember = employeeService.selectEmployee(employee.getEmpId());
 
-    if (loginMember != null && loginMember.getLoginOk().equals("Y")
-	/*
-	 * && bcryptPasswordEncoder.matches(employee.getEmpPwd(),
-	 * loginMember.getEmpPwd())
-	 */) {
+	    if (loginMember != null && loginMember.getLoginOk().equals("Y")
+	    		&& bcryptPasswordEncoder.matches(employee.getEmpPwd(), loginMember.getEmpPwd())) {
 			session.setAttribute("loginMember", loginMember);
 			status.setComplete();
 			return "common/main";

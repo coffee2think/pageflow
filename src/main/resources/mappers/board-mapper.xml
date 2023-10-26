@@ -16,6 +16,7 @@
 		<result property="viewsNum" column="VIEWS_NUM" />
 		<result property="empName" column="EMP_NAME" />
 		<result property="depName" column="DEP_NAME" />
+		<result property="profile" column="profile" />
 	</resultMap>
 	
 	<resultMap type="Board" id="resultBoard">
