@@ -368,9 +368,10 @@
 		<![CDATA[
 		select *
 		from (select rownum rnum, order_id, order_date, book_name, client_name
-	          from (select * from book_order order by order_date desc)
+	          from (select * from book_order
 	          join book using (book_id)
-	          join client using(client_id))
+	          join client using(client_id)
+	          order by order_date desc))
 		where rnum >= 1 and rnum <= 3
 		]]>
   </select>

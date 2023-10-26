@@ -227,10 +227,10 @@
                                        <td class="td-70">
                                            <div class="contents-input-div">
                                            	   <select name="refundState">
-                                           	   	<option value="refundState" class="refundState-value">재입고</option>
-                                           	   	<option value="refundState" class="refundState-value">즉시재생</option>
-                                           	   	<option value="refundState" class="refundState-value">반품</option>
-                                           	   	<option value="refundState" class="refundState-value">폐기</option>
+	                                           	   	<option value="재입고" class="refundState-value">재입고</option>
+	                                           	   	<option value="즉시재생" class="refundState-value">즉시재생</option>
+	                                           	   	<option value="반품" class="refundState-value">반품</option>
+	                                           	   	<option value="폐기" class="refundState-value">폐기</option>
                                            	   </select>
                                            </div>
                                        </td>

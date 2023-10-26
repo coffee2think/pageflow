@@ -199,7 +199,7 @@
 		INSERT INTO REFUND
 		VALUES (
 		#{ refundId }, #{ bookId }, #{ clientId },
-		#{ refundNum }, TO_DATE('${
+		#{ refundNum }, TO_DATE('${ 
 		refundDate }', 'YYYY/MM/DD'),#{ refundAmount },#{ refundState }, #{
 		remark })
 	</insert>
@@ -208,7 +208,7 @@
 		UPDATE REFUND
 		SET
 		REFUND_NUM = #{ refundNum }, REFUND_AMOUNT = #{ refundAmount }, REMARK
-		= #{ remark } , REFUND_STATE = #{ refundState }
+		= #{ remark } , REFUND_STATE = '반품'
 		WHERE REFUND_ID = #{
 		refundId } AND BOOK_ID = #{ bookId } AND CLIENT_ID = #{ clientId }
 	</update>
