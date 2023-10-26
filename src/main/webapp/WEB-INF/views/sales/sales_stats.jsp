@@ -22,7 +22,6 @@
     	$('#chart').hide();
     
     	const table = $('#table_list');
-        // var monthly_sum = Array.from({length: 12}, () => 0);
 
         // 컨텐츠 영역 합계
         const trList = table.find('tr.stats-data');
@@ -58,9 +57,8 @@
     }); // document ready
     
     function makeChart() {
-    	const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        const data = {
-            labels: labels,
+    	const data = {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [{
                 label: '전체 합계',
                 data: monthly_sum,
@@ -73,6 +71,7 @@
         var context = document
             .getElementById('myChart')
             .getContext('2d');
+        
         var myChart = new Chart(context, {
             type: 'line', // 차트의 형태
             data: data,
@@ -152,25 +151,6 @@
                     <!--서치영역-->
                     <div class="search-container">
                         <form class="search-form">
-                            <div class="select-search">
-                                <div class="select-box">
-                                    <div class="select-pan">
-                                        <label for="sel_code"></label>
-                                        <select name="code" id="sel_code">
-                                            <option value="bookName">도서명</option>
-                                            <option value="bookId">도서코드</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="search-box">
-                                    <button class="search-btn">
-                                        <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                                    </button>
-                                    <input type="search" placeholder="키워드를 입력하세요." class="search-box-text" value="">
-                                </div>
-                            </div>
-
                             <div class="select-box">
                                 <div class="select-pan">
                                     <label for="sel_code"></label>
@@ -188,12 +168,6 @@
                                 </div>
                             </div>
                         </form>
-
-                        <button class="search-visible-btn" id="search_visible_btn">
-                            <img class="search-close" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_1.png">
-                            <img class="search-open" src="${ pageContext.servletContext.contextPath }/resources/images/cursor_2.png">
-                        </button>
-
                     </div>
                     <!--서치영역 end-->
 
@@ -319,67 +293,6 @@
                                     <td id="total_sum"></td>
                                 </tr>
                                 <!--합계end-->
-
-                                <!--출고금액-->
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
-                                    <td></td>
-                                    <td>출고금액</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <!--출고금액end-->
-
-                                <!--반입금액-->
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
-                                    <td></td>
-                                    <td>반입금액</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <!--반입금액end-->
-
-                                <!--순출고금액-->
-                                <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1 sum">
-                                    <td></td>
-                                    <td>순출고금액</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                                <!--순출고금액end-->
-
                             </table>
 
                             <!-- 차트 그리기 영역 -->

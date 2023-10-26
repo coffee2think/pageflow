@@ -15,7 +15,7 @@
 	href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
 <script type="text/javascript"
 	src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
-<title>Insert title here</title>
+<title>직원 정보 수정</title>
 <script type="text/javascript">
 const NOWPAGE = 1;
 const SUBPAGE = 3;
@@ -232,7 +232,7 @@ window.onload = function(){
 					<!-- 사진파일 첨부시 enctype="multipart/form-data" 속성 추가함 -->
 					<form action="empupdate.do" id="enrollForm" method="post" enctype="multipart/form-data">
 						<input type="hidden" name="empPwd" value="${employee.empPwd }">
-						<input type="hidden" name="profile" value="${employee.profile }">
+						<input type="hidden" name="profile" value="${ employee.profile }">
 						<table id="outer" align="center" width="700" cellspacing="5"
 							cellpadding="0">
 
@@ -241,10 +241,18 @@ window.onload = function(){
 								<td rowspan="7" width="100" align="center" valign="middle">
 									<div id="myphoto"
 										style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
-										<img src="/pageflow/resources/images/employeeprofile.png"
-											id="photo"
-											style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;"
-											alt="사진을 드래그 드롭하세요."><br>
+										<c:if test="${ empty employee.profile }">
+											<img src="/pageflow/resources/images/employeeprofile.png"
+												id="photo"
+												style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;"
+												alt="사진을 드래그 드롭하세요."><br>
+										</c:if>
+										<c:if test="${ !empty employee.profile }">
+											<img src="/pageflow/resources/member_upfiles/${ employee.profile }"
+												id="photo"
+												style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;"
+												alt="사진을 드래그 드롭하세요."><br>
+										</c:if>
 									</div>
 									<div style="width: 100px;">
 										<div class="select-pan-nemo">파일첨부</div> 

@@ -300,7 +300,6 @@
 
             <!--modal-pop-area-->
             <div class="modal-pop-area">
-                <!-- 팝업 들어감 -->
                 <c:import url="../common/popup.jsp" />
             </div>
             <!--modal-pop-area end-->
