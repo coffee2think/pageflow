@@ -193,7 +193,7 @@
 	</select>
 	
 	<select id="selectBoardId" resultType="_int">
-		select max(BOARD_ID)+1 from board
+		select max(BOARD_ID) from board
 	</select>
 	
 	<select id="selectBoardUpload" parameterType="Board" resultType="_int">

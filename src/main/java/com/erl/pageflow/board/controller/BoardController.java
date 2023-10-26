@@ -423,6 +423,7 @@ public class BoardController {
 					board.setBoardId(boardId);
 					board.setOriginFile(fileName);
 					board.setRenameFile(renameFileName);
+					logger.info("boardUpload : " + boardUpload);
 					boardService.insertUploadBoard(boardUpload);
 				}
 			}
