@@ -184,13 +184,38 @@
 		ORDER BY INVEN_ID, INVEN_DATE DESC)
 	</select>
 
+	<select id="selectCurrBookId" parameterType="Refund" resultType="_int">
+		select nvl(max(inven_id),-1)
+               from (select rownum rnum, sub.*
+                   from (select inven_id from inventory
+                        where book_id = #{ bookId }
+                        order by inven_date desc, inven_id desc) sub)
+               where rnum = 1
+	</select>
+
+   <select id="selectInvenCurrValue" parameterType="_int" resultType="_int">
+		select curr_inven
+        from inventory
+        where inven_id = #{ invenId }
+	</select>
+
+
 	<insert id="insertInventory" parameterType="Refund">
 	<![CDATA[
-		insert into inventory values ((SELECT MAX(inven_id) + 1 FROM inventory), #{ bookId }, #{ clientId },NULL,#{ refundId }, (select max(inven_id) from inventory), ${ refundNum }, 
-		                (nvl((SELECT INCREASE FROM inventory WHERE refund_id = #{ refundId } AND book_id = #{ bookId }), 0)),
-		                TO_DATE('${ refundDate }', 'YYYY/MM/DD'),
-		                '반품',
-		                #{ remark })
+		INSERT INTO inventory 
+			VALUES (
+			    (SELECT MAX(inven_id) + 1 FROM inventory), 
+			    #{ bookId }, 
+			    #{ clientId }, 
+			    NULL, 
+			    #{ refundId }, 
+			    #{ prevInvenId },
+			    #{ refundNum },
+			    #{ currInven },
+			    TO_DATE(#{ refundDate }, 'RRRR/MM/DD'), 
+			    '반품', 
+			    #{ remark }
+			)		
 	]]>
 	</insert>
 
@@ -199,7 +224,7 @@
 		VALUES (
 		#{ refundId }, #{ bookId }, #{ clientId },
 		#{ refundNum }, TO_DATE('${ 
-		refundDate }', 'YYYY/MM/DD'),#{ refundAmount },#{ refundState }, #{
+		refundDate }', 'RRRR/MM/DD'),#{ refundAmount },#{ refundState }, #{
 		remark })
 	</insert>
 

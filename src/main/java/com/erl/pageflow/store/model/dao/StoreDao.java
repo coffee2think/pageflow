@@ -185,4 +185,12 @@ public class StoreDao {
 		return sqlSessionTemplate.update("storeMapper.updateRelease", store);
 	}
 
+	public int selectCurrBookId(Store store) {
+		return sqlSessionTemplate.selectOne("storeMapper.selectCurrBookId", store);
+	}
+
+	public int selectInvenCurrValue(int invenCurrId) {
+		return sqlSessionTemplate.selectOne("storeMapper.selectInvenCurrValue", invenCurrId);
+	}
+
 }

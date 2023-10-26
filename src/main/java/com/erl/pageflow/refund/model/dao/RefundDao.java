@@ -64,10 +64,6 @@ public class RefundDao {
 		return sqlSessionTemplate.selectOne("refundMapper.selectrefundCountByBookName", search);
 	}
 
-	public int selectrefundCountByEmpName(Search search) {
-		return sqlSessionTemplate.selectOne("refundMapper.selectrefundCountByEmpName", search);
-	}
-
 	public int selectrefundCountByClientName(Search search) {
 		return sqlSessionTemplate.selectOne("refundMapper.selectrefundCountByClientName", search);
 	}
@@ -82,10 +78,6 @@ public class RefundDao {
 		return (ArrayList<Refund>) list;
 	}
 
-	public ArrayList<Refund> selectrefundByEmpName(Search search) {
-		List<Refund> list = sqlSessionTemplate.selectList("refundMapper.selectrefundByEmpName", search);
-		return (ArrayList<Refund>) list;
-	}
 
 	public ArrayList<Refund> selectrefundByClientName(Search search) {
 		List<Refund> list = sqlSessionTemplate.selectList("refundMapper.selectrefundByClientName", search);
@@ -114,6 +106,14 @@ public class RefundDao {
 	
 	public int updateRefund(Refund refund) {
 		return sqlSessionTemplate.update("refundMapper.updateRefund", refund);
+	}
+
+	public int selectCurrBookId(Refund refund) {
+		return sqlSessionTemplate.selectOne("refundMapper.selectCurrBookId", refund);
+	}
+
+	public int selectInvenCurrValue(int invenCurrId) {
+		return sqlSessionTemplate.selectOne("refundMapper.selectInvenCurrValue", invenCurrId);
 	}
 
 }

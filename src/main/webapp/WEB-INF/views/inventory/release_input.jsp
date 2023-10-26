@@ -96,7 +96,7 @@
 	    if (rowToRemove) {
 	        rowToRemove.remove();
 	    } else {
-	        alert('해당 ID를 가진 행을 찾을 수 없습니다.');
+	        alert('마지막 줄은 삭제 불가능합니다.');
 	    }
 	}
 	

@@ -110,7 +110,6 @@ public class RefundController {
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
 
-			
 		} else {
 			model.addAttribute("message", "날짜 검색 실패");
 		}
@@ -175,9 +174,6 @@ public class RefundController {
 		case "bookName":
 			listCount = refundService.selectrefundCountByBookName(search);
 			break;
-		case "empName":
-			listCount = refundService.selectrefundCountByEmpName(search);
-			break;
 		case "clientName":
 			listCount = refundService.selectrefundCountByClientName(search);
 			break;
@@ -199,9 +195,6 @@ public class RefundController {
 		case "bookName":
 			list = refundService.selectrefundBybookName(search);
 			break;
-		case "empName":
-			list = refundService.selectrefundByEmpName(search);
-			break;
 		case "clientName":
 			list = refundService.selectrefundByClientName(search);
 			break;
@@ -215,9 +208,6 @@ public class RefundController {
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
 			model.addAttribute("refundList", list);
-
-		} else {
-			model.addAttribute("message", "키워드 검색 실패");
 
 		}
 		return "inventory/refund_list";
@@ -285,8 +275,21 @@ public class RefundController {
 			inventory.setRemark(refund.getRemark());
 			// 이전재고, 현재고
 
+			int invenCurrId = refundService.selectCurrBookId(refund);
+			logger.info("invenCurrId :" + invenCurrId);
+			if (invenCurrId == -1) {
+				refund.setCurrInven(refund.getRefundNum());
+			}else {
+				refund.setPrevInvenId(invenCurrId);
+				int currVal = refundService.selectInvenCurrValue(invenCurrId);
+				int resultVal = refund.getRefundNum() + currVal;
+				logger.info("currVal : " + currVal);
+				logger.info("refund : " + refund);
+				logger.info("resultVal : " + resultVal);
+				refund.setCurrInven(resultVal);
+			}
+
 			temp.add(inventory);
-			logger.info("temp : " + temp);
 			if (refundService.insertInventory(refund) > 0) {
 
 			} else {
@@ -296,7 +299,6 @@ public class RefundController {
 
 		}
 
-//		return "";
 		return "redirect:refundlist.do";
 
 	}

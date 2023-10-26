@@ -96,10 +96,7 @@ public class InventoryController {
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
 
-		} else {
-			model.addAttribute("message", "날짜 검색 실패");
-
-		}
+		} 
 		return "inventory/inven_list";
 	}
 
@@ -177,10 +174,7 @@ public class InventoryController {
 			model.addAttribute("limit", limit);
 			model.addAttribute("invenList", list);
 
-		} else {
-			model.addAttribute("message", "키워드 검색 실패");
-
-		}
+		} 
 		return "inventory/inven_list";
 	}
 }

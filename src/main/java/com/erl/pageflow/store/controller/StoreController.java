@@ -156,10 +156,6 @@ public class StoreController {
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
 
-			
-		} else {
-			model.addAttribute("message", "날짜 검색 실패");
-
 		}
 		return "inventory/store_list";
 	}
@@ -190,10 +186,6 @@ public class StoreController {
 			model.addAttribute("paging", paging);
 			model.addAttribute("currentPage", currentPage);
 			model.addAttribute("limit", limit);
-
-			
-		} else {
-			model.addAttribute("message", "날짜 검색 실패");
 
 		}
 		return "inventory/release_list";
@@ -338,12 +330,8 @@ public class StoreController {
 			model.addAttribute("limit", limit);
 			model.addAttribute("storeList", list);
 
-			return "inventory/store_list";
-		} else {
-			model.addAttribute("message", "키워드 검색 실패");
-			return "common/error";
 		}
-
+		return "inventory/store_list";
 	}
 
 	// 출고 키워드로 검색
@@ -406,12 +394,8 @@ public class StoreController {
 			model.addAttribute("limit", limit);
 			model.addAttribute("relList", list);
 
-			return "inventory/release_list";
-		} else {
-			model.addAttribute("message", "키워드 검색 실패");
-			return "common/error";
 		}
-
+		return "inventory/release_list";
 	}
 
 	// 입고등록
@@ -469,10 +453,24 @@ public class StoreController {
 			inventory.setIncrease(store.getStoreNum());
 			inventory.setInvenDate(store.getStoreDate());
 			inventory.setClassify(store.getClassify());
-			// 이전 재고 번호, 현재고
+
+			int invenCurrId = storeService.selectCurrBookId(store);
+
+			if (invenCurrId == -1) {
+
+				logger.info("invenCurrId =-1");
+				store.setCurrInven(store.getStoreNum());
+			} else {
+				logger.info("invenCurrId = " + invenCurrId);
+				store.setPrevInvenId(invenCurrId);
+				int currVal = storeService.selectInvenCurrValue(invenCurrId);
+				int resultVal = store.getStoreNum() + currVal;
+
+				logger.info("resultVal : " + resultVal);
+				store.setCurrInven(resultVal);
+			}
 
 			temp.add(inventory);
-
 			if (storeService.insertStoreInventory(store) > 0) {
 
 			} else {
@@ -541,10 +539,24 @@ public class StoreController {
 			inventory.setIncrease(store.getStoreNum());
 			inventory.setInvenDate(store.getStoreDate());
 			inventory.setClassify(store.getClassify());
-			// 이전 재고 번호, 현재고
+
+			int invenCurrId = storeService.selectCurrBookId(store);
+
+			if (invenCurrId == -1) {
+
+				logger.info("invenCurrId =-1");
+				store.setCurrInven(store.getStoreNum());
+			} else {
+				logger.info("invenCurrId = " + invenCurrId);
+				store.setPrevInvenId(invenCurrId);
+				int currVal = storeService.selectInvenCurrValue(invenCurrId);
+				int resultVal = currVal - store.getStoreNum();
+
+				logger.info("resultVal : " + resultVal);
+				store.setCurrInven(resultVal);
+			}
 
 			temp.add(inventory);
-
 			if (storeService.insertInventory(store) > 0) {
 
 			} else {

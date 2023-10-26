@@ -72,10 +72,6 @@ public class RefundServiceImpl implements RefundService {
 		return refundDao.selectrefundCountByBookName(search);
 	}
 
-	@Override
-	public int selectrefundCountByEmpName(Search search) {
-		return refundDao.selectrefundCountByEmpName(search);
-	}
 
 	@Override
 	public int selectrefundCountByClientName(Search search) {
@@ -90,11 +86,6 @@ public class RefundServiceImpl implements RefundService {
 	@Override
 	public ArrayList<Refund> selectrefundBybookName(Search search) {
 		return refundDao.selectrefundBybookName(search);
-	}
-
-	@Override
-	public ArrayList<Refund> selectrefundByEmpName(Search search) {
-		return refundDao.selectrefundByEmpName(search);
 	}
 
 	@Override
@@ -130,6 +121,16 @@ public class RefundServiceImpl implements RefundService {
 	@Override
 	public int updateRefund(Refund refund) {
 		return refundDao.updateRefund(refund);
+	}
+
+	@Override
+	public int selectCurrBookId(Refund refund) {
+		return refundDao.selectCurrBookId(refund);
+	}
+
+	@Override
+	public int selectInvenCurrValue(int invenCurrId) {
+		return refundDao.selectInvenCurrValue(invenCurrId);
 	}
 
 
