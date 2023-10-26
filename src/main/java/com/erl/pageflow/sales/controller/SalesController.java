@@ -755,12 +755,18 @@ public class SalesController {
 	@ResponseBody
 	public String selectMainGraphView()  throws UnsupportedEncodingException {
 		
-		int year = LocalDate.now().getYear();
-		ArrayList<SalesStatistics> statsList = salesService.selectSalesForStats(year);
+		int prevYear = LocalDate.now().getYear() - 1; // 전년도
+		int currYear = LocalDate.now().getYear(); // 금년도
+		
+		ArrayList<SalesStatistics> prevStatsList = salesService.selectSalesForStats(prevYear);
+		ArrayList<SalesStatistics> currStatsList = salesService.selectSalesForStats(currYear);
 		
 		JSONObject sendJson = new JSONObject();
-		JSONArray jarr = new JSONArray();
-		for(SalesStatistics statsBook : statsList) {
+		JSONArray prevJarr = new JSONArray();
+		JSONArray currJarr = new JSONArray();
+		
+		// 전년도 데이터 담기
+		for(SalesStatistics statsBook : prevStatsList) {
 			JSONObject job = new JSONObject();
 
 		    job.put("salesMonth01", statsBook.getSalesMonth01());
@@ -776,11 +782,32 @@ public class SalesController {
 		    job.put("salesMonth11", statsBook.getSalesMonth11());
 		    job.put("salesMonth12", statsBook.getSalesMonth12());
 		    
-//			job.put("statsList", statsList);
-			jarr.add(job);
+		    prevJarr.add(job);
 		}
-		sendJson.put("statsList", jarr);
-		logger.info("statsList : " + statsList);
+		
+		// 금년도 데이터 담기
+		for(SalesStatistics statsBook : currStatsList) {
+			JSONObject job = new JSONObject();
+
+		    job.put("salesMonth01", statsBook.getSalesMonth01());
+		    job.put("salesMonth02", statsBook.getSalesMonth02());
+		    job.put("salesMonth03", statsBook.getSalesMonth03());
+		    job.put("salesMonth04", statsBook.getSalesMonth04());
+		    job.put("salesMonth05", statsBook.getSalesMonth05());
+		    job.put("salesMonth06", statsBook.getSalesMonth06());
+		    job.put("salesMonth07", statsBook.getSalesMonth07());
+		    job.put("salesMonth08", statsBook.getSalesMonth08());
+		    job.put("salesMonth09", statsBook.getSalesMonth09());
+		    job.put("salesMonth10", statsBook.getSalesMonth10());
+		    job.put("salesMonth11", statsBook.getSalesMonth11());
+		    job.put("salesMonth12", statsBook.getSalesMonth12());
+		    
+			currJarr.add(job);
+		}
+		
+		sendJson.put("prevStatsList", prevJarr);
+		sendJson.put("currStatsList", currJarr);
+		logger.info("currStatsList : " + currStatsList);
 		return sendJson.toJSONString();
 	}
 	
