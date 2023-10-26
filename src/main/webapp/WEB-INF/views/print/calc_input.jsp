@@ -65,7 +65,7 @@
                         <!--컨텐츠영역-->
                         <div class="contents-container sort-row">
                             <div class="contents-box">
-                                <table class="contents-table">
+                                <table class="contents-table print">
                                     <tr>
                                         <th></th>
                                         <th>거래처코드</th>

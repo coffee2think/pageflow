@@ -705,7 +705,9 @@ body {
 }
 
 .mainbox-con {
-    min-height: 400px;
+    position: relative;
+    min-height: 560px;
+    min-width: 500px;
 }
 
 .mainbox-con.margin-bottom15 {
@@ -716,11 +718,50 @@ body {
     min-height: 0;
 }
 
+.main-nemo-box {
+    /*top: 370px;*/
+}
+
 .mainbox-tablebox {
     position: relative;
     width:48vw;
     height: auto;
 }
+
+@media screen and (max-width: 1000px) {
+    .mainbox-tablebox.graph {
+        position: absolute;
+        min-width: 520px;
+        max-width: 640px;
+        height: 363px;
+        margin: 0 auto;
+        top: calc(50% - 180px);
+        left: calc(50% - 260px);
+    }
+    
+
+}
+
+
+.mainbox-tablebox.graph {
+    position: absolute;
+    min-width: 520px;
+    max-width: 640px;
+    height: 363px;
+    margin: 0 auto;
+    top: calc(50% - 210px);
+    left: calc(50% - 320px);
+}
+
+.mainbox-tablebox.chart {
+    position: absolute;
+    width: 435px;
+    height: 435px;
+    margin: 0 auto;
+    top: calc(50% - 210px);
+    left: calc(50% - 210px);
+}
+
 
 .mainbox-tablebox.width-65vw {
     width:65vw;
@@ -728,11 +769,6 @@ body {
 
 .mainbox-table {
     padding: 10px 0px;
-}
-
-.mainbox-tablebox.chart {
-    width: 32vw;
-    margin: 0 auto;
 }
 
 #myChart {
@@ -841,4 +877,52 @@ body {
 .mainbox-table-a {
     text-decoration: none;
     color: #242424;
+}
+
+.contents-title-chart {
+    height: 0px;
+    margin-top: -20px;
+}
+
+.trend-chart-box {
+    position: relative;
+    max-width: 1000px;
+    min-width: 600px;
+    min-height: 500px;
+    margin: 0 auto;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+
+.contents-table.approval th{
+    background-color: #a73bff;
+    color: #fff;
+    font-weight: normal;
+}
+
+.contents-table.inven th{
+    background-color: #c48601;
+    color: #fff;
+    font-weight: normal;
+}
+
+.contents-table.print th{
+    background-color: #16c2e0;
+    color: #000000;
+    font-weight: normal;
+}
+
+.contents-table.sales th{
+    background-color: #e6ffac;
+    
+    color: #000000;
+    font-weight: normal;
+}
+
+.contents-table.book th{
+    background-color: #ffffac;
+    
+    color: #000000;
+    font-weight: normal;
 }

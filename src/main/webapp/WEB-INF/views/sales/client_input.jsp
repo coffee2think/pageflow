@@ -65,7 +65,7 @@
                         <!--컨텐츠영역-->
                         <div class="contents-container sort-row">
                             <div class="contents-box">
-                                <table class="contents-table">
+                                <table class="contents-table sales">
                                     <tr>
                                         <th>분류</th>
                                         <th>거래처명</th>
