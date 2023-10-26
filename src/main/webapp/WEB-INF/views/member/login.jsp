@@ -41,12 +41,12 @@
                     <input class="login-btn" type="submit" name="login" value="로그인">
                 </form>
             </div>
-
-            <div class="margin-top10px">
+ 
+            <!-- <div class="margin-top10px">
                 <a class="find-btn find-btn-id" href="#">사번찾기</a>
                 <span>/</span>
                 <a class="find-btn find-btn-pwd" href="#">비번찾기</a>
-            </div>
+            </div> -->
 
         </main>
         

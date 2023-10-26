@@ -13,7 +13,7 @@
 
 <script type="text/javascript">
 const NOWPAGE = 2;
-const SUBPAGE = 2;
+const SUBPAGE = 1;
 const LNKPAGE = 2;
 
 let client_type = 'printoffice'; 
