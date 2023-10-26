@@ -51,39 +51,7 @@ public class HomeController {
 
 		return "home";
 	}
-//
-//	@RequestMapping("main.do")
-//	@ResponseBody
-//	public String forwardMainView()  throws UnsupportedEncodingException {
-//		
-//		int year = LocalDate.now().getYear();
-//		ArrayList<SalesStatistics> statsList = salesService.selectSalesForStats(year);
-//		
-//		JSONObject sendJson = new JSONObject();
-//		JSONArray jarr = new JSONArray();
-//		for(SalesStatistics statsBook : statsList) {
-//			JSONObject job = new JSONObject();
-//
-//		    job.put("salesMonth01", statsBook.getSalesMonth01());
-//		    job.put("salesMonth02", statsBook.getSalesMonth02());
-//		    job.put("salesMonth03", statsBook.getSalesMonth03());
-//		    job.put("salesMonth04", statsBook.getSalesMonth04());
-//		    job.put("salesMonth05", statsBook.getSalesMonth05());
-//		    job.put("salesMonth06", statsBook.getSalesMonth06());
-//		    job.put("salesMonth07", statsBook.getSalesMonth07());
-//		    job.put("salesMonth08", statsBook.getSalesMonth08());
-//		    job.put("salesMonth09", statsBook.getSalesMonth09());
-//		    job.put("salesMonth10", statsBook.getSalesMonth10());
-//		    job.put("salesMonth11", statsBook.getSalesMonth11());
-//		    job.put("salesMonth12", statsBook.getSalesMonth12());
-//		    
-////			job.put("statsList", statsList);
-//			jarr.add(job);
-//		}
-//		sendJson.put("statsList", jarr);
-//		logger.info("statsList : " + statsList);
-//		return sendJson.toJSONString();
-//	}
+
 	@RequestMapping("main.do")
 	public String forwardMainView(){
 		return "member/login";

@@ -837,3 +837,8 @@ body {
 .height-up{
     height: calc(100% - 160px);
 }
+
+.mainbox-table-a {
+    text-decoration: none;
+    color: #242424;
+}

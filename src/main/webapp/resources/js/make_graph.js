@@ -27,7 +27,7 @@ Make_graph.prototype = {
                     // ⑤dataset의 이름(String)
                     label: '업계 평균',
                     // ⑥dataset값(Array)
-                    data: [12, 19, 3, 5, 2, 3, 12, 19, 3, 5, 2, 3],
+                    data: [600, 400, 1000, 1200, 700, 800, 1100, 600, 400, 300, 200, 100],
                     // ⑦dataset의 배경색(rgba값을 String으로 표현)
                     backgroundColor: 'rgba(26, 112, 211, 0.2)',
                     // ⑧dataset의 선 색(rgba값을 String으로 표현)
@@ -37,7 +37,7 @@ Make_graph.prototype = {
                 },
                 {
                     label: '우리 회사',
-                    data: [2, 4, 3, 1, 13, 3, 1, 3, 4, 5, 2, 3],
+                    data: data,//[2, 4, 3, 1, 13, 3, 1, 3, 4, 5, 2, 3],
                     type:'line',
                     fill:false,
                     borderColor:'rgba(27, 190, 255)'
@@ -67,14 +67,16 @@ Make_graph.prototype = {
     }
     ,
     makeChart : function(canvas, data){
+        
+
         var chartArea = document.getElementById(canvas).getContext('2d');
         var myChart = new Chart(chartArea, {
-            type: 'pie',
+            type: 'doughnut',
             data: {
-              labels: ['소설', '에세이', '경제', '영어', '공무원'],
+              labels: data.label,//['소설', '에세이', '경제', '영어', '공무원'],
               datasets: [{
-                data: [10, 20, 30, 10, 40],
-                backgroundColor:['rgba(26, 112, 211, .7)','rgba(21, 177, 55, .7)','rgba(221, 37, 37, .7)', 'rgba(138, 37, 221, .7)', 'rgba(233, 236, 41, .7)']
+                data: data.rank,//[10, 20, 30, 10, 40],
+                backgroundColor: data.background,//['rgba(26, 112, 211, .7)','rgba(21, 177, 55, .7)','rgba(221, 37, 37, .7)', 'rgba(138, 37, 221, .7)', 'rgba(233, 236, 41, .7)']
               }]
             },
             options:{
@@ -83,6 +85,7 @@ Make_graph.prototype = {
               plugins: {
                 legend: {
                   position: 'top',
+                  display: false, // 범례를 표시하지 않도록 설정
                 }
               }
             },
