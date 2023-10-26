@@ -86,6 +86,28 @@ window.onload = function(){
 	        };
 	        reader.readAsDataURL(file);    
 	   });
+	   
+		// 처음 실행 시 파일 삭제 버튼 숨김
+		$('#del_file_btn').hide();
+		
+
+		$('#del_file_btn').click(function() {
+			$('#photofile').val(''); // 첨부된 파일 삭제
+			
+			const myphoto = $("#photo");
+			myphoto.prop('src', '/pageflow/resources/images/employeeprofile.png');
+			
+			$('#del_file_btn').hide();
+		});
+		
+		$('#photofile').change(function() {
+			// 파일이 등록되었을 때 파일 삭제 버튼을 보이도록 함
+			if($('#photofile') != '') {
+				$('#del_file_btn').show();
+			} else {
+				$('#del_file_btn').hide();
+			}
+		});
 	}
 </script>
 <style>
@@ -219,7 +241,7 @@ window.onload = function(){
 								<td rowspan="7" width="100" align="center" valign="middle">
 									<div id="myphoto"
 										style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
-										<img src="/pageflow/resources/member_upfiles/${employee.profile }"
+										<img src="/pageflow/resources/images/employeeprofile.png"
 											id="photo"
 											style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;"
 											alt="사진을 드래그 드롭하세요."><br>
@@ -227,6 +249,7 @@ window.onload = function(){
 									<div style="width: 100px;">
 										<div class="select-pan-nemo">파일첨부</div> 
 										<input type="file" name="upfile" id="photofile">
+										<input type="button" id="del_file_btn" value="파일삭제">
 									</div>
 								</td>
 								

@@ -92,7 +92,7 @@ function initPopupBtn() {
 
 function register() {
 	popup_inputData = {
-			'book': ['bookId', 'bookName', 'bookPrice'],
+			'book': ['bookId', 'bookName', 'bookPrice', 'stock'],
 			'printoffice': ['clientId', 'clientName', ''],
 			'bookstore': ['clientId', 'clientName'],
 			'storage': ['clientId', 'clientName'],

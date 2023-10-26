@@ -129,9 +129,7 @@
 				<div class="side-container">
 					<div class="side-title"></div>
 					<div class="side-icon-box">
-						<a
-							href="${ pageContext.servletContext.contextPath }/views/work/notice_input.jsp"
-							class="side-write-btn margin-bottom-0">글쓰기</a>
+						<a href="nemoveinsert.do" class="side-write-btn margin-bottom-0">공지글쓰기</a>
 					</div>
 
 					<!-- 리스트 들어감 -->

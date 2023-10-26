@@ -214,7 +214,6 @@
                                     <th>주문번호</th>
                                     <th>도서코드</th>
                                     <th>도서명</th>
-                                    <th>지역</th>
                                     <th>서점명</th>
                                     <th>정가</th>
                                     <th>주문수량</th>
@@ -242,11 +241,6 @@
 		                                    <td class="td-200">
 		                                        <div class="contents-input-div">
 		                                            <input type="text" name="bookName" class="contents-input noline" value="${ bookOrder.bookName }" readonly>
-		                                        </div>
-		                                    </td>
-		                                    <td class="td-50">
-		                                        <div class="contents-input-div">
-		                                            <input type="text" name="location" class="contents-input noline" value="강남" readonly>
 		                                        </div>
 		                                    </td>
 		                                    <td class="td-100">
