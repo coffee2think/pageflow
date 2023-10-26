@@ -574,11 +574,11 @@ public class PopupController {
 			
 			for(int i=0; i<apprLineSaveList.size(); i++) {
 				//System.out.println("i : " + i);
-				int nextDepth = (i < apprLineSaveList.size()-1) ? apprLineSaveList.get(i+1).getLineDepth() : -1;//다음번 뎁스
+				int nextDepth = (i < apprLineSaveList.size()-1) ? apprLineSaveList.get(i+1).getSavelineId() : -1;//다음번 뎁스
 				
 				cList.add(returnApprLineSave(apprLineSaveList.get(i)));
 				
-				if(nextDepth == 1 || i == apprLineSaveList.size()-1) {//마지막이거나 다음 뎁스가 1일때
+				if(nextDepth != apprLineSaveList.get(i).getSavelineId() || i == apprLineSaveList.size()-1) {//마지막이거나 다음 뎁스가 1일때
 					
 					JSONArray ctemp = (JSONArray) cList.clone();
 					coList.add(ctemp);

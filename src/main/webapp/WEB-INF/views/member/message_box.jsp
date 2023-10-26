@@ -12,8 +12,10 @@
 <style type="text/css">
 .msgbox-outer {
 	border: 1px solid #9fc7ff;
+	border-radius: 5px;
 	width: 500px;
 	height: 500px;
+	padding: 15px;
 }
 
 .msgbox-header {
@@ -32,6 +34,7 @@
 .space-between {
 	display: flex;
 	justify-content: space-between;
+    margin: 10px 0px;
 }
 </style>
 <script>

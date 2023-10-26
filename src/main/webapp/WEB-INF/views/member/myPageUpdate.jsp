@@ -11,12 +11,6 @@
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/main.css">
 <style>
     /* Page Styles */
-    body {
-        font-family: Arial, sans-serif;
-        background-color: white;
-        margin: 0;
-        padding: 0;
-    }
 
     /* Content Styles */
     h1 {
@@ -128,75 +122,97 @@
 <title>수정페이지</title>
 </head>
 <body>
-	<header class="main-header">
-		<!--header-container-->
-		<div class="header-container">
-			<!-- 헤더 들어감 -->
-			<c:import url="../common/header.jsp" />
-		</div>
-		<!--header-container end-->
-	</header>
+	<div id="container">
+		<header class="main-header">
+			<!--header-container-->
+			<div class="header-container">
+				<!-- 헤더 들어감 -->
+				<c:import url="../common/header.jsp" />
+			</div>
+			<!--header-container end-->
+		</header>
 
-	<!--main-side-->
-	<div class="main-side">
-		<div class="side-container">
+		<main class="main-wrapper">
+			<!--main-side-->
+            <div class="main-side">
+                <div class="side-container">
+                    <div class="side-title"></div>
+                    <!-- 리스트 들어감 -->
+                    <c:import url="../common/side.jsp" />
+                </div>
+            </div>
+            <!--main-side end-->
+			
+			<!--main-container-->
+            <div class="main-container">
+                
+                <!--main-header-bar-->
+                <div class="main-header-bar">
+                    <div class="main-title-box">
+                        <img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
+                        <span class="main-title"></span>
+                    </div>
+                    <button class="header-left-btn">
+                    </button>
+                </div>
+                <!--main-header-bar end-->
 
-			<!-- 리스트 들어감 -->
-			<c:import url="../common/side.jsp" />
-		</div>
+				<!--내용-->
+                <div class="main-contents-box">
+					<h1 align="center">수정페이지</h1>
+					<br>
+					<!-- 사진파일 첨부시 enctype="multipart/form-date" 속성 추가함 -->
+					<form action="myupdate.do?empId=${ employee.empId }" id="enrollForm" method="post" enctype="multipart/form-data" onsubmit="return validate();">
+						<input type="hidden" name="origin_emppwd" value="${ employee.empPwd }">
+						<input type="hidden" name="profile" value="${employee.profile }">
+						<table id="outer" align="center" width="700" cellspacing="5" cellpadding="0">
+							<tr>
+								<th colspan="3">내 정보</th>
+								<td rowspan="7" width="100" align="center" valign="middle">
+									<div id="myphoto" style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
+										<img src="/pageflow/resources/member_upfiles/${employee.profile }" id="photo" style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;" alt="사진을 드래그 드롭하세요."><br>
+										<div class="select-pan-nemo" style="width: 150px;">파일첨부</div>
+										<input type="file" name="upfile" id="photofile" style="width: 150px;">
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<th width="120">사번</th>
+								<td>${employee.empId}</td>
+								<%-- <td><input type="text" name="empId" id="empid" value="${ employee.empId }" readonly> --%>
+							</tr>
+							<tr>
+								<th>이름</th>
+								<td>${employee.empName}</td>
+								<%-- <td><input type="text" name="empName" value="${ employee.empName }" readonly></td> --%>
+							</tr>
+							<tr>
+								<th>*암호</th>
+								<td><input type="password" name="empPwd" id="empPwd"></td>
+							</tr>
+							<tr>
+								<th>*암호확인</th>
+								<td><input type="password" name="empPwd2" id="empPwd2"></td>
+							</tr>
+							<tr>
+								<th>*전화번호</th>
+								<td><input type="text" name="phone" value="${ employee.phone }"></td>
+							</tr>
+							<tr>
+								<th>*주소</th>
+								<td><input type="text" name="address"
+									value="${ employee.address }" style="width: 250px;"></td>
+							</tr>
+							<tr>
+								<th colspan="3"><input type="submit" value="수정하기"> <input
+									type="reset" value="수정취소"> <br> <a href="main.do">시작페이지로
+										이동</a></th>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+		</main>
 	</div>
-	<!--main-side end-->
-
-	<h1 align="center">수정페이지</h1>
-	<br>
-	<!-- 사진파일 첨부시 enctype="multipart/form-date" 속성 추가함 -->
-	<form action="myupdate.do?empId=${ employee.empId }" id="enrollForm" method="post" enctype="multipart/form-data" onsubmit="return validate();">
-		<input type="hidden" name="origin_emppwd" value="${ employee.empPwd }">
-		<input type="hidden" name="profile" value="${employee.profile }">
-		<table id="outer" align="center" width="700" cellspacing="5" cellpadding="0">
-			<tr>
-				<th colspan="3">내 정보</th>
-				<td rowspan="7" width="100" align="center" valign="middle">
-					<div id="myphoto" style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
-						<img src="/pageflow/resources/member_upfiles/${employee.profile }" id="photo" style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;" alt="사진을 드래그 드롭하세요."><br>
-						<div class="select-pan-nemo" style="width: 150px;">파일첨부</div>
-						<input type="file" name="upfile" id="photofile" style="width: 150px;">
-					</div>
-				</td>
-			</tr>
-			<tr>
-				<th width="120">사번</th>
-				<td>${employee.empId}</td>
-				<%-- <td><input type="text" name="empId" id="empid" value="${ employee.empId }" readonly> --%>
-			</tr>
-			<tr>
-				<th>이름</th>
-				<td>${employee.empName}</td>
-				<%-- <td><input type="text" name="empName" value="${ employee.empName }" readonly></td> --%>
-			</tr>
-			<tr>
-				<th>*암호</th>
-				<td><input type="password" name="empPwd" id="empPwd"></td>
-			</tr>
-			<tr>
-				<th>*암호확인</th>
-				<td><input type="password" name="empPwd2" id="empPwd2"></td>
-			</tr>
-			<tr>
-				<th>*전화번호</th>
-				<td><input type="text" name="phone" value="${ employee.phone }"></td>
-			</tr>
-			<tr>
-				<th>*주소</th>
-				<td><input type="text" name="address"
-					value="${ employee.address }" style="width: 250px;"></td>
-			</tr>
-			<tr>
-				<th colspan="3"><input type="submit" value="수정하기"> <input
-					type="reset" value="수정취소"> <br> <a href="main.do">시작페이지로
-						이동</a></th>
-			</tr>
-		</table>
-	</form>
 </body>
 </html>
