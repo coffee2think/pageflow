@@ -230,7 +230,7 @@
 						<!--컨텐츠영역-->
 						<div class="contents-container sort-row">
 							<div class="contents-box">
-								<table class="contents-table" id="tblist">
+								<table class="contents-table inven" id="tblist">
 									<tr>
 										<th></th>
 										<th>도서코드</th>

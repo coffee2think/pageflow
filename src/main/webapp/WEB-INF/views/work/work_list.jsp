@@ -99,39 +99,67 @@
                             <div class="contents-title notice-tit">
                                 ${ depName } 게시판
                             </div>
-                            <c:if test="${ !empty boardList }">
-                                <c:forEach var="b" items="${ boardList }">
-                                
-                                    <c:url var="listUrl" value="bdselect.do">
-                                        <c:param name="empId" value="${ b.empId }" />
-                                        <c:param name="depId" value="${ b.depId }" />
-                                        <c:param name="boardId" value="${ b.boardId }" />
 
-                                        <c:param name="begin" value="${ begin }" />
-                                        <c:param name="end" value="${ end }" />
-                                    </c:url>
+                            <table class="contents-table board-notice-table">
+                                
+                                <tr>
+                                    <th>번호</th>
+                                    <th>제목</th>
+                                    <th>작성자</th>
+                                    <th>날짜</th>
+                                    <th>조회수</th>
+                                </tr>
+
+                                <c:if test="${ !empty boardList }">
+                                    <c:forEach var="b" items="${ boardList }">
                                     
-                                    <a class="contents-notice" href="${ listUrl }">
-                                        <div class="contents-notice-title">
-                                            <span class="alarm"></span>
-                                            ${ b.boardTitle }
-                                        </div>
-                                        <div class="contents-notice-line">
-                                            <span>${ b.empName }</span>
-                                            <span>|</span>
-                                            <span>${ b.createDate }</span>
-                                            <span>|</span>
-                                            <span>읽음 ${ b.viewsNum }</span>
-                                            <span>|</span>
-                                            <span>
-                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/msg.png">
-                                                ${ b.replyCount }
-                                            </span>
-                                            <span>|</span>
-                                        </div>
-                                    </a>
-                                </c:forEach>
-                            </c:if>
+                                        <c:url var="listUrl" value="bdselect.do">
+                                            <c:param name="empId" value="${ b.empId }" />
+                                            <c:param name="depId" value="${ b.depId }" />
+                                            <c:param name="boardId" value="${ b.boardId }" />
+
+                                            <c:param name="begin" value="${ begin }" />
+                                            <c:param name="end" value="${ end }" />
+                                        </c:url>
+                                        
+                                        <tr>
+                                            <td>
+                                                <a class="board-a" href="${ listUrl }">
+                                                    ${b.boardId}
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a href="${ listUrl }">
+                                                    <span class="alarm"></span>
+                                                    ${ b.boardTitle }
+                                                </a>
+                                            </td>
+                                            
+                                            <td>
+                                                <a class="board-a" href="${ listUrl }">
+                                                    ${ b.empName }
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a class="board-a" href="${ listUrl }">
+                                                    ${ b.createDate }
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a class="board-a" href="${ listUrl }">
+                                                    <span>읽음 ${ b.viewsNum }</span>
+                                                    <span>
+                                                        <img src="${ pageContext.servletContext.contextPath }/resources/images/msg.png">
+                                                        ${ b.replyCount }
+                                                    </span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        
+                                    </c:forEach>
+                                </c:if>
+                               
+                            </table>
                         </div>
                     </div>
                     <!--컨텐츠영역 end-->

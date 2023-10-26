@@ -249,7 +249,7 @@ function digit(c) {
 								</div>
                             </div>
 
-                            <div class="mainbox-con height-auto">
+                            <div class="mainbox-con main-nemo-box height-auto">
                                 <div class="main-header-bar">
                                     <div class="main-title-box main">
                                         <img src="./resources/images/header-icon.png">
@@ -281,7 +281,7 @@ function digit(c) {
                                 </div>
                             </div>
 
-                            <div class="mainbox-con height-auto">
+                            <div class="mainbox-con main-nemo-box height-auto">
                                 <div class="main-header-bar">
                                     <div class="main-title-box main">
                                         <img src="./resources/images/header-icon.png">

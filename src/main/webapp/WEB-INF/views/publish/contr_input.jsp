@@ -153,7 +153,7 @@
                         <!--컨텐츠영역-->
                         <div class="contents-container sort-row">
                             <div class="contents-box">
-                                <table class="contents-table" id="ctrinsert_table" border="1">
+                                <table class="contents-table book" id="ctrinsert_table" border="1">
                                     <tr>
                                         <th></th>
                                         <th>직원명</th>

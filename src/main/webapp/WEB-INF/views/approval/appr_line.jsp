@@ -195,7 +195,7 @@
                         <div class="contents-container sort-row">
                             <div class="contents-box aprovalline">
                                 <!--테이블 1-->
-                                <table class="contents-table aprovalline">
+                                <table class="contents-table aprovalline aproval">
                                     <tbody class="my-line-body">
                                         <tr>
                                             <th class="td-50">

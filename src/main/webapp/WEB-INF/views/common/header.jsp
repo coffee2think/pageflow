@@ -25,17 +25,20 @@
         
         console.log('header empId : ' + empId);
         //로그인 안했을때 나의 결재페이지 안보이게
-        
+        $('#headerTable_'+7).hide();
+        $('#header_sep_'+8).hide();
+        $('#header_sep_'+7).hide();
+        $('#header_sep_'+6).hide();
+
         if(empId == -1) {
             //전자결재 로그인 안했을 시
             $('#header_sep_'+5).hide();
             $('#header_sep_'+6).hide();
 
             $('#headerTable_'+6).hide();
-            $('#header_sep_'+7).hide();
             
-            $('#headerTable_'+7).hide();
-            $('#header_sep_'+8).hide();
+            
+           
         }else{
             console.log('=========empId : ' + empId);
             $('#headerBtn_'+6).attr('href', 'aplist.do?apType=my&empId='+empId);

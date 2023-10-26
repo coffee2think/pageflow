@@ -200,7 +200,8 @@ var MENU_INFO = [
                 ]
             }
         ]
-    },
+    }
+    ,
     {
         title : '마이페이지'
         ,link : 'javascript:goMyPage()'
@@ -215,4 +216,5 @@ var MENU_INFO = [
             }
         ]
     }
+    
 ]

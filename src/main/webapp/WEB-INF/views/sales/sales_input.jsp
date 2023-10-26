@@ -254,7 +254,7 @@
                         <!--컨텐츠영역-->
                         <div class="contents-container sort-row">
                             <div class="contents-box">
-                                <table class="contents-table" id="input_table">
+                                <table class="contents-table sales" id="input_table">
                                     <tr>
                                         <th class="td-50"></th>
                                         <th class="td-120">주문번호</th>

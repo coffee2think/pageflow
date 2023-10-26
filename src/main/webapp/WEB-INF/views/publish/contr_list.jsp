@@ -193,7 +193,7 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <table class="contents-table" id="table_list">
+                            <table class="contents-table book" id="table_list">
                                 <tr>
                                     <th>체크</th>
                                     <th>계약번호</th>
