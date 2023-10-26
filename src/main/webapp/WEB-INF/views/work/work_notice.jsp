@@ -411,6 +411,7 @@
                     ,parentId : ajaxData.replyId
                     ,replyDetail : replyDetail
                     ,depth : -1
+                    ,profile : arr[2]
                 }
 
                 $('.reply-input-box.depth1').find('.reply-input').html('');
@@ -509,8 +510,17 @@
         el += 
             `
             <div class="contents-notice-line">
-                <div class="notice-profile">
-                    <img src="${ pageContext.servletContext.contextPath }/resources/member_upfiles/profile.png">
+                <div class="notice-profile">`
+        
+        if(profile == '') {
+        el += `
+                    <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">`
+        }else {
+        el += `
+                    <img src="${ pageContext.servletContext.contextPath }/resources/member_upfiles/`+profile+`">`
+        }
+        
+        el += `
                     <span>
                         <div class="reply-ename">`+empName+`</div>
                         <div class="reply-date">
@@ -672,7 +682,14 @@
                                     </div>
                                     <div class="contents-notice-line">
                                         <div class="notice-profile">
-                                            <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
+
+                                            <c:if test="${ !empty board.profile }">
+                                                <img src="${ pageContext.servletContext.contextPath }/resources/member_upfiles/${ board.profile }">
+                                            </c:if>
+                                            <c:if test="${ empty board.profile }">
+                                                <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
+                                            </c:if>
+
                                             <span>
                                                 <div class="notice-profile-one">${ board.empName }</div>
                                                 <div>
@@ -755,7 +772,13 @@
                                                 
                                                 <div class="contents-notice-line">
                                                     <div class="notice-profile">
-                                                        <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
+                                                        <c:if test="${ !empty r.profile }">
+                                                            <img src="${ pageContext.servletContext.contextPath }/resources/member_upfiles/${ r.profile }">
+                                                        </c:if>
+                                                        <c:if test="${ empty r.profile }">
+                                                            <img src="${ pageContext.servletContext.contextPath }/resources/images/profile.png">
+                                                        </c:if>
+                                                        
                                                         <span>
                                                             <div class="reply-ename">${ r.empName }</div>
                                                             <div class="reply-date">

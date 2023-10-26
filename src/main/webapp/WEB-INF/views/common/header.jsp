@@ -27,9 +27,15 @@
         //로그인 안했을때 나의 결재페이지 안보이게
         
         if(empId == -1) {
-            //전자결재 로그인 안했을 시 링크 변경
-            $('#headerTable_'+MENU_INFO.length-1).hide();
-            $('#header_sep_'+(MENU_INFO.length-2)).hide();
+            //전자결재 로그인 안했을 시
+            $('#header_sep_'+5).hide();
+            $('#header_sep_'+6).hide();
+
+            $('#headerTable_'+6).hide();
+            $('#header_sep_'+7).hide();
+            
+            $('#headerTable_'+7).hide();
+            $('#header_sep_'+8).hide();
         }else{
             console.log('=========empId : ' + empId);
             $('#headerBtn_'+6).attr('href', 'aplist.do?apType=my&empId='+empId);
@@ -46,17 +52,15 @@
             
             var el = ``;
             for(var i=0; i<MENU_INFO.length; i++){
+                el += `
+                <div class="header-table-div" id="headerTable_`+(i+1)+`">
+                    <a class="header-btn" id="headerBtn_`+(i+1)+`" href="`+MENU_INFO[i].link+`">`
+                    +MENU_INFO[i].title+
+                    `</a>
+                </div>`;
+                
                 if(i != MENU_INFO.length-1) {
-                    el += `
-                    <div class="header-table-div" id="headerTable_`+(i+1)+`">
-                        <a class="header-btn" id="headerBtn_`+(i+1)+`" href="`+MENU_INFO[i].link+`">`
-                        +MENU_INFO[i].title+
-                        `</a>
-                    </div>`;
-
-                    if(i != MENU_INFO.length-2) {
-                        el += `<span class="header-sep" id="header_sep_`+(i+1)+`"></span>`;
-                    }
+                    el += `<span class="header-sep" id="header_sep_`+(i+1)+`"></span>`;
                 }
             }
             console.log('===NOWPAGE : ' + NOWPAGE);
@@ -67,6 +71,10 @@
             $('.header-right').on('click', function(){
                 
             })
+
+            if(empId != -1) {
+                $('#headerBtn_7').attr('href', 'movemypage.do?empId='+empId);
+            }
         }
     }
 

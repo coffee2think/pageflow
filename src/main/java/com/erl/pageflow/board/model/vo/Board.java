@@ -18,6 +18,7 @@ public class Board implements Serializable {
 	
 	private String empName;
 	private String depName;
+	private String profile;
 	
 	private int replyCount = 0;
 	
@@ -56,6 +57,23 @@ public class Board implements Serializable {
 		this.viewsNum = viewsNum;
 		this.empName = empName;
 		this.depName = depName;
+	}
+	
+	public Board(int depId, int boardId, int empId, String boardTitle, String boardDetail, Date createDate,
+			Date modifyDate, Date deleteDate, int viewsNum, String empName, String depName, String profile) {
+		super();
+		this.depId = depId;
+		this.boardId = boardId;
+		this.empId = empId;
+		this.boardTitle = boardTitle;
+		this.boardDetail = boardDetail;
+		this.createDate = createDate;
+		this.modifyDate = modifyDate;
+		this.deleteDate = deleteDate;
+		this.viewsNum = viewsNum;
+		this.empName = empName;
+		this.depName = depName;
+		this.profile = profile;
 	}
 
 	public String getEmpName() {
@@ -172,13 +190,21 @@ public class Board implements Serializable {
 		this.originFile = originFile;
 	}
 
+	public String getProfile() {
+		return profile;
+	}
+
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+
 	@Override
 	public String toString() {
 		return "Board [depId=" + depId + ", boardId=" + boardId + ", empId=" + empId + ", boardTitle=" + boardTitle
 				+ ", boardDetail=" + boardDetail + ", createDate=" + createDate + ", modifyDate=" + modifyDate
 				+ ", deleteDate=" + deleteDate + ", viewsNum=" + viewsNum + ", empName=" + empName + ", depName="
-				+ depName + ", replyCount=" + replyCount + ", renameFile=" + renameFile + ", originFile=" + originFile
-				+ "]";
+				+ depName + ", profile=" + profile + ", replyCount=" + replyCount + ", renameFile=" + renameFile
+				+ ", originFile=" + originFile + "]";
 	}
 
 }

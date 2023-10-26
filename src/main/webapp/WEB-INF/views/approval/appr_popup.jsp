@@ -149,10 +149,10 @@
         el += `
         <tr>
             <td rowspan="3" class="td-50">결재</td>
-            <td class="td-100">기안자</td>`
+            <td class="td-100">기안자-`+jdata.drafter_name+`</td>`
 
         for(let i=0; i<lineList.length; i++) {
-            el += `<td class="td-100">`+lineList[i].pos_name+`</td>`;
+            el += `<td class="td-100">`+ lineList[i].pos_name +`-`+ lineList[i].approver_name +`</td>`;
         }
         el += `
         </tr>`
@@ -194,7 +194,7 @@
         
         $('#aprovalLine_table').append(el);
 
-        $('.modal-table').css({'width' : (lineList.length+1)*100 + 'px'});
+        $('.modal-table').css({'width' : (lineList.length+1)*120 + 'px'});
 
         
         if(buttonvis) {

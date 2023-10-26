@@ -52,6 +52,11 @@ public class BoardController {
 	@RequestMapping("bdmoveinsert.do")
 	public String moveBoardInput(@RequestParam("depId") int depId, Model model) {
 		model.addAttribute("depId", depId);
+		LocalDate today = LocalDate.now();
+		//model.addAttribute("begin", today.minusDays(today.getDayOfMonth() - 1)); // 이번달 1일부터
+		model.addAttribute("begin", today.minusWeeks(1).plusDays(1)); // 일주일 전부터
+		model.addAttribute("end", today); // 오늘까지
+		
 		return "work/work_input";
 	}
 	
@@ -141,6 +146,8 @@ public class BoardController {
 		
 		int currentPage = (page != null) ? Integer.parseInt(page) : 1;
 		int limit = (limitStr != null) ? Integer.parseInt(limitStr) : 10;
+		
+		logger.info("begin : " + begin + " end : " + end);
 		
 		String depName = boardService.selectDepName(board.getDepId());
 		
@@ -240,11 +247,11 @@ public class BoardController {
 		int empId = b.getEmpId();
 		int depId = b.getDepId();
 		int boardId = b.getBoardId();
-		logger.info("search : " + search);
-		logger.info("empId : " + empId + " depId : " + depId + " boardId : " + boardId);
+		logger.info("bdselect.do -> search : " + search);
+		logger.info("bdselect.do -> empId : " + empId + " depId : " + depId + " boardId : " + boardId);
 		
 		Board board = boardService.selectBoard(new BoardKeyword(empId, depId, boardId));
-		
+		logger.info("bdselect.do -> board : " + board);
 		if(board != null) {
 			ArrayList<Reply> replyList = replyService.selectReplyList(new ReplyKeyword(board.getDepId(), board.getBoardId()));
 			
