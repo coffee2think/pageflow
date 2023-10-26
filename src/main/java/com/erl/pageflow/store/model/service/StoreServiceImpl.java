@@ -212,4 +212,16 @@ public class StoreServiceImpl implements StoreService {
 		return storeDao.updateRelease(store);
 	}
 
+	@Override
+	public int selectCurrBookId(Store store) {
+		return storeDao.selectCurrBookId(store);
+	}
+
+	@Override
+	public int selectInvenCurrValue(int invenCurrId) {
+		return storeDao.selectInvenCurrValue(invenCurrId);
+	}
+
+	
+	
 }

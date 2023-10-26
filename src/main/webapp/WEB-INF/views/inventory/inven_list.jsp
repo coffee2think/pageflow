@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <c:set var="invenList" value="${ requestScope.invenList }" />
 <c:set var="keyword" value="${ requestScope.keyword }" />
@@ -319,9 +320,7 @@
 											<c:if test="${ inv.classify eq '출고' }">
 												<td class="td-100">
 													<div class="contents-input-div">
-														<input type="input" name="plus"
-															class="contents-input noline"
-															value="${ inv.currInven - inv.increase }">
+														<input type="input" name="plus" class="contents-input noline" value="${ inv.currInven - inv.increase }">
 													</div>
 												</td>
 											</c:if>

@@ -312,29 +312,58 @@
 		#{ storeId }, #{ bookId }, #{ clientId }, #{ empId }, #{ empName }, 
 		#{ storeNum }, #{ storePrice },#{ storeDate }, '출고')
 	</insert>
+
+	<select id="selectCurrBookId" parameterType="Store" resultType="_int">
+		select nvl(max(inven_id),-1)
+               from (select rownum rnum, sub.*
+                   from (select inven_id from inventory
+                        where book_id = #{ bookId }
+                        order by inven_date desc, store_id desc) sub)
+               where rnum = 1
+	</select>
 	
-	<insert id="insertInventory" parameterType="Store">
-	<![CDATA[
-		INSERT INTO inventory 
-		VALUES ((SELECT MAX(inven_id) + 1 FROM inventory), #{ bookId }, #{ clientId }, #{ storeId }, NULL, (select max(inven_id) from inventory), -#{ storeNum },
-		                (nvl((SELECT curr_inven FROM inventory WHERE store_id = #{ storeId } AND book_id = #{ bookId }), 0)),
-		                TO_DATE('${ storeDate }', 'YYYY/MM/DD'), 
-		                '출고', 
-		                NULL
-		)	
-		]]>
-	</insert>
+	<select id="selectInvenCurrValue" parameterType="_int" resultType="_int">
+		select curr_inven
+        from inventory
+        where inven_id = #{ invenId }
+		
+	</select>
 
 	<insert id="insertStoreInventory" parameterType="Store">
 		<![CDATA[
 			INSERT INTO inventory 
-			VALUES ((SELECT MAX(inven_id) + 1 FROM inventory), #{ bookId }, #{ clientId }, #{ storeId }, NULL, (select max(inven_id) from inventory), #{ storeNum },
-	                (nvl((SELECT curr_inven FROM inventory WHERE store_id = #{ storeId } AND book_id = #{ bookId }), 0)),
-	                TO_DATE('${ storeDate }', 'YYYY/MM/DD'), 
-	                '입고', 
-	                NULL
-			)
-					
+			VALUES (
+			    (SELECT MAX(inven_id) + 1 FROM inventory), 
+			    #{ bookId }, 
+			    #{ clientId }, 
+			    #{ storeId }, 
+			    NULL, 
+			    #{ prevInvenId },
+			    #{ storeNum },
+			    #{ currInven },
+			    TO_DATE(#{ storeDate }, 'YYYY/MM/DD'), 
+			    '입고', 
+			    NULL
+			)		
+		]]>
+	</insert>
+	
+		<insert id="insertInventory" parameterType="Store">
+		<![CDATA[
+			INSERT INTO inventory 
+			VALUES (
+			    (SELECT MAX(inven_id) + 1 FROM inventory), 
+			    #{ bookId }, 
+			    #{ clientId }, 
+			    #{ storeId }, 
+			    NULL, 
+			    #{ prevInvenId },
+			    #{ storeNum },
+			    #{ currInven },
+			    TO_DATE(#{ storeDate }, 'YYYY/MM/DD'), 
+			    '출고', 
+			    NULL
+			)		
 		]]>
 	</insert>
 

@@ -31,15 +31,11 @@ public interface RefundService {
 
 	public int selectrefundCountByBookName(Search search);
 
-	public int selectrefundCountByEmpName(Search search);
-
 	public int selectrefundCountByClientName(Search search);
 
 	public ArrayList<Refund> selectrefundBybookId(Search search);
 
 	public ArrayList<Refund> selectrefundBybookName(Search search);
-
-	public ArrayList<Refund> selectrefundByEmpName(Search search);
 
 	public ArrayList<Refund> selectrefundByClientName(Search search);
 	
@@ -54,4 +50,8 @@ public interface RefundService {
 	public int insertInventory(Refund refund);
 	
 	public int updateRefund(Refund refund);
+
+	public int selectCurrBookId(Refund refund);
+
+	public int selectInvenCurrValue(int invenCurrId);
 }
