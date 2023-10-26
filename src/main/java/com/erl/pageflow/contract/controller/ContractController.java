@@ -3,7 +3,7 @@ package com.erl.pageflow.contract.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,8 +21,6 @@ import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.contract.model.service.ContractService;
 import com.erl.pageflow.contract.model.vo.Contract;
-import com.erl.pageflow.edit.model.vo.Edit;
-import com.erl.pageflow.sales.model.vo.BookOrder;
 
 @Controller
 public class ContractController {

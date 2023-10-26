@@ -314,8 +314,8 @@
 	
 	<insert id="insertEdit" parameterType="Edit">
 		insert into Edit 
-		values (#{ editId }, #{ depId }, #{ empId }, 
-			   (select emp_name from employee where emp_id = #{ empId }),
+		values (#{ editId }, (select dep_id from department where dep_name = #{ depName }),
+			   (select emp_id from employee where emp_name = #{ empName }), #{ empName },
 		        #{ bookName }, #{ editState }, default, default, (select contr_id from contract where book_name = #{ bookName }))
 	</insert>
 	

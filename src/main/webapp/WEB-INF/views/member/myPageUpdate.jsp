@@ -120,6 +120,8 @@ input[type="reset"] {
  	        reader.readAsDataURL(file);    
  	   });
  	}
+ 	
+ 	
 </script>
 <title>수정페이지</title>
 </head>
@@ -174,7 +176,7 @@ input[type="reset"] {
 									<div id="myphoto" style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
 										<c:choose>
 										    <c:when test="${empty employee.profile}">
-										        <img src="/pageflow/resources/images/profile.png" id="imageElement" style="width: 150px; height: 160px; border: 1px solid navy; color: blue; display: block;">
+										        <img src="/pageflow/resources/images/profile.png" id="photo" style="width: 150px; height: 160px; border: 1px solid navy; color: blue; display: block;">
 										    </c:when>
 										    <c:otherwise>
 										        <img src="/pageflow/resources/member_upfiles/${employee.profile}" id="photo" style="width: 150px; height: 160px; border: 1px solid navy; color: blue; display: block;">
