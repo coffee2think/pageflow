@@ -926,3 +926,10 @@ body {
     color: #000000;
     font-weight: normal;
 }
+
+.contents-table.work th{
+    background-color: #ffe5ac;
+    
+    color: #000000;
+    font-weight: normal;
+}

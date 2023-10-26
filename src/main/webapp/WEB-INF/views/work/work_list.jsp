@@ -100,7 +100,7 @@
                                 ${ depName } 게시판
                             </div>
 
-                            <table class="contents-table board-notice-table">
+                            <table class="contents-table board-notice-table work">
                                 
                                 <tr>
                                     <th>번호</th>
