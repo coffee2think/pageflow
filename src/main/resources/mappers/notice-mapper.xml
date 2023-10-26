@@ -19,14 +19,39 @@
 		<result column="NOTICE_READCOUNT" property="noticeReadCount" />
 		<result column="NOTICE_ORIGINAL_FILENAME" property="noticeOriginalFileName" />
 		<result column="NOTICE_RENAME_FILENAME" property="noticeRenameFileName" />
+		<result column="DEP_NAME" property="refDepName" />
 	</resultMap>
 	
-	<select id="selectNoticeList" parameterType="Paging" resultMap="resultNotice">
+	<select id="selectNoticeList" parameterType="Search" resultMap="resultNotice">
 		select *
 		from (select rownum rnum, sub.*
-	      	  from (select * from notice
-					join employee using (EMP_ID)
-					order by NOTICE_ID desc) sub)
+			  from (select * from notice n
+					left join department d on (substr(n.classify, 5) = d.dep_id)
+					where 1=1
+						<if test='keyword != "Y"'>
+						  and (substr(n.classify, 5) = (select dep_id from employee where emp_id = #{ empId })
+							   or classify = 'all')
+						</if>
+					order by notice_id desc) sub)
+		where rnum between #{ startRow } and #{ endRow }
+	</select>
+	
+	<select id="selectImportantNoticeList" parameterType="Search" resultMap="resultNotice">
+		
+		
+		select *
+		from (select rownum rnum, sub.*
+			  from (select * from notice n
+					left join department d on (substr(n.classify, 5) = d.dep_id)
+					where importance = 'Y'
+						<![CDATA[
+						  and importance_date >= to_char(sysdate)
+						]]>
+						<if test='keyword != "Y"'>
+						  and (substr(n.classify, 5) = (select dep_id from employee where emp_id = #{ empId })
+							   or classify = 'all')
+						</if>
+					order by notice_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
 	</select>
 	
@@ -84,44 +109,39 @@
 		delete from notice where NOTICE_ID = #{ noticeId }
 	</delete>
 	
-	<select id="selectSearchTitleCount" parameterType="Search" resultType="_int" >
+	<select id="selectSearchTitleCount" parameterType="string" resultType="_int">
 		SELECT count(*) from notice
-		where NOTICE_TITLE like '%' || #{ keyword } || '%'
+		where notice_title like '%' || #{ keyword } || '%'
 	</select>
 	
 	<select id="selectSearchTitle" parameterType="Search" resultMap="resultNotice">
 		<![CDATA[
 		select * 
-		from (select rownum rnum,  NOTICE_ID, EMP_ID, EMP_NAME,
-		           NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, CLASSIFY, IMPORTANCE
-                from (select * 
-		            from notice
-                    Left join employee using(EMP_ID)
-		            where NOTICE_TITLE like '%' || #{ keyword } || '%'
-		            order by NOTICE_ID desc))	
+		from (select rownum rnum, sub.*
+			  from (select * from notice n
+		            left join department d on (substr(n.classify, 5) = d.dep_id)
+		            where notice_title like '%' || #{ keyword } || '%'
+		            order by notice_id desc) sub)
 		where rnum >= #{ startRow } and rnum <= #{ endRow }
-		
 		]]>
 	</select>
 	
-		<select id="selectSearchWriterCount" parameterType="Search" resultType="_int" >
-			SELECT count(*) from notice 
-							join employee using(EMP_ID)
-			where emp_name like '%' || #{ keyword } || '%'
-		</select>
+	<select id="selectSearchWriterCount" parameterType="string" resultType="_int" >
+		SELECT count(*) from notice 
+		left join employee using (emp_id)
+		where emp_name like '%' || #{ keyword } || '%'
+	</select>
 	
 	<select id="selectSearchWriter" parameterType="Search" resultMap="resultNotice">
 		<![CDATA[
 		select * 
-		from (select rownum rnum,  NOTICE_ID, EMP_ID, EMP_NAME,
-		           NOTICE_TITLE, NOTICE_DETAIL, CREATE_DATE, CLASSIFY, IMPORTANCE
-                from (select * 
-		            from notice
-                    Left join employee using(EMP_ID)
-		            where emp_name like '%' || #{ keyword } || '%'
-		            order by NOTICE_ID desc))	
+		from (select rownum rnum, sub.*
+			from (select * from notice n
+				  left join employee using (emp_id)
+				  left join department d on (substr(n.classify, 5) = d.dep_id)
+				  where emp_name like '%' || #{ keyword } || '%'
+				  order by notice_id desc) sub)
 		where rnum >= #{ startRow } and rnum <= #{ endRow }
-		
 		]]>
 	</select>
 	
@@ -138,18 +158,6 @@
 					where create_date between #{ begin } and (to_date(#{ end }) + 1 - 1/86400)
 					order by create_date desc, notice_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
-	</select>
-	
-	<select id="selectImportantNoticeList" parameterType="Paging" resultMap="resultNotice">
-		<![CDATA[
-		select *
-		from (select rownum rnum, sub.*
-	      	  from (select * from notice
-					join employee using (EMP_ID)
-					where IMPORTANCE = 'Y' and IMPORTANCE_DATE >= sysdate
-					order by NOTICE_ID desc) sub)
-		where rnum between #{ startRow } and #{ endRow }
-		]]>
 	</select>
 	
 	<select id="selectNewTop" resultMap="resultNotice">

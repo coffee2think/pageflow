@@ -133,8 +133,6 @@ function deleteCheckedRow(url) {
     form.setAttribute('method', 'post'); // 전송 방식 결정 (get or post)
     form.setAttribute('action', url); // 전송할 url 지정
     
-    
-    
     var checked = $('#table_list').find('input[type="checkbox"]:checked');
     if(checked.length == 0) {
         alert('삭제할 행을 체크해주세요.');

@@ -74,22 +74,44 @@ function dupIDCheck(){
 
 
 window.onload = function(){
-	   //선택한 사진파일 이미지 미리보기 처리
-	   var photofile = document.getElementById("photofile");
-	   photofile.addEventListener('change', function(event){      
-	      const files = event.currentTarget.files;
-	       const file = files[0];
-	       const myphoto = document.getElementById("photo");       
-	       console.log(file.name);
-	       
-	       const reader = new FileReader();
-	        reader.onload = (e) => {          
-	          myphoto.setAttribute('src', e.target.result);
-	          myphoto.setAttribute('data-file', file.name);
-	        };
-	        reader.readAsDataURL(file);    
-	   });
-	}
+	//선택한 사진파일 이미지 미리보기 처리
+	var photofile = document.getElementById("photofile");
+	photofile.addEventListener('change', function(event){      
+		const files = event.currentTarget.files;
+		const file = files[0];
+		const myphoto = document.getElementById("photo");       
+		console.log(file.name);
+		
+		const reader = new FileReader();
+		reader.onload = (e) => {          
+			myphoto.setAttribute('src', e.target.result);
+			myphoto.setAttribute('data-file', file.name);
+		};
+		reader.readAsDataURL(file);    
+	});
+	
+	// 처음 실행 시 파일 삭제 버튼 숨김
+	$('#del_file_btn').hide();
+	
+
+	$('#del_file_btn').click(function() {
+		$('#photofile').val(''); // 첨부된 파일 삭제
+		
+		const myphoto = $("#photo");
+		myphoto.prop('src', '/pageflow/resources/images/employeeprofile.png');
+		
+		$('#del_file_btn').hide();
+	});
+	
+	$('#photofile').change(function() {
+		// 파일이 등록되었을 때 파일 삭제 버튼을 보이도록 함
+		if($('#photofile') != '') {
+			$('#del_file_btn').show();
+		} else {
+			$('#del_file_btn').hide();
+		}
+	});
+}
 </script>
 <style>
     /* Page Styles */
@@ -216,6 +238,7 @@ window.onload = function(){
 									<div style="width: 100px;">
 										<div class="select-pan-nemo">파일첨부</div> 
 										<input type="file" name="upfile" id="photofile">
+										<input type="button" id="del_file_btn" value="파일삭제">
 									</div>
 									
 								</td>

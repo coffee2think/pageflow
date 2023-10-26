@@ -20,10 +20,11 @@
 	const LNKPAGE = 1;
 
 	function searchNotice() {
-		url = "nsearch.do?action=" + $("#sel_code").val() + "&keyword="
-				+ $("#nkeyword").val();
+		url = 'nsearch.do';
+		url += '?searchType=' + $('#sel_code').val();
+		url += '&keyword=' + $("#nkeyword").val();
+		
 		location.href = url;
-		console.log(url);
 	}
 </script>
 </head>
@@ -48,7 +49,7 @@
 				<div class="side-container">
 					<div class="side-title"></div>
 					<div class="side-icon-box">
-						<a href="nemoveinsert.do?empId=${ empId }" class="side-write-btn">공지글쓰기</a>
+						<a href="nemoveinsert.do" class="side-write-btn">공지글쓰기</a>
 					</div>
 
 					<!-- 리스트 들어감 -->
@@ -93,7 +94,7 @@
 											src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
 									</button>
 									<input type="search" placeholder="키워드를 입력하세요." name="keyword"
-										class="search-box-text" value="" id="nkeyword">
+										class="search-box-text" value="${ keyword }" id="nkeyword">
 								</div>
 							</div>
 						</form>
