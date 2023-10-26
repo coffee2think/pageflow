@@ -140,10 +140,10 @@
 			SELECT *
 			FROM (SELECT ROWNUM RUM, SUB.*
 		           FROM (SELECT * FROM INVENTORY
-                               LEFT JOIN BOOK USING (BOOK_ID)
-                              LEFT JOIN CLIENT USING (CLIENT_ID)
-                                WHERE BOOK_NAME LIKE '%' || #{ keyword } || '%'
-                                ORDER BY BOOK_ID DESC) SUB)
+                         LEFT JOIN BOOK USING (BOOK_ID)
+                         LEFT JOIN CLIENT USING (CLIENT_ID)
+                         WHERE BOOK_NAME LIKE '%' || #{ keyword } || '%'
+                         ORDER BY BOOK_ID DESC) SUB)
 			WHERE RUM >= #{ startRow } AND RUM <= #{ endRow }
 		]]>
 	</select>

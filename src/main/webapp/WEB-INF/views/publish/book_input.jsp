@@ -166,7 +166,7 @@
                         <!--컨텐츠영역-->
                         <div class="contents-container sort-row">
                             <div class="contents-box">
-                                <table class="contents-table" id="bkinsert_table" border="1">
+                                <table class="contents-table book" id="bkinsert_table" border="1">
                                     <tr>
                                         <th></th>
                                         <th>도서명</th>

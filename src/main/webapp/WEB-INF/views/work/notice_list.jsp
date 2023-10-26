@@ -14,11 +14,6 @@
 <link rel="stylesheet" type="text/css" href="${ pageContext.servletContext.contextPath }/resources/css/notice.css">
 <script type="text/javascript" src="${ pageContext.servletContext.contextPath }/resources/js/lib/jquery.min.js"></script>
 <title>공지사항</title>
-<style>
-.paging-box {
-	
-}
-</style>
 <script>
 	const NOWPAGE = 1;
 	const SUBPAGE = 1;
@@ -110,32 +105,43 @@
 					<div class="contents-container sort-row">
 						<div class="contents-box notice" style="width: 1200px;">
 							<div class="contents-title notice-tit">공지사항</div>
-								<table class="contents-table">
+								<table class="contents-table work">
 									<tr>
 										<th>번호</th>
+										<th>부서</th>
 										<th>제목</th>
 										<th>조회수</th>
 										<th>날짜</th>
 									</tr>
 									<c:if test="${ !empty importantList }">
 										<c:forEach items="${ importantList }" var="notice">
+											<script>
+												
+											</script>
 											<tr>
-												<td>[필독]</td>
+												<td>[ 필독 ]</td>
+												<td>
+													<c:choose>
+														<c:when test="${ !empty notice.refDepName }">
+															[ ${ notice.refDepName } ]
+														</c:when>
+														<c:otherwise>
+															[ 전체 ]
+														</c:otherwise>
+													</c:choose>
+												</td>
 												<td>
 													<c:url var="detailUrl" value="ndetail.do">
 														<c:param name="noticeId" value="${ notice.noticeId }" />
 													</c:url>
 													<a href="${ detailUrl }">
-														<c:if test="${ !empty notice.refDepName }">
-															${ notice.refDepName }
-														</c:if>
 														${ notice.noticeTitle }
 													</a>
 													<c:if test="${ notice.noticeCreateDate == today }">
-														[New] <!-- 아이콘 처리 해야함 -->
+														<img src="${ pageContext.servletContext.contextPath }/resources/images/notice-new.png" width="13" height="13">
 													</c:if>
 													<c:if test="${ !empty notice.noticeOriginalFileName }">
-														[첨부파일 있음] <!-- 아이콘 처리 해야함 -->
+														<img src="${ pageContext.servletContext.contextPath }/resources/images/notice-attach.png" width="13" height="13">
 													</c:if>
 												</td>
 												<td>${ notice.noticeReadCount }</td>
@@ -148,20 +154,27 @@
 											<tr>
 												<td>${ notice.noticeId }</td>
 												<td>
+													<c:choose>
+														<c:when test="${ !empty notice.refDepName }">
+															[ ${ notice.refDepName } ]
+														</c:when>
+														<c:otherwise>
+															[ 전체 ]
+														</c:otherwise>
+													</c:choose>
+												</td>
+												<td>
 													<c:url var="detailUrl" value="ndetail.do">
 														<c:param name="noticeId" value="${ notice.noticeId }" />
 													</c:url>
 													<a href="${ detailUrl }">
-														<c:if test="${ !empty notice.refDepName }">
-															${ notice.refDepName }
-														</c:if>
 														${ notice.noticeTitle }
 													</a>
 													<c:if test="${ notice.noticeCreateDate == today }">
-														[New] <!-- 아이콘 처리 해야함 -->
+														<img src="${ pageContext.servletContext.contextPath }/resources/images/notice-new.png" width="13" height="13">
 													</c:if>
 													<c:if test="${ !empty notice.noticeOriginalFileName }">
-														[첨부파일 있음] <!-- 아이콘 처리 해야함 -->
+														<img src="${ pageContext.servletContext.contextPath }/resources/images/notice-attach.png" width="13" height="13">
 													</c:if>
 												</td>
 												<td>${ notice.noticeReadCount }</td>

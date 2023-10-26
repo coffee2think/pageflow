@@ -94,7 +94,7 @@ window.onload = function(){
 <style>
     /* Page Styles */
     body {
-        font-family: Arial, sans-serif;
+        
         background-color: white;
         margin: 0;
         padding: 0;
@@ -155,122 +155,141 @@ window.onload = function(){
 </style>
 </head>
 <body>
+	<div id="container">
 
-	<header class="main-header">
-		<!--header-container-->
-		<div class="header-container">
-			<!-- 헤더 들어감 -->
-			<c:import url="../common/header.jsp" />
-		</div>
-		<!--header-container end-->
-	</header>
-	<main class="main-wrapper">
-
-		<!--main-side-->
-		<div class="main-side">
-			<div class="side-container">
-				<div class="side-title"></div>
-				<div class="side-icon-box">
-					<a
-						href="${ pageContext.servletContext.contextPath }/views/work/notice_input.jsp"
-						class="side-write-btn margin-bottom-0">글쓰기</a>
-				</div>
-
-				<!-- 리스트 들어감 -->
-				<c:import url="../common/side.jsp" />
+		<header class="main-header">
+			<!--header-container-->
+			<div class="header-container">
+				<!-- 헤더 들어감 -->
+				<c:import url="../common/header.jsp" />
 			</div>
-		</div>
-		<!--main-side end-->
-	
-			
+			<!--header-container end-->
+		</header>
 		
-		<!-- 사진파일 첨부시 enctype="multipart/form-data" 속성 추가함 -->
-			
-		<form action="empinsert.do" id="enrollForm" method="post" enctype="multipart/form-data" >
-			<table id="outer" align="center" width="700" cellspacing="5"
-				cellpadding="0">
-					<h1 >직원 등록</h1>
-				<tr>
-					<th colspan="3">직원 정보를 입력해 주세요. (* 표시는 필수입력 항목입니다.)</th>
-					<td rowspan="7" width="100" align="center" valign="middle">
-						<div id="myphoto"
-							style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
-							<img src="/pageflow/resources/images/employeeprofile.png"
-								id="photo"
-								style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;"
-								alt="사진을 드래그 드롭하세요."><br>
-						</div>
-					</td>
-					<td><div class="select-pan-nemo">파일첨부</div> 
-					<input type="file" name="upfile" id="photofile">
-					</td>
-				</tr>
+		<main class="main-wrapper">
 
-				<tr>
-					<th width="120">*사번</th>
-					<td><input type="text" name="empId" id="empId" required>
-						&nbsp; <input type="button" value="중복체크"
-						onclick="return dupIDCheck();"></td>
-				</tr>
-				<tr>
-					<th>*암호</th>
-					<td><input type="password" name="empPwd" id="emppwd" required></td>
-				</tr>
-				<tr>
-					<th>*암호확인</th>
-					<td><input type="password" name="emppwd2" id="emppwd2"
-						required  onblur="validate(); return false;" ></td>
-				</tr>
-				<tr>
-					<th>*이름</th>
-					<td><input type="text" name="empName" required></td>
-			   </tr>
-				<tr>
-					<th>*전화번호</th>
-					<td><input type="tel" name="phone" required></td>
-				<tr>
-					<th>*생년월일</th>
-					<td><input type="date" name="empBirth" required></td>
-				<tr>
-					<th>*입사일</th>
-					<td><input type="date" name="enrollDate" required></td>
-				<tr>
-					<th>*이메일</th>
-					<td><input type="email" name="email" required></td>
-				<tr>
-					<th>*주소</th>
-					<td><input type="address" name="address" required></td>
-				<tr>
-					<th>*직급</th>
-					<td><select name="jobId">
-							<option value="1">사원</option>
-							<option value="2">대리</option>
-							<option value="3">과장</option>
-							<option value="4">차장</option>
-							<option value="5">부장</option>
-					</select></td>
-				<tr>
-					<th>*직책</th>
-					<td><select name="posId">
-							<option value="1">직원</option>
-							<option value="2">팀장</option>
-							<option value="3">차장</option>
-							<option value="4">실장</option></td>
-				<tr>
-					<th>*부서</th>
-					<td><select name="depId">
-							<option value="2">기획</option>
-							<option value="3">디자인</option>
-							<option value="4">교정</option>
-							<option value="1">개발</option></td>
-				</tr>
-				</tr>
-				<tr>
-					<th colspan="3"><input type="submit" value="등록하기">
-						&nbsp; <input type="reset" value="작성취소"> &nbsp; <a
-						href="main.do">시작페이지로 이동</a></th>
-				</tr>
-			</table>
-		</form>
+			<!--main-side-->
+			<div class="main-side">
+				<div class="side-container">
+					<div class="side-title"></div>
+					<div class="side-icon-box">
+						<a
+							href="${ pageContext.servletContext.contextPath }/views/work/notice_input.jsp"
+							class="side-write-btn margin-bottom-0">글쓰기</a>
+					</div>
+
+					<!-- 리스트 들어감 -->
+					<c:import url="../common/side.jsp" />
+				</div>
+			</div>
+			<!--main-side end-->
+		
+				
+			<!--main-container-->
+			<div class="main-container">
+
+				<!--main-header-bar-->
+				<div class="main-header-bar">
+					<div class="main-title-box">
+						<img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
+						<span class="main-title"></span>
+					</div>
+					<button class="header-left-btn"></button>
+				</div>
+				<!-- 사진파일 첨부시 enctype="multipart/form-data" 속성 추가함 -->
+				<!--내용-->
+				<div class="main-contents-box">
+					<form action="empinsert.do" id="enrollForm" method="post" enctype="multipart/form-data" >
+						<table id="outer" align="center" width="700" cellspacing="5"
+							cellpadding="0">
+								<h1 >직원 등록</h1>
+							<tr>
+								<th colspan="3">직원 정보를 입력해 주세요. (* 표시는 필수입력 항목입니다.)</th>
+								<td rowspan="7" width="100" align="center" valign="middle">
+									<div id="myphoto"
+										style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
+										<img src="/pageflow/resources/images/employeeprofile.png"
+											id="photo"
+											style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;"
+											alt="사진을 드래그 드롭하세요."><br>
+									</div>
+									<div style="width: 100px;">
+										<div class="select-pan-nemo">파일첨부</div> 
+										<input type="file" name="upfile" id="photofile">
+									</div>
+									
+								</td>
+							</tr>
+
+							<tr>
+								<th width="120">*사번</th>
+								<td><input type="text" name="empId" id="empId" required>
+									&nbsp; <input type="button" value="중복체크"
+									onclick="return dupIDCheck();"></td>
+							</tr>
+							<tr>
+								<th>*암호</th>
+								<td><input type="password" name="empPwd" id="emppwd" required></td>
+							</tr>
+							<tr>
+								<th>*암호확인</th>
+								<td><input type="password" name="emppwd2" id="emppwd2"
+									required  onblur="validate(); return false;" ></td>
+							</tr>
+							<tr>
+								<th>*이름</th>
+								<td><input type="text" name="empName" required></td>
+						</tr>
+							<tr>
+								<th>*전화번호</th>
+								<td><input type="tel" name="phone" required></td>
+							<tr>
+								<th>*생년월일</th>
+								<td><input type="date" name="empBirth" required></td>
+							<tr>
+								<th>*입사일</th>
+								<td><input type="date" name="enrollDate" required></td>
+							<tr>
+								<th>*이메일</th>
+								<td><input type="email" name="email" required></td>
+							<tr>
+								<th>*주소</th>
+								<td><input type="address" name="address" required></td>
+							<tr>
+								<th>*직급</th>
+								<td><select name="jobId">
+										<option value="1">사원</option>
+										<option value="2">대리</option>
+										<option value="3">과장</option>
+										<option value="4">차장</option>
+										<option value="5">부장</option>
+								</select></td>
+							<tr>
+								<th>*직책</th>
+								<td><select name="posId">
+										<option value="1">직원</option>
+										<option value="2">팀장</option>
+										<option value="3">차장</option>
+										<option value="4">실장</option></td>
+							<tr>
+								<th>*부서</th>
+								<td><select name="depId">
+										<option value="2">기획</option>
+										<option value="3">디자인</option>
+										<option value="4">교정</option>
+										<option value="1">개발</option></td>
+							</tr>
+							</tr>
+							<tr>
+								<th colspan="3"><input type="submit" value="등록하기">
+									&nbsp; <input type="reset" value="작성취소"> &nbsp; <a
+									href="main.do">시작페이지로 이동</a></th>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+		</main>
+	</div>
 </body>
 </html>

@@ -264,7 +264,7 @@
 	<select id="selectApprSearchAllCountApprover" parameterType="Search"  resultType="_int">
 		select count(*)
 		from approval A
-		where LINE_ID = (select LINE_ID
+		where LINE_ID in(select LINE_ID
 		           from approvalline
 		           where APPROVER_NAME like '%' || #{ keyword } || '%')
 	</select>
@@ -280,7 +280,7 @@
 		            join draft using (DRAFT_TYPE)
 		            join employee ED on (A.DRAFTER = ED.emp_id)
 		            order by APPR_ID desc) sub
-		        where sub.LINE_ID = (select LINE_ID
+		        where sub.LINE_ID in(select LINE_ID
 				           from approvalline
 				           where APPROVER_NAME like '%' || #{ keyword } || '%'))
 		where rnum >= #{ startRow } and rnum <= #{ endRow }

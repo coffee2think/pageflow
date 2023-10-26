@@ -172,7 +172,14 @@ input[type="reset"] {
 								<th colspan="3">내 정보</th>
 								<td rowspan="7" width="100" align="center" valign="middle">
 									<div id="myphoto" style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
-										<img src="/pageflow/resources/member_upfiles/${employee.profile }" id="photo" style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;" alt="사진을 드래그 드롭하세요."><br>
+										<c:choose>
+										    <c:when test="${empty employee.profile}">
+										        <img src="/pageflow/resources/images/profile.png" id="imageElement" style="width: 150px; height: 160px; border: 1px solid navy; color: blue; display: block;">
+										    </c:when>
+										    <c:otherwise>
+										        <img src="/pageflow/resources/member_upfiles/${employee.profile}" id="photo" style="width: 150px; height: 160px; border: 1px solid navy; color: blue; display: block;">
+										    </c:otherwise>
+										</c:choose>
 										<div class="select-pan-nemo" style="width: 150px;">파일첨부</div>
 										<input type="file" name="upfile" id="photofile" style="width: 150px;">
 									</div>
@@ -181,12 +188,10 @@ input[type="reset"] {
 							<tr>
 								<th width="120">사번</th>
 								<td>${employee.empId}</td>
-								<%-- <td><input type="text" name="empId" id="empid" value="${ employee.empId }" readonly> --%>
 							</tr>
 							<tr>
 								<th>이름</th>
 								<td>${employee.empName}</td>
-								<%-- <td><input type="text" name="empName" value="${ employee.empName }" readonly></td> --%>
 							</tr>
 							<tr>
 								<th>*암호</th>

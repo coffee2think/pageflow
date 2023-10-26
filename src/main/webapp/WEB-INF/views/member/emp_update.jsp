@@ -91,7 +91,7 @@ window.onload = function(){
 <style>
     /* Page Styles */
     body {
-        font-family: Arial, sans-serif;
+        
         background-color: white;
         margin: 0;
         padding: 0;
@@ -161,113 +161,136 @@ window.onload = function(){
 </head>
 <body>
 
-	<header class="main-header">
-		<!--header-container-->
-		<div class="header-container">
-			<!-- 헤더 들어감 -->
-			<c:import url="../common/header.jsp" />
-		</div>
-		<!--header-container end-->
-	</header>
+	<div id="container">
 
-	<!--main-side-->
-	<div class="main-side">
-		<div class="side-container">
-			<div class="side-title"></div>
-			<div class="side-icon-box">
-				<a
-					href="${ pageContext.servletContext.contextPath }/views/work/notice_input.jsp"
-					class="side-write-btn margin-bottom-0">글쓰기</a>
+		<header class="main-header">
+			<!--header-container-->
+			<div class="header-container">
+				<!-- 헤더 들어감 -->
+				<c:import url="../common/header.jsp" />
 			</div>
+			<!--header-container end-->
+		</header>
 
-			<!-- 리스트 들어감 -->
-			<c:import url="../common/side.jsp" />
-		</div>
-	</div>
-	<!--main-side end-->
-
-	<h1 align="center">직원 정보 수정 페이지</h1>
-	<br>
-	<!-- 사진파일 첨부시 enctype="multipart/form-data" 속성 추가함 -->
-	<form action="empupdate.do" id="enrollForm" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="empPwd" value="${employee.empPwd }">
-		<input type="hidden" name="profile" value="${employee.profile }">
-		<table id="outer" align="center" width="700" cellspacing="5"
-			cellpadding="0">
-
-			<tr>
-				<th colspan="3">직원 정보를 입력해 주세요. (* 표시는 필수입력 항목입니다.)</th>
-				<td rowspan="7" width="100" align="center" valign="middle">
-					<div id="myphoto"
-						style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
-						<img src="/pageflow/resources/member_upfiles/${employee.profile }"
-							id="photo"
-							style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;"
-							alt="사진을 드래그 드롭하세요."><br>
+		<main class="main-wrapper">
+		
+			<!--main-side-->
+			<div class="main-side">
+				<div class="side-container">
+					<div class="side-title"></div>
+					<div class="side-icon-box">
+						<a
+							href="${ pageContext.servletContext.contextPath }/views/work/notice_input.jsp"
+							class="side-write-btn margin-bottom-0">글쓰기</a>
 					</div>
-				</td>
-				<td><div class="select-pan-nemo">파일첨부</div> 
-				
-				<input type="file" name="upfile" id="photofile"> 
-				
-				</td>
-			<tr>
-				<th width="120">사번</th>
-				<td><input type="text" name="empId" id="empid" value="${employee.empId }" readonly>
-			</tr>
-			<tr>
-				<th>이름</th>
-				<td><input type="text" name="empName"  value="${employee.empName }" readonly></td>
-			</tr>
-			<tr>
-				<th>암호</th>
-				<td><input type="password" name="newempPwd"  id="emppwd"></td>
-			</tr>
-			<tr>
-				<th>암호확인</th>
-				<td><input type="password" id="emppwd2"  onblur="validate(); return false;"></td>
-			</tr>
-			<tr>
-				<th>전화번호</th>
-				<td><input type="tel" name="phone" value="${employee.phone }"></td>
-			</tr>
-			<tr>
-				<th>이메일</th>
-				<td><input type="email" name="email" value="${employee.email }"></td>
-			</tr>
-				<th>주소</th>
-				<td><input type="address" name="address" value="${employee.address}" required></td>
-			<tr>
-				<th>직급</th>
-				<td><select name="jobId" value="${employee.jobId }">
-						<option value="1">사원</option>
-						<option value="2">대리</option>
-						<option value="3">과장</option>
-						<option value="4">차장</option>
-						<option value="5">부장</option>
-				</select></td>
-			<tr>
-				<th>직책</th>
-				<td><select name="posId" value="${employee.posId }">
-						<option value="1">직원</option>
-						<option value="2">팀장</option>
-						<option value="3">차장</option>
-						<option value="4">실장</option></td>
-			<tr>
-				<th>부서</th>
-				<td><select name="depId" value="${employee.depId }">
-						<option value="2">기획</option>
-						<option value="3">디자인</option>
-						<option value="4">교정</option>
-						<option value="1">개발</option></td>
-			</tr>
 
-			<tr>
-				<th colspan="3"><input type="submit" value="수정하기">
-					&nbsp; <input type="reset" value="수정취소"> &nbsp; <a
-					href="main.do">시작페이지로 이동</a></th>
-			</tr>
-		</table>
-	</form>
+					<!-- 리스트 들어감 -->
+					<c:import url="../common/side.jsp" />
+				</div>
+			</div>
+			<!--main-side end-->
+
+			<!--main-container-->
+			<div class="main-container">
+
+				<!--main-header-bar-->
+				<div class="main-header-bar">
+					<div class="main-title-box">
+						<img src="${ pageContext.servletContext.contextPath }/resources/images/header-icon.png">
+						<span class="main-title"></span>
+					</div>
+					<button class="header-left-btn"></button>
+				</div>
+				<!-- 사진파일 첨부시 enctype="multipart/form-data" 속성 추가함 -->
+				<!--내용-->
+				<div class="main-contents-box">
+
+					<h1 align="center">직원 정보 수정 페이지</h1>
+					<br>
+					<!-- 사진파일 첨부시 enctype="multipart/form-data" 속성 추가함 -->
+					<form action="empupdate.do" id="enrollForm" method="post" enctype="multipart/form-data">
+						<input type="hidden" name="empPwd" value="${employee.empPwd }">
+						<input type="hidden" name="profile" value="${employee.profile }">
+						<table id="outer" align="center" width="700" cellspacing="5"
+							cellpadding="0">
+
+							<tr>
+								<th colspan="3">직원 정보를 입력해 주세요. (* 표시는 필수입력 항목입니다.)</th>
+								<td rowspan="7" width="100" align="center" valign="middle">
+									<div id="myphoto"
+										style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
+										<img src="/pageflow/resources/member_upfiles/${employee.profile }"
+											id="photo"
+											style="width: 150px; height: 160px; border: 1px solid navy; color: bule; display: block;"
+											alt="사진을 드래그 드롭하세요."><br>
+									</div>
+									<div style="width: 100px;">
+										<div class="select-pan-nemo">파일첨부</div> 
+										<input type="file" name="upfile" id="photofile">
+									</div>
+								</td>
+								
+							<tr>
+								<th width="120">사번</th>
+								<td><input type="text" name="empId" id="empid" value="${employee.empId }" readonly>
+							</tr>
+							<tr>
+								<th>이름</th>
+								<td><input type="text" name="empName"  value="${employee.empName }" readonly></td>
+							</tr>
+							<tr>
+								<th>암호</th>
+								<td><input type="password" name="newempPwd"  id="emppwd"></td>
+							</tr>
+							<tr>
+								<th>암호확인</th>
+								<td><input type="password" id="emppwd2"  onblur="validate(); return false;"></td>
+							</tr>
+							<tr>
+								<th>전화번호</th>
+								<td><input type="tel" name="phone" value="${employee.phone }"></td>
+							</tr>
+							<tr>
+								<th>이메일</th>
+								<td><input type="email" name="email" value="${employee.email }"></td>
+							</tr>
+								<th>주소</th>
+								<td><input type="address" name="address" value="${employee.address}" required></td>
+							<tr>
+								<th>직급</th>
+								<td><select name="jobId" value="${employee.jobId }">
+										<option value="1">사원</option>
+										<option value="2">대리</option>
+										<option value="3">과장</option>
+										<option value="4">차장</option>
+										<option value="5">부장</option>
+								</select></td>
+							<tr>
+								<th>직책</th>
+								<td><select name="posId" value="${employee.posId }">
+										<option value="1">직원</option>
+										<option value="2">팀장</option>
+										<option value="3">차장</option>
+										<option value="4">실장</option></td>
+							<tr>
+								<th>부서</th>
+								<td><select name="depId" value="${employee.depId }">
+										<option value="2">기획</option>
+										<option value="3">디자인</option>
+										<option value="4">교정</option>
+										<option value="1">개발</option></td>
+							</tr>
+
+							<tr>
+								<th colspan="3"><input type="submit" value="수정하기">
+									&nbsp; <input type="reset" value="수정취소"> &nbsp; <a
+									href="main.do">시작페이지로 이동</a></th>
+							</tr>
+						</table>
+					</form>
+				</div>
+			</div>
+		</main>
+	</div>
 </body>
 </html>

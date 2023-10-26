@@ -200,7 +200,8 @@ var MENU_INFO = [
                 ]
             }
         ]
-    },
+    }
+    ,
     {
         title : '마이페이지'
         ,link : 'javascript:goMyPage()'
@@ -210,9 +211,10 @@ var MENU_INFO = [
                 ,slink : 'javascript:goMyPage()'
                 ,sbranch : [
                     {mtitle : '내정보 보기', mlink : 'javascript:goMyPage()'},
-                    {mtitle : '쪽지함', mlink : 'movemsgbox.do'}
+                    /*{mtitle : '쪽지함', mlink : 'movemsgbox.do'}*/
                 ]
             }
         ]
     }
+    
 ]

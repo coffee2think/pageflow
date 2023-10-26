@@ -108,22 +108,28 @@
                     <!--컨텐츠영역-->
                     <div class="contents-container sort-row">
                         <div class="contents-box">
-                            <div class="contents-title">
+                            <div class="contents-title contents-title-chart">
 								<!-- 카테고리별 원형 차트 -->
 								<c:if test="${ !empty map }">
 									<c:forEach items="${ map }" var="category">
 										<input type="hidden" class="category" name="${ category.key }" value="${ category.value }">
 									</c:forEach>
 								</c:if>
-								<div class="graph" id="chart">
-								<!-- <div class="mainbox-tablebox graph width-65vw" id="chart"> -->
-	                                <canvas id="myChart" width="300" height="200">
-	                                </canvas>
-	                            </div>
-								<!-- 카테고리별 원형 차트 end -->
-								<!-- 랭킹 테이블 -->
+								
+								
+                            </div>
+
+                            <div class="graph trend-chart-box" id="chart">
+                            <!-- <canvas id="myChart" style="height:60vh; width:100vw;">
+                                </canvas> -->
+                                <canvas id="myChart">
+                                </canvas>
+                            </div>
+                            <!-- 카테고리별 원형 차트 end -->
+
+                            <!-- 랭킹 테이블 -->
 								<div>
-									<table class="contents-table" id="table_list">
+									<table class="contents-table sales" id="table_list">
 										<tr>
 											<th>순위</th>
 											<th>도서명</th>
@@ -145,7 +151,6 @@
 									</table>
 								</div>
 								<!-- 랭킹 테이블 end -->
-                            </div>
                         </div>
                     </div>
                     <!--컨텐츠영역 end-->

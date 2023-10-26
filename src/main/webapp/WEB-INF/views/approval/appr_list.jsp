@@ -160,7 +160,7 @@
                         <!--컨텐츠영역-->
                         <div class="contents-container sort-row">
                             <div class="contents-box">
-                                <table class="contents-table">
+                                <table class="contents-table approval">
                                     <tr>
                                         <th>체크</th>
                                         <th>기안번호</th>
