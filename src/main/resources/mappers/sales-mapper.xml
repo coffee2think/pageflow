@@ -330,7 +330,7 @@
 		LEFT JOIN book_order USING (order_id, book_id)
 		WHERE TO_CHAR(collect_date, 'YYYY') = #{ year }
 		GROUP BY book_id, book_name
-		ORDER BY book_id asc
+		ORDER BY book_id ASC
 	</select>
 	
 	<insert id="insertSales" parameterType="Sales">

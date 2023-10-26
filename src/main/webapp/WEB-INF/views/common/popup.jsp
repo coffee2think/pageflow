@@ -22,10 +22,6 @@ let rowIndex_popup;
 let count_global = 0;
 
 document.addEventListener("DOMContentLoaded", function(){
-
-	
-
-
 	checkOption();
 	initPopupBtn();
 });
@@ -34,44 +30,35 @@ function initPopupBtn() {
 	$('.input-search-btn').on('click', function() {
 		var input = $(this).parent().find('input').eq(0);
 		var popup_type = input.attr('name');
-		if(popup_type.includes('book')) {
-			popup_type = 'book';
+		
+		typeFilter = {
+				'book': 'book',
+				'emp': 'employee',
+				'order': 'book_order',
+				'writer': 'writer',
+				'lineE': 'lineE',
+				'dep': 'department'
+		};
+		
+		for(type in typeFilter) {
+			if(popup_type.includes(type)) {
+				popup_type = typeFilter[type];
+			}
 		}
 		
 		if(popup_type.includes('client')) {
 			popup_type = client_type;
 		}
 		
-		if(popup_type.includes('emp')) {
-			popup_type = 'employee';
-		}
-		
-		if(popup_type.includes('order')) {
-			popup_type = 'book_order';
-		}
-
-		if(popup_type.includes('writer')) {
-			popup_type = 'writer';
-		}
-
-		if(popup_type.includes('lineE')) {
-			popup_type = 'lineE';
-		}
-
 		if(popup_type.includes('save')) {
 			popup_type = 'saveLine';
-			
-		}else{
+		} else {
 			$('#popup_table tr').each(function(){
 				$(this).find('th').each(function(index) {
 					if(index == 5 || index == 6) $(this).hide();
 				})
 			})
-		}
-		
-		if(popup_type.includes('dep')) {
-			popup_type = 'department';
-		}
+		};
 		
 		console.log('popup_type : ' + popup_type);
 		
@@ -80,8 +67,8 @@ function initPopupBtn() {
 		table.find('tr').each(function(index) {
 			$(this).val(index - 1);
 		});
+		
 		rowIndex_popup = tr.val();
-		console.log('rowIndex_popup : ' + rowIndex_popup);
 		
 		popup.showPopup(popup_type);
 		
@@ -91,7 +78,7 @@ function initPopupBtn() {
 }
 
 function register() {
-	popup_inputData = {
+	const popup_inputData = {
 			'book': ['bookId', 'bookName', 'bookPrice', 'stock'],
 			'printoffice': ['clientId', 'clientName', ''],
 			'bookstore': ['clientId', 'clientName'],
@@ -165,15 +152,10 @@ function register() {
 		const list = json_global.list[index_global];
 		const inputData = popup_inputData[popup_type];
 		for(i = 0; i < inputData.length; i++) {
-			$('table input[name=' + inputData[i] + ']').eq(rowIndex_popup).val(decodeURIComponent(list[inputData[i]]).replace(/\+/gi, ' '));
-			console.log($('input[name=' + inputData[i] + ']').eq(rowIndex_popup));
-			console.log(decodeURIComponent(list[inputData[i]]).replace(/\+/gi, ' '));
+			$('table input[name=' + inputData[i] + ']').eq(rowIndex_popup)
+				.val(decodeURIComponent(list[inputData[i]]).replace(/\+/gi, ' '));
 		}
 	}
-	
-	//$('input[name=bookId]').eq(rowIndex_popup).val(json_global.list[index_global].bookId);
-	//$('input[name=bookName]').eq(rowIndex_popup).val(decodeURIComponent(json_global.list[index_global].bookName).replace(/\+/gi, ' '));
-	//$('input[name=bookPrice]').eq(rowIndex_popup).val(json_global.list[index_global].bookPrice);
 	
 	// 정보 등록 후 글로벌변수 초기화
 	index_global = null;
@@ -194,7 +176,7 @@ function decode (str) {
 
 
 function searchPopup() {	
-	var url = {
+	const url = {
 			'book': 'popupBook.do',
 			'printoffice': 'popupPrintOffice.do',
 			'bookstore': 'popupBookStore.do',
@@ -207,7 +189,7 @@ function searchPopup() {
 			'department': 'popupDepartment.do'
 	};
 	
-	var table_column = {
+	const table_column = {
 			'book': ['', 'bookId', 'bookName', 'bookPrice', 'stock'],
 			'printoffice': ['', 'clientId', 'clientName', 'manager', 'managerContact'],
 			'bookstore': ['', 'clientId', 'clientName', 'manager', 'managerContact'],
@@ -273,9 +255,6 @@ function searchPopup() {
 				tr.append('<td>' + decodeURIComponent(list[columnNames[3]]).replace(/\+/gi, ' ') + '</td>');
 				tr.append('<td>' + decodeURIComponent(list[columnNames[4]]).replace(/\+/gi, ' ') + '</td>');
 			}
-
-			
-			// 페이징 초기화
 		},
 		error: function(request, status, errorData) {
 			console.log("error code : " + request.status);

@@ -54,7 +54,9 @@
 
 	$(function(){
 		$('#btn_insert').click(function() {
-			$('#appendTextArea').val($('.content-input').text());
+			var sendText = $('.content-input').text();
+			sendText = sendText.replace(/(?:\r\n|\r|\n)/g, '<br>');
+			$('#appendTextArea').val(sendText);
 
 			// 필독을 체크 시 유효성 검사
 			if($('#importance').prop('checked') == true) {

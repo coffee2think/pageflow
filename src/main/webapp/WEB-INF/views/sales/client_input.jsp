@@ -79,7 +79,7 @@
                                         <th>거래시작일</th>
                                     </tr>
                                     <tr data-parent="1" data-num="1" data-depth="1" class="table-td-depth1">
-                                        <td class="td-50">
+                                        <td class="td-70">
                                             <div class="contents-input-div">
                                                 <!-- <input type="" name="classify" class="contents-input"> -->
                                                 <select name="category" style="width: 95%;">
@@ -95,10 +95,7 @@
                                             </div>
                                         </td>
                                         <td class="td-100">
-                                            <div class="contents-input-div input-search">
-                                                <button class="input-search-btn">
-                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
-                                                </button>
+                                            <div class="contents-input-div">
                                                 <input type="input" name="eid" class="contents-input" value="">
                                             </div>
                                         </td>
@@ -107,7 +104,7 @@
                                                 <input type="input" name="clientAddress" class="contents-input">
                                             </div>
                                         </td>
-                                        <td class="td-200">
+                                        <td class="td-150">
                                             <div class="contents-input-div">
                                                 <input type="input" name="clientContact" class="contents-input">
                                             </div>
@@ -122,7 +119,7 @@
                                                 <input type="input" name="manager" class="contents-input" value="">
                                             </div>
                                         </td>
-                                        <td class="td-100">
+                                        <td class="td-150">
                                             <div class="contents-input-div">
                                                 <input type="input" name="managerContact" class="contents-input" value="">
                                             </div>
@@ -132,7 +129,7 @@
                                                 <input type="input" name="managerEmail" class="contents-input" value="">
                                             </div>
                                         </td>
-                                        <td class="td-120">
+                                        <td class="td-150">
                                             <div class="contents-input-div">
                                                 <input type="date" name="startDate" class="select-date">
                                             </div>
