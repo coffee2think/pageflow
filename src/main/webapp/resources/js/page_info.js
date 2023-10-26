@@ -210,7 +210,7 @@ var MENU_INFO = [
                 ,slink : 'javascript:goMyPage()'
                 ,sbranch : [
                     {mtitle : '내정보 보기', mlink : 'javascript:goMyPage()'},
-                    {mtitle : '쪽지함', mlink : 'movemsgbox.do'}
+                    /*{mtitle : '쪽지함', mlink : 'movemsgbox.do'}*/
                 ]
             }
         ]

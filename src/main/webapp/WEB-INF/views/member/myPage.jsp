@@ -147,7 +147,14 @@ input[type="submit"] {
                                 <th colspan="3">내 정보</th>
                                 <td rowspan="7" width="100" align="center" valign="middle">
                                     <div id="myphoto" style="margin: 0; width: 150px; height: 160px; padding: 0; border: 1px solid navy;">
-                                        <img src="/pageflow/resources/member_upfiles/${employee.profile }" id="photo" style="width: 150px; height: 160px; border: 1px solid navy; color: blue; display: block;"><br>
+                                    	<c:choose>
+										    <c:when test="${empty employee.profile}">
+										        <img src="/pageflow/resources/images/profile.png" id="imageElement" style="width: 150px; height: 160px; border: 1px solid navy; color: blue; display: block;">
+										    </c:when>
+										    <c:otherwise>
+										        <img src="/pageflow/resources/member_upfiles/${employee.profile}" id="photo" style="width: 150px; height: 160px; border: 1px solid navy; color: blue; display: block;">
+										    </c:otherwise>
+										</c:choose>
                                     </div>
                                 </td>
                             </tr>

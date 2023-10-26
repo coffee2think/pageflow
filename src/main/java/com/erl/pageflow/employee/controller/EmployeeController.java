@@ -574,46 +574,47 @@ public class EmployeeController {
 				// 기존 패스워드면 원래 암호화된 패스워드가 적용됨
 				employee.setEmpPwd(originEmpPwd);
 			}
-
-			String savePath = request.getSession().getServletContext().getRealPath("resources/member_upfiles");
-
-			// 첨부파일이 변경된 경우의 처리 --------------------------------------------------------
-			// 1. 원래 첨부파일이 있는데 '파일삭제'를 선택한 경우
-			// 또는 원래 첨부파일이 있는데 새로운 첨부파일이 업로드된 경우
-			if (employee.getProfile() != null && !file.isEmpty()) {
-				// 저장 폴더에서 파일 삭제함
-				new File(savePath + "\\" + employee.getProfile()).delete();
-				// notice 안의 파일정보도 제거함
-				employee.setProfile(null);
-			}
-
-			// 2. 새로운 첨부파일이 있을 때
-			if (!file.isEmpty()) {
-				// 전송온 파일이름 추출함
-				String fileName = file.getOriginalFilename();
-				String renameFileName = null;
-
-				// 저장폴더에는 변경된 이름을 저장 처리함
-
-				// 바꿀 파일명에 대한 문자열 만들기
-				if (fileName != null && fileName.length() > 0) { // 바꿀 파일명에 대한 문자열 만들기
-					renameFileName = String.valueOf(employee.getEmpId());
-					// 원본 파일의 확장자를 추출해서, 바꿀 파일명에 붙여줌
-					renameFileName += "." + fileName.substring(fileName.lastIndexOf(".") + 1);
-					logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
-					try { // 저장 폴더에 파일명 바꾸기 처리
-						file.transferTo(new File(savePath + "\\" + renameFileName));
-					} catch (Exception e) {
-						e.printStackTrace();
-						model.addAttribute("message", "첨부파일 저장 실패!");
-						return "common/error";
-					}
-				} // 파일명 바꾸기
-					// employee 객체에 첨부파일 정보 저장 처리
-				employee.setProfile(renameFileName);
-
-			} // 첨부파일 있을 때
+			
 		}
+		
+		String savePath = request.getSession().getServletContext().getRealPath("resources/member_upfiles");
+
+		// 첨부파일이 변경된 경우의 처리 --------------------------------------------------------
+		// 1. 원래 첨부파일이 있는데 '파일삭제'를 선택한 경우
+		// 또는 원래 첨부파일이 있는데 새로운 첨부파일이 업로드된 경우
+		if (employee.getProfile() != null && !file.isEmpty()) {
+			// 저장 폴더에서 파일 삭제함
+			new File(savePath + "\\" + employee.getProfile()).delete();
+			// notice 안의 파일정보도 제거함
+			employee.setProfile(null);
+		}
+
+		// 2. 새로운 첨부파일이 있을 때
+		if (!file.isEmpty()) {
+			// 전송온 파일이름 추출함
+			String fileName = file.getOriginalFilename();
+			String renameFileName = null;
+
+			// 저장폴더에는 변경된 이름을 저장 처리함
+
+			// 바꿀 파일명에 대한 문자열 만들기
+			if (fileName != null && fileName.length() > 0) { // 바꿀 파일명에 대한 문자열 만들기
+				renameFileName = String.valueOf(employee.getEmpId());
+				// 원본 파일의 확장자를 추출해서, 바꿀 파일명에 붙여줌
+				renameFileName += "." + fileName.substring(fileName.lastIndexOf(".") + 1);
+				logger.info("첨부파일명 확인 : " + fileName + ", " + renameFileName);
+				try { // 저장 폴더에 파일명 바꾸기 처리
+					file.transferTo(new File(savePath + "\\" + renameFileName));
+				} catch (Exception e) {
+					e.printStackTrace();
+					model.addAttribute("message", "첨부파일 저장 실패!");
+					return "common/error";
+				}
+			} // 파일명 바꾸기
+				// employee 객체에 첨부파일 정보 저장 처리
+			employee.setProfile(renameFileName);
+
+		} // 첨부파일 있을 때
 
 		if (employeeService.myUpdateInfo2(employee) > 0) {
 			// 수정이 성공했다면 컨트롤러의 다른 메소드를 직접 호출할 수 있음
