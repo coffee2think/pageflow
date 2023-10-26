@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.erl.pageflow.approvalline.model.vo.ApprovalLineSave;
 import com.erl.pageflow.book.model.vo.BookWithStock;
 import com.erl.pageflow.common.Search;
+import com.erl.pageflow.employee.model.vo.Department;
 import com.erl.pageflow.employee.model.vo.Employee;
 import com.erl.pageflow.sales.model.vo.BookOrder;
 import com.erl.pageflow.sales.model.vo.BookStore;
@@ -156,6 +157,15 @@ public class PopupDao {
 
 	public int selectApprovalLineSaveCountByName(Search search) {
 		return sqlSession.selectOne("popupMapper.selectApprovalLineSaveCountByName", search);
+	}
+
+	public int selectDepartmentCountByName(Search search) {
+		return sqlSession.selectOne("popupMapper.selectDepartmentCountByName", search);
+	}
+
+	public ArrayList<Department> selectDepartmentByName(Search search) {
+		List<Department> list = sqlSession.selectList("popupMapper.selectDepartmentByName", search);
+		return (ArrayList<Department>) list;
 	}
 	
 }
