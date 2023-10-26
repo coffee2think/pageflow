@@ -56,7 +56,10 @@
 						+ '<input type="input" name="depName" class="contents-input" value="">'
 						+ '</div>';
 		
-		newCell3.innerHTML = '<div class="contents-input-div">'
+		newCell3.innerHTML = '<div class="contents-input-div input-search">'
+						+ '<button class="input-search-btn">'
+						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
+						+ ' </button>'
 						+ '<input type="input" name="empName" class="contents-input" value="">'
 						+ '</div>';
 
@@ -182,7 +185,10 @@
                                             </div>
                                         </td>
                                         <td class="td-200">
-                                            <div class="contents-input-div">
+                                            <div class="contents-input-div input-search">
+                                            	<button class="input-search-btn">
+                                                    <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
+                                                </button>
                                                 <input type="input" name="empName" class="contents-input" value="">
                                             </div>
                                         </td>

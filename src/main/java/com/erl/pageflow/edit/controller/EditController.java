@@ -77,8 +77,8 @@ public class EditController {
 	// 편집 정보 등록 요청 처리
 	@RequestMapping(value="edinsert.do", method=RequestMethod.POST)
 	public String editInsertMethod(HttpServletRequest request, Model model) {
-		String[] depIds = request.getParameterValues("depId");
-		String[] empIds = request.getParameterValues("empId");
+		String[] depNames = request.getParameterValues("depName");
+		String[] empNames = request.getParameterValues("empName");
 		String[] bookNames = request.getParameterValues("bookName");
 		String[] editStates = request.getParameterValues("editState");
 		
@@ -86,12 +86,12 @@ public class EditController {
 		int editId = editService.selectMaxEditId() + 1;
 		
 		ArrayList<Edit> edits = new ArrayList<>();
-		for(int i = 0; i < depIds.length; i++) {
+		for(int i = 0; i < depNames.length; i++) {
 			Edit edit = new Edit();
 			
 			edit.setEditId(editId);
-			edit.setDepId(Integer.parseInt(depIds[i]));
-			edit.setEmpId(Integer.parseInt(empIds[i]));
+			edit.setDepName(depNames[i]);
+			edit.setEmpName(empNames[i]);
 			edit.setBookName(bookNames[i]);
 			edit.setEditState(editStates[i]);
 			

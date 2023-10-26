@@ -91,12 +91,7 @@ function submitUpdate(btn, url) {
 
         $(this).find('input').each(function() {
             // startDate에 값이 들어있지 않다면 담지 않고 건너뜀
-            if($(this).attr('name') == 'startDate' && $(this).val() == '') {
-                return;
-            }
-            
-            // endDate에 값이 들어있지 않다면 담지 않고 건너뜀
-            if($(this).attr('name') == 'endDate' && $(this).val() == '') {
+            if($(this).attr('name').includes("Date") && $(this).val() == '') {
                 return;
             }
             
