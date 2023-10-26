@@ -100,33 +100,49 @@ $(function(){
 			
 			var str = JSON.stringify(data);
 			var json = JSON.parse(str);
-            var statsList = json.statsList;
+            var prevStatsList = json.prevStatsList;
+            var currStatsList = json.currStatsList;
+            
             var numData = [];
             console.log("data : " + data);
             console.log("str : " + str);
-            var ndata = {
-                num_1 : 0
-            };
-            
-            var ndata = {};
+           
+            var ndata_prev = {};
 
             for(var i=0; i<12; i++) {
-                ndata['num_' + (i+1)] = 0;
+                ndata_prev['num_' + (i+1)] = 0;
 
-                for(var j=0; j<statsList.length; j++) {
-                    ndata['num_' + (i+1)] += Number(statsList[j]['salesMonth' + digit(i+1)]);
+                for(var j=0; j<prevStatsList.length; j++) {
+                    ndata_prev['num_' + (i+1)] += Number(prevStatsList[j]['salesMonth' + digit(i+1)]);
                 }
-                
             }
-            //var ndatastr = JSON.stringify(ndata);
-            var dataArray = [];
+
+            var ndata_curr = {};
+
+            for(var i=0; i<12; i++) {
+                ndata_curr['num_' + (i+1)] = 0;
+
+                for(var j=0; j<currStatsList.length; j++) {
+                    ndata_curr['num_' + (i+1)] += Number(currStatsList[j]['salesMonth' + digit(i+1)]);
+                }
+            }
+            
+            var dataArray_prev = [];
             for (var i = 1; i <= 12; i++) {
                 var key = 'num_' + i;
-                dataArray.push(ndata[key]);
+                dataArray_prev.push(ndata_prev[key]);                
             }
-            console.log('dataArray : ' + dataArray);
+            console.log('dataArray_prev : ' + dataArray_prev);
+
+            var dataArray_curr = [];
+            for (var i = 1; i <= 12; i++) {
+                var key = 'num_' + i;
+                dataArray_curr.push(ndata_curr[key]);
+            }
+            console.log('dataArray_curr : ' + dataArray_curr);
+
             var make_graph1 = new Make_graph();
-            make_graph1.init('graph', 'myGraph', dataArray);
+            make_graph1.init('graph', 'myGraph', dataArray_prev, dataArray_curr);
 
 		},
 		error: function(jqXHR, textStatus, errorThrown){
