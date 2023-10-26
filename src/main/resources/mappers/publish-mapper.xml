@@ -286,6 +286,7 @@
 		
 	<select id="selectEditCountByEmployee" parameterType="Search" resultType="_int">
 		select count(*) from edit
+		join department using (dep_id)
 		where emp_name like '%' || #{ keyword } || '%'
 	</select>
 		
@@ -293,6 +294,7 @@
 		select *
 		from (select rownum rnum, sub.*
 			  from (select * from edit
+			  		join department using (dep_id)
 					where emp_name like '%' || #{ keyword } || '%'
 					order by start_date desc, edit_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }
@@ -300,6 +302,7 @@
 	
 	<select id="selectEditCountByBook" parameterType="Search" resultType="_int">
 		select count(*) from edit
+		join department using (dep_id)
 		where book_name like '%' || #{ keyword } || '%'
 	</select>
 		
@@ -307,6 +310,7 @@
 		select *
 		from (select rownum rnum, sub.*
 			  from (select * from edit
+			  		join department using (dep_id)
 					where book_name like '%' || #{ keyword } || '%'
 					order by start_date desc, edit_id desc) sub)
 		where rnum between #{ startRow } and #{ endRow }

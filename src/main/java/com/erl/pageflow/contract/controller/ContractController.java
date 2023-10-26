@@ -21,6 +21,7 @@ import com.erl.pageflow.common.Paging;
 import com.erl.pageflow.common.Search;
 import com.erl.pageflow.contract.model.service.ContractService;
 import com.erl.pageflow.contract.model.vo.Contract;
+import com.erl.pageflow.edit.model.vo.Edit;
 
 @Controller
 public class ContractController {
@@ -42,23 +43,39 @@ public class ContractController {
 	
 	//계약 리스트 조회
 	@RequestMapping("ctrlist.do")
-	public String selectBoardListMethod(Model model) {
-		int listCount = contractService.selectContractListCount();
+	public String selectBoardListMethod(@RequestParam(name = "page", required = false) String page,
+			@RequestParam(name = "limit", required = false) String slimit, Model model) {
+		int currentPage = 1;
+		
+		if(page != null) {
+			currentPage = Integer.parseInt(page); 
+		}
+		
 		int limit = 10;
-		Paging paging = new Paging(listCount, 1, limit, "ctrlist.do");
+		if (slimit != null) {
+			limit = Integer.parseInt(slimit);
+		}
+		
+		int listCount = contractService.selectContractListCount();
+		
+		Paging paging = new Paging(listCount, currentPage, limit, "ctrlist.do");
 		paging.calculator();
+		
 		ArrayList<Contract> list = contractService.selectContractList(paging);
 		
 		if(list != null && list.size() > 0) {
-			model.addAttribute("paging", paging);
 			model.addAttribute("contractList", list);
+			model.addAttribute("paging", paging);
+			model.addAttribute("currentPage", currentPage);
+			model.addAttribute("limit", limit);
+			
 			return "publish/contr_list";
-		}else {
-			model.addAttribute("message", "계약 조회 실패!");
+		} else {
+			model.addAttribute("message", "계약 목록 조회 실패!");
 			return "common/error";
 		}
 	}
-	
+
 	// 계약 정보 수정 요청 처리
 	@RequestMapping(value="ctrupdate.do", method=RequestMethod.POST)
 	public void contractUpdateMethod(Contract contract, HttpServletResponse response) throws IOException {
