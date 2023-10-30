@@ -199,7 +199,7 @@ function searchPopup() {
 			'book_order': ['', 'orderId', 'clientName', 'bookName', 'orderQuantity'],
 			'saveLine' : ['', 'savelineId', 'savelineName', 'approver_1', 'approver_2', 'approver_3', 'approver_4'],
 			'lineE': ['', 'empId', 'depName', 'empName', 'posName'],
-			'department': ['', 'depId', 'depName', 'depName', 'depName']
+			'department': ['', 'depId', 'depName', '', '']
 	};
 	
 	// 전송할 데이터 담기
@@ -252,8 +252,16 @@ function searchPopup() {
 				const columnNames = table_column[popup_type];
 				tr.append('<td>' + decodeURIComponent(list[columnNames[1]]).replace(/\+/gi, ' ') + '</td>');
 				tr.append('<td>' + decodeURIComponent(list[columnNames[2]]).replace(/\+/gi, ' ') + '</td>');
-				tr.append('<td>' + decodeURIComponent(list[columnNames[3]]).replace(/\+/gi, ' ') + '</td>');
-				tr.append('<td>' + decodeURIComponent(list[columnNames[4]]).replace(/\+/gi, ' ') + '</td>');
+				if(list[columnNames[3]] == undefined) {
+					tr.append('<td></td>');
+				} else {
+					tr.append('<td>' + decodeURIComponent(list[columnNames[3]]).replace(/\+/gi, ' ') + '</td>');
+				}
+				if(list[columnNames[4]] == undefined) {
+					tr.append('<td></td>');
+				} else {
+					tr.append('<td>' + decodeURIComponent(list[columnNames[4]]).replace(/\+/gi, ' ') + '</td>');
+				}
 			}
 		},
 		error: function(request, status, errorData) {

@@ -96,9 +96,9 @@ function submitUpdate(btn, url) {
             }
             
             // 콤마를 삭제한 value 값이 숫자라면 숫자로 파싱
-            if(!isNaN($(this).val().replace(/,/g, ''))) {
+            /*if(!isNaN($(this).val().replace(/,/g, ''))) {
                 $(this).val(Number($(this).val()));
-            }
+            }*/
             
             json[$(this).attr('name')] = $(this).val();
         });
