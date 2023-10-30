@@ -99,8 +99,8 @@ public class ContractController {
 	// 계약 정보 등록 요청 처리
 	@RequestMapping(value="ctrinsert.do", method=RequestMethod.POST)
 	public String contractInsertMethod(HttpServletRequest request, Model model) {
-		String[] empIds = request.getParameterValues("empId");
-		String[] writerIds = request.getParameterValues("writerId");
+		String[] empNames = request.getParameterValues("empName");
+		String[] writerNames = request.getParameterValues("writerName");
 		String[] bookNames = request.getParameterValues("bookName");
 		String[] category = request.getParameterValues("category");
 		
@@ -108,12 +108,12 @@ public class ContractController {
 		int contrId = contractService.selectMaxContrId() + 1;
 		
 		ArrayList<Contract> contracts = new ArrayList<>();
-		for(int i = 0; i < empIds.length; i++) {
+		for(int i = 0; i < empNames.length; i++) {
 			Contract contract = new Contract();
 			
 			contract.setContrId(contrId);
-			contract.setEmpId(Integer.parseInt(empIds[i]));
-			contract.setWriterId(Integer.parseInt(writerIds[i]));
+			contract.setEmpName(empNames[i]);
+			contract.setWriterName(writerNames[i]);
 			contract.setBookName(bookNames[i]);
 			contract.setCategory(category[i]);
 			

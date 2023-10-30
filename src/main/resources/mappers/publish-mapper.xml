@@ -191,9 +191,9 @@
 	
 	<insert id="insertContract" parameterType="Contract">
 		insert into Contract
-		values (#{ contrId },#{ empId }, #{ writerId }, #{ bookName },
-				(select emp_name from employee where emp_id = #{ empId }),
-				#{ contrDate }, default, default, #{ category })
+		values (#{ contrId }, (select emp_id from employee where emp_name = #{ empName }),
+				(select writer_id from writer where writer_name = #{ writerName }), #{ bookName },
+				#{ empName }, #{ contrDate }, default, default, #{ category })
 	</insert>
 	
 	<update id="updateContract" parameterType="Contract">
