@@ -213,9 +213,8 @@ input[type="reset"] {
 									value="${ employee.address }" style="width: 250px;"></td>
 							</tr>
 							<tr>
-								<th colspan="3"><input type="submit" value="수정하기"> <input
-									type="reset" value="수정취소"> <br> <a href="main.do">시작페이지로
-										이동</a></th>
+								<th colspan="3"><input type="submit" value="수정하기"> <input type="reset" value="수정취소"> <br>
+								<a href="main.do">시작페이지로 이동</a></th>
 							</tr>
 						</table>
 					</form>
