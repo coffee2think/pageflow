@@ -54,6 +54,7 @@
 						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 						+ ' </button>'
 						+ '<input type="input" name="empName" class="contents-input" value="">'
+						+ '<input type="hidden" name="empId" value="">'
 						+ '</div>';
 		
 		newCell3.innerHTML = '<div class="contents-input-div input-search">'
@@ -61,6 +62,7 @@
 						+ '<img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">'
 						+ ' </button>'
 						+ '<input type="input" name="writerName" class="contents-input" value="">'
+						+ '<input type="hidden" name="writerId" value="">'
 						+ '</div>';
 
 		newCell4.innerHTML = '<div class="contents-input-div">'
@@ -100,6 +102,7 @@
 				+ '</div>';
 		} //for
 		
+		initPopupBtn();
 	} //initRowIndex
 </script>
 <title>계약등록</title>
@@ -173,22 +176,24 @@
                                                 </button>
                                             </div>
                                         </td>
-                                        <input type="hidden" name="empId" value="${ edit.empId }">
+                                        
                                         <td class="td-70">
                                             <div class="contents-input-div input-search">
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
                                                 <input type="input" name="empName" class="contents-input" value="">
+                                                <input type="hidden" name="empId" value="">
                                             </div>
                                         </td>
-                                        <input type="hidden" name="writerId" value="${ edit.writerId }">
+                                        
                                         <td class="td-70">
                                             <div class="contents-input-div input-search">
                                                 <button class="input-search-btn">
                                                     <img class="search-image" src="${ pageContext.servletContext.contextPath }/resources/images/search_btn.png">
                                                 </button>
                                                 <input type="input" name="writerName" class="contents-input" value="">
+                                                <input type="hidden" name="writerId" value="">
                                             </div>
                                         </td>
                                         <td class="td-70">
