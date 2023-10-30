@@ -103,6 +103,7 @@
 				+ '</div>';
 		} //for
 		
+		initPopupBtn();
 	} //initRowIndex
 </script>
 <title>편집등록</title>

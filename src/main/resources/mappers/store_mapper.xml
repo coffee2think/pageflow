@@ -12,6 +12,7 @@
 		<result property="storeNum" column="STORE_NUM" />
 		<result property="storePrice" column="STORE_PRICE" />
 		<result property="storeDate" column="STORE_DATE" />
+		<result property="bookPrice" column="BOOK_PRICE" />
 		<result property="classify" column="CLASSIFY" />
 		<result property="bookName" column="BOOK_NAME" />
 		<result property="clientName" column="CLIENT_NAME" />

@@ -105,11 +105,12 @@ public class ContractController {
 		String[] category = request.getParameterValues("category");
 		
 		// 주문번호 생성
-		int contrId = contractService.selectMaxContrId() + 1;
+		
 		
 		ArrayList<Contract> contracts = new ArrayList<>();
 		for(int i = 0; i < empNames.length; i++) {
 			Contract contract = new Contract();
+			int contrId = contractService.selectMaxContrId() + 1 + i;
 			
 			contract.setContrId(contrId);
 			contract.setEmpName(empNames[i]);
